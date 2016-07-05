@@ -116,6 +116,13 @@ resource_pools:
     key_name: (( meta.aws.default_key_name ))
 
 properties:
+  tripwire: (( merge ))
+  awslogs: (( merge ))
+  nessus-agent: (( merge ))
+  newrelic: (( merge ))
+  collectd:
+    riemann_server: (( merge ))
+    hostname_prefix: (( merge ))
   postgres: &bosh_db
     adapter: postgres
     port: 5432
