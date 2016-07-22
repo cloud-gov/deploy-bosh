@@ -38,6 +38,22 @@ releases:
   version: latest
 - name: uaa
   version: latest
+- name: fisma
+  version: latest
+- name: tripwire
+  version: latest
+- name: awslogs
+  version: latest
+- name: nessus-agent
+  version: latest
+- name: newrelic
+  version: latest
+- name: riemannc
+  version: latest
+- name: clamav
+  version: latest
+- name: snort
+  version: latest
 
 compilation:
   workers: 3
@@ -73,6 +89,14 @@ jobs:
     - {name: powerdns, release: bosh}
     - {name: aws_cpi, release: bosh-aws-cpi}
     - {name: uaa, release: uaa}
+    - {name: harden, release: fisma}
+    - {name: tripwire, release: tripwire}
+    - {name: awslogs, release: awslogs}
+    - {name: nessus-agent, release: nessus-agent}
+    - {name: newrelic-monitor, release: newrelic}
+    - {name: riemannc, release: riemannc}
+    - {name: clamav, release: clamav}
+    - {name: snort, release: snort}
     instances: 1
     resource_pool: large
     persistent_disk_pool: bosh-ssd
@@ -92,6 +116,13 @@ resource_pools:
     key_name: (( meta.aws.default_key_name ))
 
 properties:
+  tripwire: (( merge ))
+  awslogs: (( merge ))
+  nessus-agent: (( merge ))
+  newrelic: (( merge ))
+  collectd:
+    riemann_server: (( merge ))
+    hostname_prefix: (( merge ))
   postgres: &bosh_db
     adapter: postgres
     port: 5432
