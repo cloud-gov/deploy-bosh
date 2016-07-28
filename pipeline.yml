@@ -80,6 +80,8 @@ jobs:
       trigger: true
     - get: cg-s3-riemannc-release
       trigger: true
+    - get: cg-s3-riemann-release
+      trigger: true
     - get: stagingbosh-deployment
       passed: [deploy-staging-bosh]
   - aggregate:
@@ -139,6 +141,13 @@ jobs:
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-riemannc-release
+        certificate: stagingbosh-certificate
+      params:
+        <<: *bosh-params-staging
+    - task: upload-riemann
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cg-s3-riemann-release
         certificate: stagingbosh-certificate
       params:
         <<: *bosh-params-staging
@@ -228,6 +237,8 @@ jobs:
       trigger: true
     - get: cg-s3-riemannc-release
       trigger: true
+    - get: cg-s3-riemann-release
+      trigger: true
     - get: productionbosh-deployment
       passed: [deploy-production-bosh]
   - aggregate:
@@ -287,6 +298,13 @@ jobs:
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-riemannc-release
+        certificate: productionbosh-certificate
+      params:
+        <<: *bosh-params-prod
+    - task: upload-riemann
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cg-s3-riemann-release
         certificate: productionbosh-certificate
       params:
         <<: *bosh-params-prod
@@ -366,6 +384,8 @@ jobs:
       trigger: true
     - get: cg-s3-riemannc-release
       trigger: true
+    - get: cg-s3-riemann-release
+      trigger: true
     - get: toolingbosh-deployment
       passed: [deploy-tooling-bosh]
   - aggregate:
@@ -428,6 +448,13 @@ jobs:
         certificate: common-tooling
       params:
         <<: *bosh-params-tooling
+    - task: upload-riemann
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cg-s3-riemann-release
+        certificate: common-tooling
+      params:
+        <<: *bosh-params-tooling
   - put: common-releases-tooling-version
     params: {bump: patch}
 
@@ -452,6 +479,8 @@ jobs:
     - get: cg-s3-snort-release
       trigger: true
     - get: cg-s3-riemannc-release
+      trigger: true
+    - get: cg-s3-riemann-release
       trigger: true
     - get: masterbosh-deployment
       passed: [deploy-master-bosh]
@@ -511,6 +540,13 @@ jobs:
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-riemannc-release
+        certificate: common-masterbosh
+      params:
+        <<: *bosh-params-master
+    - task: upload-riemann
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cg-s3-riemann-release
         certificate: common-masterbosh
       params:
         <<: *bosh-params-master
@@ -655,7 +691,7 @@ resources:
 - name: bosh-stemcell
   type: s3
   source:
-     bucket: cg-stemcell-images
+     bucket: {{bosh-stemcell-bucket-name}}
      region_name: {{aws-region}}
      access_key_id: {{ci-access-key-id}}
      secret_access_key: {{ci-secret-access-key}}
@@ -750,6 +786,12 @@ resources:
   type: s3
   source:
     regexp: riemannc-(.*).tgz
+    <<: *s3-release-params
+
+- name: cg-s3-riemann-release
+  type: s3
+  source:
+    regexp: riemann-(.*).tgz
     <<: *s3-release-params
 
 - name: stagingbosh-certificate
