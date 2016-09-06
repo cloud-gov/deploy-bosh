@@ -223,6 +223,7 @@ properties:
     <<: (( merge ))
     url: (( "https://" meta.default_static_ip ":8443" ))
     clients:
+      <<: (( merge ))
       hm:
         override: true
         authorized-grant-types: client_credentials
@@ -245,6 +246,16 @@ properties:
         secret: ""
 
     zones: {internal: {hostnames: []}}
+
+  login:
+    <<: (( merge ))
+    url: (( "https://" meta.default_static_ip ":8443" ))
+    protocol: https
+    brand: oss
+    brand_title: cloud.gov
+    self_service_links_enabled: false
+    signups_enabled: false
+    invitations_enabled: false
 
   uaadb: (( merge ))
 
