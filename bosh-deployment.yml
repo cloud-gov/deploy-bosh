@@ -107,6 +107,7 @@ jobs:
 
 resource_pools:
 - name: large
+  elbs: (( merge || [] ))
   network: default
   stemcell:
     name: bosh-aws-xen-hvm-ubuntu-trusty-go_agent
