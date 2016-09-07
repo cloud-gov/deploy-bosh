@@ -80,6 +80,7 @@ disk_pools:
 
 jobs:
   - name: bosh
+    <<: (( merge ))
     templates:
     - {name: nats, release: bosh}
     - {name: blobstore, release: bosh}
