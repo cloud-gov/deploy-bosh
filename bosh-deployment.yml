@@ -25,8 +25,6 @@ meta:
   riemann:
     host: ~
     port: (( merge || "5555" ))
-  elasticsearch:
-    hosts: ~
 
 name: (( meta.name ))
 
@@ -45,8 +43,6 @@ releases:
 - name: tripwire
   version: latest
 - name: awslogs
-  version: latest
-- name: bosh-log-forwarder
   version: latest
 - name: nessus-agent
   version: latest
@@ -96,7 +92,6 @@ jobs:
     - {name: harden, release: fisma}
     - {name: tripwire, release: tripwire}
     - {name: awslogs, release: awslogs}
-    - {name: bosh-log-forwarder, release: bosh-log-forwarder}
     - {name: nessus-agent, release: nessus-agent}
     - {name: newrelic-monitor, release: newrelic}
     - {name: riemannc, release: riemannc}
@@ -258,7 +253,3 @@ properties:
     invitations_enabled: false
 
   uaadb: (( merge ))
-
-  bosh-log-forwarder:
-    elasticsearch:
-      hosts: (( meta.elasticsearch.hosts ))
