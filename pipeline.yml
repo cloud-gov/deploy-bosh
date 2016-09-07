@@ -70,8 +70,6 @@ jobs:
       trigger: true
     - get: cg-s3-awslogs-release
       trigger: true
-    - get: cg-s3-forwarder-release
-      trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
     - get: cg-s3-newrelic-release
@@ -108,13 +106,6 @@ jobs:
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-awslogs-release
-        certificate: stagingbosh-certificate
-      params:
-        <<: *bosh-params-staging
-    - task: upload-forwarder
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-forwarder-release
         certificate: stagingbosh-certificate
       params:
         <<: *bosh-params-staging
@@ -236,8 +227,6 @@ jobs:
       trigger: true
     - get: cg-s3-awslogs-release
       trigger: true
-    - get: cg-s3-forwarder-release
-      trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
     - get: cg-s3-newrelic-release
@@ -274,13 +263,6 @@ jobs:
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-awslogs-release
-        certificate: productionbosh-certificate
-      params:
-        <<: *bosh-params-prod
-    - task: upload-forwarder
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-forwarder-release
         certificate: productionbosh-certificate
       params:
         <<: *bosh-params-prod
@@ -392,8 +374,6 @@ jobs:
       trigger: true
     - get: cg-s3-awslogs-release
       trigger: true
-    - get: cg-s3-forwarder-release
-      trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
     - get: cg-s3-newrelic-release
@@ -430,13 +410,6 @@ jobs:
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-awslogs-release
-        certificate: common-tooling
-      params:
-        <<: *bosh-params-tooling
-    - task: upload-forwarder
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-forwarder-release
         certificate: common-tooling
       params:
         <<: *bosh-params-tooling
@@ -497,8 +470,6 @@ jobs:
       trigger: true
     - get: cg-s3-awslogs-release
       trigger: true
-    - get: cg-s3-forwarder-release
-      trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
     - get: cg-s3-newrelic-release
@@ -534,13 +505,6 @@ jobs:
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-awslogs-release
-        certificate: common-masterbosh
-      params:
-        <<: *bosh-params-master
-    - task: upload-forwarder
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-forwarder-release
         certificate: common-masterbosh
       params:
         <<: *bosh-params-master
@@ -792,12 +756,6 @@ resources:
   type: s3
   source:
     regexp: awslogs-(.*).tgz
-    <<: *s3-release-params
-
-- name: cg-s3-forwarder-release
-  type: s3
-  source:
-    regexp: bosh-log-forwarder-(.*).tgz
     <<: *s3-release-params
 
 - name: cg-s3-nessus-agent-release
