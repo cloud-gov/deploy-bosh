@@ -242,7 +242,10 @@ properties:
         refresh-token-validity: 86400 # re-login required once a day
         secret: ""
 
-    zones: {internal: {hostnames: []}}
+    zones:
+      internal:
+        hostnames:
+          - (( meta.default_static_ip ))
 
   login:
     <<: (( merge ))
