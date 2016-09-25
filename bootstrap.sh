@@ -14,7 +14,7 @@ if [ ! -z "$2" ]; then
   MANIFEST=$2
 fi
 
-spiff merge \
+spruce merge \
   $SCRIPTPATH/bosh-init-deployment.yml \
   $SECRETS \
   > $MANIFEST

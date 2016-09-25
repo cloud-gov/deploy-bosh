@@ -1,16 +1,16 @@
 meta:
   db: ~
-  name: (( merge || "bosh" ))
+  name: bosh
   networks:
     default:
-      static_ips: (( merge || [10.0.0.7] ))
+      static_ips: [10.0.0.7]
   cloud_properties:
     availability_zone: ~
-  default_static_ip: (( meta.networks.default.static_ips.[0] ))
+  default_static_ip: (( grab meta.networks.default.static_ips.[0] ))
   aws:
     access_key_id: ~
     secret_access_key: ~
-    default_key_name: (( merge || "bosh" ))
+    default_key_name: bosh
     default_security_groups: ~
     region: ~
   parent_bosh_ip: ~
@@ -24,12 +24,12 @@ meta:
     hm-password: ~
   riemann:
     host: ~
-    port: (( merge || "5555" ))
+    port: "5555"
 
-name: (( meta.name ))
+name: (( grab meta.name ))
 
 # Execute the "bosh status" command to obtain the director_uuid.
-director_uuid: (( merge ))
+director_uuid: (( param "specify bosh directory" ))
 
 releases:
 - name: bosh
@@ -61,7 +61,7 @@ compilation:
   reuse_compilation_vms: true
   cloud_properties:
     instance_type: m3.large
-    availability_zone: (( meta.cloud_properties.availability_zone ))
+    availability_zone: (( grab meta.cloud_properties.availability_zone ))
 
 update:
   canaries: 1
@@ -69,41 +69,40 @@ update:
   update_watch_time: 3000-180000
   max_in_flight: 4
 
-networks: (( merge ))
+networks: (( param "specify networks" ))
 
 disk_pools:
-  - name: bosh-ssd
-    disk_size: 300000
-    cloud_properties:
-      type: gp2
-      encrypted: true
+- name: bosh-ssd
+  disk_size: 300000
+  cloud_properties:
+    type: gp2
+    encrypted: true
 
 jobs:
-  - name: bosh
-    <<: (( merge ))
-    templates:
-    - {name: nats, release: bosh}
-    - {name: blobstore, release: bosh}
-    - {name: director, release: bosh}
-    - {name: health_monitor, release: bosh}
-    - {name: registry, release: bosh}
-    - {name: powerdns, release: bosh}
-    - {name: aws_cpi, release: bosh-aws-cpi}
-    - {name: uaa, release: uaa}
-    - {name: harden, release: fisma}
-    - {name: tripwire, release: tripwire}
-    - {name: awslogs, release: awslogs}
-    - {name: nessus-agent, release: nessus-agent}
-    - {name: newrelic-monitor, release: newrelic}
-    - {name: riemannc, release: riemannc}
-    - {name: clamav, release: clamav}
-    - {name: snort, release: snort}
-    instances: 1
-    resource_pool: large
-    persistent_disk_pool: bosh-ssd
-    networks:
-      - name: default
-        static_ips: (( meta.networks.default.static_ips ))
+- name: bosh
+  templates:
+  - {name: nats, release: bosh}
+  - {name: blobstore, release: bosh}
+  - {name: director, release: bosh}
+  - {name: health_monitor, release: bosh}
+  - {name: registry, release: bosh}
+  - {name: powerdns, release: bosh}
+  - {name: aws_cpi, release: bosh-aws-cpi}
+  - {name: uaa, release: uaa}
+  - {name: harden, release: fisma}
+  - {name: tripwire, release: tripwire}
+  - {name: awslogs, release: awslogs}
+  - {name: nessus-agent, release: nessus-agent}
+  - {name: newrelic-monitor, release: newrelic}
+  - {name: riemannc, release: riemannc}
+  - {name: clamav, release: clamav}
+  - {name: snort, release: snort}
+  instances: 1
+  resource_pool: large
+  persistent_disk_pool: bosh-ssd
+  networks:
+  - name: default
+    static_ips: (( grab meta.networks.default.static_ips ))
 
 resource_pools:
 - name: large
@@ -113,125 +112,120 @@ resource_pools:
     version: latest
   cloud_properties:
     instance_type: m3.large
-    availability_zone: (( meta.cloud_properties.availability_zone ))
-    elbs: (( merge || [] ))
-    key_name: (( meta.aws.default_key_name ))
+    availability_zone: (( grab meta.cloud_properties.availability_zone ))
+    elbs: []
+    key_name: (( grab meta.aws.default_key_name ))
 
 properties:
-  tripwire: (( merge ))
-  awslogs: (( merge ))
-  nessus-agent: (( merge ))
-  newrelic: (( merge ))
-  collectd:
-    riemann_server: (( merge ))
-    hostname_prefix: (( merge ))
+  tripwire: (( param "specify tripwire props" ))
+  awslogs: (( param "specify awslogs props" ))
+  nessus-agent: (( param "specify nessus-agent props" ))
+  newrelic: (( param "specify newrelic props" ))
+  collectd: (( param "specify collectd props" ))
   postgres: &bosh_db
     adapter: postgres
     port: 5432
-    user: (( meta.db.user ))
-    password: (( meta.db.pass ))
-    host: (( meta.db.host ))
-    database: (( meta.db.database ))
+    user: (( grab meta.db.user ))
+    password: (( grab meta.db.pass ))
+    host: (( grab meta.db.host ))
+    database: (( grab meta.db.database ))
     additional_databases:
-      - (( meta.db.uaadb || "bosh_uaadb" ))
+    - (( grab meta.db.uaadb || "bosh_uaadb" ))
 
   dns:
-    address: (( meta.default_static_ip ))
+    address: (( grab meta.default_static_ip ))
     db: *bosh_db
-    recursor: (( meta.parent_bosh_ip ))
-    domain_name: (( meta.bosh_domain_name ))
+    recursor: (( grab meta.parent_bosh_ip ))
+    domain_name: (( grab meta.bosh_domain_name ))
 
   nats:
-    address: (( meta.default_static_ip ))
+    address: (( grab meta.default_static_ip ))
     user: nats
-    password: (( meta.passwords.nats-password ))
+    password: (( grab meta.passwords.nats-password ))
 
   director:
     name: bosh
-    address: (( meta.default_static_ip ))
+    address: (( grab meta.default_static_ip ))
     db: *bosh_db
-    ssl: (( merge ))
+    ssl: (( param "specify director ssl" ))
     cpi_job: aws_cpi
     user_management:
       provider: uaa
       uaa:
-        <<: (( merge ))
-        url: (( "https://" meta.default_static_ip ":8443" ))
+        url: (( concat "https://" meta.default_static_ip ":8443" ))
 
   blobstore:
     provider: s3
-    bucket_name: (( merge ))
-    access_key_id: (( merge ))
-    secret_access_key: (( merge ))
-    s3_region: ((meta.aws.region))
+    bucket_name: (( param "specify blobstore bucket" ))
+    access_key_id: (( param "specify blobstore access key" ))
+    secret_access_key: (( param "specify blobstore secret key" ))
+    s3_region: (( grab meta.aws.region ))
     agent:
       user: agent
-      password: (( meta.passwords.agent-password ))
+      password: (( grab meta.passwords.agent-password ))
     director:
       user: director
-      password: (( meta.passwords.director-password ))
+      password: (( grab meta.passwords.director-password ))
 
   registry:
-    address: (( meta.default_static_ip ))
-    host: (( meta.default_static_ip ))
+    address: (( grab meta.default_static_ip ))
+    host: (( grab meta.default_static_ip ))
     db: *bosh_db
     http:
       user: registry
-      password: (( meta.passwords.registry-password ))
+      password: (( grab meta.passwords.registry-password ))
       port: 25777
     username: registry
-    password: (( meta.passwords.registry-password ))
+    password: (( grab meta.passwords.registry-password ))
     port: 25777
     cloud:
       plugin: aws
       credentials_source: static
-      access_key_id: (( meta.aws.access_key_id ))
-      secret_access_key: (( meta.aws.secret_access_key ))
-      region: (( meta.aws.region ))
+      access_key_id: (( grab meta.aws.access_key_id ))
+      secret_access_key: (( grab meta.aws.secret_access_key ))
+      region: (( grab meta.aws.region ))
 
   hm:
     director_account:
       user: admin
-      password: (( meta.passwords.admin-password ))
-      ca_cert: (( merge ))
+      password: (( grab meta.passwords.admin-password ))
+      ca_cert: (( param "specify health monitor director ca cert" ))
       client_id: hm
-      client_secret: (( merge ))
+      client_secret: (( param "specify health monitor director client secret" ))
     varz_enabled: true
     resurrector_enabled: true
     resurrector:
       minimum_down_jobs: 3
     riemann_enabled: true
     riemann:
-      host: (( meta.riemann.host ))
-      port: (( meta.riemann.port ))
+      host: (( grab meta.riemann.host ))
+      port: (( grab meta.riemann.port ))
 
   aws: &aws
-    access_key_id: (( meta.aws.access_key_id ))
-    secret_access_key: (( meta.aws.secret_access_key ))
-    default_key_name: (( meta.aws.default_key_name ))
-    default_security_groups: (( meta.aws.default_security_groups ))
-    region: (( meta.aws.region ))
+    access_key_id: (( grab meta.aws.access_key_id ))
+    secret_access_key: (( grab meta.aws.secret_access_key ))
+    default_key_name: (( grab meta.aws.default_key_name ))
+    default_security_groups: (( grab meta.aws.default_security_groups ))
+    region: (( grab meta.aws.region ))
 
   agent:
-    mbus: (( "nats://nats:" meta.passwords.nats-password "@" meta.default_static_ip ":4222" ))
+    mbus: (( concat "nats://nats:" meta.passwords.nats-password "@" meta.default_static_ip ":4222" ))
   ntp: &ntp [0.pool.ntp.org, 1.pool.ntp.org]
 
   uaa:
-    <<: (( merge ))
-    url: (( "https://" meta.default_static_ip ":8443" ))
+    url: (( concat "https://" meta.default_static_ip ":8443" ))
     clients:
-      <<: (( merge ))
       hm:
         override: true
         authorized-grant-types: client_credentials
         scope: ""
         authorities: bosh.admin
-        secret: (( merge ))
+        secret: (( param "specify hm client secret" ))
       ci:
         authorized-grant-types: client_credentials
         scope: ""
         authorities: bosh.admin
-        secret: (( merge ))
+        secret: (( param "specify ci client secret" ))
       bosh_cli:
         override: true
         authorized-grant-types: password,refresh_token
@@ -241,15 +235,21 @@ properties:
         access-token-validity: 1200 # 20 min
         refresh-token-validity: 86400 # re-login required once a day
         secret: ""
-
+    scim:
+      users:
+      - name: admin
+        password: (( grab meta.passwords.admin-password ))
+        groups:
+        - scim.write
+        - scim.read
+        - bosh.admin
     zones:
       internal:
         hostnames:
-          - (( meta.default_static_ip ))
+        - (( grab meta.default_static_ip ))
 
   login:
-    <<: (( merge ))
-    url: (( "https://" meta.default_static_ip ":8443" ))
+    url: (( concat "https://" meta.default_static_ip ":8443" ))
     protocol: https
     brand: oss
     brand_title: cloud.gov
@@ -257,4 +257,4 @@ properties:
     signups_enabled: false
     invitations_enabled: false
 
-  uaadb: (( merge ))
+  uaadb: (( param "specify uaadb props" ))
