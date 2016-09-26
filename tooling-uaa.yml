@@ -19,7 +19,3 @@ properties:
         secret: (( param "specify concourse staging secret" ))
         redirect-uri: (( param "specify concourse staging redirect url" ))
         <<: *concourse-template
-      concourse_local:
-        secret: (( param "specify concourse local secret" ))
-        redirect-uri: (( param "specify concourse local redirect url" ))
-        <<: *concourse-template
