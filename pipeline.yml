@@ -172,7 +172,7 @@ jobs:
       passed: [deploy-staging-bosh]
     - get: bosh-stemcell
       passed: [deploy-staging-bosh]
-      trigger: true
+      trigger: false
     - get: common-releases-tooling-version
       passed: [common-releases-tooling]
     - get: common-production
@@ -322,6 +322,7 @@ jobs:
     - get: cpi-release
     - get: bosh-stemcell
       trigger: true
+      passed: [common-releases-master]
     - get: common-tooling
       trigger: true
     - get: common-releases-master-version
