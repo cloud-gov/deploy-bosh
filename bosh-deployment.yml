@@ -60,8 +60,8 @@ compilation:
   network: default
   reuse_compilation_vms: true
   cloud_properties:
-    instance_type: m3.large
-    availability_zone: (( grab meta.cloud_properties.availability_zone ))
+    instance_type: c3.xlarge
+    availability_zone: (( meta.cloud_properties.availability_zone ))
 
 update:
   canaries: 1
