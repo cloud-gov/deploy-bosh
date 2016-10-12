@@ -533,7 +533,7 @@ jobs:
     - get: common-masterbosh
       trigger: true
   - task: bosh-manifest
-    config: &manifest-config
+    config:
       <<: *manifest-config
       inputs:
       - name: common-masterbosh
@@ -644,16 +644,16 @@ resources:
 - name: bosh-config
   type: git
   source:
-    uri: https://github.com/18F/cg-deploy-bosh.git
-    branch: master
+    uri: {{bosh-config-git-url}}
+    branch: {{bosh-config-git-branch}}
     paths:
     - bosh-deployment.yml
 
 - name: bosh-init-config
   type: git
   source:
-    uri: https://github.com/18F/cg-deploy-bosh.git
-    branch: master
+    uri: {{bosh-config-git-url}}
+    branch: {{bosh-config-git-branch}}
     paths:
     - bosh-init-deployment.yml
 
