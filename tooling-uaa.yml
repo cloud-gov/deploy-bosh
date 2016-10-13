@@ -1,0 +1,21 @@
+templates:
+  concourse: &concourse-template
+    scope: openid,concourse.admin,concourse.apps
+    authorities: uaa.none
+    authorized-grant-types: authorization_code,client_credentials,refresh_token
+    autoapprove: true
+    override: true
+    access-token-validity: 3600
+    refresh-token-validity: 3600
+
+properties:
+  uaa:
+    clients:
+      concourse_production:
+        secret: (( param "specify concourse production secret" ))
+        redirect-uri: (( param "specify concourse production redirect url" ))
+        <<: *concourse-template
+      concourse_staging:
+        secret: (( param "specify concourse staging secret" ))
+        redirect-uri: (( param "specify concourse staging redirect url" ))
+        <<: *concourse-template

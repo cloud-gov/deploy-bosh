@@ -4,7 +4,6 @@ jobs:
   serial: true
   plan:
   - aggregate:
-    - get: pipeline-tasks
     - get: bosh-config
       trigger: true
     - get: bosh-release
@@ -19,20 +18,30 @@ jobs:
     - get: common-releases-tooling-version
       passed: [common-releases-tooling]
   - task: bosh-manifest
-    file: pipeline-tasks/spiff-merge.yml
-    config:
+    input_mapping: {common: common-staging}
+    config: &manifest-config
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: 18fgsa/concourse-task
       inputs:
-        - name: pipeline-tasks
-        - name: bosh-config
-        - name: common-staging
-    params:
-      OUTPUT_FILE: spiff-merge/manifest.yml
-      SOURCE_FILE: bosh-config/bosh-deployment.yml
-      MERGE_FILES: common-staging/secrets.yml
+      - name: common
+      - name: bosh-config
+      outputs:
+      - name: bosh-manifest
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          bosh-config/generate.sh \
+            common/secrets.yml \
+            > bosh-manifest/manifest.yml
   - put: stagingbosh-deployment
     params:
       cert: common-staging/boshCA.crt
-      manifest: spiff-merge/manifest.yml
+      manifest: bosh-manifest/manifest.yml
       releases:
         - bosh-release/*.tgz
         - uaa-release/*.tgz
@@ -100,63 +109,54 @@ jobs:
       input_mapping:
         release: cg-s3-tripwire-release
         certificate: stagingbosh-certificate
-      params:
-        <<: *bosh-params-staging
+      params: *bosh-params-staging
     - task: upload-awslogs
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-awslogs-release
         certificate: stagingbosh-certificate
-      params:
-        <<: *bosh-params-staging
+      params: *bosh-params-staging
     - task: upload-nessus-agent
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-nessus-agent-release
         certificate: stagingbosh-certificate
-      params:
-        <<: *bosh-params-staging
+      params: *bosh-params-staging
     - task: upload-newrelic
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-newrelic-release
         certificate: stagingbosh-certificate
-      params:
-        <<: *bosh-params-staging
+      params: *bosh-params-staging
     - task: upload-clamav
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-clamav-release
         certificate: stagingbosh-certificate
-      params:
-        <<: *bosh-params-staging
+      params: *bosh-params-staging
     - task: upload-snort
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-snort-release
         certificate: stagingbosh-certificate
-      params:
-        <<: *bosh-params-staging
+      params: *bosh-params-staging
     - task: upload-riemannc
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-riemannc-release
         certificate: stagingbosh-certificate
-      params:
-        <<: *bosh-params-staging
+      params: *bosh-params-staging
     - task: upload-riemann
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-riemann-release
         certificate: stagingbosh-certificate
-      params:
-        <<: *bosh-params-staging
+      params: *bosh-params-staging
 
 - name: deploy-production-bosh
   serial: true
   plan:
   - aggregate:
-    - get: pipeline-tasks
     - get: bosh-config
       trigger: true
       passed: [deploy-staging-bosh]
@@ -176,20 +176,12 @@ jobs:
     - get: common-production
       trigger: true
   - task: bosh-manifest
-    file: pipeline-tasks/spiff-merge.yml
-    config:
-      inputs:
-        - name: pipeline-tasks
-        - name: bosh-config
-        - name: common-production
-    params:
-      OUTPUT_FILE: spiff-merge/manifest.yml
-      SOURCE_FILE: bosh-config/bosh-deployment.yml
-      MERGE_FILES: common-production/secrets.yml
+    input_mapping: {common: common-production}
+    config: *manifest-config
   - put: productionbosh-deployment
     params:
       cert: common-production/boshCA.crt
-      manifest: spiff-merge/manifest.yml
+      manifest: bosh-manifest/manifest.yml
       releases:
         - bosh-release/*.tgz
         - uaa-release/*.tgz
@@ -257,57 +249,49 @@ jobs:
       input_mapping:
         release: cg-s3-tripwire-release
         certificate: productionbosh-certificate
-      params:
-        <<: *bosh-params-prod
+      params: *bosh-params-prod
     - task: upload-awslogs
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-awslogs-release
         certificate: productionbosh-certificate
-      params:
-        <<: *bosh-params-prod
+      params: *bosh-params-prod
     - task: upload-nessus-agent
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-nessus-agent-release
         certificate: productionbosh-certificate
-      params:
-        <<: *bosh-params-prod
+      params: *bosh-params-prod
     - task: upload-newrelic
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-newrelic-release
         certificate: productionbosh-certificate
-      params:
-        <<: *bosh-params-prod
+      params: *bosh-params-prod
     - task: upload-clamav
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-clamav-release
         certificate: productionbosh-certificate
-      params:
-        <<: *bosh-params-prod
+      params: *bosh-params-prod
     - task: upload-snort
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-snort-release
         certificate: productionbosh-certificate
-      params:
-        <<: *bosh-params-prod
+      params: *bosh-params-prod
     - task: upload-riemannc
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-riemannc-release
         certificate: productionbosh-certificate
-      params:
-        <<: *bosh-params-prod
+      params: *bosh-params-prod
     - task: upload-riemann
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-riemann-release
         certificate: productionbosh-certificate
-      params:
-        <<: *bosh-params-prod
+      params: *bosh-params-prod
 
 - name: deploy-tooling-bosh
   serial: true
@@ -324,19 +308,21 @@ jobs:
     - get: common-releases-master-version
       passed: [common-releases-master]
   - task: bosh-manifest
-    file: pipeline-tasks/spiff-merge.yml
+    input_mapping: {common: common-tooling}
     config:
-      inputs:
-        - name: pipeline-tasks
-        - name: bosh-config
-        - name: common-tooling
-    params:
-      OUTPUT_FILE: spiff-merge/manifest.yml
-      SOURCE_FILE: bosh-config/bosh-deployment.yml
-      MERGE_FILES: common-tooling/secrets.yml
+      <<: *manifest-config
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          bosh-config/generate.sh \
+            bosh-config/tooling-uaa.yml \
+            common/secrets.yml \
+            > bosh-manifest/manifest.yml
   - put: toolingbosh-deployment
     params:
-      manifest: spiff-merge/manifest.yml
+      manifest: bosh-manifest/manifest.yml
       releases:
         - bosh-release/*.tgz
         - uaa-release/*.tgz
@@ -404,57 +390,49 @@ jobs:
       input_mapping:
         release: cg-s3-tripwire-release
         certificate: common-tooling
-      params:
-        <<: *bosh-params-tooling
+      params: *bosh-params-tooling
     - task: upload-awslogs
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-awslogs-release
         certificate: common-tooling
-      params:
-        <<: *bosh-params-tooling
+      params: *bosh-params-tooling
     - task: upload-nessus-agent
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-nessus-agent-release
         certificate: common-tooling
-      params:
-        <<: *bosh-params-tooling
+      params: *bosh-params-tooling
     - task: upload-newrelic
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-newrelic-release
         certificate: common-tooling
-      params:
-        <<: *bosh-params-tooling
+      params: *bosh-params-tooling
     - task: upload-clamav
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-clamav-release
         certificate: common-tooling
-      params:
-        <<: *bosh-params-tooling
+      params: *bosh-params-tooling
     - task: upload-snort
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-snort-release
         certificate: common-tooling
-      params:
-        <<: *bosh-params-tooling
+      params: *bosh-params-tooling
     - task: upload-riemannc
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-riemannc-release
         certificate: common-tooling
-      params:
-        <<: *bosh-params-tooling
+      params: *bosh-params-tooling
     - task: upload-riemann
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-riemann-release
         certificate: common-tooling
-      params:
-        <<: *bosh-params-tooling
+      params: *bosh-params-tooling
   - put: common-releases-tooling-version
     params: {bump: patch}
 
@@ -499,57 +477,49 @@ jobs:
       input_mapping:
         release: cg-s3-tripwire-release
         certificate: common-masterbosh
-      params:
-        <<: *bosh-params-master
+      params: *bosh-params-master
     - task: upload-awslogs
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-awslogs-release
         certificate: common-masterbosh
-      params:
-        <<: *bosh-params-master
+      params: *bosh-params-master
     - task: upload-nessus-agent
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-nessus-agent-release
         certificate: common-masterbosh
-      params:
-        <<: *bosh-params-master
+      params: *bosh-params-master
     - task: upload-newrelic
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-newrelic-release
         certificate: common-masterbosh
-      params:
-        <<: *bosh-params-master
+      params: *bosh-params-master
     - task: upload-clamav
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-clamav-release
         certificate: common-masterbosh
-      params:
-        <<: *bosh-params-master
+      params: *bosh-params-master
     - task: upload-snort
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-snort-release
         certificate: common-masterbosh
-      params:
-        <<: *bosh-params-master
+      params: *bosh-params-master
     - task: upload-riemannc
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-riemannc-release
         certificate: common-masterbosh
-      params:
-        <<: *bosh-params-master
+      params: *bosh-params-master
     - task: upload-riemann
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-riemann-release
         certificate: common-masterbosh
-      params:
-        <<: *bosh-params-master
+      params: *bosh-params-master
   - put: common-releases-master-version
     params: {bump: patch}
 
@@ -563,16 +533,20 @@ jobs:
     - get: common-masterbosh
       trigger: true
   - task: bosh-manifest
-    file: pipeline-tasks/spiff-merge.yml
     config:
+      <<: *manifest-config
       inputs:
-        - name: pipeline-tasks
-        - name: bosh-init-config
-        - name: common-masterbosh
-    params:
-      OUTPUT_FILE: spiff-merge/manifest.yml
-      SOURCE_FILE: bosh-init-config/bosh-init-deployment.yml
-      MERGE_FILES: common-masterbosh/secrets.yml
+      - name: common-masterbosh
+      - name: bosh-init-config
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          spruce merge \
+            bosh-init-config/bosh-init-deployment.yml \
+            common-masterbosh/secrets.yml \
+            > bosh-manifest/manifest.yml
   - task: decrypt-private-key
     file: pipeline-tasks/decrypt.yml
     config:
@@ -585,7 +559,7 @@ jobs:
       PASSPHRASE: {{masterbosh-secrets-passphrase}}
   - put: masterbosh-deployment
     params:
-      manifest_file: spiff-merge/manifest.yml
+      manifest_file: bosh-manifest/manifest.yml
       key_file: decrypt/bosh-init.pem
       stats_file_key: master-bosh-state.json
     on_failure:
@@ -670,23 +644,18 @@ resources:
 - name: bosh-config
   type: git
   source:
-    uri: https://github.com/18F/cg-deploy-bosh.git
-    branch: master
+    uri: {{bosh-config-git-url}}
+    branch: {{bosh-config-git-branch}}
     paths:
     - bosh-deployment.yml
 
 - name: bosh-init-config
   type: git
   source:
-    uri: https://github.com/18F/cg-deploy-bosh.git
-    branch: master
+    uri: {{bosh-config-git-url}}
+    branch: {{bosh-config-git-branch}}
     paths:
     - bosh-init-deployment.yml
-
-#- name: bosh-stemcell
-#  type: bosh-io-stemcell
-#  source:
-#    name: bosh-aws-xen-hvm-ubuntu-trusty-go_agent
 
 - name: bosh-stemcell
   type: s3

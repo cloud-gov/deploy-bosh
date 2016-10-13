@@ -1,11 +1,11 @@
 ---
 meta:
-  name: (( merge || "bosh" ))
+  name: bosh
   networks:
     private:
-      static_ips: (( merge || [10.0.0.6] ))
-  default_static_ip: (( meta.networks.private.static_ips.[0] ))
-  keypair_file: (( merge || "./bosh-init.pem" ))
+      static_ips: [10.0.0.6]
+  default_static_ip: (( grab meta.networks.private.static_ips.[0] ))
+  keypair_file: ./bosh-init.pem
   cloud_properties:
     availability_zone: ~
   passwords:
@@ -20,13 +20,13 @@ meta:
   aws:
     access_key_id: ~
     secret_access_key: ~
-    default_key_name: (( merge || "bosh" ))
+    default_key_name: bosh
     default_security_groups: ~
     region: ~
   upstream_dns_ip: ~
   bosh_domain_name: ~
 
-name: (( meta.name ))
+name: (( grab meta.name ))
 
 releases:
 - name: bosh
@@ -48,7 +48,7 @@ resource_pools:
       size: 25_000
       type: gp2
       encrypted: true
-    availability_zone: (( meta.cloud_properties.availability_zone ))
+    availability_zone: (( grab meta.cloud_properties.availability_zone ))
 
 disk_pools:
 - name: bosh-ssd
@@ -57,7 +57,7 @@ disk_pools:
     type: gp2
     encrypted: true
 
-networks: (( merge ))
+networks: (( param "specify networks" ))
 
 jobs:
 - name: bosh
@@ -79,66 +79,66 @@ jobs:
 
   networks:
   - name: private
-    static_ips: (( meta.networks.private.static_ips ))
+    static_ips: (( grab meta.networks.private.static_ips ))
     default: [dns, gateway]
 
   properties:
     nats:
       address: 127.0.0.1
       user: nats
-      password: (( meta.passwords.nats-password ))
+      password: (( grab meta.passwords.nats-password ))
 
     redis:
       listen_address: 127.0.0.1
       address: 127.0.0.1
-      password: (( meta.passwords.redis-password ))
+      password: (( grab meta.passwords.redis-password ))
 
     postgres: &bosh_db
       listen_address: 127.0.0.1
       host: 127.0.0.1
       user: postgres
-      password: (( meta.passwords.postgres-password ))
+      password: (( grab meta.passwords.postgres-password ))
       database: bosh
       adapter: postgres
 
     dns:
-      address: (( meta.default_static_ip ))
+      address: (( grab meta.default_static_ip ))
       db: *bosh_db
-      recursor: (( meta.upstream_dns_ip ))
-      domain_name: (( meta.bosh_domain_name ))
+      recursor: (( grab meta.upstream_dns_ip ))
+      domain_name: (( grab meta.bosh_domain_name ))
 
     registry:
-      address: (( meta.default_static_ip ))
-      host: (( meta.default_static_ip ))
+      address: (( grab meta.default_static_ip ))
+      host: (( grab meta.default_static_ip ))
       db: *bosh_db
       http:
         user: admin
-        password: (( meta.passwords.admin-password ))
+        password: (( grab meta.passwords.admin-password ))
         port: 25777
       username: admin
-      password: (( meta.passwords.admin-password ))
+      password: (( grab meta.passwords.admin-password ))
       port: 25777
       cloud:
         plugin: aws
         credentials_source: static
-        access_key_id: (( meta.aws.access_key_id ))
-        secret_access_key: (( meta.aws.secret_access_key ))
-        region: (( meta.aws.region ))
+        access_key_id: (( grab meta.aws.access_key_id ))
+        secret_access_key: (( grab meta.aws.secret_access_key ))
+        region: (( grab meta.aws.region ))
 
     blobstore:
-      address: (( meta.default_static_ip ))
+      address: (( grab meta.default_static_ip ))
       port: 25250
       provider: dav
       director:
         user: director
-        password: (( meta.passwords.director-password ))
+        password: (( grab meta.passwords.director-password ))
       agent:
         user: agent
-        password: (( meta.passwords.agent-password ))
+        password: (( grab meta.passwords.agent-password ))
 
     director:
       address: 127.0.0.1
-      name: (( meta.name ))
+      name: (( grab meta.name ))
       db: *bosh_db
       cpi_job: aws_cpi
       max_threads: 10
@@ -147,25 +147,25 @@ jobs:
         local:
           users:
           - name: admin
-            password: (( meta.passwords.admin-password ))
+            password: (( grab meta.passwords.admin-password ))
           - name: hm
-            password: (( meta.passwords.hm-password ))
+            password: (( grab meta.passwords.hm-password ))
 
     hm:
       director_account:
         user: hm
-        password: (( meta.passwords.hm-password ))
+        password: (( grab meta.passwords.hm-password ))
       resurrector_enabled: true
 
     aws: &aws
-      access_key_id: (( meta.aws.access_key_id ))
-      secret_access_key: (( meta.aws.secret_access_key ))
-      default_key_name: (( meta.aws.default_key_name ))
-      default_security_groups: (( meta.aws.default_security_groups ))
-      region: (( meta.aws.region ))
+      access_key_id: (( grab meta.aws.access_key_id ))
+      secret_access_key: (( grab meta.aws.secret_access_key ))
+      default_key_name: (( grab meta.aws.default_key_name ))
+      default_security_groups: (( grab meta.aws.default_security_groups ))
+      region: (( grab meta.aws.region ))
 
     agent:
-      mbus: (( "nats://nats:" meta.passwords.nats-password "@" meta.default_static_ip ":4222" ))
+      mbus: (( concat "nats://nats:" meta.passwords.nats-password "@" meta.default_static_ip ":4222" ))
 
     ntp: &ntp [0.pool.ntp.org, 1.pool.ntp.org]
 
@@ -173,16 +173,16 @@ cloud_provider:
   template: {name: aws_cpi, release: bosh-aws-cpi}
 
   ssh_tunnel:
-    host: (( meta.default_static_ip ))
+    host: (( grab meta.default_static_ip ))
     port: 22
     user: vcap
-    private_key: (( meta.keypair_file ))
+    private_key: (( grab meta.keypair_file ))
 
-  mbus: (( "https://mbus:" meta.passwords.mbus-password "@" meta.default_static_ip ":6868" ))
+  mbus: (( concat "https://mbus:" meta.passwords.mbus-password "@" meta.default_static_ip ":6868" ))
 
   properties:
     aws: *aws
     agent:
-      mbus: (( "https://mbus:" meta.passwords.mbus-password "@0.0.0.0:6868" ))
+      mbus: (( concat "https://mbus:" meta.passwords.mbus-password "@0.0.0.0:6868" ))
     blobstore: {provider: local, path: /var/vcap/micro_bosh/data/cache}
     ntp: *ntp
