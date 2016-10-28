@@ -156,7 +156,6 @@ properties:
 
   blobstore:
     provider: s3
-    server_side_encryption: AES256
     bucket_name: (( param "specify blobstore bucket" ))
     access_key_id: (( param "specify blobstore access key" ))
     secret_access_key: (( param "specify blobstore secret key" ))
@@ -211,7 +210,7 @@ properties:
 
   agent:
     mbus: (( concat "nats://nats:" meta.passwords.nats-password "@" meta.default_static_ip ":4222" ))
-  ntp: &ntp [0.pool.ntp.org, 1.pool.ntp.org]
+  ntp: &ntp [north-america.pool.ntp.org, europe.pool.ntp.org, oceania.pool.ntp.org]
 
   uaa:
     url: (( concat "https://" meta.default_static_ip ":8443" ))
