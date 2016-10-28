@@ -156,6 +156,7 @@ properties:
 
   blobstore:
     provider: s3
+    server_side_encryption: AES256
     bucket_name: (( param "specify blobstore bucket" ))
     access_key_id: (( param "specify blobstore access key" ))
     secret_access_key: (( param "specify blobstore secret key" ))
