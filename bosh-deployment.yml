@@ -22,9 +22,6 @@ meta:
     agent-password: ~
     registry-password: ~
     hm-password: ~
-  riemann:
-    host: ~
-    port: "5555"
 
 name: (( grab meta.name ))
 
@@ -198,9 +195,6 @@ properties:
     resurrector:
       minimum_down_jobs: 3
     riemann_enabled: true
-    riemann:
-      host: (( grab meta.riemann.host ))
-      port: (( grab meta.riemann.port ))
 
   aws: &aws
     access_key_id: (( grab meta.aws.access_key_id ))
