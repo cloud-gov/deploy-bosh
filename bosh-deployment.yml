@@ -51,6 +51,8 @@ releases:
   version: latest
 - name: snort
   version: latest
+- name: cron
+  version: latest
 
 compilation:
   workers: 3
@@ -94,6 +96,8 @@ jobs:
   - {name: riemannc, release: riemannc}
   - {name: clamav, release: clamav}
   - {name: snort, release: snort}
+  - {name: cron, release: cron}
+
   instances: 1
   resource_pool: large
   persistent_disk_pool: bosh-ssd
@@ -253,3 +257,19 @@ properties:
     invitations_enabled: false
 
   uaadb: (( param "specify uaadb props" ))
+
+  riemann:
+    server: (( grab properties.collectd.riemann_server ))
+    port: 5555
+
+  cron:
+    entries:
+    - script:
+        name: unknown-vms.sh
+        contents: (( file "bosh-config/cronjobs/unknown-vms.sh" ))
+      minute: '*'
+      hour: '*'
+      day: '*'
+      month: '*'
+      wday: '*'
+      user: root
