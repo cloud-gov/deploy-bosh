@@ -32,9 +32,13 @@ VPCID=$(${AWSCLI} ec2 describe-vpcs --filter Name=tag:Name,Values=${VPC_NAME} --
 
 # find all instances in that VPC and emit a metric for each unknown host
 for id in $(${AWSCLI} ec2 describe-instances --max-items 500 --output text  --filter Name=vpc-id,Values=${VPCID} --query "${WHITELIST_QUERY} [].{\"aws_id\": InstanceId, \"bosh_id\": Tags[?Key==\`id\`].Value | [0]} | [].[bosh_id || aws_id]"); do
+	STATE="ok"
+
 	if [[ $KNOWN_INSTANCES != *${id}* ]]; then
-		${RIEMANNC} --service "unknown-vm.found" --host ${id} --state critical --ttl 180 --metric_sint64 1
+		STATE="critical"
 	fi
+
+    ${RIEMANNC} --service "unknown-vm.found" --host ${id} --state ${STATE} --ttl 120 --metric_sint64 1
 done
 
 ${RIEMANNC} --service "unknown-vm.check" --host $(hostname) --ttl 300 --metric_sint64 1
