@@ -150,6 +150,7 @@ properties:
     db: *bosh_db
     ssl: (( param "specify director ssl" ))
     cpi_job: aws_cpi
+    flush_arp: true
     user_management:
       provider: uaa
       uaa:
