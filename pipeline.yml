@@ -91,7 +91,7 @@ jobs:
       trigger: true
     - get: cg-s3-riemann-release
       trigger: true
-    - get: cg-s3-cron-release
+    - get: cron-release
       trigger: true
     - get: stagingbosh-deployment
       passed: [deploy-staging-bosh]
@@ -157,7 +157,7 @@ jobs:
     - task: upload-cron
       file: pipeline-tasks/upload-release.yml
       input_mapping:
-        release: cg-s3-cron-release
+        release: cron-release
         certificate: stagingbosh-certificate
       params: *bosh-params-staging
 
@@ -239,7 +239,7 @@ jobs:
       trigger: true
     - get: cg-s3-riemann-release
       trigger: true
-    - get: cg-s3-cron-release
+    - get: cron-release
       trigger: true
     - get: productionbosh-deployment
       passed: [deploy-production-bosh]
@@ -305,7 +305,7 @@ jobs:
     - task: upload-cron
       file: pipeline-tasks/upload-release.yml
       input_mapping:
-        release: cg-s3-cron-release
+        release: cron-release
         certificate: productionbosh-certificate
       params: *bosh-params-prod
 
@@ -388,7 +388,7 @@ jobs:
       trigger: true
     - get: cg-s3-riemann-release
       trigger: true
-    - get: cg-s3-cron-release
+    - get: cron-release
       trigger: true
     - get: toolingbosh-deployment
       passed: [deploy-tooling-bosh]
@@ -454,7 +454,7 @@ jobs:
     - task: upload-cron
       file: pipeline-tasks/upload-release.yml
       input_mapping:
-        release: cg-s3-cron-release
+        release: cron-release
         certificate: common-tooling
       params: *bosh-params-tooling
   - put: common-releases-tooling-version
@@ -484,7 +484,7 @@ jobs:
       trigger: true
     - get: cg-s3-riemann-release
       trigger: true
-    - get: cg-s3-cron-release
+    - get: cron-release
       trigger: true
     - get: masterbosh-deployment
       passed: [deploy-master-bosh]
@@ -549,7 +549,7 @@ jobs:
     - task: upload-cron
       file: pipeline-tasks/upload-release.yml
       input_mapping:
-        release: cg-s3-cron-release
+        release: cron-release
         certificate: common-masterbosh
       params: *bosh-params-master
   - put: common-releases-master-version
@@ -673,6 +673,11 @@ resources:
   source:
     repository: cloudfoundry-incubator/bosh-aws-cpi-release
 
+- name: cron-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-community/cron-boshrelease
+
 - name: bosh-config
   type: git
   source:
@@ -794,12 +799,6 @@ resources:
   type: s3
   source:
     regexp: riemann-(.*).tgz
-    <<: *s3-release-params
-
-- name: cg-s3-cron-release
-  type: s3
-  source:
-    regexp: cron-(.*).tgz
     <<: *s3-release-params
 
 - name: stagingbosh-certificate
