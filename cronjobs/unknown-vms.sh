@@ -57,7 +57,7 @@ for vminfo in $(${AWSCLI} ec2 describe-instances --max-items 500 --output text  
     aws_id=$(echo ${vminfo} | cut -f2)
     launch=$(echo ${vminfo} | cut -f3)
 
-    ${RIEMANNC} --service "aws.ec2.describe-instances" --host ${bosh_id} --attributes instance_id=${aws_id} --ttl 120 --metric_sint64 $(($(date +%s) - $(date -d"${launch}" +%s)))
+    ${RIEMANNC} --service "aws.ec2.describe-instances" --host ${aws_id} --attributes bosh_id=${bosh_id} --ttl 120 --metric_sint64 $(($(date +%s) - $(date -d"${launch}" +%s)))
 done
 
 ${RIEMANNC} --service "unknown-vm.check" --host $(hostname) --ttl 300 --metric_sint64 1
