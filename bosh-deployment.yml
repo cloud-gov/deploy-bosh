@@ -210,7 +210,7 @@ properties:
 
   agent:
     mbus: (( concat "nats://nats:" meta.passwords.nats-password "@" meta.default_static_ip ":4222" ))
-  ntp: &ntp [north-america.pool.ntp.org, europe.pool.ntp.org, oceania.pool.ntp.org]
+  ntp: &ntp [time.nist.gov]
 
   uaa:
     url: (( concat "https://" meta.default_static_ip ":8443" ))
