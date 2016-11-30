@@ -1,0 +1,20 @@
+releases:
+- {name: awslogs, version: (( grab $release_awslogs ))}
+- {name: tripwire, version: (( grab $release_tripwire ))}
+- {name: clamav, version: (( grab $release_clamav ))}
+- {name: snort, version: (( grab $release_snort ))}
+
+addons:
+- name: hardening
+  jobs:
+  - {name: awslogs, release: awslogs}
+  - {name: tripwire, release: tripwire}
+  - {name: clamav, release: clamav}
+  - {name: snort, release: snort}
+  properties:
+    awslogs:
+      access_key: (( grab $AWS_ACCESS_KEY_ID )))
+      secret_access_key: (( grab $AWS_SECRET_ACCESS_KEY ))
+    tripwire:
+      localpass: (( grab $TRIPWIRE_LOCALPASS ))
+      sitepass: (( grab $TRIPWIRE_SITEPASS ))
