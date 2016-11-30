@@ -13,7 +13,7 @@ addons:
   - {name: snort, release: snort}
   properties:
     awslogs:
-      access_key: (( grab $AWS_ACCESS_KEY_ID )))
+      access_key: (( grab $AWS_ACCESS_KEY_ID ))
       secret_access_key: (( grab $AWS_SECRET_ACCESS_KEY ))
     tripwire:
       localpass: (( grab $TRIPWIRE_LOCALPASS ))
