@@ -71,6 +71,7 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - get: bosh-config
     - get: pipeline-tasks
     - get: stagingbosh-certificate
     - get: cg-s3-fisma-release
@@ -162,6 +163,8 @@ jobs:
       params: *bosh-params-staging
   - task: update-runtime-config
     file: pipeline-tasks/update-runtime-config.yml
+    input_mapping:
+      manifests: bosh-config  
     params:
       BOSH_CACERT: bosh.pem
       BOSH_ENV: {{stagingbosh-target}}
@@ -230,6 +233,7 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - get: bosh-config
     - get: pipeline-tasks
     - get: productionbosh-certificate
     - get: cg-s3-fisma-release
@@ -321,6 +325,8 @@ jobs:
       params: *bosh-params-prod
   - task: update-runtime-config
     file: pipeline-tasks/update-runtime-config.yml
+    input_mapping:
+      manifests: bosh-config
     params:
       BOSH_CACERT: bosh.pem
       BOSH_ENV: {{productionbosh-target}}
@@ -390,6 +396,7 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - get: bosh-config
     - get: pipeline-tasks
     - get: common-tooling
     - get: cg-s3-fisma-release
@@ -483,6 +490,8 @@ jobs:
     params: {bump: patch}
   - task: update-runtime-config
     file: pipeline-tasks/update-runtime-config.yml
+    input_mapping:
+      manifests: bosh-config
     params:
       BOSH_CACERT: bosh.pem
       BOSH_ENV: {{toolingbosh-target}}
