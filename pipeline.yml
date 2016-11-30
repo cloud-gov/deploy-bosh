@@ -160,6 +160,17 @@ jobs:
         release: cg-s3-cron-release
         certificate: stagingbosh-certificate
       params: *bosh-params-staging
+  - task: update-runtime-config
+    file: pipeline-tasks/update-runtime-config.yml
+    params:
+      BOSH_CACERT: bosh.pem
+      BOSH_ENV: {{stagingbosh-target}}
+      BOSH_USERNAME: {{stagingbosh-username}}
+      BOSH_PASSWORD: {{stagingbosh-password}}
+      AWS_ACCESS_KEY_ID: {{awslogs-aws-access-key-id-staging}}
+      AWS_SECRET_ACCESS_KEY: {{awslogs-aws-secret-access-key-staging}}
+      TRIPWIRE_LOCALPASS: {{tripwire-localpass-staging}}
+      TRIPWIRE_SITEPASS: {{tripwire-sitepass-staging}}
 
 - name: deploy-production-bosh
   serial: true
@@ -308,6 +319,17 @@ jobs:
         release: cg-s3-cron-release
         certificate: productionbosh-certificate
       params: *bosh-params-prod
+  - task: update-runtime-config
+    file: pipeline-tasks/update-runtime-config.yml
+    params:
+      BOSH_CACERT: bosh.pem
+      BOSH_ENV: {{productionbosh-target}}
+      BOSH_USERNAME: {{productionbosh-username}}
+      BOSH_PASSWORD: {{productionbosh-password}}
+      AWS_ACCESS_KEY_ID: {{awslogs-aws-access-key-id-production}}
+      AWS_SECRET_ACCESS_KEY: {{awslogs-aws-secret-access-key-production}}
+      TRIPWIRE_LOCALPASS: {{tripwire-localpass-production}}
+      TRIPWIRE_SITEPASS: {{tripwire-sitepass-production}}
 
 - name: deploy-tooling-bosh
   serial: true
@@ -459,6 +481,17 @@ jobs:
       params: *bosh-params-tooling
   - put: common-releases-tooling-version
     params: {bump: patch}
+  - task: update-runtime-config
+    file: pipeline-tasks/update-runtime-config.yml
+    params:
+      BOSH_CACERT: bosh.pem
+      BOSH_ENV: {{toolingbosh-target}}
+      BOSH_USERNAME: {{toolingbosh-username}}
+      BOSH_PASSWORD: {{toolingbosh-password}}
+      AWS_ACCESS_KEY_ID: {{awslogs-aws-access-key-id-tooling}}
+      AWS_SECRET_ACCESS_KEY: {{awslogs-aws-secret-access-key-tooling}}
+      TRIPWIRE_LOCALPASS: {{tripwire-localpass-tooling}}
+      TRIPWIRE_SITEPASS: {{tripwire-sitepass-tooling}}
 
 - name: common-releases-master
   serial: true
