@@ -1,20 +1,45 @@
 releases:
-- {name: awslogs, version: (( grab $release_awslogs ))}
+- {name: fisma, version: (( grab $release_fisma ))}
 - {name: tripwire, version: (( grab $release_tripwire ))}
 - {name: clamav, version: (( grab $release_clamav ))}
 - {name: snort, version: (( grab $release_snort ))}
+- {name: awslogs, version: (( grab $release_awslogs ))}
+- {name: newrelic, version: (( grab $release_newrelic ))}
+- {name: collectd, version: (( grab $release_collectd ))}
+- {name: nessus-agent, version: (( grab $release_nessus_agent ))}
+- {name: riemannc, version: (( grab $release_riemannc ))}
+- {name: cron, version: (( grab $release_cron ))}
 
 addons:
 - name: hardening
   jobs:
-  - {name: awslogs, release: awslogs}
+  - {name: harden, release: fisma}
   - {name: tripwire, release: tripwire}
   - {name: clamav, release: clamav}
   - {name: snort, release: snort}
+  - {name: awslogs, release: awslogs}
+  - {name: newrelic-monitor, release: newrelic}
+  - {name: nessus-agent, release: nessus-agent}
+  - {name: collectd, release: collectd}
+  - {name: riemannc, release: riemannc}
+  - {name: cron, release: cron}
   properties:
-    awslogs:
-      access_key: (( grab $AWS_ACCESS_KEY_ID ))
-      secret_access_key: (( grab $AWS_SECRET_ACCESS_KEY ))
     tripwire:
       localpass: (( grab $TRIPWIRE_LOCALPASS ))
       sitepass: (( grab $TRIPWIRE_SITEPASS ))
+    awslogs:
+      access_key: (( grab $AWS_ACCESS_KEY_ID ))
+      secret_access_key: (( grab $AWS_SECRET_ACCESS_KEY ))
+      region: (( grab $AWS_REGION ))
+    newrelic:
+      license_key: (( grab $NEWRELIC_LICENSE_KEY ))
+    nessus-agent:
+      key: (( grab $NESSUS_AGENT_KEY ))
+      server: (( grab $NESSUS_AGENT_SERVER ))
+      port: (( grab $NESSUS_AGENT_PORT ))
+      group: (( grab $NESSUS_AGENT_GROUP ))
+    collectd:
+      riemann_server: (( grab $RIEMANN_SERVER ))
+    riemann:
+      server: (( grab $RIEMANN_SERVER ))
+      port: (( grab $RIEMANN_PORT ))
