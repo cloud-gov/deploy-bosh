@@ -2,7 +2,12 @@
 
 set -e -u
 
-bosh --ca-cert ${BOSH_CACERT} -n target ${BOSH_ENV}
+BOSH_CACERT=${BOSH_CACERT:-}
+if [ -n "$BOSH_CACERT" ]; then
+  bosh --ca-cert $BOSH_CACERT -n target $BOSH_ENV
+else
+  bosh -n target $BOSH_ENV
+fi
 
 bosh login <<EOF 1>/dev/null
 $BOSH_USERNAME
