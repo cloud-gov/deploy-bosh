@@ -638,6 +638,26 @@ jobs:
       params: *bosh-params-master
   - put: common-releases-master-version
     params: {bump: patch}
+  - task: update-runtime-config
+    file: bosh-config/update-runtime-config.yml
+    input_mapping:
+      certificate: common-masterbosh
+    params:
+      BOSH_ENV: {{masterbosh-target}}
+      BOSH_USERNAME: {{masterbosh-username}}
+      BOSH_PASSWORD: {{masterbosh-password}}
+      TRIPWIRE_LOCALPASS: {{tripwire-localpass-master}}
+      TRIPWIRE_SITEPASS: {{tripwire-sitepass-master}}
+      AWS_ACCESS_KEY_ID: {{awslogs-aws-access-key-id-master}}
+      AWS_SECRET_ACCESS_KEY: {{awslogs-aws-secret-access-key-master}}
+      AWS_REGION: {{aws-region-master}}
+      NEWRELIC_LICENSE_KEY: {{newrelic-license-key-master}}
+      NESSUS_AGENT_KEY: {{nessus-agent-key-master}}
+      NESSUS_AGENT_SERVER: {{nessus-agent-server-master}}
+      NESSUS_AGENT_PORT: {{nessus-agent-port-master}}
+      NESSUS_AGENT_GROUP: {{nessus-agent-group-master}}
+      RIEMANN_SERVER: {{riemann-server-master}}
+      RIEMANN_PORT: {{riemann-port-master}}
 
 - name: deploy-master-bosh
   serial: true
