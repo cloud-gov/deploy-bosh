@@ -10,7 +10,6 @@ meta:
     availability_zone: ~
   passwords:
     nats-password: ~
-    redis-password: ~
     postgres-password: ~
     admin-password: ~
     director-password: ~
@@ -66,7 +65,6 @@ jobs:
   templates:
   - {name: nats, release: bosh}
   - {name: powerdns, release: bosh}
-  - {name: redis, release: bosh}
   - {name: postgres, release: bosh}
   - {name: blobstore, release: bosh}
   - {name: director, release: bosh}
@@ -87,11 +85,6 @@ jobs:
       address: 127.0.0.1
       user: nats
       password: (( grab meta.passwords.nats-password ))
-
-    redis:
-      listen_address: 127.0.0.1
-      address: 127.0.0.1
-      password: (( grab meta.passwords.redis-password ))
 
     postgres: &bosh_db
       listen_address: 127.0.0.1
