@@ -92,6 +92,8 @@ jobs:
       trigger: true
     - get: cg-s3-riemann-release
       trigger: true
+    - get: cg-s3-collectd-release
+      trigger: true
     - get: cron-release
       trigger: true
     - get: stagingbosh-deployment
@@ -155,6 +157,12 @@ jobs:
         release: cg-s3-riemann-release
         certificate: stagingbosh-certificate
       params: *bosh-params-staging
+    - task: upload-collectd
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cg-s3-collectd-release
+        certificate: stagingbosh-certificate
+      params: *bosh-params-staging
     - task: upload-cron
       file: pipeline-tasks/upload-release.yml
       input_mapping:
@@ -162,9 +170,8 @@ jobs:
         certificate: stagingbosh-certificate
       params: *bosh-params-staging
   - task: update-runtime-config
-    file: pipeline-tasks/update-runtime-config.yml
+    file: bosh-config/update-runtime-config.yml
     input_mapping:
-      manifests: bosh-config
       certificate: stagingbosh-certificate
     params:
       BOSH_CACERT: certificate/bosh.pem
@@ -255,6 +262,8 @@ jobs:
       trigger: true
     - get: cg-s3-riemann-release
       trigger: true
+    - get: cg-s3-collectd-release
+      trigger: true
     - get: cron-release
       trigger: true
     - get: productionbosh-deployment
@@ -318,6 +327,12 @@ jobs:
         release: cg-s3-riemann-release
         certificate: productionbosh-certificate
       params: *bosh-params-prod
+    - task: upload-collectd
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cg-s3-collectd-release
+        certificate: productionbosh-certificate
+      params: *bosh-params-prod
     - task: upload-cron
       file: pipeline-tasks/upload-release.yml
       input_mapping:
@@ -325,9 +340,8 @@ jobs:
         certificate: productionbosh-certificate
       params: *bosh-params-prod
   - task: update-runtime-config
-    file: pipeline-tasks/update-runtime-config.yml
+    file: bosh-config/update-runtime-config.yml
     input_mapping:
-      manifests: bosh-config
       certificate: productionbosh-certificate
     params:
       BOSH_CACERT: certificate/bosh.pem
@@ -422,6 +436,8 @@ jobs:
       trigger: true
     - get: cg-s3-riemann-release
       trigger: true
+    - get: cg-s3-collectd-release
+      trigger: true
     - get: cron-release
       trigger: true
     - get: toolingbosh-deployment
@@ -485,6 +501,12 @@ jobs:
         release: cg-s3-riemann-release
         certificate: common-tooling
       params: *bosh-params-tooling
+    - task: upload-collectd
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cg-s3-collectd-release
+        certificate: common-tooling
+      params: *bosh-params-tooling
     - task: upload-cron
       file: pipeline-tasks/upload-release.yml
       input_mapping:
@@ -494,9 +516,8 @@ jobs:
   - put: common-releases-tooling-version
     params: {bump: patch}
   - task: update-runtime-config
-    file: pipeline-tasks/update-runtime-config.yml
+    file: bosh-config/update-runtime-config.yml
     input_mapping:
-      manifests: bosh-config
       certificate: common-tooling
     params:
       BOSH_CACERT: certificate/boshCA.crt
@@ -539,6 +560,8 @@ jobs:
     - get: cg-s3-riemannc-release
       trigger: true
     - get: cg-s3-riemann-release
+      trigger: true
+    - get: cg-s3-collectd-release
       trigger: true
     - get: cron-release
       trigger: true
@@ -600,6 +623,11 @@ jobs:
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-riemann-release
+        certificate: common-masterbosh
+    - task: upload-collectd
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cg-s3-collectd-release
         certificate: common-masterbosh
       params: *bosh-params-master
     - task: upload-cron
@@ -741,6 +769,8 @@ resources:
     branch: {{bosh-config-git-branch}}
     paths:
     - bosh-deployment.yml
+    - update-runtime-config.yml
+    - update-runtime-config.sh
     - runtime-config.yml
     - cronjobs/*
 
@@ -856,6 +886,12 @@ resources:
   type: s3
   source:
     regexp: riemann-(.*).tgz
+    <<: *s3-release-params
+
+- name: cg-s3-collectd-release
+  type: s3
+  source:
+    regexp: collectd-(.*).tgz
     <<: *s3-release-params
 
 - name: stagingbosh-certificate
