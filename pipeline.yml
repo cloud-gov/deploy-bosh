@@ -541,6 +541,7 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - get: bosh-config
     - get: pipeline-tasks
     - get: common-masterbosh
     - get: cg-s3-fisma-release
@@ -624,6 +625,7 @@ jobs:
       input_mapping:
         release: cg-s3-riemann-release
         certificate: common-masterbosh
+      params: *bosh-params-master
     - task: upload-collectd
       file: pipeline-tasks/upload-release.yml
       input_mapping:
