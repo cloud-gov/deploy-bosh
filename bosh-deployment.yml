@@ -35,24 +35,6 @@ releases:
   version: latest
 - name: uaa
   version: latest
-- name: fisma
-  version: latest
-- name: tripwire
-  version: latest
-- name: awslogs
-  version: latest
-- name: nessus-agent
-  version: latest
-- name: newrelic
-  version: latest
-- name: riemannc
-  version: latest
-- name: clamav
-  version: latest
-- name: snort
-  version: latest
-- name: cron
-  version: latest
 
 compilation:
   workers: 3
@@ -118,11 +100,6 @@ resource_pools:
     key_name: (( grab meta.aws.default_key_name ))
 
 properties:
-  tripwire: (( param "specify tripwire props" ))
-  awslogs: (( param "specify awslogs props" ))
-  nessus-agent: (( param "specify nessus-agent props" ))
-  newrelic: (( param "specify newrelic props" ))
-  collectd: (( param "specify collectd props" ))
   postgres: &bosh_db
     adapter: postgres
     port: 5432
@@ -258,10 +235,6 @@ properties:
     invitations_enabled: false
 
   uaadb: (( param "specify uaadb props" ))
-
-  riemann:
-    server: (( grab properties.collectd.riemann_server ))
-    port: 5555
 
   cron:
     entries:
