@@ -88,15 +88,6 @@ jobs:
   - {name: powerdns, release: bosh}
   - {name: aws_cpi, release: bosh-aws-cpi}
   - {name: uaa, release: uaa}
-  - {name: harden, release: fisma}
-  - {name: tripwire, release: tripwire}
-  - {name: awslogs, release: awslogs}
-  - {name: nessus-agent, release: nessus-agent}
-  - {name: newrelic-monitor, release: newrelic}
-  - {name: riemannc, release: riemannc}
-  - {name: clamav, release: clamav}
-  - {name: snort, release: snort}
-  - {name: cron, release: cron}
 
   instances: 1
   resource_pool: large
