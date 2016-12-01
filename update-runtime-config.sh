@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -e -u
+
+bosh --ca-cert ${BOSH_CACERT} -n target ${BOSH_ENV}
+
+bosh login <<EOF 1>/dev/null
+$BOSH_USERNAME
+$BOSH_PASSWORD
+EOF
+
+releases=$(ls releases)
+
+pushd releases
+  for release in ${releases}; do
+    pushd ${release}
+      tar xf *.tgz
+      release=$(grep "^name" release.MF | awk '{print $2}')
+      version=$(grep "^version" release.MF | awk '{print $2}' | sed -e "s/'//g")
+      declare -x "release_${release//-/_}"=${version}
+    popd
+  done
+popd
+
+spruce merge bosh-config/runtime-config.yml > runtime-config-merged.yml
+
+bosh update runtime-config runtime-config-merged.yml
