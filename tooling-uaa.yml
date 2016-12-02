@@ -1,6 +1,5 @@
 templates:
-  concourse: &concourse-template
-    scope: openid,concourse.admin,concourse.apps
+  client: &client-template
     authorities: uaa.none
     authorized-grant-types: authorization_code,client_credentials,refresh_token
     autoapprove: true
@@ -12,10 +11,22 @@ properties:
   uaa:
     clients:
       concourse_production:
+        scope: openid,concourse.admin,concourse.apps
         secret: (( param "specify concourse production secret" ))
         redirect-uri: (( param "specify concourse production redirect url" ))
-        <<: *concourse-template
+        <<: *client-template
       concourse_staging:
+        scope: openid,concourse.admin,concourse.apps
         secret: (( param "specify concourse staging secret" ))
         redirect-uri: (( param "specify concourse staging redirect url" ))
-        <<: *concourse-template
+        <<: *client-template
+      monitoring_production:
+        scope: openid,metrics.read
+        secret: (( param "specify monitoring production secret" ))
+        redirect-uri: (( param "specify monitoring production redirect url" ))
+        <<: *client-template
+      monitoring_staging:
+        scope: openid,metrics.read
+        secret: (( param "specify monitoring staging secret" ))
+        redirect-uri: (( param "specify monitoring staging redirect url" ))
+        <<: *client-template
