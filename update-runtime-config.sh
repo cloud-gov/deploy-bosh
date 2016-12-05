@@ -21,7 +21,7 @@ pushd releases
     pushd ${release}
       tar xf *.tgz
       release=$(grep "^name" release.MF | awk '{print $2}')
-      version=$(grep "^version" release.MF | awk '{print $2}' | sed -e "s/'//g")
+      version=$(grep "^version" release.MF | awk '{print $2}' | sed -e "s/['\"']//g")
       declare -x "release_${release//-/_}"=${version}
     popd
   done
