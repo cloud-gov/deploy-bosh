@@ -848,8 +848,8 @@ resources:
 - name: pipeline-tasks
   type: git
   source:
-    uri: https://github.com/18F/cg-pipeline-tasks.git
-    branch: master
+    uri: {{pipeline-tasks-git-url}}
+    branch: {{pipeline-tasks-git-branch}}
 
 - name: slack
   type: slack-notification
