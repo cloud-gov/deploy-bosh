@@ -8,7 +8,6 @@ releases:
 - {name: collectd, version: (( grab $release_collectd ))}
 - {name: nessus-agent, version: (( grab $release_nessus_agent ))}
 - {name: riemannc, version: (( grab $release_riemannc ))}
-- {name: cron, version: (( grab $release_cron ))}
 
 addons:
 - name: hardening
