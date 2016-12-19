@@ -18,7 +18,6 @@ inputs:
 - {name: cg-s3-riemannc-release, path: releases/riemannc}
 - {name: cg-s3-riemann-release, path: releases/riemann}
 - {name: cg-s3-collectd-release, path: releases/collectd}
-- {name: cron-release, path: releases/cron}
 
 run:
   path: bosh-config/update-runtime-config.sh
