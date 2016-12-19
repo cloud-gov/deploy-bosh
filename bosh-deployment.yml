@@ -35,7 +35,7 @@ releases:
   version: latest
 - name: uaa
   version: latest
-- name: cron,
+- name: cron
   version: latest
 
 compilation:
