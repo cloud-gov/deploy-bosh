@@ -21,7 +21,6 @@ addons:
   - {name: nessus-agent, release: nessus-agent}
   - {name: collectd, release: collectd}
   - {name: riemannc, release: riemannc}
-  - {name: cron, release: cron}
   properties:
     tripwire:
       localpass: (( grab $TRIPWIRE_LOCALPASS ))
