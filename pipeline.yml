@@ -541,6 +541,8 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - get: certificate
+      resource: master-bosh-root-cert
     - get: bosh-config
     - get: pipeline-tasks
     - get: common-masterbosh
@@ -573,8 +575,8 @@ jobs:
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-fisma-release
-        certificate: common-masterbosh
       params: &bosh-params-master
+        BOSH_CERT: master-bosh.crt
         BOSH_USERNAME: {{masterbosh-username}}
         BOSH_PASSWORD: {{masterbosh-password}}
         BOSH_TARGET: {{masterbosh-target}}
@@ -582,61 +584,51 @@ jobs:
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-tripwire-release
-        certificate: common-masterbosh
       params: *bosh-params-master
     - task: upload-awslogs
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-awslogs-release
-        certificate: common-masterbosh
       params: *bosh-params-master
     - task: upload-nessus-agent
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-nessus-agent-release
-        certificate: common-masterbosh
       params: *bosh-params-master
     - task: upload-newrelic
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-newrelic-release
-        certificate: common-masterbosh
       params: *bosh-params-master
     - task: upload-clamav
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-clamav-release
-        certificate: common-masterbosh
       params: *bosh-params-master
     - task: upload-snort
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-snort-release
-        certificate: common-masterbosh
       params: *bosh-params-master
     - task: upload-riemannc
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-riemannc-release
-        certificate: common-masterbosh
       params: *bosh-params-master
     - task: upload-riemann
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-riemann-release
-        certificate: common-masterbosh
       params: *bosh-params-master
     - task: upload-collectd
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-collectd-release
-        certificate: common-masterbosh
       params: *bosh-params-master
     - task: upload-cron
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cron-release
-        certificate: common-masterbosh
       params: *bosh-params-master
   - put: common-releases-master-version
     params: {bump: patch}
@@ -720,6 +712,15 @@ jobs:
       icon_url: {{slack-icon-url}}
 
 resources:
+- name: master-bosh-root-cert
+  type: s3
+  source:
+    access_key_id: {{ci-access-key-id}}
+    bucket: {{production-bucket-name}}
+    region_name: {{aws-region}}
+    secret_access_key: {{ci-secret-access-key}}
+    versioned_file: master-bosh.crt
+
 - name: common-tooling
   type: cg-common
   source:

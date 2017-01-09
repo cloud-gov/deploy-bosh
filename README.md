@@ -41,3 +41,5 @@ Use the `generate-bosh-certs.sh` script to generate other director certificate
 and key pairs.
 
 Update the deployment manifests with the values generated from the two scripts.
+
+In order to run these scripts you must have openssl and [certstrap](https://github.com/square/certstrap) installed.
