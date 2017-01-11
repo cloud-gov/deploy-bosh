@@ -25,3 +25,21 @@ Wherever you have your bosh installation run:
 
 1. `bosh deployment manifest.yml`
 1. `bosh deploy`
+
+### Generate certificates
+
+You will need to create root-signed certificates because of the SSL validation
+of bosh-cli v2.
+
+Use the `generate-master-bosh-certs.sh` script to generate the root certificate
+used for signing other certificates and the master director certificate and key.
+Because of the SSL validation, we also use the certificate and the key in the
+deployment for `bosh-init` in order to avoid bosh creating it's own certificate
+and key.
+
+Use the `generate-bosh-certs.sh` script to generate other director certificate
+and key pairs.
+
+Update the deployment manifests with the values generated from the two scripts.
+
+In order to run these scripts you must have openssl and [certstrap](https://github.com/square/certstrap) installed.
