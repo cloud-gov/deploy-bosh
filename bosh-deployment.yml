@@ -122,6 +122,8 @@ properties:
     ssl: (( param "specify director ssl" ))
     cpi_job: aws_cpi
     flush_arp: true
+    # TODO: Revert after https://github.com/cloudfoundry/bosh/issues/1486 is resolved
+    enable_post_deploy: true
     user_management:
       provider: uaa
       uaa:
