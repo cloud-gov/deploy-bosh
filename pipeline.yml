@@ -101,7 +101,7 @@ jobs:
       trigger: true
     - get: stagingbosh-deployment
       passed: [deploy-staging-bosh]
-  - do:
+  - aggregate:
     - task: upload-fisma
       file: pipeline-tasks/upload-release.yml
       input_mapping:
@@ -261,7 +261,7 @@ jobs:
       trigger: true
     - get: productionbosh-deployment
       passed: [deploy-production-bosh]
-  - do:
+  - aggregate:
     - task: upload-fisma
       file: pipeline-tasks/upload-release.yml
       input_mapping:
@@ -424,14 +424,14 @@ jobs:
       trigger: true
     - get: toolingbosh-deployment
       passed: [deploy-tooling-bosh]
-  - do:
+  - aggregate:
     - task: upload-fisma
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cg-s3-fisma-release
       params: &bosh-params-tooling
-        BOSH_USERNAME: {{toolingbosh-username}}
-        BOSH_PASSWORD: {{toolingbosh-password}}
+        BOSH_CLIENT: {{toolingbosh-uaa-client}}
+        BOSH_CLIENT_SECRET: {{toolingbosh-uaa-client-secret}}
         BOSH_TARGET: {{toolingbosh-target}}
         BOSH_CERT: master-bosh.crt
     - task: upload-tripwire
@@ -539,7 +539,7 @@ jobs:
       trigger: true
     - get: masterbosh-deployment
       passed: [deploy-master-bosh]
-  - do:
+  - aggregate:
     - task: upload-fisma
       file: pipeline-tasks/upload-release.yml
       input_mapping:
