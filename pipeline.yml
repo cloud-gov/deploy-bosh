@@ -17,7 +17,7 @@ jobs:
     - get: common
       resource: common-staging
       trigger: true
-    - get: common-releases-tooling-version
+    - get: semver-tooling-version
       passed: [common-releases-tooling]
   - task: bosh-manifest
     config: &manifest-config
@@ -200,7 +200,7 @@ jobs:
       passed: [deploy-staging-bosh]
     - get: bosh-stemcell
       passed: [deploy-staging-bosh]
-    - get: common-releases-tooling-version
+    - get: semver-tooling-version
       passed: [common-releases-tooling]
     - get: common
       resource: common-production
@@ -354,7 +354,7 @@ jobs:
     - get: common
       resource: common-tooling
       trigger: true
-    - get: common-releases-master-version
+    - get: semver-master-version
       passed: [common-releases-master]
   - task: bosh-manifest
     config:
@@ -430,8 +430,8 @@ jobs:
       input_mapping:
         release: cg-s3-fisma-release
       params: &bosh-params-tooling
-        BOSH_USERNAME: {{toolingbosh-username}}
-        BOSH_PASSWORD: {{toolingbosh-password}}
+        BOSH_CLIENT: {{toolingbosh-uaa-client}}
+        BOSH_CLIENT_SECRET: {{toolingbosh-uaa-client-secret}}
         BOSH_TARGET: {{toolingbosh-target}}
         BOSH_CERT: master-bosh.crt
     - task: upload-tripwire
@@ -484,7 +484,7 @@ jobs:
       input_mapping:
         release: cron-release
       params: *bosh-params-tooling
-  - put: common-releases-tooling-version
+  - put: semver-tooling-version
     params: {bump: patch}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
@@ -599,7 +599,7 @@ jobs:
       input_mapping:
         release: cron-release
       params: *bosh-params-master
-  - put: common-releases-master-version
+  - put: semver-master-version
     params: {bump: patch}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
@@ -906,24 +906,24 @@ resources:
     private: true
     region_name: {{aws-region}}
 
-- name: common-releases-master-version
+- name: semver-master-version
   type: semver
   source:
     driver: s3
-    bucket: {{common-releases-bucket}}
-    key: {{common-releases-master-key}}
-    access_key_id: {{common-releases-access-key-id}}
-    secret_access_key: {{common-releases-secret-access-key}}
+    bucket: {{semver-bucket}}
+    key: {{semver-master-key}}
+    access_key_id: {{semver-access-key-id}}
+    secret_access_key: {{semver-secret-access-key}}
     region_name: {{aws-region}}
 
-- name: common-releases-tooling-version
+- name: semver-tooling-version
   type: semver
   source:
     driver: s3
-    bucket: {{common-releases-bucket}}
-    key: {{common-releases-tooling-key}}
-    access_key_id: {{common-releases-access-key-id}}
-    secret_access_key: {{common-releases-secret-access-key}}
+    bucket: {{semver-bucket}}
+    key: {{semver-tooling-key}}
+    access_key_id: {{semver-access-key-id}}
+    secret_access_key: {{semver-secret-access-key}}
     region_name: {{aws-region}}
 
 resource_types:
