@@ -30,3 +30,9 @@ properties:
         secret: (( param "specify monitoring staging secret" ))
         redirect-uri: (( param "specify monitoring staging redirect url" ))
         <<: *client-template
+      # For authentication to bosh via concourse
+      concourse_bosh:
+        secret: (( param "specify concourse bosh client secret" ))
+        authorized-grant-types: client_credentials
+        authorities: bosh.admin
+        scope: ""
