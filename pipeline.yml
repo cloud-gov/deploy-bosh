@@ -764,6 +764,7 @@ resources:
     - update-runtime-config.yml
     - update-runtime-config.sh
     - runtime-config.yml
+    - tooling-uaa.yml
     - cronjobs/*
 
 - name: bosh-init-config
