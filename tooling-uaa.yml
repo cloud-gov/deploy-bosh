@@ -36,3 +36,8 @@ properties:
         authorized-grant-types: client_credentials
         authorities: bosh.admin
         scope: ""
+      uaa-token-audit:
+        secret: (( param "specify uaa token audit client secret" ))
+        authorized-grant-types: client_credentials
+        authorities: scim.read,tokens.list,uaa.admin
+        scope: ""
