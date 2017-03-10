@@ -208,6 +208,12 @@ properties:
         access-token-validity: 1200 # 20 min
         refresh-token-validity: 86400 # re-login required once a day
         secret: ""
+      bosh_exporter:
+        override: true
+        authorized-grant-types: client_credentials
+        authorities: bosh.read
+        scope: ""
+        secret: (( param "specify bosh exporter client secret" ))
     scim:
       users:
       - name: admin

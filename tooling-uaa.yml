@@ -30,6 +30,16 @@ properties:
         secret: (( param "specify monitoring staging secret" ))
         redirect-uri: (( param "specify monitoring staging redirect url" ))
         <<: *client-template
+      prometheus_grafana_production:
+        scope: openid,metrics.read
+        secret: (( param "specify prometheus production secret" ))
+        redirect-uri: (( param "specify prometheus production redirect url" ))
+        <<: *client-template
+      prometheus_grafana_staging:
+        scope: openid,metrics.read
+        secret: (( param "specify prometheus staging secret" ))
+        redirect-uri: (( param "specify prometheus staging redirect url" ))
+        <<: *client-template
       # For authentication to bosh via concourse
       concourse_bosh:
         secret: (( param "specify concourse bosh client secret" ))
