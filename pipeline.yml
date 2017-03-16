@@ -76,7 +76,6 @@ jobs:
       resource: master-bosh-root-cert
     - get: bosh-config
     - get: pipeline-tasks
-    - get: developmentbosh-certificate
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -239,7 +238,6 @@ jobs:
       resource: master-bosh-root-cert
     - get: bosh-config
     - get: pipeline-tasks
-    - get: stagingbosh-certificate
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -399,7 +397,6 @@ jobs:
       resource: master-bosh-root-cert
     - get: bosh-config
     - get: pipeline-tasks
-    - get: productionbosh-certificate
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -1068,36 +1065,6 @@ resources:
   source:
     regexp: collectd-(.*).tgz
     <<: *s3-release-params
-
-- name: developmentbosh-certificate
-  type: s3
-  source:
-    access_key_id: {{ci-access-key-id}}
-    bucket: {{development-bucket-name}}
-    secret_access_key: {{ci-secret-access-key}}
-    versioned_file: bosh.pem
-    private: true
-    region_name: {{aws-region}}
-
-- name: stagingbosh-certificate
-  type: s3
-  source:
-    access_key_id: {{ci-access-key-id}}
-    bucket: {{staging-bucket-name}}
-    secret_access_key: {{ci-secret-access-key}}
-    versioned_file: bosh.pem
-    private: true
-    region_name: {{aws-region}}
-
-- name: productionbosh-certificate
-  type: s3
-  source:
-    access_key_id: {{ci-access-key-id}}
-    bucket: {{production-bucket-name}}
-    secret_access_key: {{ci-secret-access-key}}
-    versioned_file: bosh.pem
-    private: true
-    region_name: {{aws-region}}
 
 - name: semver-master-version
   type: semver
