@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [ "$#" -lt 2 ]; then
     echo "USAGE: $0 <bosh name> <bosh ip address>"
     exit 99;
@@ -23,6 +25,4 @@ certstrap --depot-path ${TARGET} request-cert --cn "${BOSH_NAME}-uaa-web" --ip $
 certstrap --depot-path ${TARGET} sign ${BOSH_NAME}-uaa-web --CA master-bosh --passphrase ''
 
 # extract the public key for this cert as right now we use it to sign JWTs as well
-echo "${BOSH_NAME} BOSH public key:"
-openssl rsa -in ${TARGET}/${BOSH_NAME}-uaa-web.key -pubout
-
+openssl rsa -in ${TARGET}/${BOSH_NAME}-uaa-web.key -pubout > ${TARGET}/${BOSH_NAME}-pub.key
