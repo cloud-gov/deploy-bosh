@@ -913,8 +913,8 @@ resources:
     driver: s3
     bucket: {{semver-bucket}}
     key: {{semver-master-key}}
-    access_key_id: {{semver-access-key-id}}
-    secret_access_key: {{semver-secret-access-key}}
+    access_key_id: {{semver-access-key-id-master}}
+    secret_access_key: {{semver-secret-access-key-master}}
     region_name: {{aws-region}}
 
 - name: semver-tooling-version
@@ -923,8 +923,8 @@ resources:
     driver: s3
     bucket: {{semver-bucket}}
     key: {{semver-tooling-key}}
-    access_key_id: {{semver-access-key-id}}
-    secret_access_key: {{semver-secret-access-key}}
+    access_key_id: {{semver-access-key-id-tooling}}
+    secret_access_key: {{semver-secret-access-key-tooling}}
     region_name: {{aws-region}}
 
 resource_types:
