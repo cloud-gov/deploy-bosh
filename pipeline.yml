@@ -1,6 +1,6 @@
 ---
 jobs:
-- name: deploy-staging-bosh
+- name: deploy-development-bosh
   serial: true
   plan:
   - aggregate:
@@ -15,7 +15,7 @@ jobs:
       trigger: true
     - get: bosh-stemcell
     - get: common
-      resource: common-staging
+      resource: common-development
       trigger: true
     - get: semver-tooling-version
       passed: [common-releases-tooling]
@@ -39,6 +39,168 @@ jobs:
           bosh-config/generate.sh \
             common/secrets.yml \
             > bosh-manifest/manifest.yml
+  - put: developmentbosh-deployment
+    params: &bosh-deployment
+      cert: master-bosh-root-cert/master-bosh.crt
+      manifest: bosh-manifest/manifest.yml
+      releases:
+      - bosh-release/*.tgz
+      - uaa-release/*.tgz
+      - cpi-release/*.tgz
+      stemcells:
+      - bosh-stemcell/*.tgz
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: FAILED to deploy development BOSH
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: {{slack-channel}}
+      username: {{slack-username}}
+      icon_url: {{slack-icon-url}}
+  on_success:
+    put: slack
+    params:
+      text: |
+        :white_check_mark: Successfully deployed development BOSH
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: {{slack-channel}}
+      username: {{slack-username}}
+      icon_url: {{slack-icon-url}}
+
+- name: common-releases-development
+  serial: true
+  plan:
+  - aggregate:
+    - get: certificate
+      resource: master-bosh-root-cert
+    - get: bosh-config
+    - get: pipeline-tasks
+    - get: cg-s3-fisma-release
+      trigger: true
+    - get: cg-s3-tripwire-release
+      trigger: true
+    - get: cg-s3-awslogs-release
+      trigger: true
+    - get: cg-s3-nessus-agent-release
+      trigger: true
+    - get: cg-s3-newrelic-release
+      trigger: true
+    - get: cg-s3-clamav-release
+      trigger: true
+    - get: cg-s3-snort-release
+      trigger: true
+    - get: cg-s3-riemannc-release
+      trigger: true
+    - get: cg-s3-riemann-release
+      trigger: true
+    - get: cg-s3-collectd-release
+      trigger: true
+    - get: cron-release
+      trigger: true
+    - get: developmentbosh-deployment
+      passed: [deploy-development-bosh]
+  - aggregate:
+    - task: upload-fisma
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cg-s3-fisma-release
+      params: &bosh-params-development
+        BOSH_USERNAME: {{developmentbosh-username}}
+        BOSH_PASSWORD: {{developmentbosh-password}}
+        BOSH_TARGET: {{developmentbosh-target}}
+        BOSH_CERT: master-bosh.crt
+    - task: upload-tripwire
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cg-s3-tripwire-release
+      params: *bosh-params-development
+    - task: upload-awslogs
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cg-s3-awslogs-release
+      params: *bosh-params-development
+    - task: upload-nessus-agent
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cg-s3-nessus-agent-release
+      params: *bosh-params-development
+    - task: upload-newrelic
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cg-s3-newrelic-release
+      params: *bosh-params-development
+    - task: upload-clamav
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cg-s3-clamav-release
+      params: *bosh-params-development
+    - task: upload-snort
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cg-s3-snort-release
+      params: *bosh-params-development
+    - task: upload-riemannc
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cg-s3-riemannc-release
+      params: *bosh-params-development
+    - task: upload-riemann
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cg-s3-riemann-release
+      params: *bosh-params-development
+    - task: upload-collectd
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cg-s3-collectd-release
+      params: *bosh-params-development
+    - task: upload-cron
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: cron-release
+      params: *bosh-params-development
+  - task: update-runtime-config
+    file: bosh-config/update-runtime-config.yml
+    params:
+      BOSH_CACERT: certificate/master-bosh.crt
+      BOSH_ENV: {{developmentbosh-target}}
+      BOSH_USERNAME: {{developmentbosh-username}}
+      BOSH_PASSWORD: {{developmentbosh-password}}
+      TRIPWIRE_LOCALPASS: {{tripwire-localpass-development}}
+      TRIPWIRE_SITEPASS: {{tripwire-sitepass-development}}
+      AWS_ACCESS_KEY_ID: {{awslogs-aws-access-key-id-development}}
+      AWS_SECRET_ACCESS_KEY: {{awslogs-aws-secret-access-key-development}}
+      AWS_REGION: {{aws-region-development}}
+      NEWRELIC_LICENSE_KEY: {{newrelic-license-key-development}}
+      NESSUS_AGENT_KEY: {{nessus-agent-key-development}}
+      NESSUS_AGENT_SERVER: {{nessus-agent-server-development}}
+      NESSUS_AGENT_PORT: {{nessus-agent-port-development}}
+      NESSUS_AGENT_GROUP: {{nessus-agent-group-development}}
+      RIEMANN_SERVER: {{riemann-server-development}}
+      RIEMANN_PORT: {{riemann-port-development}}
+
+- name: deploy-staging-bosh
+  serial: true
+  plan:
+  - aggregate:
+    - get: master-bosh-root-cert
+    - get: bosh-config
+      trigger: true
+    - get: bosh-release
+      trigger: true
+    - get: uaa-release
+      trigger: true
+    - get: cpi-release
+      trigger: true
+    - get: bosh-stemcell
+    - get: common
+      resource: common-staging
+      trigger: true
+    - get: semver-tooling-version
+      passed: [common-releases-tooling]
+  - task: bosh-manifest
+    config: *manifest-config
   - put: stagingbosh-deployment
     params: &bosh-deployment
       cert: master-bosh-root-cert/master-bosh.crt
@@ -76,7 +238,6 @@ jobs:
       resource: master-bosh-root-cert
     - get: bosh-config
     - get: pipeline-tasks
-    - get: stagingbosh-certificate
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -236,7 +397,6 @@ jobs:
       resource: master-bosh-root-cert
     - get: bosh-config
     - get: pipeline-tasks
-    - get: productionbosh-certificate
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -701,6 +861,17 @@ resources:
     secrets_passphrase: {{tooling-secrets-passphrase}}
     bosh_cert: bosh-tooling.pem
 
+- name: common-development
+  type: cg-common
+  source:
+    bucket_name: {{production-bucket-name}}
+    region: {{aws-region}}
+    access_key_id: {{ci-access-key-id}}
+    secret_access_key: {{ci-secret-access-key}}
+    secrets_file: development-bosh.yml
+    secrets_passphrase: {{development-secrets-passphrase}}
+    bosh_cert: bosh-tooling.pem
+
 - name: common-staging
   type: cg-common
   source:
@@ -791,6 +962,14 @@ resources:
     username: {{masterbosh-username}}
     password: {{masterbosh-password}}
     deployment: toolingbosh
+
+- name: developmentbosh-deployment
+  type: 18f-bosh-deployment
+  source:
+    target: {{toolingbosh-target}}
+    username: {{toolingbosh-username}}
+    password: {{toolingbosh-password}}
+    deployment: developmentbosh
 
 - name: stagingbosh-deployment
   type: 18f-bosh-deployment
@@ -886,26 +1065,6 @@ resources:
   source:
     regexp: collectd-(.*).tgz
     <<: *s3-release-params
-
-- name: stagingbosh-certificate
-  type: s3
-  source:
-    access_key_id: {{ci-access-key-id}}
-    bucket: {{staging-bucket-name}}
-    secret_access_key: {{ci-secret-access-key}}
-    versioned_file: bosh.pem
-    private: true
-    region_name: {{aws-region}}
-
-- name: productionbosh-certificate
-  type: s3
-  source:
-    access_key_id: {{ci-access-key-id}}
-    bucket: {{production-bucket-name}}
-    secret_access_key: {{ci-secret-access-key}}
-    versioned_file: bosh.pem
-    private: true
-    region_name: {{aws-region}}
 
 - name: semver-master-version
   type: semver
