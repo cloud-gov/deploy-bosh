@@ -13,7 +13,7 @@ meta:
     default_key_name: bosh
     default_security_groups: ~
     region: ~
-  parent_bosh_ip: ~
+  dns_recursor_ip: ~
   bosh_domain_name: ~
   passwords:
     nats-password: ~
@@ -107,7 +107,7 @@ properties:
   dns:
     address: (( grab meta.default_static_ip ))
     db: *bosh_db
-    recursor: (( grab meta.parent_bosh_ip ))
+    recursor: (( grab meta.dns_recursor_ip ))
     domain_name: (( grab meta.bosh_domain_name ))
 
   nats:
