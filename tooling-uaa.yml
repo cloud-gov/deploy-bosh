@@ -1,3 +1,13 @@
+releases:
+- (( append ))
+- {name: uaa-customized, version: latest}
+
+jobs:
+- name: bosh
+  templates:
+  - (( append ))
+  - {name: uaa-customized, release: uaa-customized}
+
 templates:
   client: &client-template
     authorities: uaa.none
