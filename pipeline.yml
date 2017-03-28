@@ -509,6 +509,7 @@ jobs:
     - get: bosh-config
     - get: bosh-release
     - get: uaa-release
+    - get: uaa-customized-release
     - get: cpi-release
     - get: bosh-stemcell
     - get: common
@@ -530,7 +531,14 @@ jobs:
             > bosh-manifest/manifest.yml
   - put: toolingbosh-deployment
     params:
-      <<: *bosh-deployment
+      manifest: bosh-manifest/manifest.yml
+      releases:
+      - bosh-release/*.tgz
+      - uaa-release/*.tgz
+      - uaa-customized-release/*.tgz
+      - cpi-release/*.tgz
+      stemcells:
+      - bosh-stemcell/*.tgz
       cert: ~
   on_failure:
     put: slack
@@ -1064,6 +1072,12 @@ resources:
   type: s3
   source:
     regexp: collectd-(.*).tgz
+    <<: *s3-release-params
+
+- name: uaa-customized-release
+  type: s3
+  source:
+    regexp: uaa-customized-(.*).tgz
     <<: *s3-release-params
 
 - name: semver-master-version
