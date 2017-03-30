@@ -8,8 +8,6 @@ meta:
     availability_zone: ~
   default_static_ip: (( grab meta.networks.default.static_ips.[0] ))
   aws:
-    access_key_id: ~
-    secret_access_key: ~
     default_key_name: bosh
     default_security_groups: ~
     region: ~
@@ -73,7 +71,6 @@ jobs:
   - {name: aws_cpi, release: bosh-aws-cpi}
   - {name: uaa, release: uaa}
   - {name: cron, release: cron}
-
   instances: 1
   resource_pool: large
   persistent_disk_pool: bosh-ssd
@@ -89,8 +86,8 @@ resource_pools:
     version: latest
   cloud_properties:
     instance_type: m3.large
+    iam_instance_profile: (( grab terraform_outputs.bosh_profile ))
     availability_zone: (( grab meta.cloud_properties.availability_zone ))
-    elbs: []
     key_name: (( grab meta.aws.default_key_name ))
 
 properties:
@@ -133,8 +130,6 @@ properties:
     provider: s3
     server_side_encryption: AES256
     bucket_name: (( param "specify blobstore bucket" ))
-    access_key_id: (( param "specify blobstore access key" ))
-    secret_access_key: (( param "specify blobstore secret key" ))
     s3_region: (( grab meta.aws.region ))
     agent:
       user: agent
@@ -156,9 +151,7 @@ properties:
     port: 25777
     cloud:
       plugin: aws
-      credentials_source: static
-      access_key_id: (( grab meta.aws.access_key_id ))
-      secret_access_key: (( grab meta.aws.secret_access_key ))
+      credentials_source: env_or_profile
       region: (( grab meta.aws.region ))
 
   hm:
@@ -175,10 +168,10 @@ properties:
     riemann_enabled: true
 
   aws: &aws
-    access_key_id: (( grab meta.aws.access_key_id ))
-    secret_access_key: (( grab meta.aws.secret_access_key ))
+    credentials_source: env_or_profile
     default_key_name: (( grab meta.aws.default_key_name ))
     default_security_groups: (( grab meta.aws.default_security_groups ))
+    default_iam_instance_profile: (( grab terraform_outputs.default_profile ))
     region: (( grab meta.aws.region ))
 
   agent:
