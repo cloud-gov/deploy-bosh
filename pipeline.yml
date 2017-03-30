@@ -559,6 +559,28 @@ jobs:
       username: {{slack-username}}
       icon_url: {{slack-icon-url}}
 
+- name: uaa-smoke-tests
+  plan:
+  - aggregate:
+    - get: pipeline-tasks
+    - get: uaa-customized-release
+      passed: [deploy-tooling-bosh]
+    - get: toolingbosh-deployment
+      trigger: true
+  - task: smoke-tests
+    file: pipeline-tasks/uaa-smoke-tests.yml
+    params:
+      BASE_URL: {{uaa-url-opslogin}}
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: UAA Smoke Tests for opslogin FAILED
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: {{slack-channel}}
+      username: {{slack-username}}
+      icon_url: {{slack-icon-url}}
+
 - name: common-releases-tooling
   serial: true
   plan:
