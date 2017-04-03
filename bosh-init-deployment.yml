@@ -17,8 +17,6 @@ meta:
     hm-password: ~
     mbus-password: ~
   aws:
-    access_key_id: ~
-    secret_access_key: ~
     default_key_name: bosh
     default_security_groups: ~
     region: ~
@@ -43,6 +41,7 @@ resource_pools:
     sha1: aabdf995a9ff68ab95453c76da15d2b7b8895a40
   cloud_properties:
     instance_type: m3.large
+    iam_instance_profile: (( grab terraform_outputs.master_bosh_profile ))
     ephemeral_disk:
       size: 25_000
       type: gp2
@@ -113,9 +112,7 @@ jobs:
       port: 25777
       cloud:
         plugin: aws
-        credentials_source: static
-        access_key_id: (( grab meta.aws.access_key_id ))
-        secret_access_key: (( grab meta.aws.secret_access_key ))
+        credentials_source: env_or_profile
         region: (( grab meta.aws.region ))
 
     blobstore:
@@ -151,8 +148,6 @@ jobs:
       resurrector_enabled: true
 
     aws: &aws
-      access_key_id: (( grab meta.aws.access_key_id ))
-      secret_access_key: (( grab meta.aws.secret_access_key ))
       default_key_name: (( grab meta.aws.default_key_name ))
       default_security_groups: (( grab meta.aws.default_security_groups ))
       region: (( grab meta.aws.region ))

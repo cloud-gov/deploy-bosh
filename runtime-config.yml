@@ -26,8 +26,6 @@ addons:
       localpass: (( grab $TRIPWIRE_LOCALPASS ))
       sitepass: (( grab $TRIPWIRE_SITEPASS ))
     awslogs:
-      access_key: (( grab $AWS_ACCESS_KEY_ID ))
-      secret_access_key: (( grab $AWS_SECRET_ACCESS_KEY ))
       region: (( grab $AWS_REGION ))
     newrelic:
       license_key: (( grab $NEWRELIC_LICENSE_KEY ))
