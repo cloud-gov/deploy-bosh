@@ -17,6 +17,8 @@ meta:
     hm-password: ~
     mbus-password: ~
   aws:
+    access_key_id: ~
+    secret_access_key: ~
     default_key_name: bosh
     default_security_groups: ~
     region: ~
@@ -112,7 +114,9 @@ jobs:
       port: 25777
       cloud:
         plugin: aws
-        credentials_source: env_or_profile
+        credentials_source: static
+        access_key_id: (( grab meta.aws.access_key_id ))
+        secret_access_key: (( grab meta.aws.secret_access_key ))
         region: (( grab meta.aws.region ))
 
     blobstore:
@@ -148,9 +152,11 @@ jobs:
       resurrector_enabled: true
 
     aws: &aws
+      credentials_source: static
       default_key_name: (( grab meta.aws.default_key_name ))
       default_security_groups: (( grab meta.aws.default_security_groups ))
-      credentials_source: env_or_profile
+      access_key_id: (( grab meta.aws.access_key_id ))
+      secret_access_key: (( grab meta.aws.secret_access_key ))
       region: (( grab meta.aws.region ))
 
     agent:
