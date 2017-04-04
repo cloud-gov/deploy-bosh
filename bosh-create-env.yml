@@ -1,0 +1,23 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: 18fgsa/concourse-task
+
+inputs:
+- name: bosh-release
+- name: cpi-release
+- name: bosh-stemcell
+- name: common-masterbosh
+- name: terraform-yaml
+- name: bosh-create-env-config
+- name: decrypt
+- name: bosh-state
+
+outputs:
+- name: updated-bosh-state
+
+run:
+  path: bosh-create-env-config/bosh-create-env.sh

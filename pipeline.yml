@@ -818,28 +818,25 @@ jobs:
   plan:
   - aggregate:
     - get: pipeline-tasks
-    - get: bosh-init-config
+    - get: bosh-create-env-config
       trigger: true
     - get: common-masterbosh
       trigger: true
+    - get: bosh-release
+      params:
+        tarball: false
+      trigger: true
+    - get: cpi-release
+      params:
+        tarball: false
+      trigger: true
+    - get: stemcell
+      resource: bosh-stemcell
+      trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-tooling
-  - task: bosh-manifest
-    config:
-      <<: *manifest-config
-      inputs:
-      - name: common-masterbosh
-      - name: bosh-init-config
-      run:
-        path: sh
-        args:
-        - -exc
-        - |
-          spruce merge \
-            bosh-init-config/bosh-init-deployment.yml \
-            common-masterbosh/secrets.yml \
-            terraform-yaml/state.yml \
-            > bosh-manifest/manifest.yml
+    - get: bosh-state
+      resource: masterbosh-state
   - task: decrypt-private-key
     file: pipeline-tasks/decrypt.yml
     config:
@@ -848,13 +845,10 @@ jobs:
       - name: common-masterbosh
     params:
       INPUT_FILE: common-masterbosh/boshCA.crt
-      OUTPUT_FILE: decrypt/bosh-init.pem
+      OUTPUT_FILE: decrypt/master-bosh.pem
       PASSPHRASE: {{masterbosh-secrets-passphrase}}
-  - put: masterbosh-deployment
-    params:
-      manifest_file: bosh-manifest/manifest.yml
-      key_file: decrypt/bosh-init.pem
-      stats_file_key: master-bosh-state.json
+  - task: bosh-create-env
+    file: bosh-create-env-config/bosh-create-env.yml
   on_failure:
     put: slack
     params:
@@ -928,6 +922,14 @@ resources:
     secrets_passphrase: {{prod-secrets-passphrase}}
     bosh_cert: bosh-tooling.pem
 
+- name: masterbosh-state
+  type: s3-iam
+  source:
+    bucket: cloud-gov-varz
+    region_name: us-gov-west-1
+    versioned_file: master-bosh-state.json
+    server_side_encryption: AES256
+
 - name: common-masterbosh
   type: cg-common
   source:
@@ -972,13 +974,13 @@ resources:
     - tooling-uaa.yml
     - cronjobs/*
 
-- name: bosh-init-config
+- name: bosh-create-env-config
   type: git
   source:
     uri: {{bosh-config-git-url}}
     branch: {{bosh-config-git-branch}}
     paths:
-    - bosh-init-deployment.yml
+    - bosh-create-env*
 
 - name: bosh-stemcell
   type: s3
@@ -1020,14 +1022,6 @@ resources:
     username: {{toolingbosh-username}}
     password: {{toolingbosh-password}}
     deployment: productionbosh
-
-- name: masterbosh-deployment
-  type: bosh-init-deployment
-  source:
-    bucket_name: {{bosh-init-bucket-name}}
-    access_key_id: {{ci-access-key-id}}
-    secret_access_key: {{ci-secret-access-key}}
-    region: {{aws-region}}
 
 - name: pipeline-tasks
   type: git
@@ -1155,10 +1149,6 @@ resources:
     region_name: {{aws-region}}
 
 resource_types:
-- name: bosh-init-deployment
-  type: docker-image
-  source:
-    repository: teamidefix/bosh-init-deployment-resource
 - name: cg-common
   type: docker-image
   source:

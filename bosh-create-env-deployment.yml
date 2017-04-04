@@ -5,7 +5,7 @@ meta:
     private:
       static_ips: [10.0.0.6]
   default_static_ip: (( grab meta.networks.private.static_ips.[0] ))
-  keypair_file: ./bosh-init.pem
+  keypair_file: ./decrypt/master-bosh.pem
   cloud_properties:
     availability_zone: ~
   passwords:
@@ -27,18 +27,18 @@ name: (( grab meta.name ))
 
 releases:
 - name: bosh
-  url: https://bosh.io/d/github.com/cloudfoundry/bosh?v=260
-  sha1: f8f086974d9769263078fb6cb7927655744dacbc
+  url: (( grab $RELEASES_BOSH_URL ))
+  sha1: (( grab $RELEASES_BOSH_SHA1 ))
 - name: bosh-aws-cpi
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/bosh-aws-cpi-release?v=62
-  sha1: f36967927ceae09e5663a41fdda199edfe649dc6
+  url: (( grab $RELEASES_BOSH_AWS_CPI_URL ))
+  sha1: (( grab $RELEASES_BOSH_AWS_CPI_SHA1 ))
 
 resource_pools:
 - name: vms
   network: private
   stemcell:
-    url: https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-trusty-go_agent?v=3312.3
-    sha1: aabdf995a9ff68ab95453c76da15d2b7b8895a40
+    url: (( grab $STEMCELL_URL ))
+    sha1: (( grab $STEMCELL_SHA1 ))
   cloud_properties:
     instance_type: m3.large
     iam_instance_profile: (( grab terraform_outputs.master_bosh_profile ))
@@ -150,6 +150,7 @@ jobs:
     aws: &aws
       default_key_name: (( grab meta.aws.default_key_name ))
       default_security_groups: (( grab meta.aws.default_security_groups ))
+      credentials_source: env_or_profile
       region: (( grab meta.aws.region ))
 
     agent:
