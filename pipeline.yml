@@ -730,7 +730,7 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
-    - get: masterbosh-deployment
+    - get: masterbosh-state
       passed: [deploy-master-bosh]
   - aggregate:
     - task: upload-fisma
@@ -830,8 +830,7 @@ jobs:
       params:
         tarball: false
       trigger: true
-    - get: stemcell
-      resource: bosh-stemcell
+    - get: bosh-stemcell
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-tooling
@@ -849,6 +848,9 @@ jobs:
       PASSPHRASE: {{masterbosh-secrets-passphrase}}
   - task: bosh-create-env
     file: bosh-create-env-config/bosh-create-env.yml
+  - put: masterbosh-state
+    params:
+      file: updated-bosh-state/*.json
   on_failure:
     put: slack
     params:

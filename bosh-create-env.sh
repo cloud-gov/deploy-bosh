@@ -15,7 +15,6 @@ export STEMCELL_URL=$(cat bosh-stemcell/url  | tr -d '\n')
 # we have to trust what's in our bucket :/
 export STEMCELL_SHA1=$(shasum bosh-stemcell/*.tgz | cut -d" " -f1)
 
-
 set -x
 
 # generate the manifest
@@ -26,8 +25,6 @@ spruce merge \
     terraform-yaml/state.yml \
 > manifest.yml
 
-# dump our aws access key id so it's easier to find errors in cloudtrail
-curl -s curl 169.254.169.254/latest/meta-data/iam/info
 
 # and deploy it!
 bosh-cli create-env --state bosh-state/*.json manifest.yml
