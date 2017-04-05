@@ -17,11 +17,11 @@ meta:
     hm-password: ~
     mbus-password: ~
   aws:
-    access_key_id: ~
-    secret_access_key: ~
+    access_key_id: (( grab terraform_outputs.master_bosh_access_key_id_curr ))
+    secret_access_key: (( grab terraform_outputs.master_bosh_secret_access_key_curr ))
     default_key_name: bosh
     default_security_groups: ~
-    region: ~
+    region: (( grab terraform_outputs.vpc_region ))
   upstream_dns_ip: ~
   bosh_domain_name: ~
 
