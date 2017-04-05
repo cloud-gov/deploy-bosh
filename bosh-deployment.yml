@@ -129,6 +129,7 @@ properties:
   blobstore:
     provider: s3
     server_side_encryption: AES256
+    credentials_source: env_or_profile
     bucket_name: (( param "specify blobstore bucket" ))
     s3_region: (( grab meta.aws.region ))
     agent:
