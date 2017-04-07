@@ -27,6 +27,10 @@ pushd releases
   done
 popd
 
-spruce merge bosh-config/runtime-config.yml > runtime-config-merged.yml
+files=("bosh-config/runtime-config.yml")
+if [ -n "${RUNTIME_OVERRIDES:-}" ]; then
+  files=(${files[@]} "${RUNTIME_OVERRIDES}")
+fi
+spruce merge "${files[@]}" > runtime-config-merged.yml
 
 bosh update runtime-config runtime-config-merged.yml
