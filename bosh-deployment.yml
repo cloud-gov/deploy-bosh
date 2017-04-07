@@ -42,7 +42,7 @@ compilation:
   reuse_compilation_vms: true
   cloud_properties:
     instance_type: c3.xlarge
-    iam_instance_profile: (( grab terraform_outputs.bosh_compilation_profile ))
+    iam_instance_profile: (( grab terraform_outputs.upstream_bosh_compilation_profile || terraform_outputs.bosh_compilation_profile ))
     availability_zone: (( grab meta.cloud_properties.availability_zone ))
 
 update:
