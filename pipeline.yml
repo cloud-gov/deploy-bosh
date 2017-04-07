@@ -958,10 +958,18 @@ resources:
   source:
     repository: cloudfoundry-incubator/bosh-aws-cpi-release
 
+# TODO: Restore after https://github.com/cloudfoundry-community/cron-boshrelease/pull/4 is accepted
+# - name: cron-release
+#   type: bosh-io-release
+#   source:
+#     repository: cloudfoundry-community/cron-boshrelease
+
+# TODO: Drop after https://github.com/cloudfoundry-community/cron-boshrelease/pull/4 is accepted
 - name: cron-release
-  type: bosh-io-release
+  type: s3
   source:
-    repository: cloudfoundry-community/cron-boshrelease
+    regexp: cron-(.*).tgz
+    <<: *s3-release-params
 
 - name: bosh-config
   type: git
