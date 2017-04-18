@@ -13,8 +13,9 @@ jobs:
       resource: node-exporter-releases-dir-tarball
   - task: finalize-release
     file: pipeline-tasks/finalize-bosh-release.yml
-    params:
-      PRIVATE_YML_CONTENT: {{node-exporter-private-yml}}
+    config:
+      params:
+        PRIVATE_YML_CONTENT: {{node-exporter-private-yml}}
   - aggregate:
     - put: node-exporter-release
       params:
@@ -879,9 +880,10 @@ jobs:
       resource: masterbosh-state
   - task: decrypt-private-key
     file: pipeline-tasks/decrypt.yml
-    input_mapping:
-    - name: pipeline-tasks
-    - name: common-masterbosh
+    config:
+      inputs:
+      - name: pipeline-tasks
+      - name: common-masterbosh
     params:
       INPUT_FILE: common-masterbosh/boshCA.crt
       OUTPUT_FILE: decrypt/master-bosh.pem
