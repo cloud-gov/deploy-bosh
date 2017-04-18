@@ -1008,13 +1008,6 @@ resources:
   source:
     uri: {{bosh-config-git-url}}
     branch: {{bosh-config-git-branch}}
-    paths:
-    - bosh-deployment.yml
-    - update-runtime-config.yml
-    - update-runtime-config.sh
-    - runtime-config.yml
-    - tooling-uaa.yml
-    - cronjobs/*
 
 - name: bosh-create-env-config
   type: git
