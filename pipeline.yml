@@ -1179,8 +1179,8 @@ resources:
     driver: s3
     bucket: {{semver-bucket}}
     key: {{semver-master-key}}
-    access_key_id: {{semver-access-key-id-master}}
-    secret_access_key: {{semver-secret-access-key-master}}
+    access_key_id: {{s3-bosh-releases-access-key-id}}
+    secret_access_key: {{s3-bosh-releases-secret-access-key}}
     region_name: {{aws-region}}
 
 - name: semver-tooling-version
@@ -1189,8 +1189,8 @@ resources:
     driver: s3
     bucket: {{semver-bucket}}
     key: {{semver-tooling-key}}
-    access_key_id: {{semver-access-key-id-tooling}}
-    secret_access_key: {{semver-secret-access-key-tooling}}
+    access_key_id: {{s3-bosh-releases-access-key-id}}
+    secret_access_key: {{s3-bosh-releases-secret-access-key}}
     region_name: {{aws-region}}
 
 - name: terraform-yaml-tooling
