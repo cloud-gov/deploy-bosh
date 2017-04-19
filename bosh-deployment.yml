@@ -35,6 +35,8 @@ releases:
   version: latest
 - name: cron
   version: latest
+- name: secureproxy
+  version: latest
 
 compilation:
   workers: 3
@@ -71,6 +73,7 @@ jobs:
   - {name: powerdns, release: bosh}
   - {name: aws_cpi, release: bosh-aws-cpi}
   - {name: uaa, release: uaa}
+  - {name: secureproxy, release: secureproxy}
   - {name: cron, release: cron}
   instances: 1
   resource_pool: large
@@ -232,6 +235,10 @@ properties:
     invitations_enabled: false
 
   uaadb: (( param "specify uaadb props" ))
+
+  secureproxy:
+    listen_port: 8081
+    proxy_port: 8080
 
   cron:
     entries:

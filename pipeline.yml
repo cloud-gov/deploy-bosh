@@ -40,6 +40,8 @@ jobs:
       trigger: true
     - get: cpi-release
       trigger: true
+    - get: secureproxy-release
+      trigger: true
     - get: bosh-stemcell
     - get: common
       resource: common-development
@@ -222,6 +224,8 @@ jobs:
       trigger: true
     - get: cpi-release
       trigger: true
+    - get: secureproxy-release
+      trigger: true
     - get: bosh-stemcell
     - get: common
       resource: common-staging
@@ -396,6 +400,9 @@ jobs:
     - get: cpi-release
       trigger: true
       passed: [deploy-staging-bosh]
+    - get: secureproxy-release
+      trigger: true
+      passed: [deploy-staging-bosh]
     - get: bosh-stemcell
       passed: [deploy-staging-bosh]
     - get: semver-tooling-version
@@ -548,6 +555,7 @@ jobs:
     - get: uaa-release
     - get: uaa-customized-release
     - get: cpi-release
+    - get: secureproxy-release
     - get: bosh-stemcell
     - get: common
       resource: common-tooling
@@ -1135,6 +1143,12 @@ resources:
   type: s3
   source:
     regexp: uaa-customized-(.*).tgz
+    <<: *s3-release-params
+
+- name: secureproxy-release
+  type: s3
+  source:
+    regexp: secureproxy-(.*).tgz
     <<: *s3-release-params
 
 - name: node-exporter-release-git-repo
