@@ -131,6 +131,8 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
+    - get: terraform-yaml
+      resource: terraform-yaml-development
     - get: developmentbosh-deployment
       passed: [deploy-development-bosh]
   - aggregate:
@@ -193,6 +195,14 @@ jobs:
       input_mapping:
         release: cron-release
       params: *bosh-params-development
+  - task: update-cloud-config
+    file: bosh-config/update-cloud-config.yml
+    params:
+      MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml"
+      BOSH_ENVIRONMENT: {{developmentbosh-target}}
+      BOSH_CLIENT: {{developmentbosh-username}}
+      BOSH_CLIENT_SECRET: {{developmentbosh-password}}
+      BOSH_CA_CERT: certificate/master-bosh.crt
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
@@ -297,6 +307,8 @@ jobs:
       trigger: true
     - get: node-exporter-release
       trigger: true
+    - get: terraform-yaml
+      resource: terraform-yaml-staging
     - get: stagingbosh-deployment
       passed: [deploy-staging-bosh]
   - aggregate:
@@ -364,6 +376,14 @@ jobs:
       input_mapping:
         release: node-exporter-release
       params: *bosh-params-staging
+  - task: update-cloud-config
+    file: bosh-config/update-cloud-config.yml
+    params:
+      MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml"
+      BOSH_CA_CERT: certificate/master-bosh.crt
+      BOSH_ENVIRONMENT: {{stagingbosh-target}}
+      BOSH_USERNAME: {{stagingbosh-username}}
+      BOSH_PASSWORD: {{stagingbosh-password}}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config-staging.yml
     params:
@@ -465,6 +485,8 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
+    - get: terraform-yaml
+      resource: terraform-yaml-production
     - get: productionbosh-deployment
       passed: [deploy-production-bosh]
   - aggregate:
@@ -527,6 +549,14 @@ jobs:
       input_mapping:
         release: cron-release
       params: *bosh-params-prod
+  - task: update-cloud-config
+    file: bosh-config/update-cloud-config.yml
+    params:
+      MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml"
+      BOSH_CA_CERT: certificate/master-bosh.crt
+      BOSH_ENVIRONMENT: {{productionbosh-target}}
+      BOSH_USERNAME: {{productionbosh-username}}
+      BOSH_PASSWORD: {{productionbosh-password}}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
@@ -661,10 +691,10 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
-    - get: toolingbosh-deployment
-      passed: [deploy-tooling-bosh]
     - get: terraform-yaml
       resource: terraform-yaml-tooling
+    - get: toolingbosh-deployment
+      passed: [deploy-tooling-bosh]
   - aggregate:
     - task: upload-fisma
       file: pipeline-tasks/upload-release.yml
@@ -730,10 +760,11 @@ jobs:
   - task: update-cloud-config
     file: bosh-config/update-cloud-config.yml
     params:
-      BOSH_ENVIRONMENT: {{toolingbosh-target}}
-      BOSH_CLIENT: {{toolingbosh-username}}
-      BOSH_CLIENT_SECRET: {{toolingbosh-password}}
+      MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-tooling.yml"
       BOSH_CA_CERT: certificate/master-bosh.crt
+      BOSH_ENVIRONMENT: {{toolingbosh-target}}
+      BOSH_CLIENT: {{toolingbosh-uaa-client}}
+      BOSH_CLIENT_SECRET: {{toolingbosh-uaa-client-secret}}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:

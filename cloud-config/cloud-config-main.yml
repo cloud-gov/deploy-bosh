@@ -1,0 +1,33 @@
+vm_types:
+- name: admin-ui
+  cloud_properties:
+    instance_type: t2.medium
+    ephemeral_disk:
+      type: gp2
+      size: 45000
+      encrypted: true
+
+networks:
+- name: admin-ui
+  type: dynamic
+  subnets:
+  - az: z1
+    cloud_properties:
+      subnet: (( grab terraform_outputs.private_subnet_az1 ))
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
+
+vm_types:
+- name: admin-ui
+  cloud_properties:
+    instance_type: t2.medium
+
+disk_types:
+- name: admin-ui
+  disk_size: 5120
+  cloud_properties:
+    type: gp2
+    encrypted: true
+
+compilation:
+  network: admin-ui

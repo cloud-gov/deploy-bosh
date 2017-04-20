@@ -1,0 +1,23 @@
+azs:
+- name: z1
+  cloud_properties:
+    availability_zone: (( grab terraform_outputs.az1 ))
+- name: z2
+  cloud_properties:
+    availability_zone: (( grab terraform_outputs.az2 ))
+
+vm_types:
+- name: compilation
+  cloud_properties:
+    instance_type: c3.xlarge
+    iam_instance_profile: (( grab terraform_outputs.bosh_compilation_profile ))
+    ephemeral_disk:
+      type: gp2
+      size: 30000
+      encrypted: true
+
+compilation:
+  workers: 5
+  reuse_compilation_vms: true
+  vm_type: compilation
+  az: z1
