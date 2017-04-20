@@ -584,6 +584,7 @@ jobs:
       - bosh-release/*.tgz
       - uaa-release/*.tgz
       - uaa-customized-release/*.tgz
+      - secureproxy-release/*.tgz
       - cpi-release/*.tgz
       stemcells:
       - bosh-stemcell/*.tgz
