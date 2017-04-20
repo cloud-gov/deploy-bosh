@@ -1,0 +1,14 @@
+---
+platform: linux
+image_resource:
+  type: docker-image
+  source:
+    repository: 18fgsa/concourse-task
+
+inputs:
+- {name: bosh-config}
+- {name: certificate}
+- {name: terraform-yaml}
+
+run:
+  path: bosh-config/update-cloud-config.sh

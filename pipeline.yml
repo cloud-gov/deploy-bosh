@@ -663,6 +663,8 @@ jobs:
       trigger: true
     - get: toolingbosh-deployment
       passed: [deploy-tooling-bosh]
+    - get: terraform-yaml
+      resource: terraform-yaml-tooling
   - aggregate:
     - task: upload-fisma
       file: pipeline-tasks/upload-release.yml
@@ -725,6 +727,13 @@ jobs:
       params: *bosh-params-tooling
   - put: semver-tooling-version
     params: {bump: patch}
+  - task: update-cloud-config
+    file: bosh-config/update-cloud-config.yml
+    params:
+      BOSH_ENVIRONMENT: {{toolingbosh-target}}
+      BOSH_CLIENT: {{toolingbosh-username}}
+      BOSH_CLIENT_SECRET: {{toolingbosh-password}}
+      BOSH_CA_CERT: certificate/master-bosh.crt
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:

@@ -1,0 +1,90 @@
+azs:
+- name: z1
+  cloud_properties:
+    availability_zone: (( grab terraform_outputs.az1 ))
+- name: z2
+  cloud_properties:
+    availability_zone: (( grab terraform_outputs.az2 ))
+
+vm_types:
+- name: compilation
+  cloud_properties:
+    instance_type: c3.xlarge
+    iam_instance_profile: (( grab terraform_outputs.bosh_compilation_profile ))
+    ephemeral_disk:
+      type: gp2
+      size: 30000
+      encrypted: true
+- &concourse-web-vm
+  name: staging-concourse-web
+  cloud_properties:
+    instance_type: t2.medium
+    ephemeral_disk:
+      type: gp2
+      size: 45000
+      encrypted: true
+- &concourse-worker-vm
+  name: staging-concourse-worker
+  cloud_properties:
+    instance_type: m3.xlarge
+    ephemeral_disk:
+      type: gp2
+      size: 300000
+      encrypted: true
+- <<: *concourse-web-vm
+  name: production-concourse-web
+- <<: *concourse-worker-vm
+  name: production-concourse-worker
+
+networks:
+- name: staging-concourse
+  type: manual
+  subnets:
+  - range: (( grab terraform_outputs.staging_concourse_subnet_cidr ))
+    gateway: (( grab terraform_outputs.staging_concourse_subnet_gateway ))
+    az: z1
+    dns:
+    - (( grab terraform_outputs.tooling_bosh_static_ip ))
+    - (( grab terraform_outputs.vpc_cidr_dns ))
+    cloud_properties:
+      subnet: (( grab terraform_outputs.staging_concourse_subnet ))
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
+      - (( grab terraform_outputs.staging_concourse_security_group ))
+- name: production-concourse
+  type: manual
+  subnets:
+  - range: (( grab terraform_outputs.production_concourse_subnet_cidr ))
+    gateway: (( grab terraform_outputs.production_concourse_subnet_gateway ))
+    az: z1
+    dns:
+    - (( grab terraform_outputs.tooling_bosh_static_ip ))
+    - (( grab terraform_outputs.vpc_cidr_dns ))
+    cloud_properties:
+      subnet: (( grab terraform_outputs.production_concourse_subnet ))
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
+      - (( grab terraform_outputs.production_concourse_security_group ))
+
+vm_extensions:
+- name: staging-concourse-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.staging_concourse_elb_name ))
+- &concourse-ext
+  name: staging-concourse-profile
+  cloud_properties:
+    iam_instance_profile: (( grab terraform_outputs.concourse_worker_profile ))
+- name: production-concourse-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.production_concourse_elb_name ))
+- <<: *concourse-ext
+  name: production-concourse-profile
+
+compilation:
+  workers: 5
+  reuse_compilation_vms: true
+  network: production-concourse
+  vm_type: compilation
+  az: z1
