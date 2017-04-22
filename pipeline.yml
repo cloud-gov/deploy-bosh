@@ -199,10 +199,10 @@ jobs:
     file: bosh-config/update-cloud-config.yml
     params:
       MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml"
-      BOSH_ENVIRONMENT: {{developmentbosh-target}}
-      BOSH_CLIENT: {{developmentbosh-username}}
-      BOSH_CLIENT_SECRET: {{developmentbosh-password}}
       BOSH_CA_CERT: certificate/master-bosh.crt
+      BOSH_ENVIRONMENT: {{developmentbosh-target}}
+      BOSH_USERNAME: {{developmentbosh-username}}
+      BOSH_PASSWORD: {{developmentbosh-password}}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
