@@ -2,10 +2,6 @@ vm_types:
 - name: admin-ui
   cloud_properties:
     instance_type: t2.medium
-    ephemeral_disk:
-      type: gp2
-      size: 45000
-      encrypted: true
 
 networks:
 - name: admin-ui
