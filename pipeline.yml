@@ -206,10 +206,10 @@ jobs:
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
-      BOSH_CACERT: certificate/master-bosh.crt
-      BOSH_ENV: {{developmentbosh-target}}
-      BOSH_USERNAME: {{developmentbosh-username}}
-      BOSH_PASSWORD: {{developmentbosh-password}}
+      BOSH_CA_CERT: certificate/master-bosh.crt
+      BOSH_ENVIRONMENT: {{developmentbosh-target}}
+      BOSH_CLIENT: {{developmentbosh-uaa-client}}
+      BOSH_CLIENT_SECRET: {{developmentbosh-uaa-client-secret}}
       TRIPWIRE_LOCALPASS: {{tripwire-localpass-development}}
       TRIPWIRE_SITEPASS: {{tripwire-sitepass-development}}
       AWS_REGION: {{aws-region-development}}
@@ -387,10 +387,10 @@ jobs:
   - task: update-runtime-config
     file: bosh-config/update-runtime-config-staging.yml
     params:
-      BOSH_CACERT: certificate/master-bosh.crt
-      BOSH_ENV: {{stagingbosh-target}}
-      BOSH_USERNAME: {{stagingbosh-username}}
-      BOSH_PASSWORD: {{stagingbosh-password}}
+      BOSH_CA_CERT: certificate/master-bosh.crt
+      BOSH_ENVIRONMENT: {{stagingbosh-target}}
+      BOSH_CLIENT: {{stagingbosh-uaa-client}}
+      BOSH_CLIENT_SECRET: {{stagingbosh-uaa-client-secret}}
       RUNTIME_OVERRIDES: bosh-config/runtime-config-staging.yml
       TRIPWIRE_LOCALPASS: {{tripwire-localpass-staging}}
       TRIPWIRE_SITEPASS: {{tripwire-sitepass-staging}}
@@ -560,10 +560,10 @@ jobs:
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
-      BOSH_CACERT: certificate/master-bosh.crt
-      BOSH_ENV: {{productionbosh-target}}
-      BOSH_USERNAME: {{productionbosh-username}}
-      BOSH_PASSWORD: {{productionbosh-password}}
+      BOSH_CA_CERT: certificate/master-bosh.crt
+      BOSH_ENVIRONMENT: {{productionbosh-target}}
+      BOSH_CLIENT: {{productionbosh-uaa-client}}
+      BOSH_CLIENT_SECRET: {{productionbosh-uaa-client-secret}}
       TRIPWIRE_LOCALPASS: {{tripwire-localpass-production}}
       TRIPWIRE_SITEPASS: {{tripwire-sitepass-production}}
       AWS_REGION: {{aws-region-production}}
@@ -768,10 +768,10 @@ jobs:
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
-      BOSH_CACERT: certificate/master-bosh.crt
-      BOSH_ENV: {{toolingbosh-target}}
-      BOSH_USERNAME: {{toolingbosh-username}}
-      BOSH_PASSWORD: {{toolingbosh-password}}
+      BOSH_CA_CERT: certificate/master-bosh.crt
+      BOSH_ENVIRONMENT: {{toolingbosh-target}}
+      BOSH_CLIENT: {{toolingbosh-uaa-client}}
+      BOSH_CLIENT_SECRET: {{toolingbosh-uaa-client-secret}}
       TRIPWIRE_LOCALPASS: {{tripwire-localpass-tooling}}
       TRIPWIRE_SITEPASS: {{tripwire-sitepass-tooling}}
       AWS_REGION: {{aws-region-tooling}}
@@ -887,12 +887,11 @@ jobs:
     params: {bump: patch}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
-    input_mapping:
-      certificate: common-masterbosh
     params:
-      BOSH_ENV: {{masterbosh-target}}
-      BOSH_USERNAME: {{masterbosh-username}}
-      BOSH_PASSWORD: {{masterbosh-password}}
+      BOSH_CA_CERT: certificate/master-bosh.crt
+      BOSH_ENVIRONMENT: {{masterbosh-target}}
+      BOSH_CLIENT: {{masterbosh-username}}
+      BOSH_CLIENT_SECRET: {{masterbosh-password}}
       TRIPWIRE_LOCALPASS: {{tripwire-localpass-master}}
       TRIPWIRE_SITEPASS: {{tripwire-sitepass-master}}
       AWS_REGION: {{aws-region-master}}
