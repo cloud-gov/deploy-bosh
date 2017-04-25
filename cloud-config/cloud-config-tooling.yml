@@ -156,7 +156,7 @@ disk_types:
 - <<: *monitoring-riemann-disk
   name: production-monitoring-riemann
 - <<: *monitoring-influxdb-disk
-  name: production-influxdb-riemann
+  name: production-monitoring-influxdb
 
 compilation:
   network: production-concourse

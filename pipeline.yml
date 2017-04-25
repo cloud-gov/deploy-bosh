@@ -82,6 +82,14 @@ jobs:
       - cpi-release/*.tgz
       stemcells:
       - bosh-stemcell/*.tgz
+  - task: update-cloud-config
+    file: bosh-config/update-cloud-config.yml
+    params:
+      MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml"
+      BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
+      BOSH_ENVIRONMENT: {{developmentbosh-target}}
+      BOSH_CLIENT: {{developmentbosh-uaa-client}}
+      BOSH_CLIENT_SECRET: {{developmentbosh-uaa-client-secret}}
   on_failure:
     put: slack
     params:
@@ -131,8 +139,6 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
-    - get: terraform-yaml
-      resource: terraform-yaml-development
     - get: developmentbosh-deployment
       passed: [deploy-development-bosh]
   - aggregate:
@@ -195,14 +201,6 @@ jobs:
       input_mapping:
         release: cron-release
       params: *bosh-params-development
-  - task: update-cloud-config
-    file: bosh-config/update-cloud-config.yml
-    params:
-      MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml"
-      BOSH_CA_CERT: certificate/master-bosh.crt
-      BOSH_ENVIRONMENT: {{developmentbosh-target}}
-      BOSH_CLIENT: {{developmentbosh-uaa-client}}
-      BOSH_CLIENT_SECRET: {{developmentbosh-uaa-client-secret}}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
@@ -256,6 +254,14 @@ jobs:
       - cpi-release/*.tgz
       stemcells:
       - bosh-stemcell/*.tgz
+  - task: update-cloud-config
+    file: bosh-config/update-cloud-config.yml
+    params:
+      MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml"
+      BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
+      BOSH_ENVIRONMENT: {{stagingbosh-target}}
+      BOSH_CLIENT: {{stagingbosh-uaa-client}}
+      BOSH_CLIENT_SECRET: {{stagingbosh-uaa-client-secret}}
   on_failure:
     put: slack
     params:
@@ -307,8 +313,6 @@ jobs:
       trigger: true
     - get: node-exporter-release
       trigger: true
-    - get: terraform-yaml
-      resource: terraform-yaml-staging
     - get: stagingbosh-deployment
       passed: [deploy-staging-bosh]
   - aggregate:
@@ -376,14 +380,6 @@ jobs:
       input_mapping:
         release: node-exporter-release
       params: *bosh-params-staging
-  - task: update-cloud-config
-    file: bosh-config/update-cloud-config.yml
-    params:
-      MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml"
-      BOSH_CA_CERT: certificate/master-bosh.crt
-      BOSH_ENVIRONMENT: {{stagingbosh-target}}
-      BOSH_CLIENT: {{stagingbosh-uaa-client}}
-      BOSH_CLIENT_SECRET: {{stagingbosh-uaa-client-secret}}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config-staging.yml
     params:
@@ -436,6 +432,14 @@ jobs:
     config: *manifest-config
   - put: productionbosh-deployment
     params: *bosh-deployment
+  - task: update-cloud-config
+    file: bosh-config/update-cloud-config.yml
+    params:
+      MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml"
+      BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
+      BOSH_ENVIRONMENT: {{productionbosh-target}}
+      BOSH_CLIENT: {{productionbosh-uaa-client}}
+      BOSH_CLIENT_SECRET: {{productionbosh-uaa-client-secret}}
   on_failure:
     put: slack
     params:
@@ -485,8 +489,6 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
-    - get: terraform-yaml
-      resource: terraform-yaml-production
     - get: productionbosh-deployment
       passed: [deploy-production-bosh]
   - aggregate:
@@ -549,14 +551,6 @@ jobs:
       input_mapping:
         release: cron-release
       params: *bosh-params-prod
-  - task: update-cloud-config
-    file: bosh-config/update-cloud-config.yml
-    params:
-      MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml"
-      BOSH_CA_CERT: certificate/master-bosh.crt
-      BOSH_ENVIRONMENT: {{productionbosh-target}}
-      BOSH_CLIENT: {{productionbosh-uaa-client}}
-      BOSH_CLIENT_SECRET: {{productionbosh-uaa-client-secret}}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
@@ -579,6 +573,7 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - get: master-bosh-root-cert
     - get: pipeline-tasks
     - get: bosh-config
     - get: bosh-release
@@ -619,6 +614,14 @@ jobs:
       stemcells:
       - bosh-stemcell/*.tgz
       cert: ~
+  - task: update-cloud-config
+    file: bosh-config/update-cloud-config.yml
+    params:
+      MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-tooling.yml"
+      BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
+      BOSH_ENVIRONMENT: {{toolingbosh-target}}
+      BOSH_CLIENT: {{toolingbosh-uaa-client}}
+      BOSH_CLIENT_SECRET: {{toolingbosh-uaa-client-secret}}
   on_failure:
     put: slack
     params:
@@ -691,8 +694,6 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
-    - get: terraform-yaml
-      resource: terraform-yaml-tooling
     - get: toolingbosh-deployment
       passed: [deploy-tooling-bosh]
   - aggregate:
@@ -757,14 +758,6 @@ jobs:
       params: *bosh-params-tooling
   - put: semver-tooling-version
     params: {bump: patch}
-  - task: update-cloud-config
-    file: bosh-config/update-cloud-config.yml
-    params:
-      MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-tooling.yml"
-      BOSH_CA_CERT: certificate/master-bosh.crt
-      BOSH_ENVIRONMENT: {{toolingbosh-target}}
-      BOSH_CLIENT: {{toolingbosh-uaa-client}}
-      BOSH_CLIENT_SECRET: {{toolingbosh-uaa-client-secret}}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
