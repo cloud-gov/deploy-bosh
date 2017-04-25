@@ -201,8 +201,8 @@ jobs:
       MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml"
       BOSH_CA_CERT: certificate/master-bosh.crt
       BOSH_ENVIRONMENT: {{developmentbosh-target}}
-      BOSH_USERNAME: {{developmentbosh-username}}
-      BOSH_PASSWORD: {{developmentbosh-password}}
+      BOSH_CLIENT: {{developmentbosh-uaa-client}}
+      BOSH_CLIENT_SECRET: {{developmentbosh-uaa-client-secret}}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
@@ -382,8 +382,8 @@ jobs:
       MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml"
       BOSH_CA_CERT: certificate/master-bosh.crt
       BOSH_ENVIRONMENT: {{stagingbosh-target}}
-      BOSH_USERNAME: {{stagingbosh-username}}
-      BOSH_PASSWORD: {{stagingbosh-password}}
+      BOSH_CLIENT: {{stagingbosh-uaa-client}}
+      BOSH_CLIENT_SECRET: {{stagingbosh-uaa-client-secret}}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config-staging.yml
     params:
@@ -555,8 +555,8 @@ jobs:
       MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml"
       BOSH_CA_CERT: certificate/master-bosh.crt
       BOSH_ENVIRONMENT: {{productionbosh-target}}
-      BOSH_USERNAME: {{productionbosh-username}}
-      BOSH_PASSWORD: {{productionbosh-password}}
+      BOSH_CLIENT: {{productionbosh-uaa-client}}
+      BOSH_CLIENT_SECRET: {{productionbosh-uaa-client-secret}}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
