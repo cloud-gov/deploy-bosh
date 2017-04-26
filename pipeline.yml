@@ -613,7 +613,7 @@ jobs:
       - cpi-release/*.tgz
       stemcells:
       - bosh-stemcell/*.tgz
-      cert: ~
+      cert: master-bosh-root-cert/master-bosh.crt
   - task: update-cloud-config
     file: bosh-config/update-cloud-config.yml
     params:
