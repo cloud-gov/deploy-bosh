@@ -46,6 +46,8 @@ networks:
   subnets:
   - range: (( grab terraform_outputs.staging_concourse_subnet_cidr ))
     gateway: (( grab terraform_outputs.staging_concourse_subnet_gateway ))
+    reserved:
+    - (( grab terraform_outputs.staging_concourse_subnet_reserved ))
     az: z1
     dns:
     - (( grab terraform_outputs.tooling_bosh_static_ip ))
@@ -60,6 +62,8 @@ networks:
   subnets:
   - range: (( grab terraform_outputs.production_concourse_subnet_cidr ))
     gateway: (( grab terraform_outputs.production_concourse_subnet_gateway ))
+    reserved:
+    - (( grab terraform_outputs.production_concourse_subnet_reserved ))
     az: z1
     dns:
     - (( grab terraform_outputs.tooling_bosh_static_ip ))
@@ -74,6 +78,8 @@ networks:
   subnets:
   - range: (( grab terraform_outputs.staging_monitoring_subnet_cidr ))
     gateway: (( grab terraform_outputs.staging_monitoring_subnet_gateway ))
+    reserved:
+    - (( grab terraform_outputs.staging_monitoring_subnet_reserved ))
     static:
     - (( grab terraform_outputs.staging_monitoring_riemann_address ))
     - (( grab terraform_outputs.staging_monitoring_influxdb_address ))
@@ -91,6 +97,8 @@ networks:
   subnets:
   - range: (( grab terraform_outputs.production_monitoring_subnet_cidr ))
     gateway: (( grab terraform_outputs.production_monitoring_subnet_gateway ))
+    reserved:
+    - (( grab terraform_outputs.production_monitoring_subnet_reserved ))
     static:
     - (( grab terraform_outputs.production_monitoring_riemann_address ))
     - (( grab terraform_outputs.production_monitoring_influxdb_address ))
