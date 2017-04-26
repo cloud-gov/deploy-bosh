@@ -1,0 +1,162 @@
+vm_types:
+- &concourse-web-vm
+  name: staging-concourse-web
+  cloud_properties:
+    instance_type: t2.medium
+    ephemeral_disk:
+      type: gp2
+      size: 45000
+      encrypted: true
+- &concourse-worker-vm
+  name: staging-concourse-worker
+  cloud_properties:
+    instance_type: m3.xlarge
+    ephemeral_disk:
+      type: gp2
+      size: 300000
+      encrypted: true
+- <<: *concourse-web-vm
+  name: production-concourse-web
+- <<: *concourse-worker-vm
+  name: production-concourse-worker
+- &monitoring-riemann-vm
+  name: staging-monitoring-riemann
+  cloud_properties:
+    instance_type: t2.medium
+    ephemeral_disk:
+      type: gp2
+      size: 30000
+      encrypted: true
+- &monitoring-influxdb-vm
+  name: staging-monitoring-influxdb
+  cloud_properties:
+    instance_type: r4.4xlarge
+    ephemeral_disk:
+      type: gp2
+      size: 30000
+      encrypted: true
+- <<: *monitoring-riemann-vm
+  name: production-monitoring-riemann
+- <<: *monitoring-influxdb-vm
+  name: production-monitoring-influxdb
+
+networks:
+- name: staging-concourse
+  type: manual
+  subnets:
+  - range: (( grab terraform_outputs.staging_concourse_subnet_cidr ))
+    gateway: (( grab terraform_outputs.staging_concourse_subnet_gateway ))
+    az: z1
+    dns:
+    - (( grab terraform_outputs.tooling_bosh_static_ip ))
+    - (( grab terraform_outputs.vpc_cidr_dns ))
+    cloud_properties:
+      subnet: (( grab terraform_outputs.staging_concourse_subnet ))
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
+      - (( grab terraform_outputs.staging_concourse_security_group ))
+- name: production-concourse
+  type: manual
+  subnets:
+  - range: (( grab terraform_outputs.production_concourse_subnet_cidr ))
+    gateway: (( grab terraform_outputs.production_concourse_subnet_gateway ))
+    az: z1
+    dns:
+    - (( grab terraform_outputs.tooling_bosh_static_ip ))
+    - (( grab terraform_outputs.vpc_cidr_dns ))
+    cloud_properties:
+      subnet: (( grab terraform_outputs.production_concourse_subnet ))
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
+      - (( grab terraform_outputs.production_concourse_security_group ))
+- name: staging-monitoring
+  type: manual
+  subnets:
+  - range: (( grab terraform_outputs.staging_monitoring_subnet_cidr ))
+    gateway: (( grab terraform_outputs.staging_monitoring_subnet_gateway ))
+    static:
+    - (( grab terraform_outputs.staging_monitoring_riemann_address ))
+    - (( grab terraform_outputs.staging_monitoring_influxdb_address ))
+    az: z2
+    dns:
+    - (( grab terraform_outputs.tooling_bosh_static_ip ))
+    - (( grab terraform_outputs.vpc_cidr_dns ))
+    cloud_properties:
+      subnet: (( grab terraform_outputs.staging_monitoring_subnet ))
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
+      - (( grab terraform_outputs.staging_monitoring_security_group ))
+- name: production-monitoring
+  type: manual
+  subnets:
+  - range: (( grab terraform_outputs.production_monitoring_subnet_cidr ))
+    gateway: (( grab terraform_outputs.production_monitoring_subnet_gateway ))
+    static:
+    - (( grab terraform_outputs.production_monitoring_riemann_address ))
+    - (( grab terraform_outputs.production_monitoring_influxdb_address ))
+    az: z1
+    dns:
+    - (( grab terraform_outputs.tooling_bosh_static_ip ))
+    - (( grab terraform_outputs.vpc_cidr_dns ))
+    cloud_properties:
+      subnet: (( grab terraform_outputs.production_monitoring_subnet ))
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
+      - (( grab terraform_outputs.production_monitoring_security_group ))
+
+vm_extensions:
+- name: staging-concourse-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.staging_concourse_elb_name ))
+- &concourse-ext
+  name: staging-concourse-profile
+  cloud_properties:
+    iam_instance_profile: (( grab terraform_outputs.concourse_worker_profile ))
+- name: production-concourse-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.production_concourse_elb_name ))
+- <<: *concourse-ext
+  name: production-concourse-profile
+- name: staging-monitoring-grafana-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.staging_monitoring_elb_name ))
+- name: staging-monitoring-riemann-profile
+  cloud_properties:
+    iam_instance_profile: (( grab terraform_outputs.riemann_monitoring_profile ))
+- name: staging-monitoring-influxdb-profile
+  cloud_properties:
+    iam_instance_profile: (( grab terraform_outputs.influxdb_monitoring_profile ))
+- name: production-monitoring-grafana-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.production_monitoring_elb_name ))
+- name: production-monitoring-riemann-profile
+  cloud_properties:
+    iam_instance_profile: (( grab terraform_outputs.riemann_monitoring_profile ))
+- name: production-monitoring-influxdb-profile
+  cloud_properties:
+    iam_instance_profile: (( grab terraform_outputs.influxdb_monitoring_profile ))
+
+disk_types:
+- &monitoring-riemann-disk
+  name: staging-monitoring-riemann
+  disk_size: 5000
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- &monitoring-influxdb-disk
+  name: staging-monitoring-influxdb
+  disk_size: 200000
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- <<: *monitoring-riemann-disk
+  name: production-monitoring-riemann
+- <<: *monitoring-influxdb-disk
+  name: production-monitoring-influxdb
+
+compilation:
+  network: production-concourse

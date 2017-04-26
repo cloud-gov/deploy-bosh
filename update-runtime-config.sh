@@ -2,18 +2,6 @@
 
 set -e -u
 
-BOSH_CACERT=${BOSH_CACERT:-}
-if [ -n "$BOSH_CACERT" ]; then
-  bosh --ca-cert $BOSH_CACERT -n target $BOSH_ENV
-else
-  bosh -n target $BOSH_ENV
-fi
-
-bosh login <<EOF 1>/dev/null
-$BOSH_USERNAME
-$BOSH_PASSWORD
-EOF
-
 releases=$(ls releases)
 
 pushd releases
@@ -33,4 +21,4 @@ if [ -n "${RUNTIME_OVERRIDES:-}" ]; then
 fi
 spruce merge "${files[@]}" > runtime-config-merged.yml
 
-bosh update runtime-config runtime-config-merged.yml
+bosh-cli -n update-runtime-config runtime-config-merged.yml
