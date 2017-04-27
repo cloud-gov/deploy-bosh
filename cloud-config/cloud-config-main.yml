@@ -1,8 +1,3 @@
-vm_types:
-- name: admin-ui
-  cloud_properties:
-    instance_type: t2.medium
-
 networks:
 - name: admin-ui
   type: dynamic
@@ -12,11 +7,40 @@ networks:
       subnet: (( grab terraform_outputs.private_subnet_az1 ))
       security_groups:
       - (( grab terraform_outputs.bosh_security_group ))
+- name: concourse
+  type: manual
+  subnets:
+  - range: (( grab terraform_outputs.concourse_subnet_cidr ))
+    gateway: (( grab terraform_outputs.concourse_subnet_gateway ))
+    reserved:
+    - (( grab terraform_outputs.concourse_subnet_reserved ))
+    az: z2
+    dns:
+    - (( grab terraform_outputs.vpc_cidr_dns ))
+    cloud_properties:
+      subnet: (( grab terraform_outputs.concourse_subnet ))
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
+      - (( grab terraform_outputs.concourse_security_group ))
 
 vm_types:
 - name: admin-ui
   cloud_properties:
     instance_type: t2.medium
+- name: concourse-web
+  cloud_properties:
+    instance_type: t2.medium
+    ephemeral_disk:
+      type: gp2
+      size: 45000
+      encrypted: true
+- name: concourse-worker
+  cloud_properties:
+    instance_type: m3.xlarge
+    ephemeral_disk:
+      type: gp2
+      size: 300000
+      encrypted: true
 
 disk_types:
 - name: admin-ui
@@ -24,6 +48,12 @@ disk_types:
   cloud_properties:
     type: gp2
     encrypted: true
+
+vm_extensions:
+- name: concourse-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.concourse_elb_name ))
 
 compilation:
   network: admin-ui

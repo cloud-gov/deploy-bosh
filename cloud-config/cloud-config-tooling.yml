@@ -48,7 +48,7 @@ networks:
     gateway: (( grab terraform_outputs.staging_concourse_subnet_gateway ))
     reserved:
     - (( grab terraform_outputs.staging_concourse_subnet_reserved ))
-    az: z1
+    az: z2
     dns:
     - (( grab terraform_outputs.tooling_bosh_static_ip ))
     - (( grab terraform_outputs.vpc_cidr_dns ))
@@ -117,7 +117,7 @@ vm_extensions:
   cloud_properties:
     elbs:
     - (( grab terraform_outputs.staging_concourse_elb_name ))
-- &concourse-ext
+- &concourse-profile
   name: staging-concourse-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.concourse_worker_profile ))
@@ -125,7 +125,7 @@ vm_extensions:
   cloud_properties:
     elbs:
     - (( grab terraform_outputs.production_concourse_elb_name ))
-- <<: *concourse-ext
+- <<: *concourse-profile
   name: production-concourse-profile
 - name: staging-monitoring-grafana-lb
   cloud_properties:
