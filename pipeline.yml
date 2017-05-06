@@ -953,6 +953,32 @@ jobs:
       username: {{slack-username}}
       icon_url: {{slack-icon-url}}
 
+- name: lint-tooling-bosh
+  plan:
+  - aggregate:
+    - get: bosh-config
+    - get: master-bosh-root-cert
+  - task: lint-manifests
+    file: bosh-config/lint-manifests.yml
+    params:
+      BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
+      BOSH_ENVIRONMENT: {{toolingbosh-target}}
+      BOSH_CLIENT: {{toolingbosh-uaa-client}}
+      BOSH_CLIENT_SECRET: {{toolingbosh-uaa-client-secret}}
+
+- name: lint-production-bosh
+  plan:
+  - aggregate:
+    - get: bosh-config
+    - get: master-bosh-root-cert
+  - task: lint-manifests
+    file: bosh-config/lint-manifests.yml
+    params:
+      BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
+      BOSH_ENVIRONMENT: {{productionbosh-target}}
+      BOSH_CLIENT: {{productionbosh-uaa-client}}
+      BOSH_CLIENT_SECRET: {{productionbosh-uaa-client-secret}}
+
 resources:
 - name: master-bosh-root-cert
   type: s3
