@@ -7,6 +7,31 @@ networks:
       subnet: (( grab terraform_outputs.private_subnet_az1 ))
       security_groups:
       - (( grab terraform_outputs.bosh_security_group ))
+- name: shibboleth
+  type: dynamic
+  subnets:
+  - az: z1
+    range: (( grab terraform_outputs.private_subnet_cidr_az1 ))
+    gateway: (( grab terraform_outputs.private_subnet_gateway_az1 ))
+    reserved:
+    - (( grab terraform_outputs.private_subnet_reserved_az1 ))
+    dns:
+    - (( grab terraform_outputs.private_subnet_dns_az1 ))
+    cloud_properties:
+      subnet: (( grab terraform_outputs.private_subnet_az1 ))
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
+  - az: z2
+    range: (( grab terraform_outputs.private_subnet_cidr_az2 ))
+    gateway: (( grab terraform_outputs.private_subnet_gateway_az2 ))
+    reserved:
+    - (( grab terraform_outputs.private_subnet_reserved_az2 ))
+    dns:
+    - (( grab terraform_outputs.private_subnet_dns_az2 ))
+    cloud_properties:
+      subnet: (( grab terraform_outputs.private_subnet_az2 ))
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
 - name: concourse
   type: manual
   subnets:
@@ -27,6 +52,13 @@ vm_types:
 - name: admin-ui
   cloud_properties:
     instance_type: t2.medium
+    ephemeral_disk:
+      type: gp2
+      size: 10240
+      encrypted: true
+- name: shibboleth
+  cloud_properties:
+    instance_type: m3.medium
 - name: concourse-web
   cloud_properties:
     instance_type: t2.medium
@@ -48,12 +80,21 @@ disk_types:
   cloud_properties:
     type: gp2
     encrypted: true
+- name: shibboleth
+  disk_size: 4096
+  cloud_properties:
+    type: gp2
+    encrypted: true
 
 vm_extensions:
 - name: concourse-lb
   cloud_properties:
     elbs:
     - (( grab terraform_outputs.concourse_elb_name ))
+- name: shibboleth-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.shibboleth_elb_name ))
 
 compilation:
   network: admin-ui
