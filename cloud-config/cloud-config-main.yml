@@ -59,6 +59,10 @@ vm_types:
 - name: shibboleth
   cloud_properties:
     instance_type: m3.medium
+    ephemeral_disk:
+      type: gp2
+      size: 10240
+      encrypted: true
 - name: concourse-web
   cloud_properties:
     instance_type: t2.medium
