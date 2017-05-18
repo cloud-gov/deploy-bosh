@@ -1,0 +1,9 @@
+instance_groups:
+- name: bosh
+  vm_type: staging-bosh
+  persistent_disk_type: staging-bosh
+  vm_extensions: [staging-bosh-profile]
+  networks:
+  - name: staging-bosh
+    static_ips:
+    - (( grab terraform_outputs.bosh_static_ip ))

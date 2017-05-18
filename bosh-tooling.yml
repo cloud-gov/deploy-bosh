@@ -2,11 +2,18 @@ releases:
 - (( append ))
 - {name: uaa-customized, version: latest}
 
-jobs:
+instance_groups:
 - name: bosh
-  templates:
+  vm_type: tooling-bosh
+  persistent_disk_type: tooling-bosh
+  vm_extensions: [tooling-bosh-profile]
+  jobs:
   - (( append ))
   - {name: uaa-customized, release: uaa-customized}
+  networks:
+  - name: tooling-bosh
+    static_ips:
+    - (( grab terraform_outputs.tooling_bosh_static_ip ))
 
 templates:
   client: &client-template

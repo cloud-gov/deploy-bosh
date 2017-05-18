@@ -69,6 +69,7 @@ jobs:
         - -exc
         - |
           bosh-config/generate.sh \
+            bosh-config/development-bosh.yml \
             terraform-yaml/state.yml \
             common/secrets.yml \
             > bosh-manifest/manifest.yml
@@ -243,7 +244,18 @@ jobs:
     - get: semver-tooling-version
       passed: [common-releases-tooling]
   - task: bosh-manifest
-    config: *manifest-config
+    config:
+      <<: *manifest-config
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          bosh-config/generate.sh \
+            bosh-config/staging-bosh.yml \
+            terraform-yaml/state.yml \
+            common/secrets.yml \
+            > bosh-manifest/manifest.yml
   - put: stagingbosh-deployment
     params: &bosh-deployment
       cert: master-bosh-root-cert/master-bosh.crt
@@ -429,7 +441,18 @@ jobs:
     - get: terraform-yaml
       resource: terraform-yaml-production
   - task: bosh-manifest
-    config: *manifest-config
+    config:
+      <<: *manifest-config
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          bosh-config/generate.sh \
+            bosh-config/production-bosh.yml \
+            terraform-yaml/state.yml \
+            common/secrets.yml \
+            > bosh-manifest/manifest.yml
   - put: productionbosh-deployment
     params: *bosh-deployment
   - task: update-cloud-config
@@ -587,6 +610,9 @@ jobs:
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-tooling
+    - get: terraform-yaml-development
+    - get: terraform-yaml-staging
+    - get: terraform-yaml-production
     - get: semver-master-version
       passed: [common-releases-master]
   - task: bosh-manifest
@@ -598,7 +624,7 @@ jobs:
         - -exc
         - |
           bosh-config/generate.sh \
-            bosh-config/tooling-uaa.yml \
+            bosh-config/tooling-bosh.yml \
             terraform-yaml/state.yml \
             common/secrets.yml \
             > bosh-manifest/manifest.yml
@@ -615,7 +641,7 @@ jobs:
       - bosh-stemcell/*.tgz
       cert: master-bosh-root-cert/master-bosh.crt
   - task: update-cloud-config
-    file: bosh-config/update-cloud-config.yml
+    file: bosh-config/update-cloud-config-tooling.yml
     params:
       MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-tooling.yml"
       BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
@@ -919,6 +945,7 @@ jobs:
       resource: terraform-yaml-tooling
     - get: bosh-state
       resource: masterbosh-state
+    - get: master-bosh-root-cert
   - task: decrypt-private-key
     file: pipeline-tasks/decrypt.yml
     config:
@@ -934,6 +961,14 @@ jobs:
   - put: masterbosh-state
     params:
       file: updated-bosh-state/*.json
+  - task: update-cloud-config
+    file: bosh-config/update-cloud-config.yml
+    params:
+      MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-master.yml"
+      BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
+      BOSH_ENVIRONMENT: {{masterbosh-target}}
+      BOSH_CLIENT: {{masterbosh-username}}
+      BOSH_CLIENT_SECRET: {{masterbosh-password}}
   on_failure:
     put: slack
     params:

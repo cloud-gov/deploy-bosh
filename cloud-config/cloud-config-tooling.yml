@@ -1,4 +1,8 @@
 vm_types:
+- &bosh-vm
+  name: staging-bosh
+  cloud_properties:
+    instance_type: m3.large
 - &concourse-web-vm
   name: staging-concourse-web
   cloud_properties:
@@ -15,6 +19,8 @@ vm_types:
       type: gp2
       size: 300000
       encrypted: true
+- <<: *bosh-vm
+  name: production-bosh
 - <<: *concourse-web-vm
   name: production-concourse-web
 - <<: *concourse-worker-vm
@@ -149,6 +155,12 @@ vm_extensions:
     iam_instance_profile: (( grab terraform_outputs.influxdb_monitoring_profile ))
 
 disk_types:
+- &bosh-disk
+  name: staging-bosh
+  disk_size: 300000
+  cloud_properties:
+    type: gp2
+    encrypted: true
 - &monitoring-riemann-disk
   name: staging-monitoring-riemann
   disk_size: 5000
@@ -161,6 +173,8 @@ disk_types:
   cloud_properties:
     type: gp2
     encrypted: true
+- <<: *bosh-disk
+  name: production-bosh
 - <<: *monitoring-riemann-disk
   name: production-monitoring-riemann
 - <<: *monitoring-influxdb-disk

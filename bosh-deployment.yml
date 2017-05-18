@@ -4,8 +4,6 @@ meta:
   networks:
     default:
       static_ips: [10.0.0.7]
-  cloud_properties:
-    availability_zone: ~
   default_static_ip: (( grab meta.networks.default.static_ips.[0] ))
   aws:
     default_key_name: bosh
@@ -27,25 +25,11 @@ name: (( grab meta.name ))
 director_uuid: (( param "specify bosh directory" ))
 
 releases:
-- name: bosh
-  version: latest
-- name: bosh-aws-cpi
-  version: latest
-- name: uaa
-  version: latest
-- name: cron
-  version: latest
-- name: secureproxy
-  version: latest
-
-compilation:
-  workers: 3
-  network: default
-  reuse_compilation_vms: true
-  cloud_properties:
-    instance_type: c3.xlarge
-    iam_instance_profile: (( grab terraform_outputs.upstream_bosh_compilation_profile || terraform_outputs.bosh_compilation_profile ))
-    availability_zone: (( grab meta.cloud_properties.availability_zone ))
+- {name: bosh, version: latest}
+- {name: bosh-aws-cpi, version: latest}
+- {name: uaa, version: latest}
+- {name: cron, version: latest}
+- {name: secureproxy, version: latest}
 
 update:
   canaries: 1
@@ -53,18 +37,17 @@ update:
   update_watch_time: 3000-180000
   max_in_flight: 4
 
-networks: (( param "specify networks" ))
+stemcells:
+- alias: default
+  name: bosh-aws-xen-hvm-ubuntu-trusty-go_agent
+  version: latest
 
-disk_pools:
-- name: bosh-ssd
-  disk_size: 300000
-  cloud_properties:
-    type: gp2
-    encrypted: true
-
-jobs:
+instance_groups:
 - name: bosh
-  templates:
+  stemcell: default
+  instances: 1
+  azs: [z1]
+  jobs:
   - {name: nats, release: bosh}
   - {name: blobstore, release: bosh}
   - {name: director, release: bosh}
@@ -75,24 +58,6 @@ jobs:
   - {name: uaa, release: uaa}
   - {name: secureproxy, release: secureproxy}
   - {name: cron, release: cron}
-  instances: 1
-  resource_pool: large
-  persistent_disk_pool: bosh-ssd
-  networks:
-  - name: default
-    static_ips: (( grab meta.networks.default.static_ips ))
-
-resource_pools:
-- name: large
-  network: default
-  stemcell:
-    name: bosh-aws-xen-hvm-ubuntu-trusty-go_agent
-    version: latest
-  cloud_properties:
-    instance_type: m3.large
-    iam_instance_profile: (( grab terraform_outputs.bosh_profile ))
-    availability_zone: (( grab meta.cloud_properties.availability_zone ))
-    key_name: (( grab meta.aws.default_key_name ))
 
 properties:
   postgres: &bosh_db
