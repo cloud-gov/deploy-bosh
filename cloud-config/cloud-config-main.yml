@@ -1,13 +1,5 @@
 networks:
-- name: admin-ui
-  type: dynamic
-  subnets:
-  - az: z1
-    cloud_properties:
-      subnet: (( grab terraform_outputs.private_subnet_az1 ))
-      security_groups:
-      - (( grab terraform_outputs.bosh_security_group ))
-- name: shibboleth
+- name: default
   type: dynamic
   subnets:
   - az: z1
@@ -101,4 +93,4 @@ vm_extensions:
     - (( grab terraform_outputs.shibboleth_elb_name ))
 
 compilation:
-  network: admin-ui
+  network: default
