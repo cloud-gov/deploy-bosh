@@ -12,7 +12,7 @@ inputs:
 - name: bosh-stemcell
 - name: common-masterbosh
 - name: terraform-yaml
-- name: bosh-create-env-config
+- name: bosh-config
 - name: decrypt
 - name: bosh-state
 
@@ -20,4 +20,4 @@ outputs:
 - name: updated-bosh-state
 
 run:
-  path: bosh-create-env-config/bosh-create-env.sh
+  path: bosh-config/bosh-create-env.sh

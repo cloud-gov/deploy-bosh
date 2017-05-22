@@ -20,14 +20,12 @@ set -x
 # generate the manifest
 spruce merge \
     --prune terraform_outputs \
-    bosh-create-env-config/bosh-create-env-deployment.yml \
+    bosh-config/bosh-create-env-deployment.yml \
     common-masterbosh/secrets.yml \
     terraform-yaml/state.yml \
 > manifest.yml
-
 
 # and deploy it!
 bosh-cli create-env --state bosh-state/*.json manifest.yml
 
 cp bosh-state/*.json updated-bosh-state
-

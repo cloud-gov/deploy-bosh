@@ -927,7 +927,8 @@ jobs:
   plan:
   - aggregate:
     - get: pipeline-tasks
-    - get: bosh-create-env-config
+    - get: bosh-config
+      resource: bosh-create-env-config
       trigger: true
     - get: common-masterbosh
       trigger: true
@@ -957,7 +958,7 @@ jobs:
       OUTPUT_FILE: decrypt/master-bosh.pem
       PASSPHRASE: {{masterbosh-secrets-passphrase}}
   - task: bosh-create-env
-    file: bosh-create-env-config/bosh-create-env.yml
+    file: bosh-config/bosh-create-env.yml
   - put: masterbosh-state
     params:
       file: updated-bosh-state/*.json
@@ -1094,6 +1095,7 @@ resources:
     branch: {{bosh-config-git-branch}}
     paths:
     - bosh-create-env*
+    - cloud-config/*
 
 - name: bosh-stemcell
   type: s3
