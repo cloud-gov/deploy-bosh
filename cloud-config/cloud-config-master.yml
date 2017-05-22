@@ -16,16 +16,21 @@ networks:
     - (( grab terraform_outputs.private_subnet_az1_reserved ))
     - (( grab terraform_outputs.master_bosh_static_ip ))
     dns:
-    - (( grab terraform_outputs.private_subnet_az1_dns ))
+    - (( grab terraform_outputs.vpc_cidr_dns ))
     cloud_properties:
       subnet: (( grab terraform_outputs.private_subnet_az1 ))
       security_groups:
       - (( grab terraform_outputs.bosh_security_group ))
+      - (( grab terraform_outputs.bosh_uaa_security_group ))
 
 vm_extensions:
 - name: bosh-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.bosh_profile ))
+- name: bosh-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.bosh_uaa_elb_name ))
 
 disk_types:
 - name: bosh

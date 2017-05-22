@@ -18,8 +18,6 @@ vm_types:
       type: gp2
       size: 300000
       encrypted: true
-- <<: *bosh-vm
-  name: production-bosh
 - <<: *concourse-web-vm
   name: production-concourse-web
 - <<: *concourse-worker-vm
@@ -171,8 +169,6 @@ disk_types:
   cloud_properties:
     type: gp2
     encrypted: true
-- <<: *bosh-disk
-  name: production-bosh
 - <<: *monitoring-riemann-disk
   name: production-monitoring-riemann
 - <<: *monitoring-influxdb-disk

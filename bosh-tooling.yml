@@ -7,9 +7,9 @@ instance_groups:
   jobs:
   - (( append ))
   - {name: uaa-customized, release: uaa-customized}
-  vm_extensions: [tooling-bosh-profile]
+  vm_extensions: [bosh-profile, bosh-lb]
   networks:
-  - name: tooling-bosh
+  - name: bosh
     static_ips:
     - (( grab terraform_outputs.tooling_bosh_static_ip ))
 

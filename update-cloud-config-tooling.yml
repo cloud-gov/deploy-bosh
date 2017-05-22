@@ -14,4 +14,4 @@ inputs:
 - {name: terraform-yaml-production}
 
 run:
-  path: bosh-config/update-cloud-config.sh
+  path: bosh-config/update-cloud-config-tooling.sh

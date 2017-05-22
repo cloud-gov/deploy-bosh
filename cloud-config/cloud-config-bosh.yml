@@ -2,13 +2,15 @@ networks:
 - (( append ))
 - name: (( concat $ENVIRONMENT "-bosh" ))
   subnets:
-  - range: (( grab terraform_outputs.private_subnet_cidr_az1 ))
+  - az: z1
+    range: (( grab terraform_outputs.private_subnet_cidr_az1 ))
     gateway: (( grab terraform_outputs.private_subnet_gateway_az1 ))
     static:
     - (( grab terraform_outputs.bosh_static_ip ))
     reserved:
     - (( grab terraform_outputs.private_subnet_reserved_az1 ))
-    dns: (( grab terraform_outputs.private_subnet_dns_az1 ))
+    dns:
+    - (( grab terraform_outputs.vpc_cidr_dns ))
     cloud_properties:
       subnet: (( grab terraform_outputs.private_subnet_az1 ))
       security_groups:

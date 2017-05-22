@@ -9,7 +9,7 @@ networks:
     - (( grab terraform_outputs.private_subnet_reserved_az1 ))
     - (( grab terraform_outputs.bosh_static_ip ))
     dns:
-    - (( grab terraform_outputs.private_subnet_dns_az1 ))
+    - (( grab terraform_outputs.vpc_cidr_dns ))
     cloud_properties:
       subnet: (( grab terraform_outputs.private_subnet_az1 ))
       security_groups:
@@ -21,7 +21,7 @@ networks:
     - (( grab terraform_outputs.private_subnet_reserved_az2 ))
     - (( grab terraform_outputs.bosh_static_ip ))
     dns:
-    - (( grab terraform_outputs.private_subnet_dns_az2 ))
+    - (( grab terraform_outputs.vpc_cidr_dns ))
     cloud_properties:
       subnet: (( grab terraform_outputs.private_subnet_az2 ))
       security_groups:
