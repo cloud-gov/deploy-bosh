@@ -1,6 +1,5 @@
 vm_types:
-- &bosh-vm
-  name: staging-bosh
+- name: bosh
   cloud_properties:
     instance_type: m3.large
 - &concourse-web-vm
@@ -155,8 +154,7 @@ vm_extensions:
     iam_instance_profile: (( grab terraform_outputs.influxdb_monitoring_profile ))
 
 disk_types:
-- &bosh-disk
-  name: staging-bosh
+- name: bosh
   disk_size: 300000
   cloud_properties:
     type: gp2

@@ -1,10 +1,11 @@
 vm_types:
-- name: tooling-bosh
+- name: bosh
   cloud_properties:
     instance_type: m3.large
 
 networks:
-- name: tooling-bosh
+- name: bosh
+  type: manual
   subnets:
   - range: (( grab terraform_outputs.private_subnet_cidr_az1 ))
     gateway: (( grab terraform_outputs.private_subnet_gateway_az1 ))
@@ -19,16 +20,16 @@ networks:
       - (( grab terraform_outputs.bosh_security_group ))
 
 vm_extensions:
-- name: tooling-bosh-profile
+- name: bosh-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.bosh_profile ))
 
 disk_types:
-- name: tooling-bosh
+- name: bosh
   disk_size: 300000
   cloud_properties:
     type: gp2
     encrypted: true
 
 compilation:
-  network: tooling-bosh
+  network: bosh

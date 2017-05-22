@@ -4,12 +4,10 @@ releases:
 
 instance_groups:
 - name: bosh
-  vm_type: tooling-bosh
-  persistent_disk_type: tooling-bosh
-  vm_extensions: [tooling-bosh-profile]
   jobs:
   - (( append ))
   - {name: uaa-customized, release: uaa-customized}
+  vm_extensions: [tooling-bosh-profile]
   networks:
   - name: tooling-bosh
     static_ips:

@@ -69,7 +69,7 @@ jobs:
         - -exc
         - |
           bosh-config/generate.sh \
-            bosh-config/development-bosh.yml \
+            bosh-config/bosh-development.yml \
             terraform-yaml/state.yml \
             common/secrets.yml \
             > bosh-manifest/manifest.yml
@@ -252,7 +252,7 @@ jobs:
         - -exc
         - |
           bosh-config/generate.sh \
-            bosh-config/staging-bosh.yml \
+            bosh-config/bosh-staging.yml \
             terraform-yaml/state.yml \
             common/secrets.yml \
             > bosh-manifest/manifest.yml
@@ -449,7 +449,7 @@ jobs:
         - -exc
         - |
           bosh-config/generate.sh \
-            bosh-config/production-bosh.yml \
+            bosh-config/bosh-production.yml \
             terraform-yaml/state.yml \
             common/secrets.yml \
             > bosh-manifest/manifest.yml
@@ -624,7 +624,7 @@ jobs:
         - -exc
         - |
           bosh-config/generate.sh \
-            bosh-config/tooling-bosh.yml \
+            bosh-config/bosh-tooling.yml \
             terraform-yaml/state.yml \
             common/secrets.yml \
             > bosh-manifest/manifest.yml

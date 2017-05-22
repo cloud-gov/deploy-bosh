@@ -1,7 +1,5 @@
 instance_groups:
 - name: bosh
-  vm_type: development-bosh
-  persistent_disk_type: development-bosh
   vm_extensions: [development-bosh-profile]
   networks:
   - name: development-bosh

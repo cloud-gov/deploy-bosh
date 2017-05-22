@@ -1,4 +1,5 @@
 networks:
+- (( append ))
 - name: (( concat $ENVIRONMENT "-bosh" ))
   subnets:
   - range: (( grab terraform_outputs.private_subnet_cidr_az1 ))
@@ -14,6 +15,7 @@ networks:
       - (( grab terraform_outputs.bosh_security_group ))
 
 vm_extensions:
+- (( append ))
 - name: (( concat $ENVIRONMENT "-bosh-profile" ))
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.bosh_profile ))

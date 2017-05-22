@@ -45,6 +45,8 @@ stemcells:
 instance_groups:
 - name: bosh
   stemcell: default
+  vm_type: bosh
+  persistent_disk_type: bosh
   instances: 1
   azs: [z1]
   jobs:

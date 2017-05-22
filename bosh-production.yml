@@ -1,7 +1,5 @@
 instance_groups:
 - name: bosh
-  vm_type: production-bosh
-  persistent_disk_type: production-bosh
   vm_extensions: [production-bosh-profile]
   networks:
   - name: production-bosh
