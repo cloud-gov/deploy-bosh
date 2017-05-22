@@ -7,13 +7,16 @@ networks:
 - name: bosh
   type: manual
   subnets:
-  - range: (( grab terraform_outputs.private_subnet_cidr_az1 ))
-    gateway: (( grab terraform_outputs.private_subnet_gateway_az1 ))
+  - az: z1
+    range: (( grab terraform_outputs.private_subnet_az1_cidr ))
+    gateway: (( grab terraform_outputs.private_subnet_az1_gateway ))
     static:
     - (( grab terraform_outputs.tooling_bosh_static_ip ))
     reserved:
-    - (( grab terraform_outputs.private_subnet_reserved_az1 ))
-    dns: (( grab terraform_outputs.private_subnet_dns_az1 ))
+    - (( grab terraform_outputs.private_subnet_az1_reserved ))
+    - (( grab terraform_outputs.master_bosh_static_ip ))
+    dns:
+    - (( grab terraform_outputs.private_subnet_az1_dns ))
     cloud_properties:
       subnet: (( grab terraform_outputs.private_subnet_az1 ))
       security_groups:
