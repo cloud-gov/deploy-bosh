@@ -628,6 +628,7 @@ jobs:
         - |
           bosh-config/generate.sh \
             bosh-config/bosh-tooling.yml \
+            bosh-config/bosh-tooling-uaa.yml \
             terraform-yaml/state.yml \
             common/decrypted-tooling-bosh-main.yml \
             common/decrypted-tooling-bosh-external.yml \
@@ -1050,8 +1051,8 @@ resources:
     access_key_id: {{ci-access-key-id}}
     secret_access_key: {{ci-secret-access-key}}
     secrets_files:
-    - prod-bosh-main.yml
-    - prod-bosh-external.yml
+    - production-bosh-main.yml
+    - production-bosh-external.yml
     secrets_passphrase: {{prod-secrets-passphrase}}
     bosh_cert: bosh-tooling.pem
 
