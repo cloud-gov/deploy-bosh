@@ -1,28 +1,17 @@
 meta:
-  db: ~
-  name: bosh
-  networks:
-    default:
-      static_ips: [10.0.0.7]
-  default_static_ip: (( grab meta.networks.default.static_ips.[0] ))
+  bosh_static_ip: (( grab terraform_outputs.bosh_static_ip ))
+  blobstore_bucket: (( param "specify blobstore bucket" ))
   aws:
     default_key_name: bosh
-    default_security_groups: ~
-    region: ~
-  dns_recursor_ip: ~
-  bosh_domain_name: ~
   passwords:
-    nats-password: ~
-    admin-password: ~
-    director-password: ~
-    agent-password: ~
-    registry-password: ~
-    hm-password: ~
+    nats: (( param "specify nats password" ))
+    admin: (( param "specify admin password" ))
+    director: (( param "specify director password" ))
+    agent: (( param "specify agent password" ))
+    registry: (( param "specify registry password" ))
 
-name: (( grab meta.name ))
-
-# Execute the "bosh status" command to obtain the director_uuid.
-director_uuid: (( param "specify bosh directory" ))
+name: (( param "specify deployment name" ))
+director_uuid: (( param "specify bosh director" ))
 
 releases:
 - {name: bosh, version: latest}
@@ -50,171 +39,207 @@ instance_groups:
   instances: 1
   azs: [z1]
   jobs:
-  - {name: nats, release: bosh}
-  - {name: blobstore, release: bosh}
-  - {name: director, release: bosh}
-  - {name: health_monitor, release: bosh}
-  - {name: registry, release: bosh}
-  - {name: powerdns, release: bosh}
-  - {name: aws_cpi, release: bosh-aws-cpi}
-  - {name: uaa, release: uaa}
-  - {name: secureproxy, release: secureproxy}
-  - {name: cron, release: cron}
+  - name: nats
+    release: bosh
+    properties:
+      nats:
+        address: (( grab meta.bosh_static_ip ))
+        user: nats
+        password: (( grab meta.passwords.nats ))
 
-properties:
-  postgres: &bosh_db
-    adapter: postgres
-    port: 5432
-    user: (( grab meta.db.user ))
-    password: (( grab meta.db.pass ))
-    host: (( grab meta.db.host ))
-    database: (( grab meta.db.database ))
-    additional_databases:
-    - (( grab meta.db.uaadb || "bosh_uaadb" ))
+  - name: blobstore
+    release: bosh
+    properties:
+      blobstore:
+        provider: s3
+        server_side_encryption: AES256
+        credentials_source: env_or_profile
+        bucket_name: (( grab meta.blobstore_bucket ))
+        s3_region: (( grab terraform_outputs.vpc_region ))
+        agent:
+          user: agent
+          password: (( grab meta.passwords.agent))
+        director:
+          user: director
+          password: (( grab meta.passwords.director))
 
-  dns:
-    address: (( grab meta.default_static_ip ))
-    db: *bosh_db
-    recursor: (( grab meta.dns_recursor_ip ))
-    domain_name: (( grab meta.bosh_domain_name ))
+  - name: director
+    release: bosh
+    properties:
+      director:
+        name: bosh
+        address: (( grab meta.bosh_static_ip ))
+        db:
+          user: (( grab terraform_outputs.bosh_rds_username ))
+          password: (( grab terraform_outputs.bosh_rds_password ))
+          host: (( grab terraform_outputs.bosh_rds_host_curr ))
+          database: bosh
+          port: 5432
+        ssl: (( param "specify director ssl" ))
+        cpi_job: aws_cpi
+        flush_arp: true
+        # TODO: Revert after https://github.com/cloudfoundry/bosh/issues/1486 is resolved
+        enable_post_deploy: true
+        user_management:
+          provider: uaa
+          uaa:
+            url: (( concat "https://" meta.bosh_static_ip ":8443" ))
+      nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
+      blobstore: (( grab instance_groups.bosh.jobs.blobstore.properties.blobstore ))
+      ntp: [time.nist.gov]
 
-  nats:
-    address: (( grab meta.default_static_ip ))
-    user: nats
-    password: (( grab meta.passwords.nats-password ))
-
-  director:
-    name: bosh
-    address: (( grab meta.default_static_ip ))
-    db: *bosh_db
-    ssl: (( param "specify director ssl" ))
-    cpi_job: aws_cpi
-    flush_arp: true
-    # TODO: Revert after https://github.com/cloudfoundry/bosh/issues/1486 is resolved
-    enable_post_deploy: true
-    user_management:
-      provider: uaa
-      uaa:
-        url: (( concat "https://" meta.default_static_ip ":8443" ))
-
-  blobstore:
-    provider: s3
-    server_side_encryption: AES256
-    credentials_source: env_or_profile
-    bucket_name: (( param "specify blobstore bucket" ))
-    s3_region: (( grab meta.aws.region ))
-    agent:
-      user: agent
-      password: (( grab meta.passwords.agent-password ))
-    director:
-      user: director
-      password: (( grab meta.passwords.director-password ))
-
-  registry:
-    address: (( grab meta.default_static_ip ))
-    host: (( grab meta.default_static_ip ))
-    db: *bosh_db
-    http:
-      user: registry
-      password: (( grab meta.passwords.registry-password ))
-      port: 25777
-    username: registry
-    password: (( grab meta.passwords.registry-password ))
-    port: 25777
-    cloud:
-      plugin: aws
-      credentials_source: env_or_profile
-      region: (( grab meta.aws.region ))
-
-  hm:
-    director_account:
-      user: admin
-      password: (( grab meta.passwords.admin-password ))
-      ca_cert: (( param "specify health monitor director ca cert" ))
-      client_id: hm
-      client_secret: (( param "specify health monitor director client secret" ))
-    varz_enabled: true
-    resurrector_enabled: true
-    resurrector:
-      minimum_down_jobs: 3
-    riemann_enabled: true
-
-  aws: &aws
-    credentials_source: env_or_profile
-    default_key_name: (( grab meta.aws.default_key_name ))
-    default_security_groups: (( grab meta.aws.default_security_groups ))
-    default_iam_instance_profile: (( grab terraform_outputs.default_profile ))
-    region: (( grab meta.aws.region ))
-
-  agent:
-    mbus: (( concat "nats://nats:" meta.passwords.nats-password "@" meta.default_static_ip ":4222" ))
-  ntp: &ntp [time.nist.gov]
-
-  uaa:
-    url: (( concat "https://" meta.default_static_ip ":8443" ))
-    clients:
+  - name: health_monitor
+    release: bosh
+    properties:
       hm:
-        override: true
-        authorized-grant-types: client_credentials
-        scope: ""
-        authorities: bosh.admin
-        secret: (( param "specify hm client secret" ))
-      ci:
-        authorized-grant-types: client_credentials
-        scope: ""
-        authorities: bosh.admin
-        secret: (( param "specify ci client secret" ))
-      bosh_cli:
-        override: true
-        authorized-grant-types: password,refresh_token
-        # scopes the client may receive
-        scope: openid,bosh.admin,bosh.read,bosh.*.admin,bosh.*.read
-        authorities: uaa.none
-        access-token-validity: 1200 # 20 min
-        refresh-token-validity: 86400 # re-login required once a day
-        secret: ""
-      bosh_exporter:
-        override: true
-        authorized-grant-types: client_credentials
-        authorities: bosh.read
-        scope: ""
-        secret: (( param "specify bosh exporter client secret" ))
-    scim:
-      users:
-      - name: admin
-        password: (( grab meta.passwords.admin-password ))
-        groups:
-        - scim.write
-        - scim.read
-        - bosh.admin
-    zones:
-      internal:
-        hostnames:
-        - (( grab meta.default_static_ip ))
+        director_account:
+          user: admin
+          password: (( grab meta.passwords.admin))
+          ca_cert: (( param "specify health monitor director ca cert" ))
+          client_id: hm
+          client_secret: (( param "specify health monitor director client secret" ))
+        resurrector_enabled: true
+        resurrector:
+          minimum_down_jobs: 3
+        riemann_enabled: true
+      nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
+      director:
+        address: (( grab meta.bosh_static_ip ))
 
-  login:
-    url: (( concat "https://" meta.default_static_ip ":8443" ))
-    protocol: https
-    brand: oss
-    brand_title: cloud.gov
-    self_service_links_enabled: false
-    signups_enabled: false
-    invitations_enabled: false
+  - name: registry
+    release: bosh
+    properties:
+      registry:
+        address: (( grab meta.bosh_static_ip ))
+        host: (( grab meta.bosh_static_ip ))
+        db: (( grab instance_groups.bosh.jobs.director.properties.director.db ))
+        http:
+          user: registry
+          password: (( grab meta.passwords.registry))
+          port: 25777
+        username: registry
+        password: (( grab meta.passwords.registry))
+        port: 25777
+        cloud:
+          plugin: aws
+          credentials_source: env_or_profile
+          region: (( grab terraform_outputs.vpc_region ))
 
-  uaadb: (( param "specify uaadb props" ))
+  - name: powerdns
+    release: bosh
+    properties:
+      dns:
+        address: (( grab meta.bosh_static_ip ))
+        recursor: (( grab terraform_outputs.vpc_cidr_dns ))
+        db: (( grab instance_groups.bosh.jobs.director.properties.director.db ))
 
-  secureproxy:
-    listen_port: 8081
-    proxy_port: 8080
+  - name: aws_cpi
+    release: bosh-aws-cpi
+    properties:
+      aws:
+        credentials_source: env_or_profile
+        default_key_name: (( grab meta.aws.default_key_name ))
+        default_security_groups: (( grab terraform_outputs.bosh_security_group ))
+        default_iam_instance_profile: (( grab terraform_outputs.default_profile ))
+        region: (( grab terraform_outputs.vpc_region ))
+      registry:
+        username: registry
+        password: (( grab meta.passwords.registry))
+        host: (( grab meta.bosh_static_ip ))
+      nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
+      blobstore: (( grab instance_groups.bosh.jobs.blobstore.properties.blobstore ))
 
-  cron:
-    entries:
-    - script:
-        name: unknown-vms.sh
-        contents: (( file "bosh-config/cronjobs/unknown-vms.sh" ))
-      minute: '*'
-      hour: '*'
-      day: '*'
-      month: '*'
-      wday: '*'
-      user: root
+  - name: uaa
+    release: uaa
+    properties:
+      uaadb:
+        db_scheme: postgresql
+        address: (( grab terraform_outputs.bosh_rds_host_curr ))
+        port: 5432
+        databases:
+        - tag: uaa
+          name: bosh_uaadb
+        roles:
+        - tag: admin
+          name: (( grab terraform_outputs.bosh_rds_username ))
+          password: (( grab terraform_outputs.bosh_rds_password ))
+
+      uaa:
+        url: (( concat "https://" meta.bosh_static_ip ":8443" ))
+        clients:
+          hm:
+            override: true
+            authorized-grant-types: client_credentials
+            scope: ""
+            authorities: bosh.admin
+            secret: (( param "specify hm client secret" ))
+          ci:
+            authorized-grant-types: client_credentials
+            scope: ""
+            authorities: bosh.admin
+            secret: (( param "specify ci client secret" ))
+          bosh_cli:
+            override: true
+            authorized-grant-types: password,refresh_token
+            # scopes the client may receive
+            scope: openid,bosh.admin,bosh.read,bosh.*.admin,bosh.*.read
+            authorities: uaa.none
+            access-token-validity: 1200 # 20 min
+            refresh-token-validity: 86400 # re-login required once a day
+            secret: ""
+          bosh_exporter:
+            override: true
+            authorized-grant-types: client_credentials
+            authorities: bosh.read
+            scope: ""
+            secret: (( param "specify bosh exporter client secret" ))
+        scim:
+          users:
+          - name: admin
+            password: (( grab meta.passwords.admin ))
+            groups:
+            - scim.write
+            - scim.read
+            - bosh.admin
+        zones:
+          internal:
+            hostnames:
+            - (( grab meta.bosh_static_ip ))
+
+      login:
+        url: (( concat "https://" meta.bosh_static_ip ":8443" ))
+        protocol: https
+        brand: oss
+        brand_title: cloud.gov
+        self_service_links_enabled: false
+        signups_enabled: false
+        invitations_enabled: false
+
+  - name: secureproxy
+    release: secureproxy
+    properties:
+      secureproxy:
+        listen_port: 8081
+        proxy_port: 8080
+
+  - name: cron
+    release: cron
+    properties:
+      cron:
+        variables:
+          BOSH_DIRECTOR: (( grab meta.bosh_static_ip ))
+          AWS_DEFAULT_REGION: (( grab terraform_outputs.vpc_region ))
+          PGHOST: (( grab terraform_outputs.bosh_rds_host_curr ))
+          PGUSERNAME: (( grab terraform_outputs.bosh_rds_username ))
+          PGPASSWORD: (( grab terraform_outputs.bosh_rds_password ))
+          PGDBNAME: bosh
+        entries:
+        - script:
+            name: unknown-vms.sh
+            contents: (( file "bosh-config/cronjobs/unknown-vms.sh" ))
+          minute: '*'
+          hour: '*'
+          day: '*'
+          month: '*'
+          wday: '*'
+          user: root

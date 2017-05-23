@@ -71,7 +71,8 @@ jobs:
           bosh-config/generate.sh \
             bosh-config/bosh-development.yml \
             terraform-yaml/state.yml \
-            common/secrets.yml \
+            common/decrypted-development-bosh-main.yml \
+            common/decrypted-development-bosh-external.yml \
             > bosh-manifest/manifest.yml
   - put: developmentbosh-deployment
     params: &bosh-deployment
@@ -254,7 +255,8 @@ jobs:
           bosh-config/generate.sh \
             bosh-config/bosh-staging.yml \
             terraform-yaml/state.yml \
-            common/secrets.yml \
+            common/decrypted-staging-bosh-main.yml \
+            common/decrypted-staging-bosh-external.yml \
             > bosh-manifest/manifest.yml
   - put: stagingbosh-deployment
     params: &bosh-deployment
@@ -451,7 +453,8 @@ jobs:
           bosh-config/generate.sh \
             bosh-config/bosh-production.yml \
             terraform-yaml/state.yml \
-            common/secrets.yml \
+            common/decrypted-production-bosh-main.yml \
+            common/decrypted-production-bosh-external.yml \
             > bosh-manifest/manifest.yml
   - put: productionbosh-deployment
     params: *bosh-deployment
@@ -626,7 +629,8 @@ jobs:
           bosh-config/generate.sh \
             bosh-config/bosh-tooling.yml \
             terraform-yaml/state.yml \
-            common/secrets.yml \
+            common/decrypted-tooling-bosh-main.yml \
+            common/decrypted-tooling-bosh-external.yml \
             > bosh-manifest/manifest.yml
   - put: toolingbosh-deployment
     params:
@@ -1006,7 +1010,9 @@ resources:
     region: {{aws-region}}
     access_key_id: {{ci-access-key-id}}
     secret_access_key: {{ci-secret-access-key}}
-    secrets_file: tooling-bosh.yml
+    secrets_files:
+    - tooling-bosh-main.yml
+    - tooling-bosh-external.yml
     secrets_passphrase: {{tooling-secrets-passphrase}}
     bosh_cert: bosh-tooling.pem
 
@@ -1017,7 +1023,9 @@ resources:
     region: {{aws-region}}
     access_key_id: {{ci-access-key-id}}
     secret_access_key: {{ci-secret-access-key}}
-    secrets_file: development-bosh.yml
+    secrets_files:
+    - development-bosh-main.yml
+    - development-bosh-external.yml
     secrets_passphrase: {{development-secrets-passphrase}}
     bosh_cert: bosh-tooling.pem
 
@@ -1028,7 +1036,9 @@ resources:
     region: {{aws-region}}
     access_key_id: {{ci-access-key-id}}
     secret_access_key: {{ci-secret-access-key}}
-    secrets_file: staging-bosh.yml
+    secrets_files:
+    - staging-bosh-main.yml
+    - staging-bosh-external.yml
     secrets_passphrase: {{staging-secrets-passphrase}}
     bosh_cert: bosh-tooling.pem
 
@@ -1039,7 +1049,9 @@ resources:
     region: {{aws-region}}
     access_key_id: {{ci-access-key-id}}
     secret_access_key: {{ci-secret-access-key}}
-    secrets_file: prod-bosh.yml
+    secrets_files:
+    - prod-bosh-main.yml
+    - prod-bosh-external.yml
     secrets_passphrase: {{prod-secrets-passphrase}}
     bosh_cert: bosh-tooling.pem
 

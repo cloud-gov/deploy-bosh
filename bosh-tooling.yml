@@ -1,3 +1,15 @@
+meta:
+  bosh_static_ip: (( grab terraform_outputs.tooling_bosh_static_ip ))
+
+templates:
+  client: &client-template
+    authorities: uaa.none
+    authorized-grant-types: authorization_code,client_credentials,refresh_token
+    autoapprove: true
+    override: true
+    access-token-validity: 3600
+    refresh-token-validity: 3600
+
 releases:
 - (( append ))
 - {name: uaa-customized, version: latest}
@@ -13,56 +25,51 @@ instance_groups:
     static_ips:
     - (( grab terraform_outputs.tooling_bosh_static_ip ))
 
-templates:
-  client: &client-template
-    authorities: uaa.none
-    authorized-grant-types: authorization_code,client_credentials,refresh_token
-    autoapprove: true
-    override: true
-    access-token-validity: 3600
-    refresh-token-validity: 3600
-
-properties:
-  uaa:
-    clients:
-      concourse_production:
-        scope: openid,concourse.admin,concourse.apps
-        secret: (( param "specify concourse production secret" ))
-        redirect-uri: (( param "specify concourse production redirect url" ))
-        <<: *client-template
-      concourse_staging:
-        scope: openid,concourse.admin,concourse.apps
-        secret: (( param "specify concourse staging secret" ))
-        redirect-uri: (( param "specify concourse staging redirect url" ))
-        <<: *client-template
-      monitoring_production:
-        scope: openid,metrics.read
-        secret: (( param "specify monitoring production secret" ))
-        redirect-uri: (( param "specify monitoring production redirect url" ))
-        <<: *client-template
-      monitoring_staging:
-        scope: openid,metrics.read
-        secret: (( param "specify monitoring staging secret" ))
-        redirect-uri: (( param "specify monitoring staging redirect url" ))
-        <<: *client-template
-      prometheus_grafana_production:
-        scope: openid,metrics.read
-        secret: (( param "specify prometheus production secret" ))
-        redirect-uri: (( param "specify prometheus production redirect url" ))
-        <<: *client-template
-      prometheus_grafana_staging:
-        scope: openid,metrics.read
-        secret: (( param "specify prometheus staging secret" ))
-        redirect-uri: (( param "specify prometheus staging redirect url" ))
-        <<: *client-template
-      # For authentication to bosh via concourse
-      concourse_bosh:
-        secret: (( param "specify concourse bosh client secret" ))
-        authorized-grant-types: client_credentials
-        authorities: bosh.admin
-        scope: ""
-      uaa-token-audit:
-        secret: (( param "specify uaa token audit client secret" ))
-        authorized-grant-types: client_credentials
-        authorities: scim.read,tokens.list,uaa.admin
-        scope: ""
+instance_groups:
+- name: bosh
+  jobs:
+  - name: uaa
+    properties:
+      uaa:
+        clients:
+          concourse_production:
+            scope: openid,concourse.admin,concourse.apps
+            secret: (( param "specify concourse production secret" ))
+            redirect-uri: (( param "specify concourse production redirect url" ))
+            <<: *client-template
+          concourse_staging:
+            scope: openid,concourse.admin,concourse.apps
+            secret: (( param "specify concourse staging secret" ))
+            redirect-uri: (( param "specify concourse staging redirect url" ))
+            <<: *client-template
+          monitoring_production:
+            scope: openid,metrics.read
+            secret: (( param "specify monitoring production secret" ))
+            redirect-uri: (( param "specify monitoring production redirect url" ))
+            <<: *client-template
+          monitoring_staging:
+            scope: openid,metrics.read
+            secret: (( param "specify monitoring staging secret" ))
+            redirect-uri: (( param "specify monitoring staging redirect url" ))
+            <<: *client-template
+          prometheus_grafana_production:
+            scope: openid,metrics.read
+            secret: (( param "specify prometheus production secret" ))
+            redirect-uri: (( param "specify prometheus production redirect url" ))
+            <<: *client-template
+          prometheus_grafana_staging:
+            scope: openid,metrics.read
+            secret: (( param "specify prometheus staging secret" ))
+            redirect-uri: (( param "specify prometheus staging redirect url" ))
+            <<: *client-template
+          # For authentication to bosh via concourse
+          concourse_bosh:
+            secret: (( param "specify concourse bosh client secret" ))
+            authorized-grant-types: client_credentials
+            authorities: bosh.admin
+            scope: ""
+          uaa-token-audit:
+            secret: (( param "specify uaa token audit client secret" ))
+            authorized-grant-types: client_credentials
+            authorities: scim.read,tokens.list,uaa.admin
+            scope: ""
