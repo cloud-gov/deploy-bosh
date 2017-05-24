@@ -26,11 +26,6 @@ instance_groups:
             authorities: uaa.none,concourse.admin,concourse.apps
             secret: (( param "specify concourse staging secret" ))
             redirect-uri: (( param "specify concourse staging redirect url" ))
-          concourse_local:
-            <<: *client-template
-            scope: openid,concourse.admin,concourse.apps
-            secret: (( param "specify concourse local secret" ))
-            redirect-uri: (( param "specify concourse local redirect url" ))
           monitoring_production:
             scope: openid,metrics.read
             secret: (( param "specify monitoring production secret" ))
