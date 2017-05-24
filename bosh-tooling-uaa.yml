@@ -15,15 +15,17 @@ instance_groups:
       uaa:
         clients:
           concourse_production:
+            <<: *client-template
             scope: openid,concourse.admin,concourse.apps
+            authorities: uaa.none,concourse.admin,concourse.apps
             secret: (( param "specify concourse production secret" ))
             redirect-uri: (( param "specify concourse production redirect url" ))
-            <<: *client-template
           concourse_staging:
+            <<: *client-template
             scope: openid,concourse.admin,concourse.apps
+            authorities: uaa.none,concourse.admin,concourse.apps
             secret: (( param "specify concourse staging secret" ))
             redirect-uri: (( param "specify concourse staging redirect url" ))
-            <<: *client-template
           monitoring_production:
             scope: openid,metrics.read
             secret: (( param "specify monitoring production secret" ))
