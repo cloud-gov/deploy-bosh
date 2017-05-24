@@ -139,7 +139,8 @@ instance_groups:
       aws:
         credentials_source: env_or_profile
         default_key_name: (( grab meta.aws.default_key_name ))
-        default_security_groups: (( grab terraform_outputs.bosh_security_group ))
+        default_security_groups:
+        - (( grab terraform_outputs.bosh_security_group ))
         default_iam_instance_profile: (( grab terraform_outputs.default_profile ))
         region: (( grab terraform_outputs.vpc_region ))
       registry:
