@@ -1,6 +1,7 @@
 meta:
   bosh_static_ip: (( grab terraform_outputs.bosh_static_ip ))
   blobstore_bucket: (( param "specify blobstore bucket" ))
+  bosh_domain_name: bosh
   aws:
     default_key_name: bosh
   passwords:
@@ -86,6 +87,7 @@ instance_groups:
             url: (( concat "https://" meta.bosh_static_ip ":8443" ))
       nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
       blobstore: (( grab instance_groups.bosh.jobs.blobstore.properties.blobstore ))
+      dns: (( grab instance_groups.bosh.jobs.powerdns.properties.dns ))
       ntp: [time.nist.gov]
 
   - name: health_monitor
@@ -132,6 +134,7 @@ instance_groups:
         address: (( grab meta.bosh_static_ip ))
         recursor: (( grab terraform_outputs.vpc_cidr_dns ))
         db: (( grab instance_groups.bosh.jobs.director.properties.director.db ))
+        domain_name: (( grab meta.bosh_domain_name ))
 
   - name: aws_cpi
     release: bosh-aws-cpi
