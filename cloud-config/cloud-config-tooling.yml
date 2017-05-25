@@ -1,7 +1,11 @@
 vm_types:
-- name: bosh
-  cloud_properties:
-    instance_type: m3.large
+- name: nesuss-manager
+cloud_properties:
+  instance_type: t2.medium
+  ephemeral_disk:
+    size: 30000
+    type: gp2
+    encrypted: true
 - &concourse-web-vm
   name: staging-concourse-web
   cloud_properties:
@@ -44,6 +48,21 @@ vm_types:
   name: production-monitoring-influxdb
 
 networks:
+- name: nessus-manager
+  type: manual
+  subnets:
+  - range: (( grab terraform_outputs.private_subnet_az1_cidr ))
+    reserved: (( grab terraform_outputs.private_subnet_az1_reserved ))
+    gateway: (( grab terraform_outputs.private_subnet_gateway ))
+    az: z1
+    dns:
+    - (( grab terraform_outputs.tooling_bosh_static_ip ))
+    - (( grab terraform_outputs.vpc_cidr_dns ))
+    cloud_properties:
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
+      - (( grab terraform_outputs.nessus_security_group ))
+      subnet: (( grab terraform_outputs.private_subnet_az1 ))
 - name: staging-concourse
   type: manual
   subnets:
@@ -116,6 +135,10 @@ networks:
       - (( grab terraform_outputs.production_monitoring_security_group ))
 
 vm_extensions:
+- name: nessus-manager-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.nessus_elb_name ))
 - name: staging-concourse-lb
   cloud_properties:
     elbs:
@@ -152,8 +175,8 @@ vm_extensions:
     iam_instance_profile: (( grab terraform_outputs.influxdb_monitoring_profile ))
 
 disk_types:
-- name: bosh
-  disk_size: 300000
+- name: nessus-manager
+  disk_size: 60000
   cloud_properties:
     type: gp2
     encrypted: true
