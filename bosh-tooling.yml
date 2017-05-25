@@ -1,5 +1,6 @@
 meta:
   bosh_static_ip: (( grab terraform_outputs.tooling_bosh_static_ip ))
+  bosh_domain_name: toolingbosh
 
 releases:
 - (( append ))
