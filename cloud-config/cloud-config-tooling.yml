@@ -1,5 +1,8 @@
 vm_types:
-- name: nesuss-manager
+- name: bosh
+  cloud_properties:
+    instance_type: m3.large
+- name: nessus-manager
 cloud_properties:
   instance_type: t2.medium
   ephemeral_disk:
@@ -175,6 +178,8 @@ vm_extensions:
     iam_instance_profile: (( grab terraform_outputs.influxdb_monitoring_profile ))
 
 disk_types:
+- name: bosh
+  disk_size: 300000
 - name: nessus-manager
   disk_size: 60000
   cloud_properties:
