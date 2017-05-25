@@ -1,31 +1,20 @@
 ---
 meta:
-  name: bosh
-  networks:
-    private:
-      static_ips: [10.0.0.6]
-  default_static_ip: (( grab meta.networks.private.static_ips.[0] ))
+  bosh_static_ip: (( grab terraform_outputs.master_bosh_static_ip ))
   keypair_file: ./decrypt/master-bosh.pem
-  cloud_properties:
-    availability_zone: ~
   passwords:
-    nats-password: ~
-    postgres-password: ~
-    admin-password: ~
-    director-password: ~
-    agent-password: ~
-    hm-password: ~
-    mbus-password: ~
+    nats: (( param "specify nats password" ))
+    postgres: (( param "specify postgres password" ))
+    admin: (( param "specify admin password" ))
+    director: (( param "specify director password" ))
+    agent: (( param "specify agent password" ))
+    hm: (( param "specify hm password" ))
+    mbus: (( param "specify mbus password" ))
   aws:
-    access_key_id: (( grab terraform_outputs.master_bosh_access_key_id_curr ))
-    secret_access_key: (( grab terraform_outputs.master_bosh_secret_access_key_curr ))
     default_key_name: bosh
-    default_security_groups: ~
-    region: (( grab terraform_outputs.vpc_region ))
-  upstream_dns_ip: ~
-  bosh_domain_name: ~
+  bosh_domain_name: masterbosh
 
-name: (( grab meta.name ))
+name: master-bosh
 
 releases:
 - name: bosh
@@ -48,7 +37,7 @@ resource_pools:
       size: 25_000
       type: gp2
       encrypted: true
-    availability_zone: (( grab meta.cloud_properties.availability_zone ))
+    availability_zone: (( grab terraform_outputs.az1 ))
 
 disk_pools:
 - name: bosh-ssd
@@ -57,127 +46,155 @@ disk_pools:
     type: gp2
     encrypted: true
 
-networks: (( param "specify networks" ))
+networks:
+- name: private
+  type: manual
+  subnets:
+  - range: (( grab terraform_outputs.private_subnet_az1_cidr ))
+    gateway: (( grab terraform_outputs.private_subnet_az1_gateway ))
+    dns:
+    - (( grab terraform_outputs.vpc_cidr_dns ))
+    cloud_properties:
+      subnet: (( grab terraform_outputs.private_subnet_az1 ))
 
-jobs:
+instance_groups:
 - name: bosh
   instances: 1
-
-  templates:
-  - {name: nats, release: bosh}
-  - {name: powerdns, release: bosh}
-  - {name: postgres, release: bosh}
-  - {name: blobstore, release: bosh}
-  - {name: director, release: bosh}
-  - {name: health_monitor, release: bosh}
-  - {name: registry, release: bosh}
-  - {name: aws_cpi, release: bosh-aws-cpi}
-
   resource_pool: vms
   persistent_disk_pool: bosh-ssd
 
   networks:
   - name: private
-    static_ips: (( grab meta.networks.private.static_ips ))
     default: [dns, gateway]
+    static_ips:
+    - (( grab meta.bosh_static_ip ))
 
-  properties:
-    nats:
-      address: 127.0.0.1
-      user: nats
-      password: (( grab meta.passwords.nats-password ))
+  jobs:
+  - name: nats
+    release: bosh
+    properties:
+      nats:
+        address: 127.0.0.1
+        user: nats
+        password: (( grab meta.passwords.nats ))
 
-    postgres: &bosh_db
-      listen_address: 127.0.0.1
-      host: 127.0.0.1
-      user: postgres
-      password: (( grab meta.passwords.postgres-password ))
-      database: bosh
-      adapter: postgres
+  - name: powerdns
+    release: bosh
+    properties:
+      dns:
+        address: (( grab meta.bosh_static_ip ))
+        recursor: (( grab terraform_outputs.vpc_cidr_dns ))
+        domain_name: (( grab meta.bosh_domain_name ))
+        db: (( grab instance_groups.bosh.jobs.postgres.properties.postgres ))
 
-    dns:
-      address: (( grab meta.default_static_ip ))
-      db: *bosh_db
-      recursor: (( grab meta.upstream_dns_ip ))
-      domain_name: (( grab meta.bosh_domain_name ))
+  - name: postgres
+    release: bosh
+    properties:
+      postgres:
+        listen_address: 127.0.0.1
+        host: 127.0.0.1
+        user: postgres
+        password: (( grab meta.passwords.postgres ))
+        database: bosh
+        adapter: postgres
 
-    registry:
-      address: (( grab meta.default_static_ip ))
-      host: (( grab meta.default_static_ip ))
-      db: *bosh_db
-      http:
-        user: admin
-        password: (( grab meta.passwords.admin-password ))
-        port: 25777
-      username: admin
-      password: (( grab meta.passwords.admin-password ))
-      port: 25777
-      cloud:
-        plugin: aws
-        credentials_source: static
-        access_key_id: (( grab meta.aws.access_key_id ))
-        secret_access_key: (( grab meta.aws.secret_access_key ))
-        region: (( grab meta.aws.region ))
+  - name: blobstore
+    release: bosh
+    properties:
+      blobstore:
+        address: (( grab meta.bosh_static_ip ))
+        port: 25250
+        provider: dav
+        director:
+          user: director
+          password: (( grab meta.passwords.director ))
+        agent:
+          user: agent
+          password: (( grab meta.passwords.agent ))
 
-    blobstore:
-      address: (( grab meta.default_static_ip ))
-      port: 25250
-      provider: dav
+  - name: director
+    release: bosh
+    properties:
       director:
-        user: director
-        password: (( grab meta.passwords.director-password ))
-      agent:
-        user: agent
-        password: (( grab meta.passwords.agent-password ))
+        address: 127.0.0.1
+        name: (( grab meta.name ))
+        db: (( grab instance_groups.bosh.jobs.postgres.properties.postgres ))
+        cpi_job: aws_cpi
+        max_threads: 10
+        user_management:
+          provider: local
+          local:
+            users:
+            - name: admin
+              password: (( grab meta.passwords.admin ))
+            - name: hm
+              password: (( grab meta.passwords.hm ))
+      nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
+      blobstore: (( grab instance_groups.bosh.jobs.blobstore.properties.blobstore ))
+      dns: (( grab instance_groups.bosh.jobs.powerdns.properties.dns ))
+      ntp: [time.nist.gov]
 
-    director:
-      address: 127.0.0.1
-      name: (( grab meta.name ))
-      db: *bosh_db
-      cpi_job: aws_cpi
-      max_threads: 10
-      user_management:
-        provider: local
-        local:
-          users:
-          - name: admin
-            password: (( grab meta.passwords.admin-password ))
-          - name: hm
-            password: (( grab meta.passwords.hm-password ))
+  - name: health_monitor
+    release: bosh
+    properties:
+      hm:
+        director_account:
+          user: hm
+          password: (( grab meta.passwords.hm ))
+        resurrector_enabled: true
+      nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
+      director:
+        address: 127.0.0.1
 
-    hm:
-      director_account:
-        user: hm
-        password: (( grab meta.passwords.hm-password ))
-      resurrector_enabled: true
+  - name: registry
+    release: bosh
+    properties:
+      registry:
+        address: (( grab meta.bosh_static_ip ))
+        host: (( grab meta.bosh_static_ip ))
+        db: (( grab instance_groups.bosh.jobs.postgres.properties.postgres ))
+        http:
+          user: admin
+          password: (( grab meta.passwords.admin ))
+          port: 25777
+        username: admin
+        password: (( grab meta.passwords.admin ))
+        port: 25777
+        cloud:
+          plugin: aws
+          credentials_source: static
+          access_key_id: (( grab terraform_outputs.master_bosh_access_key_id_curr ))
+          secret_access_key: (( grab terraform_outputs.master_bosh_secret_access_key_curr ))
+          region: (( grab terraform_outputs.vpc_region ))
 
-    aws: &aws
-      credentials_source: static
-      default_key_name: (( grab meta.aws.default_key_name ))
-      default_security_groups: (( grab meta.aws.default_security_groups ))
-      access_key_id: (( grab meta.aws.access_key_id ))
-      secret_access_key: (( grab meta.aws.secret_access_key ))
-      region: (( grab meta.aws.region ))
-
-    agent:
-      mbus: (( concat "nats://nats:" meta.passwords.nats-password "@" meta.default_static_ip ":4222" ))
-
-    ntp: &ntp [time.nist.gov]
+  - name: aws_cpi
+    release: bosh-aws-cpi
+    properties:
+      aws:
+        credentials_source: static
+        default_key_name: (( grab meta.aws.default_key_name ))
+        default_security_groups:
+        - (( grab terraform_outputs.bosh_security_group ))
+        access_key_id: (( grab terraform_outputs.master_bosh_access_key_id_curr ))
+        secret_access_key: (( grab terraform_outputs.master_bosh_secret_access_key_curr ))
+        region: (( grab terraform_outputs.vpc_region ))
+      nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
+      blobstore: (( grab instance_groups.bosh.jobs.blobstore.properties.blobstore ))
 
 cloud_provider:
   template: {name: aws_cpi, release: bosh-aws-cpi}
 
   ssh_tunnel:
-    host: (( grab meta.default_static_ip ))
+    host: (( grab meta.bosh_static_ip ))
     port: 22
     user: vcap
     private_key: (( grab meta.keypair_file ))
 
-  mbus: (( concat "https://mbus:" meta.passwords.mbus-password "@" meta.default_static_ip ":6868" ))
+  mbus: (( concat "https://mbus:" meta.passwords.mbus "@" meta.bosh_static_ip ":6868" ))
 
   properties:
-    aws: *aws
+    aws: (( grab instance_groups.bosh.jobs.aws_cpi.properties.aws ))
     agent:
-      mbus: (( concat "https://mbus:" meta.passwords.mbus-password "@0.0.0.0:6868" ))
+      mbus: (( concat "https://mbus:" meta.passwords.mbus "@0.0.0.0:6868" ))
     blobstore: {provider: local, path: /var/vcap/micro_bosh/data/cache}
-    ntp: *ntp
+    ntp: (( grab instance_groups.bosh.jobs.director.properties.ntp ))
