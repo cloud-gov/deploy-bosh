@@ -3,12 +3,12 @@ vm_types:
   cloud_properties:
     instance_type: m3.large
 - name: nessus-manager
-cloud_properties:
-  instance_type: t2.medium
-  ephemeral_disk:
-    size: 30000
-    type: gp2
-    encrypted: true
+  cloud_properties:
+    instance_type: t2.medium
+    ephemeral_disk:
+      size: 30000
+      type: gp2
+      encrypted: true
 - &concourse-web-vm
   name: staging-concourse-web
   cloud_properties:
@@ -56,7 +56,7 @@ networks:
   subnets:
   - range: (( grab terraform_outputs.private_subnet_az1_cidr ))
     reserved: (( grab terraform_outputs.private_subnet_az1_reserved ))
-    gateway: (( grab terraform_outputs.private_subnet_gateway ))
+    gateway: (( grab terraform_outputs.private_subnet_az1_gateway ))
     az: z1
     dns:
     - (( grab terraform_outputs.tooling_bosh_static_ip ))
