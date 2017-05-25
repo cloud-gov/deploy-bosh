@@ -41,6 +41,21 @@ networks:
       security_groups:
       - (( grab terraform_outputs.bosh_security_group ))
       - (( grab terraform_outputs.concourse_security_group ))
+- name: logsearch
+  type: manual
+  subnets:
+  - az: z1
+    range: (( grab terraform_outputs.public_subnet_cidr_az1 ))
+    gateway: (( grab terraform_outputs.public_subnet_gateway_az1 ))
+    reserved:
+    - (( grab terraform_outputs.public_subnet_reserved_az1 ))
+    static: (( grab terraform_outputs.logsearch_static_ips ))
+    dns:
+    - (( grab terraform_outputs.vpc_cidr_dns ))
+    cloud_properties:
+      subnet: (( grab terraform_outputs.public_subnet_az1 ))
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
 
 vm_types:
 - name: admin-ui
@@ -71,6 +86,36 @@ vm_types:
       type: gp2
       size: 300000
       encrypted: true
+- name: logsearch_es_master
+  cloud_properties:
+    instance_type: t2.xlarge
+- name: logsearch_es_data
+  cloud_properties:
+    instance_type: m3.xlarge
+- name: logsearch_queue
+  cloud_properties:
+    instance_type: t2.2xlarge
+- name: logsearch_ingestor
+  cloud_properties:
+    instance_type: t2.medium
+- name: logsearch_parser
+  cloud_properties:
+    instance_type: c4.xlarge
+- name: logsearch_kibana
+  cloud_properties:
+    instance_type: t2.medium
+- name: logsearch_maintenance
+  cloud_properties:
+    instance_type: t2.medium
+- name: logsearch_cluster_monitor
+  cloud_properties:
+    instance_type: m3.xlarge
+- name: logsearch_haproxy
+  cloud_properties:
+    instance_type: t2.medium
+- name: logsearch_errand
+  cloud_properties:
+    instance_type: t2.medium
 
 disk_types:
 - name: admin-ui
@@ -80,6 +125,26 @@ disk_types:
     encrypted: true
 - name: shibboleth
   disk_size: 4096
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- name: logsearch_es_master
+  disk_size: 102400
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- name: logsearch_es_data
+  disk_size: 1500000
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- name: logsearch_queue
+  disk_size: 102400
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- name: logsearch_cluster_monitor
+  disk_size: 102400
   cloud_properties:
     type: gp2
     encrypted: true
@@ -93,6 +158,12 @@ vm_extensions:
   cloud_properties:
     elbs:
     - (( grab terraform_outputs.shibboleth_elb_name ))
+- name: logsearch-errand-profile
+  cloud_properties:
+    iam_instance_profile: (( grab terraform_outputs.bosh_compilation_profile ))
+- name: logsearch-ingestor-profile
+  cloud_properties:
+    iam_instance_profile: (( grab terraform_outputs.logsearch_ingestor_profile ))
 
 compilation:
   network: default
