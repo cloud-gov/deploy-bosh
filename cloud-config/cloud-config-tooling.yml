@@ -9,6 +9,12 @@ vm_types:
       size: 30000
       type: gp2
       encrypted: true
+- &prometheus-vm
+  name: staging-prometheus
+  cloud_properties:
+    instance_type: m3.medium
+- <<: *prometheus-vm
+  name: production-prometheus
 - &concourse-web-vm
   name: staging-concourse-web
   cloud_properties:
@@ -154,6 +160,14 @@ vm_extensions:
   cloud_properties:
     elbs:
     - (( grab terraform_outputs.nessus_elb_name ))
+- name: staging-prometheus-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.staging_prometheus_elb_name ))
+- name: production-prometheus-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.production_prometheus_elb_name ))
 - name: staging-concourse-lb
   cloud_properties:
     elbs:
@@ -203,6 +217,22 @@ disk_types:
   cloud_properties:
     type: gp2
     encrypted: true
+- &prometheus-small-disk
+  name: staging-prometheus-small
+  disk_size: 1024
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- &prometheus-large-disk
+  name: staging-prometheus-large
+  disk_size: 8192
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- <<: *prometheus-small-disk
+  name: production-prometheus-small
+- <<: *prometheus-large-disk
+  name: production-prometheus-large
 - &monitoring-riemann-disk
   name: staging-monitoring-riemann
   disk_size: 5000
