@@ -25,10 +25,20 @@ vm_types:
       type: gp2
       size: 300000
       encrypted: true
+- &concourse-iaas-worker-vm
+  name: staging-concourse-iaas-worker
+  cloud_properties:
+    instance_type: m4.large
+    ephemeral_disk:
+      type: gp2
+      size: 300000
+      encrypted: true
 - <<: *concourse-web-vm
   name: production-concourse-web
 - <<: *concourse-worker-vm
   name: production-concourse-worker
+- <<: *concourse-iaas-worker-vm
+  name: production-concourse-iaas-worker
 - &monitoring-riemann-vm
   name: staging-monitoring-riemann
   cloud_properties:
