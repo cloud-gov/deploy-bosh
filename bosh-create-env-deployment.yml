@@ -85,9 +85,9 @@ instance_groups:
         address: (( grab meta.bosh_static_ip ))
         recursor: (( grab terraform_outputs.vpc_cidr_dns ))
         domain_name: (( grab meta.bosh_domain_name ))
-        db: (( grab instance_groups.bosh.jobs.postgres.properties.postgres ))
+        db: (( grab instance_groups.bosh.jobs.[postgres-9.4].properties.postgres ))
 
-  - name: postgres
+  - name: postgres-9.4
     release: bosh
     properties:
       postgres:
@@ -118,7 +118,7 @@ instance_groups:
       director:
         address: 127.0.0.1
         name: (( grab meta.name ))
-        db: (( grab instance_groups.bosh.jobs.postgres.properties.postgres ))
+        db: (( grab instance_groups.bosh.jobs.[postgres-9.4].properties.postgres ))
         cpi_job: aws_cpi
         max_threads: 10
         user_management:
@@ -152,7 +152,7 @@ instance_groups:
       registry:
         address: (( grab meta.bosh_static_ip ))
         host: (( grab meta.bosh_static_ip ))
-        db: (( grab instance_groups.bosh.jobs.postgres.properties.postgres ))
+        db: (( grab instance_groups.bosh.jobs.[postgres-9.4].properties.postgres ))
         http:
           user: admin
           password: (( grab meta.passwords.admin ))
