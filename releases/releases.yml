@@ -1,0 +1,16 @@
+releases:
+- name: collectd
+  uri: https://github.com/18F/cg-collectd-boshrelease
+  branch: master
+- name: fisma
+  uri: https://github.com/18F/cg-harden-boshrelease
+  branch: master
+- name: nessus-agent
+  uri: https://github.com/18F/cg-nessus-agent-boshrelease
+  branch: master
+- name: riemann
+  uri: https://github.com/18F/cg-riemann-boshrelease
+  branch: master
+- name: secureproxy
+  uri: https://github.com/18F/cg-secureproxy-boshrelease
+  branch: master
