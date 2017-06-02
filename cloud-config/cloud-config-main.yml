@@ -56,6 +56,21 @@ networks:
       subnet: (( grab terraform_outputs.services_subnet_az1 ))
       security_groups:
       - (( grab terraform_outputs.bosh_security_group ))
+- name: minion
+  type: manual
+  subnets:
+  - az: z1
+    range: (( grab terraform_outputs.services_subnet_cidr_az1 ))
+    gateway: (( grab terraform_outputs.services_subnet_gateway_az1 ))
+    reserved:
+    - (( grab terraform_outputs.services_subnet_reserved_az1 ))
+    static: (( grab terraform_outputs.kubernetes_static_ips ))
+    dns:
+    - (( grab terraform_outputs.vpc_cidr_dns ))
+    cloud_properties:
+      subnet: (( grab terraform_outputs.services_subnet_az1 ))
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
 
 vm_types:
 - name: admin-ui
@@ -116,6 +131,12 @@ vm_types:
 - name: logsearch_errand
   cloud_properties:
     instance_type: t2.medium
+- name: minion
+  cloud_properties:
+    instance_type: r4.xlarge
+- name: etcd
+  cloud_properties:
+    instance_type: t2.medium
 
 disk_types:
 - name: admin-ui
@@ -145,6 +166,10 @@ disk_types:
     encrypted: true
 - name: logsearch_cluster_monitor
   disk_size: 102400
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- name: kubernetes_storage_class
   cloud_properties:
     type: gp2
     encrypted: true
