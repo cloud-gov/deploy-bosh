@@ -71,45 +71,6 @@ networks:
       subnet: (( grab terraform_outputs.services_subnet_az1 ))
       security_groups:
       - (( grab terraform_outputs.bosh_security_group ))
-- name: kubernetes-warden
-  type: manual
-  subnets:
-  - range: 10.244.8.4/30
-    reserved: [10.244.8.5]
-    static: [10.244.8.6]
-    cloud_properties: {}
-  - range: 10.244.8.8/30
-    reserved: [10.244.8.9]
-    static: [10.244.8.10]
-    cloud_properties: {}
-  - range: 10.244.8.12/30
-    reserved: [10.244.8.13]
-    static: [10.244.8.14]
-    cloud_properties: {}
-  - range: 10.244.8.16/30
-    reserved: [10.244.8.17]
-    static: [10.244.8.18]
-    cloud_properties: {}
-  - range: 10.244.8.20/30
-    reserved: [10.244.8.21]
-    static: [10.244.8.22]
-    cloud_properties: {}
-  - range: 10.244.8.24/30
-    reserved: [10.244.8.25]
-    static: []
-    cloud_properties: {}
-  - range: 10.244.8.28/30
-    reserved: [10.244.8.29]
-    static: []
-    cloud_properties: {}
-  - range: 10.244.8.32/30
-    reserved: [10.244.8.33]
-    static: []
-    cloud_properties: {}
-  - range: 10.244.8.36/30
-    reserved: [10.244.8.37]
-    static: []
-    cloud_properties: {}
 
 vm_types:
 - name: admin-ui
@@ -173,7 +134,7 @@ vm_types:
 - name: kubernetes_compilation
   cloud_properties:
     instance_type: m3.large
-- name: kubernetes_aws_default
+- name: kubernetes_default
   cloud_properties:
     instance_type: m3.large
 - name: kubernetes_etcd
@@ -217,6 +178,11 @@ disk_types:
     encrypted: true
 - name: logsearch_cluster_monitor
   disk_size: 102400
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- name: kubernetes
+  disk_size: 15000
   cloud_properties:
     type: gp2
     encrypted: true
