@@ -56,7 +56,7 @@ networks:
       subnet: (( grab terraform_outputs.services_subnet_az1 ))
       security_groups:
       - (( grab terraform_outputs.bosh_security_group ))
-- name: minion
+- name: kubernetes-aws
   type: manual
   subnets:
   - az: z1
@@ -71,6 +71,45 @@ networks:
       subnet: (( grab terraform_outputs.services_subnet_az1 ))
       security_groups:
       - (( grab terraform_outputs.bosh_security_group ))
+- name: kubernetes-warden
+  type: manual
+  subnets:
+  - range: 10.244.8.4/30
+    reserved: [10.244.8.5]
+    static: [10.244.8.6]
+    cloud_properties: {}
+  - range: 10.244.8.8/30
+    reserved: [10.244.8.9]
+    static: [10.244.8.10]
+    cloud_properties: {}
+  - range: 10.244.8.12/30
+    reserved: [10.244.8.13]
+    static: [10.244.8.14]
+    cloud_properties: {}
+  - range: 10.244.8.16/30
+    reserved: [10.244.8.17]
+    static: [10.244.8.18]
+    cloud_properties: {}
+  - range: 10.244.8.20/30
+    reserved: [10.244.8.21]
+    static: [10.244.8.22]
+    cloud_properties: {}
+  - range: 10.244.8.24/30
+    reserved: [10.244.8.25]
+    static: []
+    cloud_properties: {}
+  - range: 10.244.8.28/30
+    reserved: [10.244.8.29]
+    static: []
+    cloud_properties: {}
+  - range: 10.244.8.32/30
+    reserved: [10.244.8.33]
+    static: []
+    cloud_properties: {}
+  - range: 10.244.8.36/30
+    reserved: [10.244.8.37]
+    static: []
+    cloud_properties: {}
 
 vm_types:
 - name: admin-ui
@@ -131,12 +170,24 @@ vm_types:
 - name: logsearch_errand
   cloud_properties:
     instance_type: t2.medium
-- name: minion
+- name: kubernetes_compilation
   cloud_properties:
-    instance_type: r4.xlarge
-- name: etcd
+    instance_type: m3.large
+- name: kubernetes_aws_default
   cloud_properties:
-    instance_type: t2.medium
+    instance_type: m3.large
+- name: kubernetes_etcd
+  cloud_properties:
+    instance_type: t2.small
+- name: kubernetes_master
+  cloud_properties:
+    instance_type: m3.large
+- name: kubernetes_minion
+  cloud_properties:
+    instance_type: m3.large
+- name: kubernetes_errand
+  cloud_properties:
+    instance_type: m3.large
 
 disk_types:
 - name: admin-ui
@@ -169,10 +220,6 @@ disk_types:
   cloud_properties:
     type: gp2
     encrypted: true
-- name: kubernetes_storage_class
-  cloud_properties:
-    type: gp2
-    encrypted: true
 
 vm_extensions:
 - name: concourse-lb
@@ -192,6 +239,15 @@ vm_extensions:
 - name: logsearch-ingestor-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.logsearch_ingestor_profile ))
+- name: kubernetes-etcd-profile
+  cloud_properites:
+    iam_instance_profile: (( grab terraform_outputs.kubernetes_etcd_profile ))
+- name: kubernetes-master-profile
+  cloud_properties:
+    iam_instance_profile: (( grab terraform_outputs.kubernetes_master_profile ))
+- name: kubernetes-minion-profile
+  cloud_properties:
+    iam_instance_profile: (( grab terraform_outputs.kubernetes_minion_profile ))
 
 compilation:
   network: default
