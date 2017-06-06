@@ -56,7 +56,7 @@ networks:
       subnet: (( grab terraform_outputs.services_subnet_az1 ))
       security_groups:
       - (( grab terraform_outputs.bosh_security_group ))
-- name: kubernetes-aws
+- name: kubernetes
   type: manual
   subnets:
   - az: z1
