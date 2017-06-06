@@ -158,6 +158,9 @@ vm_extensions:
   cloud_properties:
     elbs:
     - (( grab terraform_outputs.shibboleth_elb_name ))
+- name: diego-platform-cell-profile
+  cloud_properties:
+    iam_instance_profile: (( grab terraform_outputs.platform_profile ))
 - name: logsearch-errand-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.bosh_compilation_profile ))
