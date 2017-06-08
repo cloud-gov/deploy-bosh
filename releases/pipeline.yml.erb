@@ -1,0 +1,85 @@
+---
+resource_types:
+- name: s3-iam
+  type: docker-image
+  source:
+    repository: 18fgsa/s3-resource
+
+resources:
+- name: pipeline-tasks
+  type: git
+  source:
+    uri: https://github.com/18F/cg-pipeline-tasks
+    branch: master
+
+<% releases.map do |release| %>
+- name: <%= release['name'] %>-release-git-repo
+  type: git
+  source:
+    uri: <%= release['uri'] %>
+    branch: <%= release['branch'] %>
+
+- name: <%= release['name'] %>-release-tarball
+  type: s3-iam
+  source:
+    bucket: cloud-gov-bosh-releases
+    regexp: <%= release['name'] %>-(.*).tgz
+    region_name: us-gov-west-1
+    server_side_encryption: AES256
+
+- name: <%= release['name'] %>-final-builds-dir-tarball
+  type: s3-iam
+  source:
+    bucket: cloud-gov-bosh-releases
+    versioned_file: final-builds-dir-<%= release['name'] %>.tgz
+    region_name: us-gov-west-1
+    server_side_encryption: AES256
+
+- name: <%= release['name'] %>-releases-dir-tarball
+  type: s3-iam
+  source:
+    bucket: cloud-gov-bosh-releases
+    versioned_file: releases-dir-<%= release['name'] %>.tgz
+    region_name: us-gov-west-1
+    server_side_encryption: AES256
+<% end %>
+
+jobs:
+<% releases.map do |release| %>
+- name: build-<%= release['name'] %>-release
+  plan:
+  - aggregate:
+    - get: release-git-repo
+      resource: <%= release['name'] %>-release-git-repo
+      trigger: true
+    - get: pipeline-tasks
+    - get: final-builds-dir-tarball
+      resource: <%= release['name'] %>-final-builds-dir-tarball
+    - get: releases-dir-tarball
+      resource: <%= release['name'] %>-releases-dir-tarball
+  - task: finalize-release
+    file: pipeline-tasks/finalize-bosh-release.yml
+    tags: [iaas]
+    params:
+      PRIVATE_YML_CONTENT: |-
+        ---
+        blobstore:
+          options:
+            region: us-gov-west-1
+            bucket_name: cloud-gov-release-blobstore
+            credentials_source: env_or_profile
+            server_side_encryption: AES256
+  - aggregate:
+    - put: <%= release['name'] %>-release-tarball
+      tags: [iaas]
+      params:
+        file: finalized-release/<%= release['name'] %>-*.tgz
+    - put: <%= release['name'] %>-final-builds-dir-tarball
+      tags: [iaas]
+      params:
+        file: finalized-release/final-builds-dir-<%= release['name'] %>.tgz
+    - put: <%= release['name'] %>-releases-dir-tarball
+      tags: [iaas]
+      params:
+        file: finalized-release/releases-dir-<%= release['name'] %>.tgz
+<% end %>
