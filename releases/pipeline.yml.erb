@@ -59,6 +59,7 @@ jobs:
       resource: <%= release['name'] %>-releases-dir-tarball
   - task: finalize-release
     file: pipeline-tasks/finalize-bosh-release.yml
+    tags: [iaas]
     params:
       PRIVATE_YML_CONTENT: |-
         ---
@@ -70,12 +71,15 @@ jobs:
             server_side_encryption: AES256
   - aggregate:
     - put: <%= release['name'] %>-release-tarball
+      tags: [iaas]
       params:
         file: finalized-release/<%= release['name'] %>-*.tgz
     - put: <%= release['name'] %>-final-builds-dir-tarball
+      tags: [iaas]
       params:
         file: finalized-release/final-builds-dir-<%= release['name'] %>.tgz
     - put: <%= release['name'] %>-releases-dir-tarball
+      tags: [iaas]
       params:
         file: finalized-release/releases-dir-<%= release['name'] %>.tgz
 <% end %>
