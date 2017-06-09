@@ -41,3 +41,7 @@ releases:
 - name: grafana
   uri: https://github.com/18F/cg-grafana-boshrelease
   branch: master
+  # waiting on upstream to merge fixes
+- name: admin-ui
+  uri: https://github.com/jmcarp/admin-ui-boshrelease
+  branch: deploy
