@@ -1022,8 +1022,6 @@ resources:
   source:
     bucket_name: {{production-bucket-name}}
     region: {{aws-region}}
-    access_key_id: {{ci-access-key-id}}
-    secret_access_key: {{ci-secret-access-key}}
     secrets_files:
     - development-bosh-main.yml
     - development-bosh-external.yml
@@ -1035,8 +1033,6 @@ resources:
   source:
     bucket_name: {{production-bucket-name}}
     region: {{aws-region}}
-    access_key_id: {{ci-access-key-id}}
-    secret_access_key: {{ci-secret-access-key}}
     secrets_files:
     - staging-bosh-main.yml
     - staging-bosh-external.yml
@@ -1048,8 +1044,6 @@ resources:
   source:
     bucket_name: {{production-bucket-name}}
     region: {{aws-region}}
-    access_key_id: {{ci-access-key-id}}
-    secret_access_key: {{ci-secret-access-key}}
     secrets_files:
     - production-bosh-main.yml
     - production-bosh-external.yml
@@ -1069,8 +1063,6 @@ resources:
   source:
     bucket_name: {{production-bucket-name}}
     region: {{aws-region}}
-    access_key_id: {{ci-access-key-id}}
-    secret_access_key: {{ci-secret-access-key}}
     secrets_file: master-bosh.yml
     secrets_passphrase: {{masterbosh-secrets-passphrase}}
     bosh_cert: master-bosh.pem
@@ -1111,12 +1103,10 @@ resources:
     - cloud-config/*
 
 - name: bosh-stemcell
-  type: s3
+  type: s3-iam
   source:
     bucket: {{bosh-stemcell-bucket-name}}
     region_name: {{aws-region}}
-    access_key_id: {{ci-access-key-id}}
-    secret_access_key: {{ci-secret-access-key}}
     regexp: light-bosh-stemcell-(.*)-aws-xen-hvm-ubuntu-trusty-go_agent.tgz
 
 - name: toolingbosh-deployment
@@ -1163,73 +1153,73 @@ resources:
     url: {{slack-webhook-url}}
 
 - name: cg-s3-fisma-release
-  type: s3
+  type: s3-iam
   source:
     regexp: fisma-(.*).tgz
     <<: *s3-release-params
 
 - name: cg-s3-tripwire-release
-  type: s3
+  type: s3-iam
   source:
     regexp: tripwire-(.*).tgz
     <<: *s3-release-params
 
 - name: cg-s3-awslogs-release
-  type: s3
+  type: s3-iam
   source:
     regexp: awslogs-(.*).tgz
     <<: *s3-release-params
 
 - name: cg-s3-nessus-agent-release
-  type: s3
+  type: s3-iam
   source:
     regexp: nessus-agent-(.*).tgz
     <<: *s3-release-params
 
 - name: cg-s3-newrelic-release
-  type: s3
+  type: s3-iam
   source:
     regexp: newrelic-(.*).tgz
     <<: *s3-release-params
 
 - name: cg-s3-clamav-release
-  type: s3
+  type: s3-iam
   source:
     regexp: clamav-(.*).tgz
     <<: *s3-release-params
 
 - name: cg-s3-snort-release
-  type: s3
+  type: s3-iam
   source:
     regexp: snort-(.*).tgz
     <<: *s3-release-params
 
 - name: cg-s3-riemannc-release
-  type: s3
+  type: s3-iam
   source:
     regexp: riemannc-(.*).tgz
     <<: *s3-release-params
 
 - name: cg-s3-riemann-release
-  type: s3
+  type: s3-iam
   source:
     regexp: riemann-(.*).tgz
     <<: *s3-release-params
 
 - name: cg-s3-collectd-release
-  type: s3
+  type: s3-iam
   source:
     regexp: collectd-(.*).tgz
     <<: *s3-release-params
 
 - name: uaa-customized-release
-  type: s3
+  type: s3-iam
   source:
     regexp: uaa-customized-(.*).tgz
     <<: *s3-release-params
 
 - name: secureproxy-release
-  type: s3
+  type: s3-iam
   source:
     regexp: secureproxy-(.*).tgz
     <<: *s3-release-params
@@ -1241,53 +1231,43 @@ resources:
     branch: {{node-exporter-release-git-branch}}
 
 - name: node-exporter-release
-  type: s3
+  type: s3-iam
   source:
     bucket: {{s3-bosh-releases-bucket}}
     regexp: node-exporter-(.*).tgz
     region_name: {{s3-bosh-releases-region}}
-    access_key_id: {{s3-bosh-releases-access-key-id}}
-    secret_access_key: {{s3-bosh-releases-secret-access-key}}
     server_side_encryption: AES256
 
 - name: node-exporter-final-builds-dir-tarball
-  type: s3
+  type: s3-iam
   source:
     bucket: {{s3-bosh-releases-bucket}}
     versioned_file: final-builds-dir-node-exporter.tgz
     region_name: {{s3-bosh-releases-region}}
-    access_key_id: {{s3-bosh-releases-access-key-id}}
-    secret_access_key: {{s3-bosh-releases-secret-access-key}}
     server_side_encryption: AES256
 
 - name: node-exporter-releases-dir-tarball
-  type: s3
+  type: s3-iam
   source:
     bucket: {{s3-bosh-releases-bucket}}
     versioned_file: releases-dir-node-exporter.tgz
     region_name: {{s3-bosh-releases-region}}
-    access_key_id: {{s3-bosh-releases-access-key-id}}
-    secret_access_key: {{s3-bosh-releases-secret-access-key}}
     server_side_encryption: AES256
 
 - name: semver-master-version
-  type: semver
+  type: semver-iam
   source:
     driver: s3
     bucket: {{semver-bucket}}
     key: {{semver-master-key}}
-    access_key_id: {{s3-bosh-releases-access-key-id}}
-    secret_access_key: {{s3-bosh-releases-secret-access-key}}
     region_name: {{aws-region}}
 
 - name: semver-tooling-version
-  type: semver
+  type: semver-iam
   source:
     driver: s3
     bucket: {{semver-bucket}}
     key: {{semver-tooling-key}}
-    access_key_id: {{s3-bosh-releases-access-key-id}}
-    secret_access_key: {{s3-bosh-releases-secret-access-key}}
     region_name: {{aws-region}}
 
 - name: terraform-yaml-tooling
@@ -1323,22 +1303,28 @@ resource_types:
   type: docker-image
   source:
     repository: 18fgsa/cg-common-resource
+
 - name: 18f-bosh-deployment
   type: docker-image
   source:
     repository: 18fgsa/bosh-deployment-resource
+
 - name: slack-notification
   type: docker-image
   source:
     repository: cfcommunity/slack-notification-resource
+
 - name: s3-iam
   type: docker-image
   source:
     repository: 18fgsa/s3-resource
 
+- name: semver-iam
+  type: docker-image
+  source:
+    repository: governmentpaas/semver-resource
+
 s3-release-params: &s3-release-params
-  access_key_id: {{ci-access-key-id}}
-  secret_access_key: {{ci-secret-access-key}}
   bucket: {{s3-bosh-releases-bucket}}
   region_name: {{aws-region}}
   private: true
