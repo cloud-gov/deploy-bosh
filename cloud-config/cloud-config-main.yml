@@ -127,7 +127,7 @@ vm_types:
     instance_type: m3.large
 - name: kubernetes_minion
   cloud_properties:
-    instance_type: m3.large
+    instance_type: r4.xlarge
 - name: kubernetes_errand
   cloud_properties:
     instance_type: m3.large
