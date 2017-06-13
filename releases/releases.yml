@@ -48,3 +48,6 @@ releases:
 - name: admin-ui
   uri: https://github.com/jmcarp/admin-ui-boshrelease
   branch: deploy
+- name: kubernetes
+  uri: https://github.com/18F/kubernetes-release
+  branch: master
