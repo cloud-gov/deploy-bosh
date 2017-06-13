@@ -1,32 +1,5 @@
 ---
 jobs:
-- name: node-exporter-boshrelease
-  plan:
-  - aggregate:
-    - get: release-git-repo
-      resource: node-exporter-release-git-repo
-      trigger: true
-    - get: pipeline-tasks
-    - get: final-builds-dir-tarball
-      resource: node-exporter-final-builds-dir-tarball
-    - get: releases-dir-tarball
-      resource: node-exporter-releases-dir-tarball
-  - task: finalize-release
-    file: pipeline-tasks/finalize-bosh-release.yml
-    config:
-      params:
-        PRIVATE_YML_CONTENT: {{node-exporter-private-yml}}
-  - aggregate:
-    - put: node-exporter-release
-      params:
-        file: finalized-release/node-exporter-*.tgz
-    - put: node-exporter-final-builds-dir-tarball
-      params:
-        file: finalized-release/final-builds-dir-node-exporter.tgz
-    - put: node-exporter-releases-dir-tarball
-      params:
-        file: finalized-release/releases-dir-node-exporter.tgz
-
 - name: deploy-development-bosh
   serial: true
   plan:
@@ -1220,33 +1193,11 @@ resources:
     regexp: secureproxy-(.*).tgz
     <<: *s3-release-params
 
-- name: node-exporter-release-git-repo
-  type: git
-  source:
-    uri: {{node-exporter-release-git-url}}
-    branch: {{node-exporter-release-git-branch}}
-
 - name: node-exporter-release
   type: s3-iam
   source:
     bucket: {{s3-bosh-releases-bucket}}
     regexp: node-exporter-(.*).tgz
-    region_name: {{s3-bosh-releases-region}}
-    server_side_encryption: AES256
-
-- name: node-exporter-final-builds-dir-tarball
-  type: s3-iam
-  source:
-    bucket: {{s3-bosh-releases-bucket}}
-    versioned_file: final-builds-dir-node-exporter.tgz
-    region_name: {{s3-bosh-releases-region}}
-    server_side_encryption: AES256
-
-- name: node-exporter-releases-dir-tarball
-  type: s3-iam
-  source:
-    bucket: {{s3-bosh-releases-bucket}}
-    versioned_file: releases-dir-node-exporter.tgz
     region_name: {{s3-bosh-releases-region}}
     server_side_encryption: AES256
 

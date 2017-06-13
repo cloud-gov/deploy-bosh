@@ -32,6 +32,9 @@ releases:
 - name: newrelic
   uri: https://github.com/18F/cg-newrelic-boshrelease
   branch: master
+- name: node-exporter
+  uri: https://github.com/cloudfoundry-community/node-exporter-boshrelease
+  branch: master
 - name: shibboleth
   uri: https://github.com/18F/shibboleth-boshrelease
   branch: master
