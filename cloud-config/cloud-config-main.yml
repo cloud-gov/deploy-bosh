@@ -116,7 +116,7 @@ vm_types:
 - name: logsearch_errand
   cloud_properties:
     instance_type: t2.medium
-- name: kubernetes_default
+- name: kubernetes_consul
   cloud_properties:
     instance_type: m3.large
 - name: kubernetes_etcd
@@ -189,7 +189,7 @@ vm_extensions:
     iam_instance_profile: (( grab terraform_outputs.logsearch_ingestor_profile ))
 - name: kubernetes-etcd-profile
   cloud_properites:
-    iam_instance_profile: (( grab terraform_outputs.kubernetes_etcd_profile ))
+    iam_instance_profile: (( grab terraform_outputs.etcd_backup_profile))
 - name: kubernetes-master-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.kubernetes_master_profile ))
