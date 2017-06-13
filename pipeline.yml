@@ -996,12 +996,10 @@ jobs:
 
 resources:
 - name: master-bosh-root-cert
-  type: s3
+  type: s3-iam
   source:
-    access_key_id: {{ci-access-key-id}}
     bucket: {{production-bucket-name}}
     region_name: {{aws-region}}
-    secret_access_key: {{ci-secret-access-key}}
     versioned_file: master-bosh.crt
 
 - name: common-tooling
@@ -1009,8 +1007,6 @@ resources:
   source:
     bucket_name: {{production-bucket-name}}
     region: {{aws-region}}
-    access_key_id: {{ci-access-key-id}}
-    secret_access_key: {{ci-secret-access-key}}
     secrets_files:
     - tooling-bosh-main.yml
     - tooling-bosh-external.yml
