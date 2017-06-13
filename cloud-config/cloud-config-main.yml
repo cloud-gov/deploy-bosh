@@ -193,6 +193,8 @@ vm_extensions:
 - name: kubernetes-master-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.kubernetes_master_profile ))
+    elbs:
+    - (( grab terraform_outputs.kubernetes_elb_name ))
 - name: kubernetes-minion-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.kubernetes_minion_profile ))
