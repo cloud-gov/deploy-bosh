@@ -15,6 +15,17 @@ vm_types:
       type: gp2
       size: 30000
       encrypted: true
+- name: errand_small
+  cloud_properties:
+    instance_type: t2.small
+- name: errand_large
+  cloud_properties:
+    instance_type: m4.large
+
+vm_extensions:
+- name: errand-profile
+  cloud_properties:
+    iam_instance_profile: (( grab terraform_outputs.bosh_compilation_profile ))
 
 compilation:
   workers: 5

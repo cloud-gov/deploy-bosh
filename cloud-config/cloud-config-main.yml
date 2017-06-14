@@ -113,9 +113,6 @@ vm_types:
 - name: logsearch_haproxy
   cloud_properties:
     instance_type: t2.medium
-- name: logsearch_errand
-  cloud_properties:
-    instance_type: t2.medium
 - name: kubernetes_consul
   cloud_properties:
     instance_type: m3.large
@@ -128,9 +125,6 @@ vm_types:
 - name: kubernetes_minion
   cloud_properties:
     instance_type: r4.xlarge
-- name: kubernetes_errand
-  cloud_properties:
-    instance_type: m3.large
 
 disk_types:
 - name: admin-ui
@@ -181,9 +175,6 @@ vm_extensions:
 - name: diego-platform-cell-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.platform_profile ))
-- name: logsearch-errand-profile
-  cloud_properties:
-    iam_instance_profile: (( grab terraform_outputs.bosh_compilation_profile ))
 - name: logsearch-ingestor-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.logsearch_ingestor_profile ))
