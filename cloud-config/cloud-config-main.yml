@@ -172,6 +172,14 @@ vm_extensions:
   cloud_properties:
     elbs:
     - (( grab terraform_outputs.shibboleth_elb_name ))
+- name: kubernetes-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.kubernetes_elb_name ))
+- name: kubernetes-sg
+  cloud_properties:
+    security_groups:
+    - (( grab terraform_outputs.kubernetes_ec2_security_group ))
 - name: diego-platform-cell-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.platform_profile ))
@@ -184,8 +192,6 @@ vm_extensions:
 - name: kubernetes-master-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.kubernetes_master_profile ))
-    elbs:
-    - (( grab terraform_outputs.kubernetes_elb_name ))
 - name: kubernetes-minion-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.kubernetes_minion_profile ))
