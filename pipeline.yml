@@ -48,7 +48,8 @@ jobs:
             common/decrypted-development-bosh-main.yml \
             common/decrypted-development-bosh-external.yml \
             > bosh-manifest/manifest.yml
-  - task: lint-manifest
+  - &lint-manifest
+    task: lint-manifest
     file: pipeline-tasks/lint-manifest.yml
     input_mapping:
       pipeline-config: bosh-config
@@ -240,13 +241,7 @@ jobs:
             common/decrypted-staging-bosh-main.yml \
             common/decrypted-staging-bosh-external.yml \
             > bosh-manifest/manifest.yml
-  - task: lint-manifest
-    file: pipeline-tasks/lint-manifest.yml
-    input_mapping:
-      pipeline-config: bosh-config
-      lint-manifest: bosh-manifest
-    params:
-      LINTER_CONFIG: bosh-lint.yml
+  - *lint-manifest
   - put: stagingbosh-deployment
     params: &bosh-deployment
       cert: master-bosh-root-cert/master-bosh.crt
@@ -446,13 +441,7 @@ jobs:
             common/decrypted-production-bosh-main.yml \
             common/decrypted-production-bosh-external.yml \
             > bosh-manifest/manifest.yml
-  - task: lint-manifest
-    file: pipeline-tasks/lint-manifest.yml
-    input_mapping:
-      pipeline-config: bosh-config
-      lint-manifest: bosh-manifest
-    params:
-      LINTER_CONFIG: bosh-lint.yml
+  - *lint-manifest
   - put: productionbosh-deployment
     params: *bosh-deployment
   - task: update-cloud-config
@@ -630,6 +619,7 @@ jobs:
             common/decrypted-tooling-bosh-main.yml \
             common/decrypted-tooling-bosh-external.yml \
             > bosh-manifest/manifest.yml
+  - *lint-manifest
   - put: toolingbosh-deployment
     params:
       manifest: bosh-manifest/manifest.yml
