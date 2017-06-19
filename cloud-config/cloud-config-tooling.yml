@@ -241,7 +241,7 @@ disk_types:
     encrypted: true
 - &monitoring-influxdb-disk
   name: staging-monitoring-influxdb
-  disk_size: 200000
+  disk_size: 250000
   cloud_properties:
     type: gp2
     encrypted: true
