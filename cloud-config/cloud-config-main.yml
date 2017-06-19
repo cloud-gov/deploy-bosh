@@ -187,7 +187,7 @@ vm_extensions:
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.logsearch_ingestor_profile ))
 - name: kubernetes-etcd-profile
-  cloud_properites:
+  cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.etcd_backup_profile))
 - name: kubernetes-master-profile
   cloud_properties:
