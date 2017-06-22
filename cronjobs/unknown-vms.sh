@@ -60,4 +60,4 @@ for vminfo in $(${AWSCLI} ec2 describe-instances --max-items 500 --output text  
     ${RIEMANNC} --service "aws.ec2.describe-instances" --host ${aws_id} --attributes bosh_id=${bosh_id} --ttl 120 --metric_sint64 $(($(date +%s) - $(date -d"${launch}" +%s)))
 done
 
-${RIEMANNC} --service "unknown-vm.check" --host $(hostname) --ttl 300 --metric_sint64 1
+${RIEMANNC} --service "unknown-vm.check" --host "$(cat /var/vcap/instance/name)/$(cat /var/vcap/instance/id)" --ttl 600 --metric_sint64 1
