@@ -950,6 +950,8 @@ jobs:
       OUTPUT_FILE: decrypt/master-bosh.pem
       PASSPHRASE: {{masterbosh-secrets-passphrase}}
   - task: bosh-create-env
+    tags:
+    - iaas
     file: bosh-config/bosh-create-env.yml
   - put: masterbosh-state
     params:
