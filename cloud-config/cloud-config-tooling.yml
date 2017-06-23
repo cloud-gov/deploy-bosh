@@ -195,9 +195,6 @@ vm_extensions:
 - name: staging-monitoring-riemann-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.riemann_monitoring_profile ))
-- name: staging-monitoring-influxdb-profile
-  cloud_properties:
-    iam_instance_profile: (( grab terraform_outputs.influxdb_monitoring_profile ))
 - name: production-monitoring-grafana-lb
   cloud_properties:
     elbs:
@@ -205,9 +202,6 @@ vm_extensions:
 - name: production-monitoring-riemann-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.riemann_monitoring_profile ))
-- name: production-monitoring-influxdb-profile
-  cloud_properties:
-    iam_instance_profile: (( grab terraform_outputs.influxdb_monitoring_profile ))
 
 disk_types:
 - name: bosh
