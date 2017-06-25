@@ -23,6 +23,5 @@ chmod 600 ${TMPKEY}
 ssh-keygen -y -f ${TMPKEY} > ${TARGET}/master-bosh.pub
 rm ${TMPKEY}
 
-echo "Master BOSH public key (upload as a keypair AWS):"
-cat ${TARGET}/master-bosh.pub
-
+# upload it to AWS.  Use this as the default_key_name is all bosh manifests
+aws ec2 import-key-pair --key-name "masterbosh-$(date +'%Y%m%d')" --public-key-material "$(cat ${TARGET}/master-bosh.pub)"
