@@ -56,7 +56,7 @@ vm_types:
 - &monitoring-influxdb-vm
   name: staging-monitoring-influxdb
   cloud_properties:
-    instance_type: r4.4xlarge
+    instance_type: r4.xlarge
     ephemeral_disk:
       type: gp2
       size: 30000
@@ -235,7 +235,7 @@ disk_types:
     encrypted: true
 - &monitoring-influxdb-disk
   name: staging-monitoring-influxdb
-  disk_size: 250000
+  disk_size: 50000
   cloud_properties:
     type: gp2
     encrypted: true
