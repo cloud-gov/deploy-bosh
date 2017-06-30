@@ -1088,11 +1088,9 @@ resources:
     - cloud-config/*
 
 - name: bosh-stemcell
-  type: s3-iam
+  type: bosh-io-stemcell
   source:
-    bucket: {{bosh-stemcell-bucket-name}}
-    region_name: {{aws-region}}
-    regexp: light-bosh-stemcell-(.*)-aws-xen-hvm-ubuntu-trusty-go_agent.tgz
+    name: bosh-aws-xen-hvm-ubuntu-trusty-go_agent
 
 - name: toolingbosh-deployment
   type: 18f-bosh-deployment
