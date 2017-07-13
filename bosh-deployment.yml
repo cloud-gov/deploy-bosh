@@ -152,6 +152,7 @@ instance_groups:
         host: (( grab meta.bosh_static_ip ))
       nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
       blobstore: (( grab instance_groups.bosh.jobs.blobstore.properties.blobstore ))
+      ntp: (( grab instance_groups.bosh.jobs.director.properties.ntp ))
 
   - name: uaa
     release: uaa
