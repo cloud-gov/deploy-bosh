@@ -7,6 +7,7 @@ jobs:
     - get: master-bosh-root-cert
     - get: pipeline-tasks
     - get: bosh-config
+      resource: bosh-config-development
       trigger: true
     - get: bosh-release
       trigger: true
@@ -100,6 +101,7 @@ jobs:
     - get: certificate
       resource: master-bosh-root-cert
     - get: bosh-config
+      resource: bosh-config-development
     - get: pipeline-tasks
     - get: cg-s3-fisma-release
       trigger: true
@@ -1077,6 +1079,12 @@ resources:
   source:
     uri: {{bosh-config-git-url}}
     branch: {{bosh-config-git-branch}}
+
+- name: bosh-config-development
+  type: git
+  source:
+    uri: {{bosh-config-development-git-url}}
+    branch: {{bosh-config-development-git-branch}}
 
 - name: bosh-create-env-config
   type: git
