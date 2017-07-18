@@ -3,9 +3,9 @@
 set -e -u
 
 files=("bosh-config/cloud-config/cloud-config-base.yml" "terraform-yaml/state.yml")
-if [ -n "${MANIFEST_PATH:-}" ]; then
-  files=(${files[@]} "${MANIFEST_PATH}")
-fi
+for file in ${MANIFEST_PATH:-}; do
+  files=(${files[@]} "${file}")
+done
 
 for environment in "development" "staging" "production"; do
   ENVIRONMENT=${environment} spruce merge --prune terraform_outputs \
