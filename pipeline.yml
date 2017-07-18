@@ -69,7 +69,7 @@ jobs:
   - task: update-cloud-config
     file: bosh-config/update-cloud-config.yml
     params:
-      MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml"
+      MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml bosh-config/cloud-config/cloud-config-development.yml"
       BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
       BOSH_ENVIRONMENT: {{developmentbosh-target}}
       BOSH_CLIENT: {{developmentbosh-uaa-client}}
