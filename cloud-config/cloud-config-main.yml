@@ -110,9 +110,6 @@ vm_types:
 - name: logsearch_cluster_monitor
   cloud_properties:
     instance_type: m3.xlarge
-- name: logsearch_haproxy
-  cloud_properties:
-    instance_type: t2.medium
 - name: kubernetes_consul
   cloud_properties:
     instance_type: m3.large
@@ -144,6 +141,11 @@ disk_types:
     encrypted: true
 - name: logsearch_es_data
   disk_size: 1500000
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- name: logsearch_ingestor
+  disk_size: 8192
   cloud_properties:
     type: gp2
     encrypted: true
