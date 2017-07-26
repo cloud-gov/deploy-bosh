@@ -174,6 +174,10 @@ vm_extensions:
   cloud_properties:
     elbs:
     - (( grab terraform_outputs.shibboleth_elb_name ))
+- name: logsearch-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.logsearch_elb_name ))
 - name: kubernetes-lb
   cloud_properties:
     elbs:
