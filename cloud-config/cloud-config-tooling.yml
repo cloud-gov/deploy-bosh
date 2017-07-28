@@ -207,7 +207,7 @@ disk_types:
 - name: bosh
   disk_size: 300000
 - name: nessus-manager
-  disk_size: 60000
+  disk_size: 120000
   cloud_properties:
     type: gp2
     encrypted: true
