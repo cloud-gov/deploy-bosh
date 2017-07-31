@@ -91,7 +91,7 @@ vm_types:
     instance_type: t2.xlarge
 - name: logsearch_es_data
   cloud_properties:
-    instance_type: m3.xlarge
+    instance_type: r4.xlarge
 - name: logsearch_queue
   cloud_properties:
     instance_type: t2.2xlarge
@@ -143,7 +143,7 @@ disk_types:
     type: gp2
     encrypted: true
 - name: logsearch_es_data
-  disk_size: 1500000
+  disk_size: 2000000
   cloud_properties:
     type: gp2
     encrypted: true
