@@ -1,5 +1,11 @@
+disk_types:
+- name: logsearch_es_data
+  disk_size: 150000
+  cloud_properties:
+    type: gp2
+    encrypted: true
+
 vm_types:
 - name: logsearch_es_data
   cloud_properties:
     instance_type: m4.large
-
