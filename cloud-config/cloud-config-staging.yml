@@ -1,0 +1,5 @@
+vm_types:
+- name: logsearch_es_data
+  cloud_properties:
+    instance_type: m4.large
+
