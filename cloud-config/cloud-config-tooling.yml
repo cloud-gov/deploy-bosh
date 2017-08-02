@@ -12,7 +12,7 @@ vm_types:
 - &prometheus-vm
   name: staging-prometheus
   cloud_properties:
-    instance_type: m3.medium
+    instance_type: m4.large
 - <<: *prometheus-vm
   name: production-prometheus
 - &concourse-web-vm
@@ -219,7 +219,7 @@ disk_types:
     encrypted: true
 - &prometheus-large-disk
   name: staging-prometheus-large
-  disk_size: 8192
+  disk_size: 16_000
   cloud_properties:
     type: gp2
     encrypted: true
