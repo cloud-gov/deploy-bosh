@@ -32,12 +32,6 @@ vm_types:
 - name: kubernetes_etcd
   cloud_properties:
     instance_type: t2.large
-- name: kubernetes_master
-  cloud_properties:
-    instance_type: t2.large
-- name: kubernetes_minion
-  cloud_properties:
-    instance_type: r4.large
 
 disk_types:
 - name: logsearch_es_data
