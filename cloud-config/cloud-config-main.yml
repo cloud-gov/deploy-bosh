@@ -97,7 +97,7 @@ vm_types:
     instance_type: t2.2xlarge
 - name: logsearch_ingestor
   cloud_properties:
-    instance_type: t2.medium
+    instance_type: r4.large
 - name: logsearch_parser
   cloud_properties:
     instance_type: r4.large
@@ -145,7 +145,7 @@ disk_types:
     type: gp2
     encrypted: true
 - name: logsearch_ingestor
-  disk_size: 8192
+  disk_size: 32_000
   cloud_properties:
     type: gp2
     encrypted: true
