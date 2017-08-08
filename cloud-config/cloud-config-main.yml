@@ -97,7 +97,7 @@ vm_types:
     instance_type: t2.2xlarge
 - name: logsearch_ingestor
   cloud_properties:
-    instance_type: t2.medium
+    instance_type: r4.large
 - name: logsearch_parser
   cloud_properties:
     instance_type: r4.large
@@ -110,9 +110,6 @@ vm_types:
 - name: logsearch_cluster_monitor
   cloud_properties:
     instance_type: m3.xlarge
-- name: logsearch_haproxy
-  cloud_properties:
-    instance_type: t2.medium
 - name: kubernetes_consul
   cloud_properties:
     instance_type: m3.large
@@ -147,6 +144,11 @@ disk_types:
   cloud_properties:
     type: gp2
     encrypted: true
+- name: logsearch_ingestor
+  disk_size: 32_000
+  cloud_properties:
+    type: gp2
+    encrypted: true
 - name: logsearch_queue
   disk_size: 102400
   cloud_properties:
@@ -172,6 +174,10 @@ vm_extensions:
   cloud_properties:
     elbs:
     - (( grab terraform_outputs.shibboleth_elb_name ))
+- name: logsearch-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.logsearch_elb_name ))
 - name: kubernetes-lb
   cloud_properties:
     elbs:

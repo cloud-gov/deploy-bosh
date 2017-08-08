@@ -23,9 +23,6 @@ vm_types:
 - name: logsearch_cluster_monitor
   cloud_properties:
     instance_type: t2.large
-- name: logsearch_haproxy
-  cloud_properties:
-    instance_type: t2.large
 - name: kubernetes_consul
   cloud_properties:
     instance_type: t2.large
