@@ -51,3 +51,9 @@ releases:
 - name: kubernetes
   uri: https://github.com/18F/kubernetes-release
   branch: master
+- name: logsearch
+  uri: https://github.com/18F/logsearch-boshrelease
+  branch: develop
+- name: logsearch-for-cloudfoundry
+  uri: https://github.com/18F/logsearch-for-cloudfoundry
+  branch: develop
