@@ -92,13 +92,10 @@ vm_types:
 - name: logsearch_es_data
   cloud_properties:
     instance_type: r4.xlarge
-- name: logsearch_queue
+- name: logsearch_redis
   cloud_properties:
-    instance_type: t2.2xlarge
+    instance_type: t2.medium
 - name: logsearch_ingestor
-  cloud_properties:
-    instance_type: r4.large
-- name: logsearch_parser
   cloud_properties:
     instance_type: r4.large
 - name: logsearch_kibana
@@ -107,9 +104,6 @@ vm_types:
 - name: logsearch_maintenance
   cloud_properties:
     instance_type: t2.medium
-- name: logsearch_cluster_monitor
-  cloud_properties:
-    instance_type: m3.xlarge
 - name: kubernetes_consul
   cloud_properties:
     instance_type: m3.large
@@ -149,13 +143,8 @@ disk_types:
   cloud_properties:
     type: gp2
     encrypted: true
-- name: logsearch_queue
-  disk_size: 102400
-  cloud_properties:
-    type: gp2
-    encrypted: true
-- name: logsearch_cluster_monitor
-  disk_size: 102400
+- name: logsearch_redis
+  disk_size: 4096
   cloud_properties:
     type: gp2
     encrypted: true
