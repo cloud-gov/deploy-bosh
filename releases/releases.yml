@@ -57,3 +57,6 @@ releases:
 - name: logsearch-for-cloudfoundry
   uri: https://github.com/18F/logsearch-for-cloudfoundry
   branch: develop
+- name: elastalert
+  uri: https://github.com/18F/elastalert-boshrelease
+  branch: poc
