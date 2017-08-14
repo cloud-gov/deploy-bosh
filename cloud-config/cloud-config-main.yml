@@ -167,6 +167,14 @@ vm_extensions:
   cloud_properties:
     elbs:
     - (( grab terraform_outputs.logsearch_elb_name ))
+- name: platform-syslog-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.platform_syslog_elb_name ))
+- name: platform-kibana-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.platform_kibana_elb_name ))
 - name: kubernetes-lb
   cloud_properties:
     elbs:
