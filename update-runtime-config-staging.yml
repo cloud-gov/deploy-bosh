@@ -18,6 +18,7 @@ inputs:
 - {name: cg-s3-riemannc-release, path: releases/riemannc}
 - {name: cg-s3-riemann-release, path: releases/riemann}
 - {name: cg-s3-collectd-release, path: releases/collectd}
+- {name: syslog-release, path: releases/syslog}
 - {name: node-exporter-release, path: releases/node-exporter}
 
 run:
