@@ -32,4 +32,6 @@ vm_types:
 
 disk_types:
 - name: logsearch_es_data
-  disk_size: 150000
+  disk_size: 150_000
+- name: logsearch_es_platform_data
+  disk_size: 50_000
