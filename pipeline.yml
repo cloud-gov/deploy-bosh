@@ -110,6 +110,7 @@ jobs:
     - get: cg-s3-tripwire-release
       trigger: true
     - get: cg-s3-awslogs-release
+      resource: cg-s3-awslogs-release-development
       trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
@@ -1203,11 +1204,15 @@ resources:
     regexp: tripwire-(.*).tgz
     <<: *s3-release-params
 
-- name: cg-s3-awslogs-release
+- &awslogs-release
+  name: cg-s3-awslogs-release
   type: s3-iam
   source:
     regexp: awslogs-(.*).tgz
     <<: *s3-release-params
+
+- <<: *awslogs-release
+  name: cg-s3-awslogs-release-development
 
 - name: cg-s3-nessus-agent-release
   type: s3-iam
