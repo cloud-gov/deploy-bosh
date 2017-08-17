@@ -8,6 +8,7 @@ releases:
 - {name: collectd, version: (( grab $release_collectd ))}
 - {name: nessus-agent, version: (( grab $release_nessus_agent ))}
 - {name: riemannc, version: (( grab $release_riemannc ))}
+- {name: node-exporter, version: (( grab $release_node_exporter ))}
 
 addons:
 - name: hardening
@@ -21,6 +22,7 @@ addons:
   - {name: nessus-agent, release: nessus-agent}
   - {name: collectd, release: collectd}
   - {name: riemannc, release: riemannc}
+  - {name: node_exporter, release: node-exporter}
   properties:
     tripwire:
       localpass: (( grab $TRIPWIRE_LOCALPASS ))

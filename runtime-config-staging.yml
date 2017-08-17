@@ -1,9 +1,0 @@
-releases:
-- (( append ))
-- {name: node-exporter, version: (( grab $release_node_exporter ))}
-
-addons:
-- name: hardening
-  jobs:
-  - (( append ))
-  - {name: node_exporter, release: node-exporter}

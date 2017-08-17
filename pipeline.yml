@@ -387,7 +387,6 @@ jobs:
       BOSH_ENVIRONMENT: {{stagingbosh-target}}
       BOSH_CLIENT: {{stagingbosh-uaa-client}}
       BOSH_CLIENT_SECRET: {{stagingbosh-uaa-client-secret}}
-      RUNTIME_OVERRIDES: bosh-config/runtime-config-staging.yml
       TRIPWIRE_LOCALPASS: {{tripwire-localpass-staging}}
       TRIPWIRE_SITEPASS: {{tripwire-sitepass-staging}}
       AWS_REGION: {{aws-region-staging}}
