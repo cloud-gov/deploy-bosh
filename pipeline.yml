@@ -125,6 +125,8 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
+    - get: node-exporter-release
+      trigger: true
     - get: developmentbosh-deployment
       passed: [deploy-development-bosh]
   - aggregate:
@@ -186,6 +188,11 @@ jobs:
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cron-release
+      params: *bosh-params-development
+    - task: upload-node-exporter
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: node-exporter-release
       params: *bosh-params-development
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
@@ -502,6 +509,8 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
+    - get: node-exporter-release
+      trigger: true
     - get: productionbosh-deployment
       passed: [deploy-production-bosh]
   - aggregate:
@@ -563,6 +572,11 @@ jobs:
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cron-release
+      params: *bosh-params-prod
+    - task: upload-node-exporter
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: node-exporter-release
       params: *bosh-params-prod
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
@@ -713,6 +727,8 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
+    - get: node-exporter-release
+      trigger: true
     - get: toolingbosh-deployment
       passed: [deploy-tooling-bosh]
   - aggregate:
@@ -774,6 +790,11 @@ jobs:
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: cron-release
+      params: *bosh-params-tooling
+    - task: upload-node-exporter
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: node-exporter-release
       params: *bosh-params-tooling
   - put: semver-tooling-version
     params: {bump: patch}
