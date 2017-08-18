@@ -299,8 +299,8 @@ jobs:
       resource: master-bosh-root-cert
     - get: bosh-config
     - get: pipeline-tasks
-    # - get: terraform-yaml
-    #   resource: terraform-yaml-staging
+    - get: terraform-yaml
+      resource: terraform-yaml-staging
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -323,8 +323,8 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
-    # - get: syslog-release
-    #   trigger: true
+    - get: syslog-release
+      trigger: true
     - get: node-exporter-release
       trigger: true
     - get: stagingbosh-deployment
@@ -389,11 +389,11 @@ jobs:
       input_mapping:
         release: cron-release
       params: *bosh-params-staging
-    # - task: upload-syslog
-    #   file: pipeline-tasks/upload-release.yml
-    #   input_mapping:
-    #     release: syslog-release
-    #   params: *bosh-params-staging
+    - task: upload-syslog
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: syslog-release
+      params: *bosh-params-staging
     - task: upload-node-exporter
       file: pipeline-tasks/upload-release.yml
       input_mapping:
@@ -500,8 +500,8 @@ jobs:
       resource: master-bosh-root-cert
     - get: bosh-config
     - get: pipeline-tasks
-    # - get: terraform-yaml
-    #   resource: terraform-yaml-production
+    - get: terraform-yaml
+      resource: terraform-yaml-production
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -524,8 +524,8 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
-    # - get: syslog-release
-    #   trigger: true
+    - get: syslog-release
+      trigger: true
     - get: productionbosh-deployment
       passed: [deploy-production-bosh]
   - aggregate:
@@ -588,11 +588,11 @@ jobs:
       input_mapping:
         release: cron-release
       params: *bosh-params-prod
-    # - task: upload-syslog
-    #   file: pipeline-tasks/upload-release.yml
-    #   input_mapping:
-    #     release: syslog-release
-    #   params: *bosh-params-prod
+    - task: upload-syslog
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: syslog-release
+      params: *bosh-params-prod
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
@@ -719,8 +719,8 @@ jobs:
       resource: master-bosh-root-cert
     - get: bosh-config
     - get: pipeline-tasks
-    # - get: terraform-yaml
-    #   resource: terraform-yaml-production
+    - get: terraform-yaml
+      resource: terraform-yaml-production
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -743,8 +743,8 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
-    # - get: syslog-release
-    #   trigger: true
+    - get: syslog-release
+      trigger: true
     - get: toolingbosh-deployment
       passed: [deploy-tooling-bosh]
   - aggregate:
@@ -807,11 +807,11 @@ jobs:
       input_mapping:
         release: cron-release
       params: *bosh-params-tooling
-    # - task: upload-syslog
-    #   file: pipeline-tasks/upload-release.yml
-    #   input_mapping:
-    #     release: syslog-release
-    #   params: *bosh-params-tooling
+    - task: upload-syslog
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: syslog-release
+      params: *bosh-params-tooling
   - put: semver-tooling-version
     params: {bump: patch}
   - task: update-runtime-config
@@ -840,8 +840,8 @@ jobs:
       resource: master-bosh-root-cert
     - get: bosh-config
     - get: pipeline-tasks
-    # - get: terraform-yaml
-    #   resource: terraform-yaml-production
+    - get: terraform-yaml
+      resource: terraform-yaml-production
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -864,8 +864,8 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
-    # - get: syslog-release
-    #   trigger: true
+    - get: syslog-release
+      trigger: true
     - get: node-exporter-release
       trigger: true
     - get: masterbosh-state
@@ -930,11 +930,11 @@ jobs:
       input_mapping:
         release: cron-release
       params: *bosh-params-master
-    # - task: upload-syslog
-    #   file: pipeline-tasks/upload-release.yml
-    #   input_mapping:
-    #     release: syslog-release
-    #   params: *bosh-params-master
+    - task: upload-syslog
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: syslog-release
+      params: *bosh-params-master
     - task: upload-node-exporter
       file: pipeline-tasks/upload-release.yml
       input_mapping:
