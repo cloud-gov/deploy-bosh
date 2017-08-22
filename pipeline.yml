@@ -103,11 +103,14 @@ jobs:
     - get: bosh-config
       resource: bosh-config-development
     - get: pipeline-tasks
+    - get: terraform-yaml
+      resource: terraform-yaml-development
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
       trigger: true
     - get: cg-s3-awslogs-release
+      resource: cg-s3-awslogs-release-development
       trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
@@ -126,6 +129,8 @@ jobs:
     - get: cron-release
       trigger: true
     - get: node-exporter-release
+      trigger: true
+    - get: syslog-release
       trigger: true
     - get: developmentbosh-deployment
       passed: [deploy-development-bosh]
@@ -193,6 +198,11 @@ jobs:
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: node-exporter-release
+      params: *bosh-params-development
+    - task: upload-syslog
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: syslog-release
       params: *bosh-params-development
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
@@ -296,6 +306,8 @@ jobs:
       resource: master-bosh-root-cert
     - get: bosh-config
     - get: pipeline-tasks
+    - get: terraform-yaml
+      resource: terraform-yaml-staging
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -317,6 +329,8 @@ jobs:
     - get: cg-s3-collectd-release
       trigger: true
     - get: cron-release
+      trigger: true
+    - get: syslog-release
       trigger: true
     - get: node-exporter-release
       trigger: true
@@ -386,6 +400,11 @@ jobs:
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: node-exporter-release
+      params: *bosh-params-staging
+    - task: upload-syslog
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: syslog-release
       params: *bosh-params-staging
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
@@ -487,6 +506,8 @@ jobs:
       resource: master-bosh-root-cert
     - get: bosh-config
     - get: pipeline-tasks
+    - get: terraform-yaml
+      resource: terraform-yaml-production
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -510,6 +531,8 @@ jobs:
     - get: cron-release
       trigger: true
     - get: node-exporter-release
+      trigger: true
+    - get: syslog-release
       trigger: true
     - get: productionbosh-deployment
       passed: [deploy-production-bosh]
@@ -577,6 +600,11 @@ jobs:
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: node-exporter-release
+      params: *bosh-params-prod
+    - task: upload-syslog
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: syslog-release
       params: *bosh-params-prod
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
@@ -704,7 +732,8 @@ jobs:
       resource: master-bosh-root-cert
     - get: bosh-config
     - get: pipeline-tasks
-    - get: common-tooling
+    - get: terraform-yaml
+      resource: terraform-yaml-production
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -728,6 +757,8 @@ jobs:
     - get: cron-release
       trigger: true
     - get: node-exporter-release
+      trigger: true
+    - get: syslog-release
       trigger: true
     - get: toolingbosh-deployment
       passed: [deploy-tooling-bosh]
@@ -796,6 +827,11 @@ jobs:
       input_mapping:
         release: node-exporter-release
       params: *bosh-params-tooling
+    - task: upload-syslog
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: syslog-release
+      params: *bosh-params-tooling
   - put: semver-tooling-version
     params: {bump: patch}
   - task: update-runtime-config
@@ -824,7 +860,8 @@ jobs:
       resource: master-bosh-root-cert
     - get: bosh-config
     - get: pipeline-tasks
-    - get: common-masterbosh
+    - get: terraform-yaml
+      resource: terraform-yaml-production
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -846,6 +883,8 @@ jobs:
     - get: cg-s3-collectd-release
       trigger: true
     - get: cron-release
+      trigger: true
+    - get: syslog-release
       trigger: true
     - get: node-exporter-release
       trigger: true
@@ -915,6 +954,11 @@ jobs:
       file: pipeline-tasks/upload-release.yml
       input_mapping:
         release: node-exporter-release
+      params: *bosh-params-master
+    - task: upload-syslog
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: syslog-release
       params: *bosh-params-master
   - put: semver-master-version
     params: {bump: patch}
@@ -1094,6 +1138,11 @@ resources:
   source:
     repository: cloudfoundry-community/cron-boshrelease
 
+- name: syslog-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/syslog-release
+
 - name: bosh-config
   type: git
   source:
@@ -1175,11 +1224,15 @@ resources:
     regexp: tripwire-(.*).tgz
     <<: *s3-release-params
 
-- name: cg-s3-awslogs-release
+- &awslogs-release
+  name: cg-s3-awslogs-release
   type: s3-iam
   source:
     regexp: awslogs-(.*).tgz
     <<: *s3-release-params
+
+- <<: *awslogs-release
+  name: cg-s3-awslogs-release-development
 
 - name: cg-s3-nessus-agent-release
   type: s3-iam

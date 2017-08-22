@@ -134,7 +134,12 @@ disk_types:
     type: gp2
     encrypted: true
 - name: logsearch_es_data
-  disk_size: 2000000
+  disk_size: 2_000_000
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- name: logsearch_es_platform_data
+  disk_size: 500_000
   cloud_properties:
     type: gp2
     encrypted: true
@@ -167,6 +172,14 @@ vm_extensions:
   cloud_properties:
     elbs:
     - (( grab terraform_outputs.logsearch_elb_name ))
+- name: platform-syslog-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.platform_syslog_elb_name ))
+- name: platform-kibana-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.platform_kibana_elb_name ))
 - name: kubernetes-lb
   cloud_properties:
     elbs:

@@ -8,6 +8,7 @@ image_resource:
 inputs:
 - {name: bosh-config}
 - {name: certificate}
+- {name: terraform-yaml}
 - {name: cg-s3-fisma-release, path: releases/fisma}
 - {name: cg-s3-tripwire-release, path: releases/tripwire}
 - {name: cg-s3-awslogs-release, path: releases/awslogs}
@@ -18,6 +19,8 @@ inputs:
 - {name: cg-s3-riemannc-release, path: releases/riemannc}
 - {name: cg-s3-riemann-release, path: releases/riemann}
 - {name: cg-s3-collectd-release, path: releases/collectd}
+- {name: node-exporter-release, path: releases/node-exporter}
+- {name: syslog-release, path: releases/syslog}
 
 run:
   path: bosh-config/update-runtime-config.sh

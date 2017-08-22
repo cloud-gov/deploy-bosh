@@ -15,10 +15,10 @@ pushd releases
   done
 popd
 
-files=("bosh-config/runtime-config.yml")
+files=("bosh-config/runtime-config.yml" "terraform-yaml/state.yml")
 if [ -n "${RUNTIME_OVERRIDES:-}" ]; then
   files=(${files[@]} "${RUNTIME_OVERRIDES}")
 fi
-spruce merge "${files[@]}" > runtime-config-merged.yml
+spruce merge --prune terraform_outputs "${files[@]}" > runtime-config-merged.yml
 
 bosh-cli -n update-runtime-config runtime-config-merged.yml

@@ -9,6 +9,7 @@ releases:
 - {name: nessus-agent, version: (( grab $release_nessus_agent ))}
 - {name: riemannc, version: (( grab $release_riemannc ))}
 - {name: node-exporter, version: (( grab $release_node_exporter ))}
+- {name: syslog, version: (( grab $release_syslog ))}
 
 addons:
 - name: hardening
@@ -23,6 +24,7 @@ addons:
   - {name: collectd, release: collectd}
   - {name: riemannc, release: riemannc}
   - {name: node_exporter, release: node-exporter}
+  - {name: syslog_forwarder, release: syslog}
   properties:
     tripwire:
       localpass: (( grab $TRIPWIRE_LOCALPASS ))
@@ -41,3 +43,6 @@ addons:
     riemann:
       server: (( grab $RIEMANN_SERVER ))
       port: (( grab $RIEMANN_PORT ))
+    syslog:
+      address: (( grab terraform_outputs.platform_syslog_elb_dns_name ))
+      port: 5514
