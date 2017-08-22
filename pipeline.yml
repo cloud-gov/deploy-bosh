@@ -388,7 +388,7 @@ jobs:
         release: node-exporter-release
       params: *bosh-params-staging
   - task: update-runtime-config
-    file: bosh-config/update-runtime-config-staging.yml
+    file: bosh-config/update-runtime-config.yml
     params:
       BOSH_CA_CERT: certificate/master-bosh.crt
       BOSH_ENVIRONMENT: {{stagingbosh-target}}
