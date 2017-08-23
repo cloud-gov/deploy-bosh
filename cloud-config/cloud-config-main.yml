@@ -144,7 +144,7 @@ disk_types:
     type: gp2
     encrypted: true
 - name: logsearch_ingestor
-  disk_size: 32_000
+  disk_size: 35_000
   cloud_properties:
     type: gp2
     encrypted: true
