@@ -213,13 +213,13 @@ disk_types:
     encrypted: true
 - &prometheus-small-disk
   name: staging-prometheus-small
-  disk_size: 1024
+  disk_size: 2048
   cloud_properties:
     type: gp2
     encrypted: true
 - &prometheus-large-disk
   name: staging-prometheus-large
-  disk_size: 50_000
+  disk_size: 100_000
   cloud_properties:
     type: gp2
     encrypted: true
