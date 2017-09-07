@@ -46,7 +46,12 @@ for id in $(${AWSCLI} ec2 describe-instances --max-items 500 --output text  --fi
         STATE="critical"
     fi
 
-    ${RIEMANNC} --service "unknown-vm.found" --host ${id} --state ${STATE} --ttl 120 --metric_sint64 1
+    #${RIEMANNC} --service "unknown-vm.found" --host ${id} --state ${STATE} --ttl 120 --metric_sint64 1
+
+    cat <<EOF | curl --data-binary @- "${GATEWAY_HOST}:${GATEWAY_PORT:-9091}/metrics/job/awslogs/instance/${NICE_GROUP}"
+    awslogs_loggroup_not_logging {group="${NICE_GROUP}"} ${STATUS}
+EOF
+
 done
 
 # emit metrics with bosh id, iaas id, and uptime info for all non-whitelisted VMs
