@@ -88,7 +88,11 @@ instance_groups:
       nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
       blobstore: (( grab instance_groups.bosh.jobs.blobstore.properties.blobstore ))
       dns: (( grab instance_groups.bosh.jobs.powerdns.properties.dns ))
-      ntp: [time.nist.gov]
+      ntp:
+      - time.nist.gov
+      - time-a.nist.gov
+      - time-b.nist.gov
+      - time-c.nist.gov
 
   - name: health_monitor
     release: bosh
