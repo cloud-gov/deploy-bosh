@@ -13,8 +13,9 @@ vm_types:
   name: staging-prometheus
   cloud_properties:
     instance_type: m4.large
-- <<: *prometheus-vm
-  name: production-prometheus
+- name: production-prometheus
+  cloud_properties:
+    instance_type: m4.xlarge
 - &concourse-web-vm
   name: staging-concourse-web
   cloud_properties:
