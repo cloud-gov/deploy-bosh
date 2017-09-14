@@ -12,7 +12,7 @@ if ! fly --target "${fly_target}" workers > /dev/null; then
   exit 1
 fi
 
-config=$(mktemp /tmp/test.XXXX)
+config=$(mktemp)
 ${dir}/generate.rb ${dir}/releases.yml > "${config}"
 fly -t "${fly_target}" set-pipeline -p "${PIPELINE:-bosh-releases}" -c "${config}"
 rm "${config}"
