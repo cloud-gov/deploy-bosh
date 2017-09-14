@@ -116,6 +116,9 @@ vm_types:
 - name: kubernetes_minion
   cloud_properties:
     instance_type: r4.xlarge
+- name: nfs-volume
+  cloud_properties:
+    instance_type: m3.large
 
 disk_types:
 - name: admin-ui
@@ -155,6 +158,11 @@ disk_types:
     encrypted: true
 - name: kubernetes
   disk_size: 25000
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- name: nfs-volume
+  disk_size: 64_000
   cloud_properties:
     type: gp2
     encrypted: true

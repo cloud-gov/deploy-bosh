@@ -132,6 +132,8 @@ jobs:
       trigger: true
     - get: syslog-release
       trigger: true
+    - get: nfs-volume-release
+      trigger: true
     - get: developmentbosh-deployment
       passed: [deploy-development-bosh]
   - aggregate:
@@ -204,6 +206,11 @@ jobs:
       input_mapping:
         release: syslog-release
       params: *bosh-params-development
+    - task: upload-nfs-volume
+      file: pipeline-tasks/upload-release.yml
+      input_mapping:
+        release: nfs-volume-release
+      params: *bosh-params-development
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
@@ -221,6 +228,7 @@ jobs:
       NESSUS_AGENT_GROUP: {{nessus-agent-group-development}}
       RIEMANN_SERVER: {{riemann-server-development}}
       RIEMANN_PORT: {{riemann-port-development}}
+      ENVIRONMENT: development
 
 - name: deploy-staging-bosh
   serial: true
@@ -1142,6 +1150,11 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry/syslog-release
+
+- name: nfs-volume-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-incubator/nfs-volume-release
 
 - name: bosh-config
   type: git
