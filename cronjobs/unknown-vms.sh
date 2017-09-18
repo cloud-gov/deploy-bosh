@@ -10,6 +10,9 @@ PSQL=/var/vcap/packages/postgres-9.4/bin/psql
 AWSCLI=/var/vcap/packages/awslogs/bin/aws
 export LD_LIBRARY_PATH=/var/vcap/packages/awslogs/lib
 
+# get the push gateway ip from toolingbosh
+GATEWAY_IP=$(dig +short @${TOOLING_BOSH} ${GATEWAY_HOST})
+
 # build JMESpath filter to exclude a list of instances based on their PrivateIpAddress
 query_filter() {
     local IFS
@@ -54,13 +57,13 @@ for vminfo in $(
         unknown_instance=1
     fi
 
-    cat <<EOF | curl --data-binary @- "${PROMETHEUS_PUSH_GATEWAY_HOST}:${PROMETHEUS_PUSH_GATEWAY_PORT:-9091}/metrics/job/boshunknowninstance/instance/${iaas_id}"
+    cat <<EOF | curl --data-binary @- "${GATEWAY_IP}:${PROMETHEUS_PUSH_GATEWAY_PORT:-9091}/metrics/job/boshunknowninstance/instance/${iaas_id}"
     bosh_unknown_iaas_instance {iaas_id="${iaas_id}",bosh_id="${bosh_id}",vpc_name="${VPC_NAME}",uptime="${uptime}"} ${unknown_instance}
 EOF
 
 done
 
-cat <<EOF | curl --data-binary @- "${PROMETHEUS_PUSH_GATEWAY_HOST}:${PROMETHEUS_PUSH_GATEWAY_PORT:-9091}/metrics/job/boshunknowninstance/instance/${VPC_NAME}"
+cat <<EOF | curl --data-binary @- "${GATEWAY_IP}:${PROMETHEUS_PUSH_GATEWAY_PORT:-9091}/metrics/job/boshunknowninstance/instance/${VPC_NAME}"
 bosh_unknown_iaas_instance_lastcheck {vpc_name="${VPC_NAME}"}  $(date +'%s')
 EOF
 

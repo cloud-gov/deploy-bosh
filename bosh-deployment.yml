@@ -233,7 +233,7 @@ instance_groups:
       cron:
         variables:
           BOSH_DIRECTOR: (( grab meta.bosh_static_ip ))
-          PROMETHEUS_PUSH_GATEWAY_HOST:
+          TOOLING_BOSH: (( grab terraform_outputs.tooling_bosh_static_ip ))
           AWS_DEFAULT_REGION: (( grab terraform_outputs.vpc_region ))
           PGHOST: (( grab terraform_outputs.bosh_rds_host_curr ))
           PGUSERNAME: (( grab terraform_outputs.bosh_rds_username ))
