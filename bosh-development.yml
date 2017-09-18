@@ -10,4 +10,4 @@ instance_groups:
     properties:
       cron:
         variables:
-          GATEWAY_HOST: 0.prometheus.staging-monitoring.prometheus-staging.toolingbosh
+          GATEWAY_HOST: 1.prometheus.staging-monitoring.prometheus-staging.toolingbosh

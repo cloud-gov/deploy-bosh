@@ -38,18 +38,17 @@ KNOWN_INSTANCES=$($PSQL -h ${PGHOST} -U ${PGUSERNAME} -d ${PGDBNAME} -t -c "sele
 VPC_ID=$(${AWSCLI} ec2 describe-vpcs --filter Name=tag:Name,Values=${VPC_NAME} --output text --query 'Vpcs[].VpcId')
 
 # emit a metric for all instances in that VPC
-IFS="\n"
+IFS=$'\n'
 for vminfo in $(
         ${AWSCLI} ec2 describe-instances --max-items 1000 --output text  --filter Name=vpc-id,Values=${VPC_ID} --query "
             Reservations[].Instances[$(query_filter "${BOSH_DIRECTOR} ${INSTANCE_WHITELIST}")]
-            | [].{\"launch\": LaunchTime, \"iaas_id\": InstanceId, \"bosh_id\": Tags[?Key==\`id\`].Value | [0]}
-            | [].[iaas_id, bosh_id, launch]"
+            | [].{\"iaas_id\": InstanceId, \"bosh_id\": Tags[?Key==\`id\`].Value | [0]}
+            | [].[iaas_id, bosh_id]"
         )
     do
 
     iaas_id=$(echo ${vminfo} | cut -f1)
     bosh_id=$(echo ${vminfo} | cut -f2)
-    uptime=$(expr $(date +'%s') - $(date -d "$(echo ${vminfo} | cut -f3)" + '%s'))
 
     # check to see if bosh director knows about this instance pulled from the iaas
     unknown_instance=0
@@ -57,13 +56,13 @@ for vminfo in $(
         unknown_instance=1
     fi
 
-    cat <<EOF | curl --data-binary @- "${GATEWAY_IP}:${PROMETHEUS_PUSH_GATEWAY_PORT:-9091}/metrics/job/boshunknowninstance/instance/${iaas_id}"
-    bosh_unknown_iaas_instance {iaas_id="${iaas_id}",bosh_id="${bosh_id}",vpc_name="${VPC_NAME}",uptime="${uptime}"} ${unknown_instance}
-EOF
+    cat <<PUSH | curl --data-binary @- "${GATEWAY_IP}:${PROMETHEUS_PUSH_GATEWAY_PORT:-9091}/metrics/job/boshunknowninstance/instance/${iaas_id}"
+    bosh_unknown_iaas_instance {iaas_id="${iaas_id}",bosh_id="${bosh_id}",vpc_name="${VPC_NAME}"} ${unknown_instance}
+PUSH
 
 done
 
-cat <<EOF | curl --data-binary @- "${GATEWAY_IP}:${PROMETHEUS_PUSH_GATEWAY_PORT:-9091}/metrics/job/boshunknowninstance/instance/${VPC_NAME}"
+cat <<PUSH | curl --data-binary @- "${GATEWAY_IP}:${PROMETHEUS_PUSH_GATEWAY_PORT:-9091}/metrics/job/boshunknowninstance-lastcheck/instance/${VPC_NAME}"
 bosh_unknown_iaas_instance_lastcheck {vpc_name="${VPC_NAME}"}  $(date +'%s')
-EOF
+PUSH
 
