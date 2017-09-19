@@ -102,7 +102,6 @@ jobs:
       resource: master-bosh-root-cert
     - get: bosh-config
       resource: bosh-config-development
-    - get: pipeline-tasks
     - get: terraform-yaml
       resource: terraform-yaml-development
     - get: cg-s3-fisma-release
@@ -134,76 +133,41 @@ jobs:
       trigger: true
     - get: developmentbosh-deployment
       passed: [deploy-development-bosh]
-  - aggregate:
-    - task: upload-fisma
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-fisma-release
-      params: &bosh-params-development
-        BOSH_USERNAME: {{developmentbosh-username}}
-        BOSH_PASSWORD: {{developmentbosh-password}}
-        BOSH_TARGET: {{developmentbosh-target}}
-        BOSH_CERT: master-bosh.crt
-    - task: upload-tripwire
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-tripwire-release
-      params: *bosh-params-development
-    - task: upload-awslogs
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-awslogs-release
-      params: *bosh-params-development
-    - task: upload-nessus-agent
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-nessus-agent-release
-      params: *bosh-params-development
-    - task: upload-newrelic
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-newrelic-release
-      params: *bosh-params-development
-    - task: upload-clamav
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-clamav-release
-      params: *bosh-params-development
-    - task: upload-snort
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-snort-release
-      params: *bosh-params-development
-    - task: upload-riemannc
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-riemannc-release
-      params: *bosh-params-development
-    - task: upload-riemann
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-riemann-release
-      params: *bosh-params-development
-    - task: upload-collectd
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-collectd-release
-      params: *bosh-params-development
-    - task: upload-cron
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cron-release
-      params: *bosh-params-development
-    - task: upload-node-exporter
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: node-exporter-release
-      params: *bosh-params-development
-    - task: upload-syslog
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: syslog-release
-      params: *bosh-params-development
+  - task: upload-releases
+    config: &upload-releases-config
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: 18fgsa/concourse-task
+      inputs:
+      - {name: certificate}
+      - {name: cg-s3-fisma-release, path: releases/fisma}
+      - {name: cg-s3-tripwire-release, path: releases/tripwire}
+      - {name: cg-s3-awslogs-release, path: releases/awslogs}
+      - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
+      - {name: cg-s3-newrelic-release, path: releases/newrelic}
+      - {name: cg-s3-clamav-release, path: releases/clamav}
+      - {name: cg-s3-snort-release, path: releases/snort}
+      - {name: cg-s3-riemannc-release, path: releases/riemannc}
+      - {name: cg-s3-riemann-release, path: releases/riemann}
+      - {name: cg-s3-collectd-release, path: releases/collectd}
+      - {name: cron-release, path: releases/cron}
+      - {name: node-exporter-release, path: releases/node-exporter}
+      - {name: syslog-release, path: releases/syslog}
+      params:
+        BOSH_CA_CERT: certificate/master-bosh.crt
+        BOSH_CLIENT: {{developmentbosh-client}}
+        BOSH_CLIENT_SECRET: {{developmentbosh-client-secret}}
+        BOSH_ENVIRONMENT: {{developmentbosh-target}}
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          for release in releases/**/*.tgz; do
+            bosh upload-release "${release}"
+          done
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
@@ -305,7 +269,6 @@ jobs:
     - get: certificate
       resource: master-bosh-root-cert
     - get: bosh-config
-    - get: pipeline-tasks
     - get: terraform-yaml
       resource: terraform-yaml-staging
     - get: cg-s3-fisma-release
@@ -330,82 +293,20 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
-    - get: syslog-release
-      trigger: true
     - get: node-exporter-release
+      trigger: true
+    - get: syslog-release
       trigger: true
     - get: stagingbosh-deployment
       passed: [deploy-staging-bosh]
-  - aggregate:
-    - task: upload-fisma
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-fisma-release
-      params: &bosh-params-staging
-        BOSH_USERNAME: {{stagingbosh-username}}
-        BOSH_PASSWORD: {{stagingbosh-password}}
-        BOSH_TARGET: {{stagingbosh-target}}
-        BOSH_CERT: master-bosh.crt
-    - task: upload-tripwire
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-tripwire-release
-      params: *bosh-params-staging
-    - task: upload-awslogs
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-awslogs-release
-      params: *bosh-params-staging
-    - task: upload-nessus-agent
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-nessus-agent-release
-      params: *bosh-params-staging
-    - task: upload-newrelic
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-newrelic-release
-      params: *bosh-params-staging
-    - task: upload-clamav
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-clamav-release
-      params: *bosh-params-staging
-    - task: upload-snort
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-snort-release
-      params: *bosh-params-staging
-    - task: upload-riemannc
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-riemannc-release
-      params: *bosh-params-staging
-    - task: upload-riemann
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-riemann-release
-      params: *bosh-params-staging
-    - task: upload-collectd
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-collectd-release
-      params: *bosh-params-staging
-    - task: upload-cron
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cron-release
-      params: *bosh-params-staging
-    - task: upload-node-exporter
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: node-exporter-release
-      params: *bosh-params-staging
-    - task: upload-syslog
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: syslog-release
-      params: *bosh-params-staging
+  - task: upload-releases
+    config:
+      <<: *upload-releases-config
+      params:
+        BOSH_CA_CERT: certificate/master-bosh.crt
+        BOSH_CLIENT: {{stagingbosh-client}}
+        BOSH_CLIENT_SECRET: {{stagingbosh-client-secret}}
+        BOSH_ENVIRONMENT: {{stagingbosh-target}}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
@@ -505,7 +406,6 @@ jobs:
     - get: certificate
       resource: master-bosh-root-cert
     - get: bosh-config
-    - get: pipeline-tasks
     - get: terraform-yaml
       resource: terraform-yaml-production
     - get: cg-s3-fisma-release
@@ -536,76 +436,14 @@ jobs:
       trigger: true
     - get: productionbosh-deployment
       passed: [deploy-production-bosh]
-  - aggregate:
-    - task: upload-fisma
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-fisma-release
-      params: &bosh-params-prod
-        BOSH_USERNAME: {{productionbosh-username}}
-        BOSH_PASSWORD: {{productionbosh-password}}
-        BOSH_TARGET: {{productionbosh-target}}
-        BOSH_CERT: master-bosh.crt
-    - task: upload-tripwire
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-tripwire-release
-      params: *bosh-params-prod
-    - task: upload-awslogs
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-awslogs-release
-      params: *bosh-params-prod
-    - task: upload-nessus-agent
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-nessus-agent-release
-      params: *bosh-params-prod
-    - task: upload-newrelic
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-newrelic-release
-      params: *bosh-params-prod
-    - task: upload-clamav
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-clamav-release
-      params: *bosh-params-prod
-    - task: upload-snort
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-snort-release
-      params: *bosh-params-prod
-    - task: upload-riemannc
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-riemannc-release
-      params: *bosh-params-prod
-    - task: upload-riemann
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-riemann-release
-      params: *bosh-params-prod
-    - task: upload-collectd
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-collectd-release
-      params: *bosh-params-prod
-    - task: upload-cron
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cron-release
-      params: *bosh-params-prod
-    - task: upload-node-exporter
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: node-exporter-release
-      params: *bosh-params-prod
-    - task: upload-syslog
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: syslog-release
-      params: *bosh-params-prod
+  - task: upload-releases
+    config:
+      <<: *upload-releases-config
+      params:
+        BOSH_CA_CERT: certificate/master-bosh.crt
+        BOSH_CLIENT: {{productionbosh-client}}
+        BOSH_CLIENT_SECRET: {{productionbosh-client-secret}}
+        BOSH_ENVIRONMENT: {{productionbosh-target}}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
@@ -731,7 +569,6 @@ jobs:
     - get: certificate
       resource: master-bosh-root-cert
     - get: bosh-config
-    - get: pipeline-tasks
     - get: terraform-yaml
       resource: terraform-yaml-production
     - get: cg-s3-fisma-release
@@ -762,76 +599,14 @@ jobs:
       trigger: true
     - get: toolingbosh-deployment
       passed: [deploy-tooling-bosh]
-  - aggregate:
-    - task: upload-fisma
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-fisma-release
-      params: &bosh-params-tooling
-        BOSH_CLIENT: {{toolingbosh-uaa-client}}
-        BOSH_CLIENT_SECRET: {{toolingbosh-uaa-client-secret}}
-        BOSH_TARGET: {{toolingbosh-target}}
-        BOSH_CERT: master-bosh.crt
-    - task: upload-tripwire
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-tripwire-release
-      params: *bosh-params-tooling
-    - task: upload-awslogs
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-awslogs-release
-      params: *bosh-params-tooling
-    - task: upload-nessus-agent
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-nessus-agent-release
-      params: *bosh-params-tooling
-    - task: upload-newrelic
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-newrelic-release
-      params: *bosh-params-tooling
-    - task: upload-clamav
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-clamav-release
-      params: *bosh-params-tooling
-    - task: upload-snort
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-snort-release
-      params: *bosh-params-tooling
-    - task: upload-riemannc
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-riemannc-release
-      params: *bosh-params-tooling
-    - task: upload-riemann
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-riemann-release
-      params: *bosh-params-tooling
-    - task: upload-collectd
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-collectd-release
-      params: *bosh-params-tooling
-    - task: upload-cron
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cron-release
-      params: *bosh-params-tooling
-    - task: upload-node-exporter
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: node-exporter-release
-      params: *bosh-params-tooling
-    - task: upload-syslog
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: syslog-release
-      params: *bosh-params-tooling
+  - task: upload-releases
+    config:
+      <<: *upload-releases-config
+      params:
+        BOSH_CA_CERT: certificate/master-bosh.crt
+        BOSH_CLIENT: {{toolingbosh-client}}
+        BOSH_CLIENT_SECRET: {{toolingbosh-client-secret}}
+        BOSH_ENVIRONMENT: {{toolingbosh-target}}
   - put: semver-tooling-version
     params: {bump: patch}
   - task: update-runtime-config
@@ -859,7 +634,6 @@ jobs:
     - get: certificate
       resource: master-bosh-root-cert
     - get: bosh-config
-    - get: pipeline-tasks
     - get: terraform-yaml
       resource: terraform-yaml-production
     - get: cg-s3-fisma-release
@@ -890,76 +664,14 @@ jobs:
       trigger: true
     - get: masterbosh-state
       passed: [deploy-master-bosh]
-  - aggregate:
-    - task: upload-fisma
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-fisma-release
-      params: &bosh-params-master
-        BOSH_CERT: master-bosh.crt
-        BOSH_USERNAME: {{masterbosh-username}}
-        BOSH_PASSWORD: {{masterbosh-password}}
-        BOSH_TARGET: {{masterbosh-target}}
-    - task: upload-tripwire
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-tripwire-release
-      params: *bosh-params-master
-    - task: upload-awslogs
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-awslogs-release
-      params: *bosh-params-master
-    - task: upload-nessus-agent
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-nessus-agent-release
-      params: *bosh-params-master
-    - task: upload-newrelic
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-newrelic-release
-      params: *bosh-params-master
-    - task: upload-clamav
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-clamav-release
-      params: *bosh-params-master
-    - task: upload-snort
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-snort-release
-      params: *bosh-params-master
-    - task: upload-riemannc
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-riemannc-release
-      params: *bosh-params-master
-    - task: upload-riemann
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-riemann-release
-      params: *bosh-params-master
-    - task: upload-collectd
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cg-s3-collectd-release
-      params: *bosh-params-master
-    - task: upload-cron
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: cron-release
-      params: *bosh-params-master
-    - task: upload-node-exporter
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: node-exporter-release
-      params: *bosh-params-master
-    - task: upload-syslog
-      file: pipeline-tasks/upload-release.yml
-      input_mapping:
-        release: syslog-release
-      params: *bosh-params-master
+  - task: upload-releases
+    config:
+      <<: *upload-releases-config
+      params:
+        BOSH_CA_CERT: certificate/master-bosh.crt
+        BOSH_CLIENT: {{masterbosh-username}}
+        BOSH_CLIENT_SECRET: {{masterbosh-password}}
+        BOSH_ENVIRONMENT: {{masterbosh-target}}
   - put: semver-master-version
     params: {bump: patch}
   - task: update-runtime-config
