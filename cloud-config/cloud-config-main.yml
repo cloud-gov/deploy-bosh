@@ -89,6 +89,10 @@ vm_types:
 - name: logsearch_es_master
   cloud_properties:
     instance_type: t2.xlarge
+    ephemeral_disk:
+      type: gp2
+      size: 15000
+      encrypted: true
 - name: logsearch_es_data
   cloud_properties:
     instance_type: r4.xlarge
