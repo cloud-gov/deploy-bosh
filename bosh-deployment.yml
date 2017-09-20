@@ -243,6 +243,8 @@ instance_groups:
           PGUSERNAME: (( grab terraform_outputs.bosh_rds_username ))
           PGPASSWORD: (( grab terraform_outputs.bosh_rds_password ))
           PGDBNAME: bosh
+          VPC_NAME: (( grab terraform_outputs.stack_description ))
+          INSTANCE_WHITELIST: (( concat terraform_outputs.bosh_static_ip " " terraform_outputs.nat_private_ip_az1 " " terraform_outputs.nat_private_ip_az2 ))
         entries:
         - script:
             name: unknown-vms.sh
