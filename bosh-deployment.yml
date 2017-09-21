@@ -236,7 +236,6 @@ instance_groups:
     properties:
       cron:
         variables:
-          BOSH_DIRECTOR: (( grab meta.bosh_static_ip ))
           TOOLING_BOSH: (( grab terraform_outputs.tooling_bosh_static_ip ))
           AWS_DEFAULT_REGION: (( grab terraform_outputs.vpc_region ))
           PGHOST: (( grab terraform_outputs.bosh_rds_host_curr ))
@@ -244,7 +243,8 @@ instance_groups:
           PGPASSWORD: (( grab terraform_outputs.bosh_rds_password ))
           PGDBNAME: bosh
           VPC_NAME: (( grab terraform_outputs.stack_description ))
-          INSTANCE_WHITELIST: (( concat terraform_outputs.bosh_static_ip " " terraform_outputs.nat_private_ip_az1 " " terraform_outputs.nat_private_ip_az2 ))
+          BOSH_DIRECTOR: (( grab meta.bosh_static_ip ))
+          INSTANCE_WHITELIST: (( concat terraform_outputs.nat_private_ip_az1 " " terraform_outputs.nat_private_ip_az2 ))
         entries:
         - script:
             name: unknown-vms.sh
