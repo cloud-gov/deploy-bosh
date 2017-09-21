@@ -1,7 +1,7 @@
 vm_types:
 - name: bosh
   cloud_properties:
-    instance_type: m3.large
+    instance_type: m3.xlarge
 - name: nessus-manager
   cloud_properties:
     instance_type: t2.medium
