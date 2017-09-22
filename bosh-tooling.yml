@@ -8,15 +8,15 @@ releases:
 
 instance_groups:
 - name: bosh
-  jobs:
-  - (( append ))
-  - {name: uaa-customized, release: uaa-customized}
   vm_extensions: [bosh-profile, bosh-lb]
   networks:
   - name: bosh
     static_ips:
     - (( grab terraform_outputs.tooling_bosh_static_ip ))
   jobs:
+  - (( append ))
+  - name: uaa-customized
+    release: uaa-customized
   - name: cron
     properties:
       cron:
