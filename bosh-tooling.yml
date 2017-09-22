@@ -3,7 +3,6 @@ meta:
   bosh_domain_name: toolingbosh
 
 releases:
-- (( append ))
 - {name: uaa-customized, version: latest}
 
 instance_groups:
@@ -14,7 +13,6 @@ instance_groups:
     static_ips:
     - (( grab terraform_outputs.tooling_bosh_static_ip ))
   jobs:
-  - (( append ))
   - name: uaa-customized
     release: uaa-customized
   - name: cron
