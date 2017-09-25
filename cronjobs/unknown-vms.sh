@@ -37,6 +37,10 @@ KNOWN_INSTANCES=$($PSQL -h ${PGHOST} -U ${PGUSERNAME} -d ${PGDBNAME} -t -c "sele
 # find the AWS VPC ID we want to enumerate
 VPC_ID=$(${AWSCLI} ec2 describe-vpcs --filter Name=tag:Name,Values=${VPC_NAME} --output text --query 'Vpcs[].VpcId')
 
+# Clear existing metrics from VPC
+# See https://github.com/prometheus/pushgateway/issues/117
+curl -X DELETE "${GATEWAY_IP}:${PROMETHEUS_PUSH_GATEWAY_PORT:-9091}/metrics/job/bosh_unknown_instance/vpc_name/${VPC_NAME}"
+
 # emit a metric for all instances in that VPC
 IFS=$'\n'
 for vminfo in $(
@@ -56,8 +60,8 @@ for vminfo in $(
         unknown_instance=1
     fi
 
-    cat <<PUSH | curl --data-binary @- "${GATEWAY_IP}:${PROMETHEUS_PUSH_GATEWAY_PORT:-9091}/metrics/job/boshunknowninstance/instance/${iaas_id}"
-    bosh_unknown_iaas_instance {iaas_id="${iaas_id}",bosh_id="${bosh_id}",vpc_name="${VPC_NAME}"} ${unknown_instance}
+    cat <<PUSH | curl --data-binary @- "${GATEWAY_IP}:${PROMETHEUS_PUSH_GATEWAY_PORT:-9091}/metrics/job/bosh_unknown_instance/vpc_name/${VPC_NAME}"
+    bosh_unknown_iaas_instance {iaas_id="${iaas_id}",bosh_id="${bosh_id}"} ${unknown_instance}
 PUSH
 
 done
@@ -65,4 +69,3 @@ done
 cat <<PUSH | curl --data-binary @- "${GATEWAY_IP}:${PROMETHEUS_PUSH_GATEWAY_PORT:-9091}/metrics/job/boshunknowninstance-lastcheck/instance/${VPC_NAME}"
 bosh_unknown_iaas_instance_lastcheck {vpc_name="${VPC_NAME}"}  $(date +'%s')
 PUSH
-
