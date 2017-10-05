@@ -210,7 +210,10 @@ vm_extensions:
 
 disk_types:
 - name: bosh
-  disk_size: 300000
+  disk_size: 16_000
+  cloud_properties:
+    type: gp2
+    encrypted: true
 - name: nessus-manager
   disk_size: 120000
   cloud_properties:

@@ -77,14 +77,14 @@ vm_types:
     instance_type: t2.medium
     ephemeral_disk:
       type: gp2
-      size: 45000
+      size: 8_000
       encrypted: true
 - name: concourse-worker
   cloud_properties:
     instance_type: m3.xlarge
     ephemeral_disk:
       type: gp2
-      size: 300000
+      size: 32_000
       encrypted: true
 - name: logsearch_es_master
   cloud_properties:
@@ -120,6 +120,10 @@ vm_types:
 - name: kubernetes_minion
   cloud_properties:
     instance_type: r4.xlarge
+    ephemeral_disk:
+      type: gp2
+      size: 16_000
+      encrypted: true
 
 disk_types:
 - name: admin-ui
