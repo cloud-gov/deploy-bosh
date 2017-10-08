@@ -57,3 +57,6 @@ releases:
 - name: elastalert
   uri: https://github.com/18F/elastalert-boshrelease
   branch: master
+- name: oauth2-proxy
+  uri: https://github.com/18F/oauth2-proxy-boshrelease
+  branch: master
