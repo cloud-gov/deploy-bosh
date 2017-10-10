@@ -168,6 +168,7 @@ jobs:
           for release in releases/**/*.tgz; do
             bosh upload-release "${release}"
           done
+          bosh -n clean-up
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
