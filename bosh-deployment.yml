@@ -1,15 +1,6 @@
 meta:
-  bosh_static_ip: (( grab terraform_outputs.bosh_static_ip ))
   blobstore_bucket: (( param "specify blobstore bucket" ))
   bosh_domain_name: bosh
-  aws:
-    default_key_name: bosh
-  passwords:
-    nats: (( param "specify nats password" ))
-    admin: (( param "specify admin password" ))
-    director: (( param "specify director password" ))
-    agent: (( param "specify agent password" ))
-    registry: (( param "specify registry password" ))
 
 name: (( param "specify deployment name" ))
 director_uuid: (( param "specify bosh director" ))
@@ -44,9 +35,9 @@ instance_groups:
     release: bosh
     properties:
       nats:
-        address: (( grab meta.bosh_static_ip ))
+        address: (( grab terraform_outputs.bosh_static_ip ))
         user: nats
-        password: (( grab meta.passwords.nats ))
+        password: (( grab secrets.bosh_nats_password ))
 
   - name: blobstore
     release: bosh
@@ -59,24 +50,26 @@ instance_groups:
         s3_region: (( grab terraform_outputs.vpc_region ))
         agent:
           user: agent
-          password: (( grab meta.passwords.agent))
+          password: (( grab secrets.bosh_agent_password ))
         director:
           user: director
-          password: (( grab meta.passwords.director))
+          password: (( grab secrets.bosh_director_password ))
 
   - name: director
     release: bosh
     properties:
       director:
         name: bosh
-        address: (( grab meta.bosh_static_ip ))
+        address: (( grab terraform_outputs.bosh_static_ip ))
         db:
           user: (( grab terraform_outputs.bosh_rds_username ))
           password: (( grab terraform_outputs.bosh_rds_password ))
           host: (( grab terraform_outputs.bosh_rds_host_curr ))
           database: bosh
           port: 5432
-        ssl: (( param "specify director ssl" ))
+        ssl:
+          cert: (( grab secrets.bosh_director_cert ))
+          key: (( grab secrets.bosh_director_key ))
         cpi_job: aws_cpi
         flush_arp: true
         # TODO: Revert after https://github.com/cloudfoundry/bosh/issues/1486 is resolved
@@ -84,7 +77,8 @@ instance_groups:
         user_management:
           provider: uaa
           uaa:
-            url: (( concat "https://" meta.bosh_static_ip ":8443" ))
+            url: (( concat "https://" terraform_outputs.bosh_static_ip ":8443" ))
+            public_key: (( grab secrets.bosh_uaa_web_public_key ))
       nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
       blobstore: (( grab instance_groups.bosh.jobs.blobstore.properties.blobstore ))
       dns: (( grab instance_groups.bosh.jobs.powerdns.properties.dns ))
@@ -100,31 +94,31 @@ instance_groups:
       hm:
         director_account:
           user: admin
-          password: (( grab meta.passwords.admin))
-          ca_cert: (( param "specify health monitor director ca cert" ))
+          password: (( grab secrets.bosh_admin_password ))
+          ca_cert: (( grab secrets.ca_cert ))
           client_id: hm
-          client_secret: (( param "specify health monitor director client secret" ))
+          client_secret: (( grab secrets.bosh_uaa_hm_client_secret ))
         resurrector_enabled: true
         resurrector:
           minimum_down_jobs: 3
         riemann_enabled: true
       nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
       director:
-        address: (( grab meta.bosh_static_ip ))
+        address: (( grab terraform_outputs.bosh_static_ip ))
 
   - name: registry
     release: bosh
     properties:
       registry:
-        address: (( grab meta.bosh_static_ip ))
-        host: (( grab meta.bosh_static_ip ))
+        address: (( grab terraform_outputs.bosh_static_ip ))
+        host: (( grab terraform_outputs.bosh_static_ip ))
         db: (( grab instance_groups.bosh.jobs.director.properties.director.db ))
         http:
           user: registry
-          password: (( grab meta.passwords.registry))
+          password: (( grab secrets.bosh_registry_password ))
           port: 25777
         username: registry
-        password: (( grab meta.passwords.registry))
+        password: (( grab secrets.bosh_registry_password ))
         port: 25777
         cloud:
           plugin: aws
@@ -135,7 +129,7 @@ instance_groups:
     release: bosh
     properties:
       dns:
-        address: (( grab meta.bosh_static_ip ))
+        address: (( grab terraform_outputs.bosh_static_ip ))
         recursor: (( grab terraform_outputs.vpc_cidr_dns ))
         db: (( grab instance_groups.bosh.jobs.director.properties.director.db ))
         domain_name: (( grab meta.bosh_domain_name ))
@@ -145,15 +139,15 @@ instance_groups:
     properties:
       aws:
         credentials_source: env_or_profile
-        default_key_name: (( grab meta.aws.default_key_name ))
+        default_key_name: (( grab secrets.ca_public_key_name ))
         default_security_groups:
         - (( grab terraform_outputs.bosh_security_group ))
         default_iam_instance_profile: (( grab terraform_outputs.default_profile ))
         region: (( grab terraform_outputs.vpc_region ))
       registry:
         username: registry
-        password: (( grab meta.passwords.registry))
-        host: (( grab meta.bosh_static_ip ))
+        password: (( grab secrets.bosh_registry_password ))
+        host: (( grab terraform_outputs.bosh_static_ip ))
       nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
       blobstore: (( grab instance_groups.bosh.jobs.blobstore.properties.blobstore ))
       ntp: (( grab instance_groups.bosh.jobs.director.properties.ntp ))
@@ -174,19 +168,28 @@ instance_groups:
           password: (( grab terraform_outputs.bosh_rds_password ))
 
       uaa:
-        url: (( concat "https://" meta.bosh_static_ip ":8443" ))
+        url: (( concat "https://" terraform_outputs.bosh_static_ip ":8443" ))
+        sslCertificate: (( grab secrets.bosh_uaa_web_cert ))
+        sslPrivateKey: (( grab secrets.bosh_uaa_web_key ))
+        jwt:
+          signing_key: (( grab secrets.bosh_uaa_web_key ))
+          verification_key: (( grab secrets.bosh_uaa_web_public_key ))
+        admin:
+          client_secret: (( grab secrets.bosh_uaa_admin_client_secret ))
+        login:
+          client_secret: (( grab secrets.bosh_uaa_login_client_secret ))
         clients:
           hm:
             override: true
             authorized-grant-types: client_credentials
             scope: ""
             authorities: bosh.admin
-            secret: (( param "specify hm client secret" ))
+            secret: (( grab secrets.bosh_uaa_hm_client_secret ))
           ci:
             authorized-grant-types: client_credentials
             scope: ""
             authorities: bosh.admin
-            secret: (( param "specify ci client secret" ))
+            secret: (( grab secrets.bosh_uaa_ci_client_secret ))
           bosh_cli:
             override: true
             authorized-grant-types: password,refresh_token
@@ -201,11 +204,11 @@ instance_groups:
             authorized-grant-types: client_credentials
             authorities: bosh.read
             scope: ""
-            secret: (( param "specify bosh exporter client secret" ))
+            secret: (( grab secrets.bosh_uaa_bosh_exporter_client_secret ))
         scim:
           users:
           - name: admin
-            password: (( grab meta.passwords.admin ))
+            password: (( grab secrets.bosh_admin_password ))
             groups:
             - scim.write
             - scim.read
@@ -213,10 +216,10 @@ instance_groups:
         zones:
           internal:
             hostnames:
-            - (( grab meta.bosh_static_ip ))
+            - (( grab terraform_outputs.bosh_static_ip ))
 
       login:
-        url: (( concat "https://" meta.bosh_static_ip ":8443" ))
+        url: (( concat "https://" terraform_outputs.bosh_static_ip ":8443" ))
         protocol: https
         brand: oss
         brand_title: cloud.gov
@@ -243,7 +246,7 @@ instance_groups:
           PGPASSWORD: (( grab terraform_outputs.bosh_rds_password ))
           PGDBNAME: bosh
           VPC_NAME: (( grab terraform_outputs.stack_description ))
-          BOSH_DIRECTOR: (( grab meta.bosh_static_ip ))
+          BOSH_DIRECTOR: (( grab terraform_outputs.bosh_static_ip ))
           INSTANCE_WHITELIST: (( concat terraform_outputs.nat_private_ip_az1 " " terraform_outputs.nat_private_ip_az2 ))
         entries:
         - script:

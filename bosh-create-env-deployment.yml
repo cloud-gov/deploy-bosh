@@ -119,6 +119,9 @@ instance_groups:
         address: 127.0.0.1
         name: (( grab meta.name ))
         db: (( grab instance_groups.bosh.jobs.[postgres-9.4].properties.postgres ))
+        ssl:
+          cert: (( grab secrets.bosh_director_cert ))
+          key: (( grab secrets.bosh_director_key ))
         cpi_job: aws_cpi
         max_threads: 10
         user_management:
