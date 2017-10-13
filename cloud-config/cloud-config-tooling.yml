@@ -9,6 +9,13 @@ vm_types:
       size: 30000
       type: gp2
       encrypted: true
+- name: ntp-vm
+  cloud_properties:
+    instance_type: t2.small
+    ephemeral_disk:
+      size: 2048
+      type: gp2
+      encrypted: true
 - &prometheus-vm
   name: staging-prometheus
   cloud_properties:
