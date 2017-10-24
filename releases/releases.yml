@@ -60,6 +60,3 @@ releases:
 - name: oauth2-proxy
   uri: https://github.com/18F/oauth2-proxy-boshrelease
   branch: master
-- name: ntp
-  uri: https://github.com/cloudfoundry-community/ntp-release
-  branch: master
