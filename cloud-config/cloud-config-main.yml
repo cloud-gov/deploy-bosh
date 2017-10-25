@@ -142,7 +142,7 @@ disk_types:
     type: gp2
     encrypted: true
 - name: logsearch_es_data
-  disk_size: 2_000_000
+  disk_size: 2_500_000
   cloud_properties:
     type: gp2
     encrypted: true
