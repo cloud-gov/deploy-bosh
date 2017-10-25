@@ -865,7 +865,7 @@ resources:
 - name: ntp-release
   type: bosh-io-release
   source:
-    repository: cloudfoundry-community/ntp-boshrelease
+    repository: cloudfoundry-community/ntp-release
 
 - name: syslog-release
   type: bosh-io-release
