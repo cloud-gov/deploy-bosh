@@ -134,6 +134,8 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
+    - get: ntp-release
+      trigger: true
     - get: node-exporter-release
       trigger: true
     - get: syslog-release
@@ -160,6 +162,7 @@ jobs:
       - {name: cg-s3-riemann-release, path: releases/riemann}
       - {name: cg-s3-collectd-release, path: releases/collectd}
       - {name: cron-release, path: releases/cron}
+      - {name: ntp-release, path: releases/ntp}
       - {name: node-exporter-release, path: releases/node-exporter}
       - {name: syslog-release, path: releases/syslog}
       params:
@@ -311,6 +314,8 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
+    - get: ntp-release
+      trigger: true
     - get: node-exporter-release
       trigger: true
     - get: syslog-release
@@ -447,6 +452,8 @@ jobs:
     - get: cg-s3-collectd-release
       trigger: true
     - get: cron-release
+      trigger: true
+    - get: ntp-release
       trigger: true
     - get: node-exporter-release
       trigger: true
@@ -611,6 +618,8 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
+    - get: ntp-release
+      trigger: true
     - get: node-exporter-release
       trigger: true
     - get: syslog-release
@@ -676,6 +685,8 @@ jobs:
       trigger: true
     - get: cron-release
       trigger: true
+    - get: ntp-release
+      trigger: true
     - get: syslog-release
       trigger: true
     - get: node-exporter-release
@@ -737,12 +748,10 @@ jobs:
     - get: master-bosh-root-cert
   - task: decrypt-private-key
     file: pipeline-tasks/decrypt.yml
-    config:
-      inputs:
-      - name: pipeline-tasks
-      - name: common-masterbosh
+    input_mapping:
+      encrypt: common-masterbosh
     params:
-      INPUT_FILE: common-masterbosh/boshCA.crt
+      INPUT_FILE: encrypt/boshCA.crt
       OUTPUT_FILE: decrypt/master-bosh.pem
       PASSPHRASE: {{masterbosh-secrets-passphrase}}
   - task: bosh-create-env
@@ -883,6 +892,11 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry-community/cron-boshrelease
+
+- name: ntp-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-community/ntp-release
 
 - name: syslog-release
   type: bosh-io-release

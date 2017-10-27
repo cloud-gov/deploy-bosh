@@ -10,6 +10,7 @@ releases:
 - {name: bosh-aws-cpi, version: latest}
 - {name: uaa, version: latest}
 - {name: cron, version: latest}
+- {name: ntp, version: latest}
 - {name: secureproxy, version: latest}
 
 update:
@@ -226,6 +227,18 @@ instance_groups:
         self_service_links_enabled: false
         signups_enabled: false
         invitations_enabled: false
+
+  - name: ntpd
+    release: ntp
+    properties:
+      ntp_conf: |
+        server time-a.nist.gov
+        server time-b.nist.gov
+        server time-c.nist.gov
+        server time-d.nist.gov
+        server time-b-wwv.nist.gov
+        server time-c-wwv.nist.gov
+        server time-d-wwv.nist.gov
 
   - name: secureproxy
     release: secureproxy
