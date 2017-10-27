@@ -731,12 +731,10 @@ jobs:
     - get: master-bosh-root-cert
   - task: decrypt-private-key
     file: pipeline-tasks/decrypt.yml
-    config:
-      inputs:
-      - name: pipeline-tasks
-      - name: common-masterbosh
+    input_mapping:
+      encrypt: common-masterbosh
     params:
-      INPUT_FILE: common-masterbosh/boshCA.crt
+      INPUT_FILE: encrypt/boshCA.crt
       OUTPUT_FILE: decrypt/master-bosh.pem
       PASSPHRASE: {{masterbosh-secrets-passphrase}}
   - task: bosh-create-env
