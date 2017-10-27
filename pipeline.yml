@@ -21,6 +21,9 @@ jobs:
     - get: common
       resource: common-development
       trigger: true
+    - get: secrets-common
+    - get: secrets
+      resource: secrets-development
     - get: terraform-yaml
       resource: terraform-yaml-development
     - get: semver-tooling-version
@@ -36,6 +39,8 @@ jobs:
       - name: common
       - name: bosh-config
       - name: terraform-yaml
+      - name: secrets-common
+      - name: secrets
       outputs:
       - name: bosh-manifest
       run:
@@ -48,6 +53,8 @@ jobs:
             terraform-yaml/state.yml \
             common/decrypted-development-bosh-main.yml \
             common/decrypted-development-bosh-external.yml \
+            secrets-common/secrets.yml \
+            secrets/secrets.yml \
             > bosh-manifest/manifest.yml
   - &lint-manifest
     task: lint-manifest
@@ -160,8 +167,8 @@ jobs:
       - {name: syslog-release, path: releases/syslog}
       params:
         BOSH_CA_CERT: certificate/master-bosh.crt
-        BOSH_CLIENT: {{developmentbosh-client}}
-        BOSH_CLIENT_SECRET: {{developmentbosh-client-secret}}
+        BOSH_CLIENT: {{developmentbosh-uaa-client}}
+        BOSH_CLIENT_SECRET: {{developmentbosh-uaa-client-secret}}
         BOSH_ENVIRONMENT: {{developmentbosh-target}}
       run:
         path: sh
@@ -210,6 +217,9 @@ jobs:
     - get: common
       resource: common-staging
       trigger: true
+    - get: secrets-common
+    - get: secrets
+      resource: secrets-staging
     - get: terraform-yaml
       resource: terraform-yaml-staging
     - get: semver-tooling-version
@@ -227,6 +237,8 @@ jobs:
             terraform-yaml/state.yml \
             common/decrypted-staging-bosh-main.yml \
             common/decrypted-staging-bosh-external.yml \
+            secrets-common/secrets.yml \
+            secrets/secrets.yml \
             > bosh-manifest/manifest.yml
   - *lint-manifest
   - put: stagingbosh-deployment
@@ -310,8 +322,8 @@ jobs:
       <<: *upload-releases-config
       params:
         BOSH_CA_CERT: certificate/master-bosh.crt
-        BOSH_CLIENT: {{stagingbosh-client}}
-        BOSH_CLIENT_SECRET: {{stagingbosh-client-secret}}
+        BOSH_CLIENT: {{stagingbosh-uaa-client}}
+        BOSH_CLIENT_SECRET: {{stagingbosh-uaa-client-secret}}
         BOSH_ENVIRONMENT: {{stagingbosh-target}}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
@@ -359,6 +371,9 @@ jobs:
     - get: common
       resource: common-production
       trigger: true
+    - get: secrets-common
+    - get: secrets
+      resource: secrets-production
     - get: terraform-yaml
       resource: terraform-yaml-production
   - task: bosh-manifest
@@ -374,6 +389,8 @@ jobs:
             terraform-yaml/state.yml \
             common/decrypted-production-bosh-main.yml \
             common/decrypted-production-bosh-external.yml \
+            secrets-common/secrets.yml \
+            secrets/secrets.yml \
             > bosh-manifest/manifest.yml
   - *lint-manifest
   - put: productionbosh-deployment
@@ -449,8 +466,8 @@ jobs:
       <<: *upload-releases-config
       params:
         BOSH_CA_CERT: certificate/master-bosh.crt
-        BOSH_CLIENT: {{productionbosh-client}}
-        BOSH_CLIENT_SECRET: {{productionbosh-client-secret}}
+        BOSH_CLIENT: {{productionbosh-uaa-client}}
+        BOSH_CLIENT_SECRET: {{productionbosh-uaa-client-secret}}
         BOSH_ENVIRONMENT: {{productionbosh-target}}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
@@ -486,6 +503,9 @@ jobs:
     - get: common
       resource: common-tooling
       trigger: true
+    - get: secrets-common
+    - get: secrets
+      resource: secrets-tooling
     - get: terraform-yaml
       resource: terraform-yaml-tooling
     - get: terraform-yaml-development
@@ -507,6 +527,8 @@ jobs:
             terraform-yaml/state.yml \
             common/decrypted-tooling-bosh-main.yml \
             common/decrypted-tooling-bosh-external.yml \
+            secrets-common/secrets.yml \
+            secrets/secrets.yml \
             > bosh-manifest/manifest.yml
   - *lint-manifest
   - put: toolingbosh-deployment
@@ -614,8 +636,8 @@ jobs:
       <<: *upload-releases-config
       params:
         BOSH_CA_CERT: certificate/master-bosh.crt
-        BOSH_CLIENT: {{toolingbosh-client}}
-        BOSH_CLIENT_SECRET: {{toolingbosh-client-secret}}
+        BOSH_CLIENT: {{toolingbosh-uaa-client}}
+        BOSH_CLIENT_SECRET: {{toolingbosh-uaa-client-secret}}
         BOSH_ENVIRONMENT: {{toolingbosh-target}}
   - put: semver-tooling-version
     params: {bump: patch}
@@ -800,6 +822,46 @@ resources:
     - development-bosh-external.yml
     secrets_passphrase: {{development-secrets-passphrase}}
     bosh_cert: bosh-tooling.pem
+
+- name: secrets-common
+  type: cg-common
+  source:
+    bucket_name: {{common-bucket-name}}
+    region: {{aws-region}}
+    secrets_file: {{common-secrets-file}}
+    secrets_passphrase: {{common-secrets-secrets-passphrase}}
+
+- name: secrets-tooling
+  type: cg-common
+  source:
+    bucket_name: {{tooling-bucket-name}}
+    region: {{aws-region}}
+    secrets_file: {{tooling-secrets-file}}
+    secrets_passphrase: {{tooling-secrets-secrets-passphrase}}
+
+- name: secrets-development
+  type: cg-common
+  source:
+    bucket_name: {{development-bucket-name}}
+    region: {{aws-region}}
+    secrets_file: {{development-secrets-file}}
+    secrets_passphrase: {{development-secrets-secrets-passphrase}}
+
+- name: secrets-staging
+  type: cg-common
+  source:
+    bucket_name: {{staging-bucket-name}}
+    region: {{aws-region}}
+    secrets_file: {{staging-secrets-file}}
+    secrets_passphrase: {{staging-secrets-secrets-passphrase}}
+
+- name: secrets-production
+  type: cg-common
+  source:
+    bucket_name: {{production-bucket-name}}
+    region: {{aws-region}}
+    secrets_file: {{production-secrets-file}}
+    secrets_passphrase: {{production-secrets-secrets-passphrase}}
 
 - name: common-staging
   type: cg-common

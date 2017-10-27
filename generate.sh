@@ -5,6 +5,6 @@ set -e -x
 SCRIPTPATH=$(cd $(dirname $0); pwd -P)
 
 spruce merge \
-  --prune meta --prune templates --prune terraform_outputs \
+  --prune meta --prune secrets --prune templates --prune terraform_outputs \
   "$SCRIPTPATH/bosh-deployment.yml" \
   "$@"
