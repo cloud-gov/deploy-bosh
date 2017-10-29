@@ -5,3 +5,9 @@ instance_groups:
   - name: staging-bosh
     static_ips:
     - (( grab terraform_outputs.bosh_static_ip ))
+  jobs:
+  - name: cron
+    properties:
+      cron:
+        variables:
+          GATEWAY_HOST: 1.prometheus.staging-monitoring.prometheus-staging.toolingbosh

@@ -1,12 +1,19 @@
 vm_types:
 - name: bosh
   cloud_properties:
-    instance_type: m3.large
+    instance_type: m3.xlarge
 - name: nessus-manager
   cloud_properties:
     instance_type: t2.medium
     ephemeral_disk:
       size: 30000
+      type: gp2
+      encrypted: true
+- name: ntp-vm
+  cloud_properties:
+    instance_type: t2.small
+    ephemeral_disk:
+      size: 2048
       type: gp2
       encrypted: true
 - &prometheus-vm
@@ -210,7 +217,10 @@ vm_extensions:
 
 disk_types:
 - name: bosh
-  disk_size: 300000
+  disk_size: 16_000
+  cloud_properties:
+    type: gp2
+    encrypted: true
 - name: nessus-manager
   disk_size: 120000
   cloud_properties:
