@@ -21,6 +21,7 @@ inputs:
 - {name: cg-s3-collectd-release, path: releases/collectd}
 - {name: node-exporter-release, path: releases/node-exporter}
 - {name: syslog-release, path: releases/syslog}
+- {name: nfs-volume-release, path: releases/nfs-volume}
 
 run:
   path: bosh-config/update-runtime-config.sh

@@ -10,6 +10,7 @@ releases:
 - {name: riemannc, version: (( grab $release_riemannc ))}
 - {name: node-exporter, version: (( grab $release_node_exporter ))}
 - {name: syslog, version: (( grab $release_syslog ))}
+- {name: nfs-volume, version: (( grab $release_nfs_volume ))}
 
 addons:
 - name: hardening
@@ -46,3 +47,12 @@ addons:
     syslog:
       address: (( grab terraform_outputs.platform_syslog_elb_dns_name ))
       port: 5514
+- name: volume_drivers
+  include:
+    deployments:
+    - (( concat "cf-" $ENVIRONMENT "-diego" ))
+    jobs:
+    - name: rep
+      release: diego
+  jobs:
+    - {name: nfsv3driver, release: nfs-volume}
