@@ -10,6 +10,7 @@ networks:
     reserved:
     - (( grab terraform_outputs.private_subnet_reserved_az1 ))
     dns:
+    - (( grab terraform_outputs.bosh_static_ip ))
     - (( grab terraform_outputs.vpc_cidr_dns ))
     cloud_properties:
       subnet: (( grab terraform_outputs.private_subnet_az1 ))
