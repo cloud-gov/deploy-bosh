@@ -1,5 +1,4 @@
 meta:
-  bosh_static_ip: (( grab terraform_outputs.tooling_bosh_static_ip ))
   bosh_domain_name: toolingbosh
 
 releases:
@@ -11,7 +10,7 @@ instance_groups:
   networks:
   - name: bosh
     static_ips:
-    - (( grab terraform_outputs.tooling_bosh_static_ip ))
+    - (( grab terraform_outputs.bosh_static_ip ))
   jobs:
   - name: uaa-customized
     release: uaa-customized
