@@ -76,7 +76,7 @@ vm_types:
     instance_type: r4.2xlarge
     ephemeral_disk:
       type: gp2
-      size: 60000
+      size: 30000
       encrypted: true
 networks:
 - name: nessus-manager
@@ -250,7 +250,7 @@ disk_types:
     encrypted: true
 - &monitoring-influxdb-disk
   name: staging-monitoring-influxdb
-  disk_size: 50000
+  disk_size: 100000
   cloud_properties:
     type: gp2
     encrypted: true
