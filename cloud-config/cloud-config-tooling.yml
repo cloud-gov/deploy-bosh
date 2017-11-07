@@ -76,7 +76,7 @@ vm_types:
     instance_type: r4.2xlarge
     ephemeral_disk:
       type: gp2
-      size: 30000
+      size: 60000
       encrypted: true
 networks:
 - name: nessus-manager
