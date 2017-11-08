@@ -1,0 +1,15 @@
+releases:
+- (( append ))
+- {name: nfs-volume, version: (( grab $release_nfs_volume ))}
+
+addons:
+- (( append ))
+- name: volume_drivers
+  include:
+    deployments:
+    - (( concat "cf-" $ENVIRONMENT "-diego" ))
+    jobs:
+    - name: rep
+      release: diego
+  jobs:
+  - {name: nfsv3driver, release: nfs-volume}

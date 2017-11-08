@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e -u
+set -eu
 
 files=("bosh-config/cloud-config/cloud-config-base.yml" "terraform-yaml/state.yml")
 for file in ${MANIFEST_PATH:-}; do
