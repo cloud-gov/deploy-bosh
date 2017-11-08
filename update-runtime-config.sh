@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e -u
+set -eu
 
 releases=$(ls releases)
 
@@ -15,7 +15,7 @@ pushd releases
   done
 popd
 
-files=("bosh-config/runtime-config.yml" "terraform-yaml/state.yml")
+files=("bosh-config/runtime-config/base.yml" "terraform-yaml/state.yml")
 if [ -n "${RUNTIME_OVERRIDES:-}" ]; then
   files=(${files[@]} "${RUNTIME_OVERRIDES}")
 fi

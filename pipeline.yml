@@ -185,6 +185,7 @@ jobs:
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
+      RUNTIME_OVERRIDES: bosh-config/runtime-config/volume-driver.yml
       BOSH_CA_CERT: certificate/master-bosh.crt
       BOSH_ENVIRONMENT: {{developmentbosh-target}}
       BOSH_CLIENT: {{developmentbosh-uaa-client}}
@@ -334,6 +335,7 @@ jobs:
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
+      RUNTIME_OVERRIDES: bosh-config/runtime-config/volume-driver.yml
       BOSH_CA_CERT: certificate/master-bosh.crt
       BOSH_ENVIRONMENT: {{stagingbosh-target}}
       BOSH_CLIENT: {{stagingbosh-uaa-client}}
@@ -348,6 +350,7 @@ jobs:
       NESSUS_AGENT_GROUP: {{nessus-agent-group-staging}}
       RIEMANN_SERVER: {{riemann-server-staging}}
       RIEMANN_PORT: {{riemann-port-staging}}
+      ENVIRONMENT: staging
 
 - name: deploy-production-bosh
   serial: true
@@ -480,6 +483,7 @@ jobs:
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
     params:
+      RUNTIME_OVERRIDES: bosh-config/runtime-config/volume-driver.yml
       BOSH_CA_CERT: certificate/master-bosh.crt
       BOSH_ENVIRONMENT: {{productionbosh-target}}
       BOSH_CLIENT: {{productionbosh-uaa-client}}
@@ -494,6 +498,7 @@ jobs:
       NESSUS_AGENT_GROUP: {{nessus-agent-group-production}}
       RIEMANN_SERVER: {{riemann-server-production}}
       RIEMANN_PORT: {{riemann-port-production}}
+      ENVIRONMENT: production
 
 - name: deploy-tooling-bosh
   serial: true
@@ -666,7 +671,7 @@ jobs:
   - put: semver-tooling-version
     params: {bump: patch}
   - task: update-runtime-config
-    file: bosh-config/update-runtime-config.yml
+    file: bosh-config/update-runtime-config-tooling.yml
     params:
       BOSH_CA_CERT: certificate/master-bosh.crt
       BOSH_ENVIRONMENT: {{toolingbosh-target}}
@@ -749,7 +754,7 @@ jobs:
   - put: semver-master-version
     params: {bump: patch}
   - task: update-runtime-config
-    file: bosh-config/update-runtime-config.yml
+    file: bosh-config/update-runtime-config-tooling.yml
     params:
       BOSH_CA_CERT: certificate/master-bosh.crt
       BOSH_ENVIRONMENT: {{masterbosh-target}}
