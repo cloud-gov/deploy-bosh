@@ -39,6 +39,20 @@ instance_groups:
         address: (( grab terraform_outputs.bosh_static_ip ))
         user: nats
         password: (( grab secrets.bosh_nats_password ))
+        tls:
+          ca: (( grab secrets.ca_cert ))
+          client_ca:
+            certificate: (( grab secrets.ca_cert ))
+            private_key: (( grab secrets.ca_key ))
+          server:
+            certificate: (( grab secrets.bosh_nats_server_cert ))
+            private_key: (( grab secrets.bosh_nats_server_key ))
+          director:
+            certificate: (( grab secrets.bosh_nats_director_cert ))
+            private_key: (( grab secrets.bosh_nats_director_key ))
+          health_monitor:
+            certificate: (( grab secrets.bosh_nats_hm_cert ))
+            private_key: (( grab secrets.bosh_nats_hm_key ))
 
   - name: blobstore
     release: bosh
