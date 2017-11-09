@@ -79,9 +79,9 @@ jobs:
     params:
       MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml bosh-config/cloud-config/cloud-config-development.yml"
       BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
-      BOSH_ENVIRONMENT: {{developmentbosh-target}}
-      BOSH_CLIENT: {{developmentbosh-uaa-client}}
-      BOSH_CLIENT_SECRET: {{developmentbosh-uaa-client-secret}}
+      BOSH_ENVIRONMENT: {{development-bosh-target}}
+      BOSH_CLIENT: ci
+      BOSH_CLIENT_SECRET: {{development_bosh_uaa_ci_client_secret}}
   on_failure:
     put: slack
     params:
@@ -170,9 +170,9 @@ jobs:
       - {name: nfs-volume-release, path: releases/nfs-volume}
       params:
         BOSH_CA_CERT: certificate/master-bosh.crt
-        BOSH_CLIENT: {{developmentbosh-uaa-client}}
-        BOSH_CLIENT_SECRET: {{developmentbosh-uaa-client-secret}}
-        BOSH_ENVIRONMENT: {{developmentbosh-target}}
+        BOSH_CLIENT: ci
+        BOSH_CLIENT_SECRET: {{development_bosh_uaa_ci_client_secret}}
+        BOSH_ENVIRONMENT: {{development-bosh-target}}
       run:
         path: sh
         args:
@@ -187,9 +187,9 @@ jobs:
     params:
       RUNTIME_OVERRIDES: bosh-config/runtime-config/volume-driver.yml
       BOSH_CA_CERT: certificate/master-bosh.crt
-      BOSH_ENVIRONMENT: {{developmentbosh-target}}
-      BOSH_CLIENT: {{developmentbosh-uaa-client}}
-      BOSH_CLIENT_SECRET: {{developmentbosh-uaa-client-secret}}
+      BOSH_ENVIRONMENT: {{development-bosh-target}}
+      BOSH_CLIENT: ci
+      BOSH_CLIENT_SECRET: {{development_bosh_uaa_ci_client_secret}}
       TRIPWIRE_LOCALPASS: {{tripwire-localpass-development}}
       TRIPWIRE_SITEPASS: {{tripwire-sitepass-development}}
       AWS_REGION: {{aws-region-development}}
@@ -874,7 +874,7 @@ resources:
     bucket_name: {{common-bucket-name}}
     region: {{aws-region}}
     secrets_file: {{common-secrets-file}}
-    secrets_passphrase: {{common-secrets-secrets-passphrase}}
+    secrets_passphrase: {{common_secrets_secrets_passphrase}}
 
 - name: secrets-tooling
   type: cg-common
@@ -890,7 +890,7 @@ resources:
     bucket_name: {{development-bucket-name}}
     region: {{aws-region}}
     secrets_file: {{development-secrets-file}}
-    secrets_passphrase: {{development-secrets-secrets-passphrase}}
+    secrets_passphrase: {{development_secrets_secrets_passphrase}}
 
 - name: secrets-staging
   type: cg-common

@@ -14,6 +14,75 @@ instance_groups:
   jobs:
   - name: uaa-customized
     release: uaa-customized
+
+  - name: nats
+    properties:
+      nats:
+        password: (( grab tooling_bosh_nats_password ))
+
+  - name: blobstore
+    properties:
+      blobstore:
+        agent:
+          password: (( grab tooling_bosh_agent_password ))
+        director:
+          password: (( grab tooling_bosh_director_password ))
+
+  - name: director
+    release: bosh
+    properties:
+      director:
+        ssl:
+          cert: (( grab tooling_bosh_director_cert ))
+          key: (( grab tooling_bosh_director_key ))
+        user_management:
+          uaa:
+            public_key: (( grab tooling_bosh_uaa_web_public_key ))
+
+  - name: health_monitor
+    properties:
+      hm:
+        director_account:
+          password: (( grab tooling_bosh_admin_password ))
+          client_secret: (( grab tooling_bosh_uaa_hm_client_secret ))
+
+  - name: registry
+    properties:
+      registry:
+        http:
+          password: (( grab tooling_bosh_registry_password ))
+        password: (( grab tooling_bosh_registry_password ))
+
+  - name: aws_cpi
+    release: bosh-aws-cpi
+    properties:
+      registry:
+        password: (( grab tooling_bosh_registry_password ))
+
+  - name: uaa
+    properties:
+      uaa:
+        sslCertificate: (( grab tooling_bosh_uaa_web_cert ))
+        sslPrivateKey: (( grab tooling_bosh_uaa_web_key ))
+        jwt:
+          signing_key: (( grab tooling_bosh_uaa_web_key ))
+          verification_key: (( grab tooling_bosh_uaa_web_public_key ))
+        admin:
+          client_secret: (( grab tooling_bosh_uaa_admin_client_secret ))
+        login:
+          client_secret: (( grab tooling_bosh_uaa_login_client_secret ))
+        clients:
+          hm:
+            secret: (( grab tooling_bosh_uaa_hm_client_secret ))
+          ci:
+            secret: (( grab tooling_bosh_uaa_ci_client_secret ))
+          bosh_exporter:
+            secret: (( grab tooling_bosh_uaa_bosh_exporter_client_secret ))
+        scim:
+          users:
+          - name: admin
+            password: (( grab tooling_bosh_admin_password ))
+
   - name: cron
     properties:
       cron:
