@@ -21,7 +21,6 @@ jobs:
     - get: common
       resource: common-development
       trigger: true
-    - get: secrets-common
     - get: secrets
       resource: secrets-development
     - get: terraform-yaml
@@ -39,7 +38,6 @@ jobs:
       - name: common
       - name: bosh-config
       - name: terraform-yaml
-      - name: secrets-common
       - name: secrets
       outputs:
       - name: bosh-manifest
@@ -53,7 +51,6 @@ jobs:
             terraform-yaml/state.yml \
             common/decrypted-development-bosh-main.yml \
             common/decrypted-development-bosh-external.yml \
-            secrets-common/secrets.yml \
             secrets/secrets.yml \
             > bosh-manifest/manifest.yml
   - &lint-manifest
@@ -218,7 +215,6 @@ jobs:
     - get: common
       resource: common-staging
       trigger: true
-    - get: secrets-common
     - get: secrets
       resource: secrets-staging
     - get: terraform-yaml
@@ -238,7 +234,6 @@ jobs:
             terraform-yaml/state.yml \
             common/decrypted-staging-bosh-main.yml \
             common/decrypted-staging-bosh-external.yml \
-            secrets-common/secrets.yml \
             secrets/secrets.yml \
             > bosh-manifest/manifest.yml
   - *lint-manifest
@@ -373,7 +368,6 @@ jobs:
     - get: common
       resource: common-production
       trigger: true
-    - get: secrets-common
     - get: secrets
       resource: secrets-production
     - get: terraform-yaml
@@ -391,7 +385,6 @@ jobs:
             terraform-yaml/state.yml \
             common/decrypted-production-bosh-main.yml \
             common/decrypted-production-bosh-external.yml \
-            secrets-common/secrets.yml \
             secrets/secrets.yml \
             > bosh-manifest/manifest.yml
   - *lint-manifest
@@ -506,7 +499,6 @@ jobs:
     - get: common
       resource: common-tooling
       trigger: true
-    - get: secrets-common
     - get: secrets
       resource: secrets-tooling
     - get: terraform-yaml
@@ -530,7 +522,6 @@ jobs:
             terraform-yaml/state.yml \
             common/decrypted-tooling-bosh-main.yml \
             common/decrypted-tooling-bosh-external.yml \
-            secrets-common/secrets.yml \
             secrets/secrets.yml \
             > bosh-manifest/manifest.yml
   - *lint-manifest
@@ -850,13 +841,13 @@ resources:
     secrets_passphrase: {{development-secrets-passphrase}}
     bosh_cert: bosh-tooling.pem
 
-- name: secrets-common
+- name: secrets-master
   type: cg-common
   source:
-    bucket_name: {{common-bucket-name}}
+    bucket_name: {{master-bucket-name}}
     region: {{aws-region}}
-    secrets_file: {{common-secrets-file}}
-    secrets_passphrase: {{common-secrets-secrets-passphrase}}
+    secrets_file: {{master-secrets-file}}
+    secrets_passphrase: {{master-secrets-secrets-passphrase}}
 
 - name: secrets-tooling
   type: cg-common
