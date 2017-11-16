@@ -39,7 +39,7 @@ instance_groups:
             <<: *client-template
           # For authentication to bosh via concourse
           concourse_bosh:
-            secret: (( param "specify concourse bosh client secret" ))
+            secret: (( grab secrets.bosh_uaa_concourse_bosh_client_secret ))
             authorized-grant-types: client_credentials
             authorities: bosh.admin
             scope: ""

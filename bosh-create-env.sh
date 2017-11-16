@@ -22,6 +22,7 @@ spruce merge \
     --prune terraform_outputs \
     bosh-config/bosh-create-env-deployment.yml \
     common-masterbosh/secrets.yml \
+    secrets/secrets.yml \
     terraform-yaml/state.yml \
 > manifest.yml
 
