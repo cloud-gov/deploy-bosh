@@ -24,17 +24,17 @@ certstrap --depot-path ${TARGET} sign ${BOSH_NAME}-uaa-saml --CA master-bosh --p
 certstrap --depot-path ${TARGET} request-cert --cn "${BOSH_NAME}-uaa-web" --ip ${BOSH_IP} --passphrase ''
 certstrap --depot-path ${TARGET} sign ${BOSH_NAME}-uaa-web --CA master-bosh --passphrase ''
 
-# generate a cert for nats server
-certstrap --depot-path ${TARGET} request-cert --cn "${BOSH_NAME}-nats-server" --ip ${BOSH_IP} --passphrase ''
-certstrap --depot-path ${TARGET} sign ${BOSH_NAME}-nats-server -CA master-bosh --passphrase ''
-
-# generate a cert for nats director
-certstrap --depot-path ${TARGET} request-cert --cn "${BOSH_NAME}-nats-director" --ip ${BOSH_IP} --passphrase ''
-certstrap --depot-path ${TARGET} sign ${BOSH_NAME}-nats-director --CA master-bosh --passphrase ''
-
-# generate a cert for nats health monitor
-certstrap --depot-path ${TARGET} request-cert --cn "${BOSH_NAME}-nats-hm" --ip ${BOSH_IP} --passphrase ''
-certstrap --depot-path ${TARGET} sign ${BOSH_NAME}-nats-hm --CA master-bosh --passphrase ''
-
 # extract the public key for this cert as right now we use it to sign JWTs as well
 openssl rsa -in ${TARGET}/${BOSH_NAME}-uaa-web.key -pubout > ${TARGET}/${BOSH_NAME}-pub.key
+
+# generate a cert for nats server
+certstrap --depot-path ${TARGET} request-cert --cn "${BOSH_NAME}.nats.bosh-internal" --ip ${BOSH_IP} --passphrase ''
+certstrap --depot-path ${TARGET} sign ${BOSH_NAME}.nats.bosh-internal -CA master-bosh --passphrase ''
+
+# generate a cert for nats director
+certstrap --depot-path ${TARGET} request-cert --cn "${BOSH_NAME}.director.bosh-internal" --ip ${BOSH_IP} --passphrase ''
+certstrap --depot-path ${TARGET} sign ${BOSH_NAME}.director.bosh-internal --CA master-bosh --passphrase ''
+
+# generate a cert for nats health monitor
+certstrap --depot-path ${TARGET} request-cert --cn "${BOSH_NAME}.hm.bosh-internal" --ip ${BOSH_IP} --passphrase ''
+certstrap --depot-path ${TARGET} sign ${BOSH_NAME}.hm.bosh-internal --CA master-bosh --passphrase ''

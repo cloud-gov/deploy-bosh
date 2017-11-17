@@ -38,6 +38,7 @@ instance_groups:
       nats:
         address: (( grab terraform_outputs.bosh_static_ip ))
         user: nats
+        #allow_legacy_agents: false # this should be uncommented once all deployments are updated to use mtls
         password: (( grab secrets.bosh_nats_password ))
         tls:
           ca: (( grab secrets.ca_cert ))

@@ -3,7 +3,6 @@ meta:
   bosh_static_ip: (( grab terraform_outputs.master_bosh_static_ip ))
   keypair_file: ./decrypt/master-bosh.pem
   passwords:
-    nats: (( param "specify nats password" ))
     postgres: (( param "specify postgres password" ))
     admin: (( param "specify admin password" ))
     director: (( param "specify director password" ))
@@ -75,9 +74,22 @@ instance_groups:
     release: bosh
     properties:
       nats:
+        allow_legacy_agents: false
         address: 127.0.0.1
-        user: nats
-        password: (( grab meta.passwords.nats ))
+        tls:
+          ca: (( grab meta.certs.ca_cert ))
+          client_ca:
+            certificate: (( grab meta.certs.ca_cert ))
+            private_key: (( grab meta.certs.ca_key ))
+          server:
+            certificate: (( grab meta.certs.bosh_nats_server_cert ))
+            private_key: (( grab meta.certs.bosh_nats_server_key ))
+          director:
+            certificate: (( grab meta.certs.bosh_nats_director_cert ))
+            private_key: (( grab meta.certs.bosh_nats_director_key ))
+          health_monitor:
+            certificate: (( grab meta.certs.bosh_nats_hm_cert ))
+            private_key: (( grab meta.certs.bosh_nats_hm_key ))
 
   - name: powerdns
     release: bosh
@@ -180,7 +192,7 @@ instance_groups:
         region: (( grab terraform_outputs.vpc_region ))
       registry: (( grab instance_groups.bosh.jobs.registry.properties.registry ))
       agent:
-        mbus: (( concat "nats://nats:" meta.passwords.nats "@" meta.bosh_static_ip ":4222" ))
+        mbus: (( concat "nats://" meta.bosh_static_ip ":4222" ))
       nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
       blobstore: (( grab instance_groups.bosh.jobs.blobstore.properties.blobstore ))
 
