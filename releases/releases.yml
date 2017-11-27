@@ -26,9 +26,6 @@ releases:
 - name: nessus-manager
   uri: https://github.com/18F/cg-nessus-manager-boshrelease
   branch: master
-- name: newrelic
-  uri: https://github.com/cloudfoundry-community/newrelic-boshrelease
-  branch: master
 - name: node-exporter
   uri: https://github.com/cloudfoundry-community/node-exporter-boshrelease
   branch: master
