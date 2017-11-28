@@ -1009,35 +1009,39 @@ resources:
     name: bosh-aws-xen-hvm-ubuntu-trusty-go_agent
 
 - name: toolingbosh-deployment
-  type: 18f-bosh-deployment
+  type: bosh-deployment
   source:
     target: {{masterbosh-target}}
-    username: {{masterbosh-username}}
-    password: {{masterbosh-password}}
+    client: {{masterbosh-username}}
+    client_secret: {{masterbosh-password}}
+    ca_cert: {{masterbosh-ca-cert}}
     deployment: toolingbosh
 
 - name: developmentbosh-deployment
-  type: 18f-bosh-deployment
+  type: bosh-deployment
   source:
     target: {{toolingbosh-target}}
-    username: {{toolingbosh-username}}
-    password: {{toolingbosh-password}}
+    client: {{toolingbosh-username}}
+    client_secret: {{toolingbosh-password}}
+    ca_cert: {{toolingbosh-ca-cert}}
     deployment: developmentbosh
 
 - name: stagingbosh-deployment
-  type: 18f-bosh-deployment
+  type: bosh-deployment
   source:
     target: {{toolingbosh-target}}
-    username: {{toolingbosh-username}}
-    password: {{toolingbosh-password}}
+    client: {{toolingbosh-username}}
+    client_secret: {{toolingbosh-password}}
+    ca_cert: {{toolingbosh-ca-cert}}
     deployment: stagingbosh
 
 - name: productionbosh-deployment
-  type: 18f-bosh-deployment
+  type: bosh-deployment
   source:
     target: {{toolingbosh-target}}
-    username: {{toolingbosh-username}}
-    password: {{toolingbosh-password}}
+    client: {{toolingbosh-username}}
+    client_secret: {{toolingbosh-password}}
+    ca_cert: {{toolingbosh-ca-cert}}
     deployment: productionbosh
 
 - name: pipeline-tasks
@@ -1185,10 +1189,10 @@ resource_types:
   source:
     repository: 18fgsa/cg-common-resource
 
-- name: 18f-bosh-deployment
+- name: bosh-deployment
   type: docker-image
   source:
-    repository: 18fgsa/bosh-deployment-resource
+    repository: cloudfoundry/bosh-deployment-resource
 
 - name: slack-notification
   type: docker-image
