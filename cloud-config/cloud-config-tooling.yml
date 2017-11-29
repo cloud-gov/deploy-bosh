@@ -13,9 +13,15 @@ vm_types:
   name: staging-prometheus
   cloud_properties:
     instance_type: m4.large
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
 - name: production-prometheus
   cloud_properties:
     instance_type: m4.xlarge
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
 - &concourse-web-vm
   name: staging-concourse-web
   cloud_properties:
