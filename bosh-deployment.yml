@@ -187,9 +187,6 @@ instance_groups:
         jwt:
           signing_key: (( grab secrets.bosh_uaa_web_key ))
           verification_key: (( grab secrets.bosh_uaa_web_public_key ))
-          revocable: true
-          refresh:
-            unique: true
         admin:
           client_secret: (( grab secrets.bosh_uaa_admin_client_secret ))
         login:
