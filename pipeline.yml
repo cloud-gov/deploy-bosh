@@ -1021,8 +1021,8 @@ resources:
   type: bosh-deployment
   source:
     target: {{toolingbosh-target}}
-    client: {{toolingbosh-username}}
-    client_secret: {{toolingbosh-password}}
+    client: {{toolingbosh-uaa-client}}
+    client_secret: {{toolingbosh-uaa-client-secret}}
     ca_cert: {{toolingbosh-ca-cert}}
     deployment: developmentbosh
 
@@ -1030,8 +1030,8 @@ resources:
   type: bosh-deployment
   source:
     target: {{toolingbosh-target}}
-    client: {{toolingbosh-username}}
-    client_secret: {{toolingbosh-password}}
+    client: {{toolingbosh-uaa-client}}
+    client_secret: {{toolingbosh-uaa-client-secret}}
     ca_cert: {{toolingbosh-ca-cert}}
     deployment: stagingbosh
 
@@ -1039,8 +1039,8 @@ resources:
   type: bosh-deployment
   source:
     target: {{toolingbosh-target}}
-    client: {{toolingbosh-username}}
-    client_secret: {{toolingbosh-password}}
+    client: {{toolingbosh-uaa-client}}
+    client_secret: {{toolingbosh-uaa-client-secret}}
     ca_cert: {{toolingbosh-ca-cert}}
     deployment: productionbosh
 
