@@ -2,33 +2,63 @@ vm_types:
 - name: logsearch_es_master
   cloud_properties:
     instance_type: t2.large
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
 - name: logsearch_es_data
   cloud_properties:
     instance_type: t2.large
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
 - name: logsearch_queue
   cloud_properties:
     instance_type: t2.large
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
 - name: logsearch_ingestor
   cloud_properties:
     instance_type: t2.large
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
 - name: logsearch_parser
   cloud_properties:
     instance_type: t2.large
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
 - name: logsearch_kibana
   cloud_properties:
     instance_type: t2.large
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
 - name: logsearch_maintenance
   cloud_properties:
     instance_type: t2.large
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
 - name: logsearch_cluster_monitor
   cloud_properties:
     instance_type: t2.large
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
 - name: kubernetes_consul
   cloud_properties:
     instance_type: t2.large
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
 - name: kubernetes_etcd
   cloud_properties:
     instance_type: t2.large
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
 
 disk_types:
 - name: logsearch_es_data
