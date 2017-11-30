@@ -272,8 +272,7 @@ instance_groups:
           PGDBNAME: bosh
           VPC_NAME: (( grab terraform_outputs.stack_description ))
           BOSH_DIRECTOR: (( grab terraform_outputs.bosh_static_ip ))
-          INSTANCE_WHITELIST: (( concat terraform_outputs.nat_private_ip_az1 " " terraform_outputs.nat_private_ip_az2 " " terraform_outputs.
-            master_bosh_static_ip " " terraform_outputs.bosh_static_ip ))
+          INSTANCE_WHITELIST: (( concat terraform_outputs.nat_private_ip_az1 " " terraform_outputs.nat_private_ip_az2 " " terraform_outputs.master_bosh_static_ip " " terraform_outputs.bosh_static_ip ))
         entries:
         - script:
             name: unknown-vms.sh
