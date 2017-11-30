@@ -9,3 +9,6 @@ vm_types:
 - name: logsearch_es_data
   cloud_properties:
     instance_type: t2.large
+    ephemeral_disk:
+      type: gp2
+      encrypted: true

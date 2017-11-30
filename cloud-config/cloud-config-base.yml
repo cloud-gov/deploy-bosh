@@ -18,9 +18,15 @@ vm_types:
 - name: errand_small
   cloud_properties:
     instance_type: t2.small
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
 - name: errand_large
   cloud_properties:
     instance_type: m4.large
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
 
 vm_extensions:
 - name: errand-profile
