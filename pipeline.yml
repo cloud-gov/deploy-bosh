@@ -21,6 +21,7 @@ jobs:
     - get: common
       resource: common-development
       trigger: true
+    - get: secrets-common
     - get: secrets
       resource: secrets-development
     - get: terraform-yaml
@@ -38,6 +39,7 @@ jobs:
       - name: common
       - name: bosh-config
       - name: terraform-yaml
+      - name: secrets-common
       - name: secrets
       outputs:
       - name: bosh-manifest
@@ -51,6 +53,7 @@ jobs:
             terraform-yaml/state.yml \
             common/decrypted-development-bosh-main.yml \
             common/decrypted-development-bosh-external.yml \
+            secrets-common/secrets.yml \
             secrets/secrets.yml \
             > bosh-manifest/manifest.yml
   - &lint-manifest
@@ -215,6 +218,7 @@ jobs:
     - get: common
       resource: common-staging
       trigger: true
+    - get: secrets-common
     - get: secrets
       resource: secrets-staging
     - get: terraform-yaml
@@ -234,6 +238,7 @@ jobs:
             terraform-yaml/state.yml \
             common/decrypted-staging-bosh-main.yml \
             common/decrypted-staging-bosh-external.yml \
+            secrets-common/secrets.yml \
             secrets/secrets.yml \
             > bosh-manifest/manifest.yml
   - *lint-manifest
@@ -368,6 +373,7 @@ jobs:
     - get: common
       resource: common-production
       trigger: true
+    - get: secrets-common
     - get: secrets
       resource: secrets-production
     - get: terraform-yaml
@@ -385,6 +391,7 @@ jobs:
             terraform-yaml/state.yml \
             common/decrypted-production-bosh-main.yml \
             common/decrypted-production-bosh-external.yml \
+            secrets-common/secrets.yml \
             secrets/secrets.yml \
             > bosh-manifest/manifest.yml
   - *lint-manifest
@@ -499,6 +506,7 @@ jobs:
     - get: common
       resource: common-tooling
       trigger: true
+    - get: secrets-common
     - get: secrets
       resource: secrets-tooling
     - get: terraform-yaml
@@ -522,6 +530,7 @@ jobs:
             terraform-yaml/state.yml \
             common/decrypted-tooling-bosh-main.yml \
             common/decrypted-tooling-bosh-external.yml \
+            secrets-common/secrets.yml \
             secrets/secrets.yml \
             > bosh-manifest/manifest.yml
   - *lint-manifest
@@ -543,8 +552,8 @@ jobs:
       MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-tooling.yml"
       BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
       BOSH_ENVIRONMENT: {{toolingbosh-target}}
-      BOSH_CLIENT: concourse_bosh
-      BOSH_CLIENT_SECRET: {{tooling_bosh_uaa_concourse_bosh_client_secret}}
+      BOSH_CLIENT: ci
+      BOSH_CLIENT_SECRET: {{tooling_bosh_uaa_ci_client_secret}}
   on_failure:
     put: slack
     params:
@@ -643,8 +652,8 @@ jobs:
       - {name: syslog-release, path: releases/syslog}
       params:
         BOSH_CA_CERT: certificate/master-bosh.crt
-        BOSH_CLIENT: concourse_bosh
-        BOSH_CLIENT_SECRET: {{tooling_bosh_uaa_concourse_bosh_client_secret}}
+        BOSH_CLIENT: ci
+        BOSH_CLIENT_SECRET: {{tooling_bosh_uaa_ci_client_secret}}
         BOSH_ENVIRONMENT: {{toolingbosh-target}}
   - put: semver-tooling-version
     params: {bump: patch}
@@ -653,8 +662,8 @@ jobs:
     params:
       BOSH_CA_CERT: certificate/master-bosh.crt
       BOSH_ENVIRONMENT: {{toolingbosh-target}}
-      BOSH_CLIENT: concourse_bosh
-      BOSH_CLIENT_SECRET: {{tooling_bosh_uaa_concourse_bosh_client_secret}}
+      BOSH_CLIENT: ci
+      BOSH_CLIENT_SECRET: {{tooling_bosh_uaa_ci_client_secret}}
       TRIPWIRE_LOCALPASS: {{tripwire-localpass-tooling}}
       TRIPWIRE_SITEPASS: {{tripwire-sitepass-tooling}}
       AWS_REGION: {{aws-region-tooling}}
@@ -754,6 +763,7 @@ jobs:
       trigger: true
     - get: common-masterbosh
       trigger: true
+    - get: secrets-common
     - get: secrets
       resource: secrets-master
     - get: bosh-release
@@ -842,6 +852,14 @@ resources:
     - development-bosh-external.yml
     secrets_passphrase: {{development-secrets-passphrase}}
     bosh_cert: bosh-tooling.pem
+
+- name: secrets-common
+  type: cg-common
+  source:
+    bucket_name: {{common-bucket-name}}
+    region: {{aws-region}}
+    secrets_file: {{common-secrets-file}}
+    secrets_passphrase: {{common_secrets_secrets_passphrase}}
 
 - name: secrets-master
   type: cg-common
@@ -987,9 +1005,9 @@ resources:
   type: bosh-deployment
   source:
     target: {{masterbosh-target}}
-    client: {{masterbosh-username}}
-    client_secret: {{masterbosh-password}}
-    ca_cert: {{masterbosh-ca-cert}}
+    client: admin
+    client_secret: {{master_bosh_admin_password}}
+    ca_cert: {{common_ca_cert}}
     deployment: toolingbosh
 
 - name: developmentbosh-deployment

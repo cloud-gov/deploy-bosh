@@ -3,9 +3,8 @@ meta:
   passwords:
     postgres: (( param "specify postgres password" ))
     mbus: (( param "specify mbus password" ))
-  bosh_domain_name: masterbosh
 
-name: master-bosh
+name: masterbosh
 
 releases:
 - name: bosh
@@ -89,7 +88,7 @@ instance_groups:
       dns:
         address: (( grab terraform_outputs.master_bosh_static_ip ))
         recursor: (( grab terraform_outputs.vpc_cidr_dns ))
-        domain_name: (( grab meta.bosh_domain_name ))
+        domain_name: masterbosh
         db: (( grab instance_groups.bosh.jobs.[postgres-9.4].properties.postgres ))
 
   - name: postgres-9.4
@@ -99,7 +98,7 @@ instance_groups:
         listen_address: 127.0.0.1
         host: 127.0.0.1
         user: postgres
-        password: (( param "specify postgres password" ))
+        password: (( grab meta.passwords.postgres ))
         database: bosh
         adapter: postgres
 
@@ -122,7 +121,7 @@ instance_groups:
     properties:
       director:
         address: 127.0.0.1
-        name: master-bosh
+        name: masterbosh
         db: (( grab instance_groups.bosh.jobs.[postgres-9.4].properties.postgres ))
         ssl:
           cert: (( grab secrets.bosh_director_cert ))
@@ -184,7 +183,7 @@ instance_groups:
         region: (( grab terraform_outputs.vpc_region ))
       registry: (( grab instance_groups.bosh.jobs.registry.properties.registry ))
       agent:
-        mbus: (( concat "nats://" meta.bosh_static_ip ":4222" ))
+        mbus: (( concat "nats://" terraform_outputs.master_bosh_static_ip ":4222" ))
       nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
       blobstore: (( grab instance_groups.bosh.jobs.blobstore.properties.blobstore ))
 

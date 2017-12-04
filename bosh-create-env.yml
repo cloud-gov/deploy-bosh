@@ -11,7 +11,8 @@ inputs:
 - name: cpi-release
 - name: bosh-stemcell
 - name: common-masterbosh
-- name: secrets-config
+- name: secrets-common
+- name: secrets
 - name: terraform-yaml
 - name: bosh-config
 - name: decrypt
