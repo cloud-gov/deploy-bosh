@@ -120,8 +120,6 @@ jobs:
       trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
-    - get: cg-s3-newrelic-release
-      trigger: true
     - get: cg-s3-clamav-release
       trigger: true
     - get: cg-s3-snort-release
@@ -157,7 +155,6 @@ jobs:
       - {name: cg-s3-tripwire-release, path: releases/tripwire}
       - {name: cg-s3-awslogs-release, path: releases/awslogs}
       - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
-      - {name: cg-s3-newrelic-release, path: releases/newrelic}
       - {name: cg-s3-clamav-release, path: releases/clamav}
       - {name: cg-s3-snort-release, path: releases/snort}
       - {name: cg-s3-riemannc-release, path: releases/riemannc}
@@ -193,7 +190,6 @@ jobs:
       TRIPWIRE_LOCALPASS: {{tripwire-localpass-development}}
       TRIPWIRE_SITEPASS: {{tripwire-sitepass-development}}
       AWS_REGION: {{aws-region-development}}
-      NEWRELIC_LICENSE_KEY: {{newrelic-license-key-development}}
       NESSUS_AGENT_KEY: {{nessus-agent-key-development}}
       NESSUS_AGENT_SERVER: {{nessus-agent-server-development}}
       NESSUS_AGENT_PORT: {{nessus-agent-port-development}}
@@ -300,8 +296,6 @@ jobs:
       trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
-    - get: cg-s3-newrelic-release
-      trigger: true
     - get: cg-s3-clamav-release
       trigger: true
     - get: cg-s3-snort-release
@@ -343,7 +337,6 @@ jobs:
       TRIPWIRE_LOCALPASS: {{tripwire-localpass-staging}}
       TRIPWIRE_SITEPASS: {{tripwire-sitepass-staging}}
       AWS_REGION: {{aws-region-staging}}
-      NEWRELIC_LICENSE_KEY: {{newrelic-license-key-staging}}
       NESSUS_AGENT_KEY: {{nessus-agent-key-staging}}
       NESSUS_AGENT_SERVER: {{nessus-agent-server-staging}}
       NESSUS_AGENT_PORT: {{nessus-agent-port-staging}}
@@ -448,8 +441,6 @@ jobs:
       trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
-    - get: cg-s3-newrelic-release
-      trigger: true
     - get: cg-s3-clamav-release
       trigger: true
     - get: cg-s3-snort-release
@@ -491,7 +482,6 @@ jobs:
       TRIPWIRE_LOCALPASS: {{tripwire-localpass-production}}
       TRIPWIRE_SITEPASS: {{tripwire-sitepass-production}}
       AWS_REGION: {{aws-region-production}}
-      NEWRELIC_LICENSE_KEY: {{newrelic-license-key-production}}
       NESSUS_AGENT_KEY: {{nessus-agent-key-production}}
       NESSUS_AGENT_SERVER: {{nessus-agent-server-production}}
       NESSUS_AGENT_PORT: {{nessus-agent-port-production}}
@@ -622,8 +612,6 @@ jobs:
       trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
-    - get: cg-s3-newrelic-release
-      trigger: true
     - get: cg-s3-clamav-release
       trigger: true
     - get: cg-s3-snort-release
@@ -653,7 +641,6 @@ jobs:
       - {name: cg-s3-tripwire-release, path: releases/tripwire}
       - {name: cg-s3-awslogs-release, path: releases/awslogs}
       - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
-      - {name: cg-s3-newrelic-release, path: releases/newrelic}
       - {name: cg-s3-clamav-release, path: releases/clamav}
       - {name: cg-s3-snort-release, path: releases/snort}
       - {name: cg-s3-riemannc-release, path: releases/riemannc}
@@ -680,7 +667,6 @@ jobs:
       TRIPWIRE_LOCALPASS: {{tripwire-localpass-tooling}}
       TRIPWIRE_SITEPASS: {{tripwire-sitepass-tooling}}
       AWS_REGION: {{aws-region-tooling}}
-      NEWRELIC_LICENSE_KEY: {{newrelic-license-key-tooling}}
       NESSUS_AGENT_KEY: {{nessus-agent-key-tooling}}
       NESSUS_AGENT_SERVER: {{nessus-agent-server-tooling}}
       NESSUS_AGENT_PORT: {{nessus-agent-port-tooling}}
@@ -704,8 +690,6 @@ jobs:
     - get: cg-s3-awslogs-release
       trigger: true
     - get: cg-s3-nessus-agent-release
-      trigger: true
-    - get: cg-s3-newrelic-release
       trigger: true
     - get: cg-s3-clamav-release
       trigger: true
@@ -736,7 +720,6 @@ jobs:
       - {name: cg-s3-tripwire-release, path: releases/tripwire}
       - {name: cg-s3-awslogs-release, path: releases/awslogs}
       - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
-      - {name: cg-s3-newrelic-release, path: releases/newrelic}
       - {name: cg-s3-clamav-release, path: releases/clamav}
       - {name: cg-s3-snort-release, path: releases/snort}
       - {name: cg-s3-riemannc-release, path: releases/riemannc}
@@ -763,7 +746,6 @@ jobs:
       TRIPWIRE_LOCALPASS: {{tripwire-localpass-master}}
       TRIPWIRE_SITEPASS: {{tripwire-sitepass-master}}
       AWS_REGION: {{aws-region-master}}
-      NEWRELIC_LICENSE_KEY: {{newrelic-license-key-master}}
       NESSUS_AGENT_KEY: {{nessus-agent-key-master}}
       NESSUS_AGENT_SERVER: {{nessus-agent-server-master}}
       NESSUS_AGENT_PORT: {{nessus-agent-port-master}}
@@ -1081,12 +1063,6 @@ resources:
   type: s3-iam
   source:
     regexp: nessus-agent-(.*).tgz
-    <<: *s3-release-params
-
-- name: cg-s3-newrelic-release
-  type: s3-iam
-  source:
-    regexp: newrelic-(.*).tgz
     <<: *s3-release-params
 
 - name: cg-s3-clamav-release

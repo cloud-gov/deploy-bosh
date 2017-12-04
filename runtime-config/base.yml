@@ -4,7 +4,6 @@ releases:
 - {name: clamav, version: (( grab $release_clamav ))}
 - {name: snort, version: (( grab $release_snort ))}
 - {name: awslogs, version: (( grab $release_awslogs ))}
-- {name: newrelic, version: (( grab $release_newrelic ))}
 - {name: collectd, version: (( grab $release_collectd ))}
 - {name: nessus-agent, version: (( grab $release_nessus_agent ))}
 - {name: riemannc, version: (( grab $release_riemannc ))}
@@ -19,7 +18,6 @@ addons:
   - {name: clamav, release: clamav}
   - {name: snort, release: snort}
   - {name: awslogs, release: awslogs}
-  - {name: newrelic-monitor, release: newrelic}
   - {name: nessus-agent, release: nessus-agent}
   - {name: collectd, release: collectd}
   - {name: riemannc, release: riemannc}
@@ -31,8 +29,6 @@ addons:
       sitepass: (( grab $TRIPWIRE_SITEPASS ))
     awslogs:
       region: (( grab $AWS_REGION ))
-    newrelic:
-      license_key: (( grab $NEWRELIC_LICENSE_KEY ))
     nessus-agent:
       key: (( grab $NESSUS_AGENT_KEY ))
       server: (( grab $NESSUS_AGENT_SERVER ))

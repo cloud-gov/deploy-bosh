@@ -13,7 +13,6 @@ inputs:
 - {name: cg-s3-tripwire-release, path: releases/tripwire}
 - {name: cg-s3-awslogs-release, path: releases/awslogs}
 - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
-- {name: cg-s3-newrelic-release, path: releases/newrelic}
 - {name: cg-s3-clamav-release, path: releases/clamav}
 - {name: cg-s3-snort-release, path: releases/snort}
 - {name: cg-s3-riemannc-release, path: releases/riemannc}
