@@ -962,7 +962,7 @@ resources:
 - name: nfs-volume-release
   type: bosh-io-release
   source:
-    repository: cloudfoundry-incubator/nfs-volume-release
+    repository: cloudfoundry/nfs-volume-release
 
 - name: bosh-config
   type: git
