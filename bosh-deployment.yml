@@ -114,7 +114,6 @@ instance_groups:
         resurrector_enabled: true
         resurrector:
           minimum_down_jobs: 3
-        riemann_enabled: true
       nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
       director:
         address: (( grab terraform_outputs.bosh_static_ip ))
