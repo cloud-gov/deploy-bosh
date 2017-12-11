@@ -38,8 +38,8 @@ instance_groups:
             redirect-uri: (( param "specify monitoring staging redirect url" ))
             <<: *client-template
           # For authentication to bosh via concourse
-          concourse_bosh:
-            secret: (( param "specify concourse bosh client secret" ))
+          ci:
+            secret: (( grab secrets.bosh_uaa_ci_client_secret ))
             authorized-grant-types: client_credentials
             authorities: bosh.admin
             scope: ""

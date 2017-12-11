@@ -80,8 +80,8 @@ jobs:
       MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml bosh-config/cloud-config/cloud-config-development.yml"
       BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
       BOSH_ENVIRONMENT: {{developmentbosh-target}}
-      BOSH_CLIENT: {{developmentbosh-uaa-client}}
-      BOSH_CLIENT_SECRET: {{developmentbosh-uaa-client-secret}}
+      BOSH_CLIENT: ci
+      BOSH_CLIENT_SECRET: {{development_bosh_uaa_ci_client_secret}}
   on_failure:
     put: slack
     params:
@@ -167,8 +167,8 @@ jobs:
       - {name: nfs-volume-release, path: releases/nfs-volume}
       params:
         BOSH_CA_CERT: certificate/master-bosh.crt
-        BOSH_CLIENT: {{developmentbosh-uaa-client}}
-        BOSH_CLIENT_SECRET: {{developmentbosh-uaa-client-secret}}
+        BOSH_CLIENT: ci
+        BOSH_CLIENT_SECRET: {{development_bosh_uaa_ci_client_secret}}
         BOSH_ENVIRONMENT: {{developmentbosh-target}}
       run:
         path: sh
@@ -185,8 +185,8 @@ jobs:
       RUNTIME_OVERRIDES: bosh-config/runtime-config/volume-driver.yml
       BOSH_CA_CERT: certificate/master-bosh.crt
       BOSH_ENVIRONMENT: {{developmentbosh-target}}
-      BOSH_CLIENT: {{developmentbosh-uaa-client}}
-      BOSH_CLIENT_SECRET: {{developmentbosh-uaa-client-secret}}
+      BOSH_CLIENT: ci
+      BOSH_CLIENT_SECRET: {{development_bosh_uaa_ci_client_secret}}
       TRIPWIRE_LOCALPASS: {{tripwire-localpass-development}}
       TRIPWIRE_SITEPASS: {{tripwire-sitepass-development}}
       AWS_REGION: {{aws-region-development}}
@@ -258,8 +258,8 @@ jobs:
       MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml bosh-config/cloud-config/cloud-config-staging.yml"
       BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
       BOSH_ENVIRONMENT: {{stagingbosh-target}}
-      BOSH_CLIENT: {{stagingbosh-uaa-client}}
-      BOSH_CLIENT_SECRET: {{stagingbosh-uaa-client-secret}}
+      BOSH_CLIENT: ci
+      BOSH_CLIENT_SECRET: {{staging_bosh_uaa_ci_client_secret}}
   on_failure:
     put: slack
     params:
@@ -323,8 +323,8 @@ jobs:
       <<: *upload-releases-config
       params:
         BOSH_CA_CERT: certificate/master-bosh.crt
-        BOSH_CLIENT: {{stagingbosh-uaa-client}}
-        BOSH_CLIENT_SECRET: {{stagingbosh-uaa-client-secret}}
+        BOSH_CLIENT: ci
+        BOSH_CLIENT_SECRET: {{staging_bosh_uaa_ci_client_secret}}
         BOSH_ENVIRONMENT: {{stagingbosh-target}}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
@@ -332,8 +332,8 @@ jobs:
       RUNTIME_OVERRIDES: bosh-config/runtime-config/volume-driver.yml
       BOSH_CA_CERT: certificate/master-bosh.crt
       BOSH_ENVIRONMENT: {{stagingbosh-target}}
-      BOSH_CLIENT: {{stagingbosh-uaa-client}}
-      BOSH_CLIENT_SECRET: {{stagingbosh-uaa-client-secret}}
+      BOSH_CLIENT: ci
+      BOSH_CLIENT_SECRET: {{staging_bosh_uaa_ci_client_secret}}
       TRIPWIRE_LOCALPASS: {{tripwire-localpass-staging}}
       TRIPWIRE_SITEPASS: {{tripwire-sitepass-staging}}
       AWS_REGION: {{aws-region-staging}}
@@ -403,8 +403,8 @@ jobs:
       MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml"
       BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
       BOSH_ENVIRONMENT: {{productionbosh-target}}
-      BOSH_CLIENT: {{productionbosh-uaa-client}}
-      BOSH_CLIENT_SECRET: {{productionbosh-uaa-client-secret}}
+      BOSH_CLIENT: ci
+      BOSH_CLIENT_SECRET: {{production_bosh_uaa_ci_client_secret}}
   on_failure:
     put: slack
     params:
@@ -468,8 +468,8 @@ jobs:
       <<: *upload-releases-config
       params:
         BOSH_CA_CERT: certificate/master-bosh.crt
-        BOSH_CLIENT: {{productionbosh-uaa-client}}
-        BOSH_CLIENT_SECRET: {{productionbosh-uaa-client-secret}}
+        BOSH_CLIENT: ci
+        BOSH_CLIENT_SECRET: {{production_bosh_uaa_ci_client_secret}}
         BOSH_ENVIRONMENT: {{productionbosh-target}}
   - task: update-runtime-config
     file: bosh-config/update-runtime-config.yml
@@ -477,8 +477,8 @@ jobs:
       RUNTIME_OVERRIDES: bosh-config/runtime-config/volume-driver.yml
       BOSH_CA_CERT: certificate/master-bosh.crt
       BOSH_ENVIRONMENT: {{productionbosh-target}}
-      BOSH_CLIENT: {{productionbosh-uaa-client}}
-      BOSH_CLIENT_SECRET: {{productionbosh-uaa-client-secret}}
+      BOSH_CLIENT: ci
+      BOSH_CLIENT_SECRET: {{production_bosh_uaa_ci_client_secret}}
       TRIPWIRE_LOCALPASS: {{tripwire-localpass-production}}
       TRIPWIRE_SITEPASS: {{tripwire-sitepass-production}}
       AWS_REGION: {{aws-region-production}}
@@ -552,8 +552,8 @@ jobs:
       MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-tooling.yml"
       BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
       BOSH_ENVIRONMENT: {{toolingbosh-target}}
-      BOSH_CLIENT: {{toolingbosh-uaa-client}}
-      BOSH_CLIENT_SECRET: {{toolingbosh-uaa-client-secret}}
+      BOSH_CLIENT: ci
+      BOSH_CLIENT_SECRET: {{tooling_bosh_uaa_ci_client_secret}}
   on_failure:
     put: slack
     params:
@@ -652,8 +652,8 @@ jobs:
       - {name: syslog-release, path: releases/syslog}
       params:
         BOSH_CA_CERT: certificate/master-bosh.crt
-        BOSH_CLIENT: {{toolingbosh-uaa-client}}
-        BOSH_CLIENT_SECRET: {{toolingbosh-uaa-client-secret}}
+        BOSH_CLIENT: ci
+        BOSH_CLIENT_SECRET: {{tooling_bosh_uaa_ci_client_secret}}
         BOSH_ENVIRONMENT: {{toolingbosh-target}}
   - put: semver-tooling-version
     params: {bump: patch}
@@ -662,8 +662,8 @@ jobs:
     params:
       BOSH_CA_CERT: certificate/master-bosh.crt
       BOSH_ENVIRONMENT: {{toolingbosh-target}}
-      BOSH_CLIENT: {{toolingbosh-uaa-client}}
-      BOSH_CLIENT_SECRET: {{toolingbosh-uaa-client-secret}}
+      BOSH_CLIENT: ci
+      BOSH_CLIENT_SECRET: {{tooling_bosh_uaa_ci_client_secret}}
       TRIPWIRE_LOCALPASS: {{tripwire-localpass-tooling}}
       TRIPWIRE_SITEPASS: {{tripwire-sitepass-tooling}}
       AWS_REGION: {{aws-region-tooling}}
@@ -731,8 +731,8 @@ jobs:
       - {name: syslog-release, path: releases/syslog}
       params:
         BOSH_CA_CERT: certificate/master-bosh.crt
-        BOSH_CLIENT: {{masterbosh-username}}
-        BOSH_CLIENT_SECRET: {{masterbosh-password}}
+        BOSH_CLIENT: admin
+        BOSH_CLIENT_SECRET: {{master_bosh_admin_password}}
         BOSH_ENVIRONMENT: {{masterbosh-target}}
   - put: semver-master-version
     params: {bump: patch}
@@ -741,8 +741,8 @@ jobs:
     params:
       BOSH_CA_CERT: certificate/master-bosh.crt
       BOSH_ENVIRONMENT: {{masterbosh-target}}
-      BOSH_CLIENT: {{masterbosh-username}}
-      BOSH_CLIENT_SECRET: {{masterbosh-password}}
+      BOSH_CLIENT: admin
+      BOSH_CLIENT_SECRET: {{master_bosh_admin_password}}
       TRIPWIRE_LOCALPASS: {{tripwire-localpass-master}}
       TRIPWIRE_SITEPASS: {{tripwire-sitepass-master}}
       AWS_REGION: {{aws-region-master}}
@@ -763,6 +763,9 @@ jobs:
       trigger: true
     - get: common-masterbosh
       trigger: true
+    - get: secrets-common
+    - get: secrets
+      resource: secrets-master
     - get: bosh-release
       params:
         tarball: false
@@ -799,8 +802,8 @@ jobs:
       MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-master.yml"
       BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
       BOSH_ENVIRONMENT: {{masterbosh-target}}
-      BOSH_CLIENT: {{masterbosh-username}}
-      BOSH_CLIENT_SECRET: {{masterbosh-password}}
+      BOSH_CLIENT: admin
+      BOSH_CLIENT_SECRET: {{master_bosh_admin_password}}
   on_failure:
     put: slack
     params:
@@ -856,7 +859,15 @@ resources:
     bucket_name: {{common-bucket-name}}
     region: {{aws-region}}
     secrets_file: {{common-secrets-file}}
-    secrets_passphrase: {{common-secrets-secrets-passphrase}}
+    secrets_passphrase: {{common_secrets_secrets_passphrase}}
+
+- name: secrets-master
+  type: cg-common
+  source:
+    bucket_name: {{master-bucket-name}}
+    region: {{aws-region}}
+    secrets_file: {{master-secrets-file}}
+    secrets_passphrase: {{master_secrets_secrets_passphrase}}
 
 - name: secrets-tooling
   type: cg-common
@@ -864,7 +875,7 @@ resources:
     bucket_name: {{tooling-bucket-name}}
     region: {{aws-region}}
     secrets_file: {{tooling-secrets-file}}
-    secrets_passphrase: {{tooling-secrets-secrets-passphrase}}
+    secrets_passphrase: {{tooling_secrets_secrets_passphrase}}
 
 - name: secrets-development
   type: cg-common
@@ -872,7 +883,7 @@ resources:
     bucket_name: {{development-bucket-name}}
     region: {{aws-region}}
     secrets_file: {{development-secrets-file}}
-    secrets_passphrase: {{development-secrets-secrets-passphrase}}
+    secrets_passphrase: {{development_secrets_secrets_passphrase}}
 
 - name: secrets-staging
   type: cg-common
@@ -880,7 +891,7 @@ resources:
     bucket_name: {{staging-bucket-name}}
     region: {{aws-region}}
     secrets_file: {{staging-secrets-file}}
-    secrets_passphrase: {{staging-secrets-secrets-passphrase}}
+    secrets_passphrase: {{staging_secrets_secrets_passphrase}}
 
 - name: secrets-production
   type: cg-common
@@ -888,7 +899,7 @@ resources:
     bucket_name: {{production-bucket-name}}
     region: {{aws-region}}
     secrets_file: {{production-secrets-file}}
-    secrets_passphrase: {{production-secrets-secrets-passphrase}}
+    secrets_passphrase: {{production_secrets_secrets_passphrase}}
 
 - name: common-staging
   type: cg-common
@@ -994,36 +1005,36 @@ resources:
   type: bosh-deployment
   source:
     target: {{masterbosh-target}}
-    client: {{masterbosh-username}}
-    client_secret: {{masterbosh-password}}
-    ca_cert: {{masterbosh-ca-cert}}
+    client: admin
+    client_secret: {{master_bosh_admin_password}}
+    ca_cert: {{common_ca_cert}}
     deployment: toolingbosh
 
 - name: developmentbosh-deployment
   type: bosh-deployment
   source:
     target: {{toolingbosh-target}}
-    client: {{toolingbosh-uaa-client}}
-    client_secret: {{toolingbosh-uaa-client-secret}}
-    ca_cert: {{toolingbosh-ca-cert}}
+    client: ci
+    client_secret: {{tooling_bosh_uaa_ci_client_secret}}
+    ca_cert: {{common_ca_cert}}
     deployment: developmentbosh
 
 - name: stagingbosh-deployment
   type: bosh-deployment
   source:
     target: {{toolingbosh-target}}
-    client: {{toolingbosh-uaa-client}}
-    client_secret: {{toolingbosh-uaa-client-secret}}
-    ca_cert: {{toolingbosh-ca-cert}}
+    client: ci
+    client_secret: {{tooling_bosh_uaa_ci_client_secret}}
+    ca_cert: {{common_ca_cert}}
     deployment: stagingbosh
 
 - name: productionbosh-deployment
   type: bosh-deployment
   source:
     target: {{toolingbosh-target}}
-    client: {{toolingbosh-uaa-client}}
-    client_secret: {{toolingbosh-uaa-client-secret}}
-    ca_cert: {{toolingbosh-ca-cert}}
+    client: ci
+    client_secret: {{tooling_bosh_uaa_ci_client_secret}}
+    ca_cert: {{common_ca_cert}}
     deployment: productionbosh
 
 - name: pipeline-tasks
