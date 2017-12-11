@@ -1108,12 +1108,11 @@ resources:
     <<: *s3-release-params
 
 - name: node-exporter-release
-  type: s3-iam
+  type: github-release
   source:
-    bucket: {{s3-bosh-releases-bucket}}
-    regexp: node-exporter-(.*).tgz
-    region_name: {{s3-bosh-releases-region}}
-    server_side_encryption: AES256
+    owner: bosh-prometheus
+    repository: node-exporter-boshrelease
+    access_token: {{github-release-access-token}}  # Note: Use any personal access token with no scopes
 
 - name: semver-master-version
   type: semver-iam
