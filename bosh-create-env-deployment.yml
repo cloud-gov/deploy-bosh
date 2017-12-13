@@ -147,7 +147,7 @@ instance_groups:
       hm:
         director_account:
           user: hm
-          password: (( secrets.bosh_hm_password ))
+          password: (( grab secrets.bosh_hm_password ))
         resurrector_enabled: true
       nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
       director:

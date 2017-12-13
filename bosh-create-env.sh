@@ -19,7 +19,9 @@ set -x
 
 # generate the manifest
 spruce merge \
+    --prune meta \
     --prune terraform_outputs \
+    --prune secrets \
     bosh-config/bosh-create-env-deployment.yml \
     common-masterbosh/secrets.yml \
     secrets-common/secrets.yml \
