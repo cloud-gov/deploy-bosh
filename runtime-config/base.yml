@@ -4,9 +4,7 @@ releases:
 - {name: clamav, version: (( grab $release_clamav ))}
 - {name: snort, version: (( grab $release_snort ))}
 - {name: awslogs, version: (( grab $release_awslogs ))}
-- {name: collectd, version: (( grab $release_collectd ))}
 - {name: nessus-agent, version: (( grab $release_nessus_agent ))}
-- {name: riemannc, version: (( grab $release_riemannc ))}
 - {name: node-exporter, version: (( grab $release_node_exporter ))}
 - {name: syslog, version: (( grab $release_syslog ))}
 
@@ -19,8 +17,6 @@ addons:
   - {name: snort, release: snort}
   - {name: awslogs, release: awslogs}
   - {name: nessus-agent, release: nessus-agent}
-  - {name: collectd, release: collectd}
-  - {name: riemannc, release: riemannc}
   - {name: node_exporter, release: node-exporter}
   - {name: syslog_forwarder, release: syslog}
   properties:
@@ -34,11 +30,6 @@ addons:
       server: (( grab $NESSUS_AGENT_SERVER ))
       port: (( grab $NESSUS_AGENT_PORT ))
       group: (( grab $NESSUS_AGENT_GROUP ))
-    collectd:
-      riemann_server: (( grab $RIEMANN_SERVER ))
-    riemann:
-      server: (( grab $RIEMANN_SERVER ))
-      port: (( grab $RIEMANN_PORT ))
     syslog:
       address: (( grab terraform_outputs.platform_syslog_elb_dns_name ))
       port: 5514

@@ -1,24 +1,15 @@
 releases:
-- name: collectd
-  uri: https://github.com/18F/cg-collectd-boshrelease
-  branch: master
 - name: fisma
   uri: https://github.com/18F/cg-harden-boshrelease
   branch: master
 - name: nessus-agent
   uri: https://github.com/18F/cg-nessus-agent-boshrelease
   branch: master
-- name: riemann
-  uri: https://github.com/18F/cg-riemann-boshrelease
-  branch: master
 - name: awslogs
   uri: https://github.com/18F/cg-awslogs-boshrelease
   branch: master
 - name: clamav
   uri: https://github.com/18F/cg-clamav-boshrelease
-  branch: master
-- name: riemannc
-  uri: https://github.com/18F/cg-riemannc-boshrelease
   branch: master
 - name: tripwire
   uri: https://github.com/18F/cg-tripwire-boshrelease

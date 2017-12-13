@@ -55,31 +55,6 @@ vm_types:
   name: production-concourse-worker
 - <<: *concourse-iaas-worker-vm
   name: production-concourse-iaas-worker
-- &monitoring-riemann-vm
-  name: staging-monitoring-riemann
-  cloud_properties:
-    instance_type: t2.medium
-    ephemeral_disk:
-      type: gp2
-      size: 30000
-      encrypted: true
-- &monitoring-influxdb-vm
-  name: staging-monitoring-influxdb
-  cloud_properties:
-    instance_type: m4.large
-    ephemeral_disk:
-      type: gp2
-      size: 30000
-      encrypted: true
-- <<: *monitoring-riemann-vm
-  name: production-monitoring-riemann
-- name: production-monitoring-influxdb
-  cloud_properties:
-    instance_type: r4.2xlarge
-    ephemeral_disk:
-      type: gp2
-      size: 30000
-      encrypted: true
 networks:
 - name: nessus-manager
   type: manual
@@ -130,44 +105,6 @@ networks:
       security_groups:
       - (( grab terraform_outputs.bosh_security_group ))
       - (( grab terraform_outputs.production_concourse_security_group ))
-- name: staging-monitoring
-  type: manual
-  subnets:
-  - range: (( grab terraform_outputs.staging_monitoring_subnet_cidr ))
-    gateway: (( grab terraform_outputs.staging_monitoring_subnet_gateway ))
-    reserved:
-    - (( grab terraform_outputs.staging_monitoring_subnet_reserved ))
-    static:
-    - (( grab terraform_outputs.staging_monitoring_riemann_address ))
-    - (( grab terraform_outputs.staging_monitoring_influxdb_address ))
-    az: z2
-    dns:
-    - (( grab terraform_outputs.tooling_bosh_static_ip ))
-    - (( grab terraform_outputs.vpc_cidr_dns ))
-    cloud_properties:
-      subnet: (( grab terraform_outputs.staging_monitoring_subnet ))
-      security_groups:
-      - (( grab terraform_outputs.bosh_security_group ))
-      - (( grab terraform_outputs.staging_monitoring_security_group ))
-- name: production-monitoring
-  type: manual
-  subnets:
-  - range: (( grab terraform_outputs.production_monitoring_subnet_cidr ))
-    gateway: (( grab terraform_outputs.production_monitoring_subnet_gateway ))
-    reserved:
-    - (( grab terraform_outputs.production_monitoring_subnet_reserved ))
-    static:
-    - (( grab terraform_outputs.production_monitoring_riemann_address ))
-    - (( grab terraform_outputs.production_monitoring_influxdb_address ))
-    az: z1
-    dns:
-    - (( grab terraform_outputs.tooling_bosh_static_ip ))
-    - (( grab terraform_outputs.vpc_cidr_dns ))
-    cloud_properties:
-      subnet: (( grab terraform_outputs.production_monitoring_subnet ))
-      security_groups:
-      - (( grab terraform_outputs.bosh_security_group ))
-      - (( grab terraform_outputs.production_monitoring_security_group ))
 
 vm_extensions:
 - name: nessus-manager-lb
@@ -206,16 +143,6 @@ vm_extensions:
   cloud_properties:
     elbs:
     - (( grab terraform_outputs.staging_monitoring_elb_name ))
-- name: staging-monitoring-riemann-profile
-  cloud_properties:
-    iam_instance_profile: (( grab terraform_outputs.riemann_monitoring_profile ))
-- name: production-monitoring-grafana-lb
-  cloud_properties:
-    elbs:
-    - (( grab terraform_outputs.production_monitoring_elb_name ))
-- name: production-monitoring-riemann-profile
-  cloud_properties:
-    iam_instance_profile: (( grab terraform_outputs.riemann_monitoring_profile ))
 
 disk_types:
 - name: bosh
@@ -247,22 +174,6 @@ disk_types:
   cloud_properties:
     type: io1
     iops: 9_000
-- &monitoring-riemann-disk
-  name: staging-monitoring-riemann
-  disk_size: 5000
-  cloud_properties:
-    type: gp2
-    encrypted: true
-- &monitoring-influxdb-disk
-  name: staging-monitoring-influxdb
-  disk_size: 100000
-  cloud_properties:
-    type: gp2
-    encrypted: true
-- <<: *monitoring-riemann-disk
-  name: production-monitoring-riemann
-- <<: *monitoring-influxdb-disk
-  name: production-monitoring-influxdb
 
 compilation:
   network: production-concourse
