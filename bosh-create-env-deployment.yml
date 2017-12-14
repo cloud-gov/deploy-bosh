@@ -4,7 +4,7 @@ meta:
     postgres: (( param "specify postgres password" ))
     mbus: (( param "specify mbus password" ))
 
-name: masterbosh
+name: master-bosh
 
 releases:
 - name: bosh
@@ -121,7 +121,7 @@ instance_groups:
     properties:
       director:
         address: 127.0.0.1
-        name: masterbosh
+        name: master-bosh
         db: (( grab instance_groups.bosh.jobs.[postgres-9.4].properties.postgres ))
         ssl:
           cert: (( grab secrets.bosh_director_cert ))
