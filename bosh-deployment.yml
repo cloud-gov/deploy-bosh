@@ -90,6 +90,7 @@ instance_groups:
         flush_arp: true
         # TODO: Revert after https://github.com/cloudfoundry/bosh/issues/1486 is resolved
         enable_post_deploy: true
+        workers: 5
         user_management:
           provider: uaa
           uaa:
