@@ -1,0 +1,120 @@
+vm_types:
+- name: minimal
+  cloud_properties:
+    instance_type: m4.large
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
+      size: 10240
+- name: small
+  cloud_properties:
+    instance_type: m4.large
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
+      size: 10240
+- name: small-highmem
+  cloud_properties:
+    instance_type: r4.xlarge
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
+      size: 10240
+
+disk_types:
+- name: default
+  disk_size: 1024
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- name: 1GB
+  disk_size: 1024
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- name: 5GB
+  disk_size: 5120
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- name: 10GB
+  disk_size: 10240
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- name: 50GB
+  disk_size: 51200
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- name: 100GB
+  disk_size: 102400
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- name: 500GB
+  disk_size: 512000
+  cloud_properties:
+    type: gp2
+    encrypted: true
+- name: 1TB
+  disk_size: 1048576
+  cloud_properties:
+    type: gp2
+    encrypted: true
+
+vm_extensions:
+# Ephemeral disks
+- name: 1GB_ephemeral_disk
+  cloud_properties:
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
+      size: 1024
+- name: 5GB_ephemeral_disk
+  cloud_properties:
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
+      size: 1024
+- name: 10GB_ephemeral_disk
+  cloud_properties:
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
+      size: 10240
+- name: 50GB_ephemeral_disk
+  cloud_properties:
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
+      size: 51200
+- name: 100GB_ephemeral_disk
+  cloud_properties:
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
+      size: 102400
+- name: 500GB_ephemeral_disk
+  cloud_properties:
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
+      size: 512000
+- name: 1TB_ephemeral_disk
+  cloud_properties:
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
+      size: 1048576
+# Load balancers
+- name: cf-router-network-properties
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.cf_main_elb_name ))
+    - (( grab terraform_outputs.cf_apps_elb_name ))
+    - (( grab terraform_outputs.cf_logging_elb_name ))
+- name: diego-ssh-proxy-network-properties
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.diego_elb_name ))
