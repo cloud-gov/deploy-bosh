@@ -21,7 +21,7 @@ vm_types:
       encrypted: true
 - name: production-prometheus
   cloud_properties:
-    instance_type: m4.xlarge
+    instance_type: m4.2xlarge
     ephemeral_disk:
       type: gp2
       encrypted: true
