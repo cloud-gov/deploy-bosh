@@ -115,7 +115,7 @@ vm_types:
       encrypted: true
 - name: logsearch_kibana
   cloud_properties:
-    instance_type: t2.medium
+    instance_type: t2.large
     ephemeral_disk:
       type: gp2
       encrypted: true
