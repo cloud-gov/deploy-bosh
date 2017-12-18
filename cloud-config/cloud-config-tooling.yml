@@ -244,6 +244,9 @@ disk_types:
   name: production-prometheus-small
 - <<: *prometheus-large-disk
   name: production-prometheus-large
+  cloud_properties:
+    type: io1
+    iops: 10_000
 - &monitoring-riemann-disk
   name: staging-monitoring-riemann
   disk_size: 5000
