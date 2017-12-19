@@ -194,7 +194,7 @@ disk_types:
     type: gp2
     encrypted: true
 - name: kubernetes
-  disk_size: 25000
+  disk_size: 35_000
   cloud_properties:
     type: gp2
     encrypted: true
