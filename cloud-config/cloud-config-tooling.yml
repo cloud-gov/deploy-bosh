@@ -55,6 +55,7 @@ vm_types:
   name: production-concourse-worker
 - <<: *concourse-iaas-worker-vm
   name: production-concourse-iaas-worker
+
 networks:
 - name: nessus-manager
   type: manual
@@ -105,6 +106,38 @@ networks:
       security_groups:
       - (( grab terraform_outputs.bosh_security_group ))
       - (( grab terraform_outputs.production_concourse_security_group ))
+- name: staging-monitoring
+  type: dynamic
+  subnets:
+  - range: (( grab terraform_outputs.staging_monitoring_subnet_cidr ))
+    gateway: (( grab terraform_outputs.staging_monitoring_subnet_gateway ))
+    reserved:
+    - (( grab terraform_outputs.staging_monitoring_subnet_reserved ))
+    az: z2
+    dns:
+    - (( grab terraform_outputs.tooling_bosh_static_ip ))
+    - (( grab terraform_outputs.vpc_cidr_dns ))
+    cloud_properties:
+      subnet: (( grab terraform_outputs.staging_monitoring_subnet ))
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
+      - (( grab terraform_outputs.staging_monitoring_security_group ))
+- name: production-monitoring
+  type: dynamic
+  subnets:
+  - range: (( grab terraform_outputs.production_monitoring_subnet_cidr ))
+    gateway: (( grab terraform_outputs.production_monitoring_subnet_gateway ))
+    reserved:
+    - (( grab terraform_outputs.production_monitoring_subnet_reserved ))
+    az: z1
+    dns:
+    - (( grab terraform_outputs.tooling_bosh_static_ip ))
+    - (( grab terraform_outputs.vpc_cidr_dns ))
+    cloud_properties:
+      subnet: (( grab terraform_outputs.production_monitoring_subnet ))
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
+      - (( grab terraform_outputs.production_monitoring_security_group ))
 
 vm_extensions:
 - name: nessus-manager-lb
