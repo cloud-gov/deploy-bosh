@@ -173,7 +173,7 @@ disk_types:
   name: production-prometheus-large
   cloud_properties:
     type: io1
-    iops: 9_000
-
+    iops: 14_000
+    size: 300_000
 compilation:
   network: production-concourse
