@@ -204,9 +204,9 @@ disk_types:
   name: production-prometheus-small
 - <<: *prometheus-large-disk
   name: production-prometheus-large
+  disk_size: 300_000
   cloud_properties:
     type: io1
     iops: 14_000
-    size: 300_000
 compilation:
   network: production-concourse
