@@ -1,14 +1,20 @@
-disk_types:
-- name: logsearch_es_data
-  disk_size: 150000
-  cloud_properties:
-    type: gp2
-    encrypted: true
-
 vm_types:
 - name: logsearch_es_data
   cloud_properties:
     instance_type: t2.large
-    ephemeral_disk:
-      type: gp2
-      encrypted: true
+- name: kubernetes_consul
+  cloud_properties:
+    instance_type: t2.large
+- name: kubernetes_etcd
+  cloud_properties:
+    instance_type: t2.large
+- name: kubernetes_minion
+  cloud_properties:
+    instance_type: r4.large
+- name: concourse-worker
+  cloud_properties:
+    instance_type: m3.medium
+
+disk_types:
+- name: logsearch_es_data
+  disk_size: 150000
