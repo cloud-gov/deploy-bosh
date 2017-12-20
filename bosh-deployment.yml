@@ -1,6 +1,8 @@
 meta:
   blobstore_bucket: (( param "specify blobstore bucket" ))
   bosh_domain_name: bosh
+  env:
+    name: bosh
 
 name: (( param "specify deployment name" ))
 director_uuid: (( param "specify bosh director" ))
@@ -25,6 +27,95 @@ stemcells:
   version: latest
 
 instance_groups:
+- name: uaa
+  stemcell: default
+  vm_type: bosh
+  persistent_disk_type: bosh
+  instances: 1
+  azs: [z1]
+  jobs:
+  - name: uaa
+    release: uaa
+    properties:
+      uaadb:
+        db_scheme: postgresql
+        address: (( grab terraform_outputs.bosh_rds_host_curr ))
+        port: 5432
+        databases:
+        - tag: uaa
+          name: bosh_uaadb
+        roles:
+        - tag: admin
+          name: (( grab terraform_outputs.bosh_rds_username ))
+          password: (( grab terraform_outputs.bosh_rds_password ))
+
+      uaa:
+        url: https://localhost:8443
+        sslCertificate: (( grab secrets.bosh_uaa_web_cert ))
+        sslPrivateKey: (( grab secrets.bosh_uaa_web_key ))
+        jwt:
+          signing_key: (( grab secrets.bosh_uaa_web_key ))
+          verification_key: (( grab secrets.bosh_uaa_web_public_key ))
+        admin:
+          client_secret: (( grab secrets.bosh_uaa_admin_client_secret ))
+        login:
+          client_secret: (( grab secrets.bosh_uaa_login_client_secret ))
+        clients:
+          hm:
+            override: true
+            authorized-grant-types: client_credentials
+            scope: ""
+            authorities: bosh.admin
+            secret: (( grab secrets.bosh_uaa_hm_client_secret ))
+          ci:
+            authorized-grant-types: client_credentials
+            scope: ""
+            authorities: bosh.admin
+            secret: (( grab secrets.bosh_uaa_ci_client_secret ))
+          bosh_cli:
+            override: true
+            authorized-grant-types: password,refresh_token
+            # scopes the client may receive
+            scope: openid,bosh.admin,bosh.read,bosh.*.admin,bosh.*.read
+            authorities: uaa.none
+            access-token-validity: 1200 # 20 min
+            refresh-token-validity: 86400 # re-login required once a day
+            secret: ""
+          bosh_exporter:
+            override: true
+            authorized-grant-types: client_credentials
+            authorities: bosh.read
+            scope: ""
+            secret: (( grab secrets.bosh_uaa_bosh_exporter_client_secret ))
+        scim:
+          users:
+          - name: admin
+            password: (( grab secrets.bosh_admin_password ))
+            groups:
+            - scim.write
+            - scim.read
+            - bosh.admin
+        zones:
+          internal:
+            hostnames:
+            - (( grab terraform_outputs.bosh_static_ip ))
+
+      login:
+        url: https://localhost:8443
+        protocol: https
+        brand: oss
+        brand_title: cloud.gov
+        self_service_links_enabled: false
+        signups_enabled: false
+        invitations_enabled: false
+
+  - name: secureproxy
+    release: secureproxy
+    properties:
+      secureproxy:
+        listen_port: 8081
+        proxy_port: 8080
+
 - name: bosh
   stemcell: default
   vm_type: bosh
@@ -94,7 +185,7 @@ instance_groups:
         user_management:
           provider: uaa
           uaa:
-            url: (( concat "https://" terraform_outputs.bosh_static_ip ":8443" ))
+            url: (( concat "https://0.uaa." meta.env.name "-bosh." meta.env.name "bosh.toolingbosh:8443" ))
             public_key: (( grab secrets.bosh_uaa_web_public_key ))
       nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
       blobstore: (( grab instance_groups.bosh.jobs.blobstore.properties.blobstore ))
@@ -165,81 +256,6 @@ instance_groups:
       blobstore: (( grab instance_groups.bosh.jobs.blobstore.properties.blobstore ))
       ntp: (( grab instance_groups.bosh.jobs.director.properties.ntp ))
 
-  - name: uaa
-    release: uaa
-    properties:
-      uaadb:
-        db_scheme: postgresql
-        address: (( grab terraform_outputs.bosh_rds_host_curr ))
-        port: 5432
-        databases:
-        - tag: uaa
-          name: bosh_uaadb
-        roles:
-        - tag: admin
-          name: (( grab terraform_outputs.bosh_rds_username ))
-          password: (( grab terraform_outputs.bosh_rds_password ))
-
-      uaa:
-        url: (( concat "https://" terraform_outputs.bosh_static_ip ":8443" ))
-        sslCertificate: (( grab secrets.bosh_uaa_web_cert ))
-        sslPrivateKey: (( grab secrets.bosh_uaa_web_key ))
-        jwt:
-          signing_key: (( grab secrets.bosh_uaa_web_key ))
-          verification_key: (( grab secrets.bosh_uaa_web_public_key ))
-        admin:
-          client_secret: (( grab secrets.bosh_uaa_admin_client_secret ))
-        login:
-          client_secret: (( grab secrets.bosh_uaa_login_client_secret ))
-        clients:
-          hm:
-            override: true
-            authorized-grant-types: client_credentials
-            scope: ""
-            authorities: bosh.admin
-            secret: (( grab secrets.bosh_uaa_hm_client_secret ))
-          ci:
-            authorized-grant-types: client_credentials
-            scope: ""
-            authorities: bosh.admin
-            secret: (( grab secrets.bosh_uaa_ci_client_secret ))
-          bosh_cli:
-            override: true
-            authorized-grant-types: password,refresh_token
-            # scopes the client may receive
-            scope: openid,bosh.admin,bosh.read,bosh.*.admin,bosh.*.read
-            authorities: uaa.none
-            access-token-validity: 1200 # 20 min
-            refresh-token-validity: 86400 # re-login required once a day
-            secret: ""
-          bosh_exporter:
-            override: true
-            authorized-grant-types: client_credentials
-            authorities: bosh.read
-            scope: ""
-            secret: (( grab secrets.bosh_uaa_bosh_exporter_client_secret ))
-        scim:
-          users:
-          - name: admin
-            password: (( grab secrets.bosh_admin_password ))
-            groups:
-            - scim.write
-            - scim.read
-            - bosh.admin
-        zones:
-          internal:
-            hostnames:
-            - (( grab terraform_outputs.bosh_static_ip ))
-
-      login:
-        url: (( concat "https://" terraform_outputs.bosh_static_ip ":8443" ))
-        protocol: https
-        brand: oss
-        brand_title: cloud.gov
-        self_service_links_enabled: false
-        signups_enabled: false
-        invitations_enabled: false
-
   - name: ntpd
     release: ntp
     properties:
@@ -251,13 +267,6 @@ instance_groups:
         server time-b-wwv.nist.gov
         server time-c-wwv.nist.gov
         server time-d-wwv.nist.gov
-
-  - name: secureproxy
-    release: secureproxy
-    properties:
-      secureproxy:
-        listen_port: 8081
-        proxy_port: 8080
 
   - name: cron
     release: cron

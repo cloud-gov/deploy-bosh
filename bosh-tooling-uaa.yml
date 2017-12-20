@@ -8,7 +8,8 @@ templates:
     refresh-token-validity: 3600
 
 instance_groups:
-- name: bosh
+- name: uaa
+  instances: 2
   jobs:
   - name: uaa
     properties:
@@ -74,3 +75,11 @@ instance_groups:
             scope: openid,email,profile
             redirect-uri: https://prometheus.fr.cloud.gov/oauth2/callback,https://alertmanager.fr.cloud.gov/oauth2/callback,https://grafana.fr.cloud.gov/oauth2/callback
             secret: (( param "specify prometheus production client secret" ))
+
+- name: bosh
+  jobs:
+  - name: director
+    properties:
+      director:
+        user_management:
+          url: https://opslogin.fr.cloud.gov

@@ -1,3 +1,7 @@
+meta:
+  env:
+    name: development
+
 instance_groups:
 - name: bosh
   vm_extensions: [development-bosh-profile]

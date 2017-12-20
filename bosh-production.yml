@@ -1,3 +1,7 @@
+meta:
+  env:
+    name: production
+
 instance_groups:
 - name: bosh
   vm_extensions: [production-bosh-profile]

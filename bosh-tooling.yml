@@ -1,19 +1,26 @@
 meta:
   bosh_domain_name: toolingbosh
+  env:
+    name: tooling
 
 releases:
 - {name: uaa-customized, version: latest}
 
 instance_groups:
+- name: uaa
+  vm_extensions: [bosh-lb]
+  networks:
+  - name: bosh
+  jobs:
+  - name: uaa-customized
+    release: uaa-customized
 - name: bosh
-  vm_extensions: [bosh-profile, bosh-lb]
+  vm_extensions: [bosh-profile]
   networks:
   - name: bosh
     static_ips:
     - (( grab terraform_outputs.bosh_static_ip ))
   jobs:
-  - name: uaa-customized
-    release: uaa-customized
   - name: cron
     properties:
       cron:

@@ -1,3 +1,7 @@
+meta:
+  env:
+    name: staging
+
 instance_groups:
 - name: bosh
   vm_extensions: [staging-bosh-profile]
