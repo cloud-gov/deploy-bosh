@@ -78,8 +78,7 @@ instance_groups:
             secret: (( param "specify prometheus production client secret" ))
         zones:
           internal:
-            hostnames:
-            - opslogin.fr.cloud.gov
+            hostnames: []
 
       login:
         url: https://opslogin.fr.cloud.gov
