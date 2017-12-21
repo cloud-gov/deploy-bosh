@@ -248,6 +248,7 @@ instance_groups:
         - (( grab terraform_outputs.bosh_security_group ))
         default_iam_instance_profile: (( grab terraform_outputs.default_profile ))
         region: (( grab terraform_outputs.vpc_region ))
+        encrypted: true
       registry:
         username: registry
         password: (( grab secrets.bosh_registry_password ))
