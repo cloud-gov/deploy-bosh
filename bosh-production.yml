@@ -3,6 +3,9 @@ meta:
     name: production
 
 instance_groups:
+- name: uaa
+  networks:
+  - name: production-bosh
 - name: bosh
   vm_extensions: [production-bosh-profile]
   networks:

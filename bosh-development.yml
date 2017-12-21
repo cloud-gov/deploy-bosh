@@ -3,6 +3,9 @@ meta:
     name: development
 
 instance_groups:
+- name: uaa
+  networks:
+  - name: development-bosh
 - name: bosh
   vm_extensions: [development-bosh-profile]
   networks:

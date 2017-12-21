@@ -3,6 +3,9 @@ meta:
     name: staging
 
 instance_groups:
+- name: uaa
+  networks:
+  - name: staging-bosh
 - name: bosh
   vm_extensions: [staging-bosh-profile]
   networks:
