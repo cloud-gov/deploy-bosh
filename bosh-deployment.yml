@@ -50,7 +50,7 @@ instance_groups:
           password: (( grab terraform_outputs.bosh_rds_password ))
 
       uaa:
-        url: https://localhost:8443
+        url: (( concat "https://0.uaa." meta.env.name "-bosh." meta.env.name "bosh.toolingbosh:8443" ))
         sslCertificate: (( grab secrets.bosh_uaa_web_cert ))
         sslPrivateKey: (( grab secrets.bosh_uaa_web_key ))
         jwt:
@@ -98,10 +98,10 @@ instance_groups:
         zones:
           internal:
             hostnames:
-            - (( grab terraform_outputs.bosh_static_ip ))
+            - (( concat "0.uaa." meta.env.name "-bosh." meta.env.name "bosh.toolingbosh" ))
 
       login:
-        url: https://localhost:8443
+        url: (( concat "https://0.uaa." meta.env.name "-bosh." meta.env.name "bosh.toolingbosh:8443" ))
         protocol: https
         brand: oss
         brand_title: cloud.gov
