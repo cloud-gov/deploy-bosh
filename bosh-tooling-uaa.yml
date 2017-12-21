@@ -14,6 +14,7 @@ instance_groups:
   - name: uaa
     properties:
       uaa:
+        url: https://opslogin.fr.cloud.gov
         issuer: https://opslogin.fr.cloud.gov
         clients:
           concourse_production:
@@ -75,6 +76,13 @@ instance_groups:
             scope: openid,email,profile
             redirect-uri: https://prometheus.fr.cloud.gov/oauth2/callback,https://alertmanager.fr.cloud.gov/oauth2/callback,https://grafana.fr.cloud.gov/oauth2/callback
             secret: (( param "specify prometheus production client secret" ))
+        zones:
+          internal:
+            hostnames:
+            - opslogin.fr.cloud.gov
+
+      login:
+        url: https://opslogin.fr.cloud.gov
 
 - name: bosh
   jobs:
