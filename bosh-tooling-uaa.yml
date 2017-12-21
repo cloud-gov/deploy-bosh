@@ -4,8 +4,8 @@ templates:
     authorized-grant-types: authorization_code,client_credentials,refresh_token
     autoapprove: true
     override: true
-    access-token-validity: 3600
-    refresh-token-validity: 3600
+    access-token-validity: 1800
+    refresh-token-validity: 1800
 
 instance_groups:
 - name: uaa
@@ -14,7 +14,7 @@ instance_groups:
   - name: uaa
     properties:
       uaa:
-        url: https://opslogin.fr.cloud.gov
+        url: https://opsuaa.fr.cloud.gov
         issuer: https://opslogin.fr.cloud.gov
         clients:
           concourse_production:
@@ -90,4 +90,5 @@ instance_groups:
     properties:
       director:
         user_management:
-          url: https://opslogin.fr.cloud.gov
+          uaa:
+            url: https://opslogin.fr.cloud.gov
