@@ -185,6 +185,7 @@ instance_groups:
         default_security_groups:
         - (( grab terraform_outputs.bosh_security_group ))
         region: (( grab terraform_outputs.vpc_region ))
+        encrypted: true
       registry: (( grab instance_groups.bosh.jobs.registry.properties.registry ))
       agent:
         mbus: (( concat "nats://" terraform_outputs.master_bosh_static_ip ":4222" ))
