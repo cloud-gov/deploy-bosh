@@ -184,6 +184,7 @@ instance_groups:
         default_key_name: (( grab secrets.ca_public_key_name ))
         default_security_groups:
         - (( grab terraform_outputs.bosh_security_group ))
+        default_iam_instance_profile: (( grab terraform_outputs.default_profile ))
         region: (( grab terraform_outputs.vpc_region ))
         encrypted: true
       registry: (( grab instance_groups.bosh.jobs.registry.properties.registry ))
