@@ -12,14 +12,25 @@ vm_types:
       size: 30000
       type: gp2
       encrypted: true
-- &prometheus-vm
-  name: staging-prometheus
+- name: staging-prometheus-small
+  cloud_properties:
+    instance_type: t2.medium
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
+- name: staging-prometheus-large
   cloud_properties:
     instance_type: m4.large
     ephemeral_disk:
       type: gp2
       encrypted: true
-- name: production-prometheus
+- name: production-prometheus-small
+  cloud_properties:
+    instance_type: m4.large
+    ephemeral_disk:
+      type: gp2
+      encrypted: true
+- name: production-prometheus-large
   cloud_properties:
     instance_type: m4.2xlarge
     ephemeral_disk:
