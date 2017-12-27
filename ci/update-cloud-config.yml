@@ -11,4 +11,4 @@ inputs:
 - {name: terraform-yaml}
 
 run:
-  path: bosh-config/update-cloud-config.sh
+  path: bosh-config/ci/update-cloud-config.sh
