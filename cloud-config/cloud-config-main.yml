@@ -2,7 +2,8 @@ networks:
 - name: default
   type: dynamic
   subnets:
-  - az: z1
+  - &network-z1
+    az: z1
     range: (( grab terraform_outputs.private_subnet_cidr_az1 ))
     gateway: (( grab terraform_outputs.private_subnet_gateway_az1 ))
     reserved:
@@ -28,6 +29,9 @@ networks:
       subnet: (( grab terraform_outputs.private_subnet_az2 ))
       security_groups:
       - (( grab terraform_outputs.bosh_security_group ))
+  # Clone z1 to z3 to satisfy cf-deployment
+  - <<: *network-z1
+    az: z3
 - name: concourse
   type: manual
   subnets:
