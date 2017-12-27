@@ -19,4 +19,4 @@ inputs:
 - {name: syslog-release, path: releases/syslog}
 
 run:
-  path: bosh-config/update-runtime-config.sh
+  path: bosh-config/ci/update-runtime-config.sh

@@ -20,4 +20,4 @@ inputs:
 - {name: nfs-volume-release, path: releases/nfs-volume}
 
 run:
-  path: bosh-config/update-runtime-config.sh
+  path: bosh-config/ci/update-runtime-config.sh
