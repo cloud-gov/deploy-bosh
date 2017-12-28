@@ -74,3 +74,6 @@ vm_extensions:
   cloud_properties:
     elbs:
     - (( grab terraform_outputs.diego_elb_name ))
+- name: blobstore-profile
+  cloud_properties:
+    iam_instance_profile: (( grab terraform_outputs.cf_blobstore_profile ))
