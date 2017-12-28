@@ -21,7 +21,6 @@ networks:
     gateway: (( grab terraform_outputs.private_subnet_gateway_az2 ))
     reserved:
     - (( grab terraform_outputs.private_subnet_reserved_az2 ))
-    - (( grab terraform_outputs.bosh_static_ip ))
     dns:
     - (( grab terraform_outputs.bosh_static_ip ))
     - (( grab terraform_outputs.vpc_cidr_dns ))
@@ -29,9 +28,6 @@ networks:
       subnet: (( grab terraform_outputs.private_subnet_az2 ))
       security_groups:
       - (( grab terraform_outputs.bosh_security_group ))
-  # Clone z1 to z3 to satisfy cf-deployment
-  - <<: *network-z1
-    az: z3
 - name: concourse
   type: manual
   subnets:
