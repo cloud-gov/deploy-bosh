@@ -2,64 +2,41 @@ vm_types:
 - name: bosh
   cloud_properties:
     instance_type: m3.xlarge
-    ephemeral_disk:
-      type: gp2
-      encrypted: true
 - name: nessus-manager
   cloud_properties:
     instance_type: t2.medium
     ephemeral_disk:
       size: 30000
-      type: gp2
-      encrypted: true
 - name: staging-prometheus-small
   cloud_properties:
     instance_type: t2.medium
-    ephemeral_disk:
-      type: gp2
-      encrypted: true
 - name: staging-prometheus-large
   cloud_properties:
     instance_type: m4.large
-    ephemeral_disk:
-      type: gp2
-      encrypted: true
 - name: production-prometheus-small
   cloud_properties:
     instance_type: m4.large
-    ephemeral_disk:
-      type: gp2
-      encrypted: true
 - name: production-prometheus-large
   cloud_properties:
     instance_type: m4.2xlarge
-    ephemeral_disk:
-      type: gp2
-      encrypted: true
 - &concourse-web-vm
   name: staging-concourse-web
   cloud_properties:
     instance_type: t2.medium
     ephemeral_disk:
-      type: gp2
       size: 45000
-      encrypted: true
 - &concourse-worker-vm
   name: staging-concourse-worker
   cloud_properties:
     instance_type: m3.xlarge
     ephemeral_disk:
-      type: gp2
       size: 300000
-      encrypted: true
 - &concourse-iaas-worker-vm
   name: staging-concourse-iaas-worker
   cloud_properties:
     instance_type: m4.large
     ephemeral_disk:
-      type: gp2
       size: 300000
-      encrypted: true
 - <<: *concourse-web-vm
   name: production-concourse-web
 - <<: *concourse-worker-vm
@@ -191,26 +168,14 @@ vm_extensions:
 disk_types:
 - name: bosh
   disk_size: 16_000
-  cloud_properties:
-    type: gp2
-    encrypted: true
 - name: nessus-manager
   disk_size: 120000
-  cloud_properties:
-    type: gp2
-    encrypted: true
 - &prometheus-small-disk
   name: staging-prometheus-small
   disk_size: 2048
-  cloud_properties:
-    type: gp2
-    encrypted: true
 - &prometheus-large-disk
   name: staging-prometheus-large
   disk_size: 200_000
-  cloud_properties:
-    type: gp2
-    encrypted: true
 - <<: *prometheus-small-disk
   name: production-prometheus-small
 - <<: *prometheus-large-disk

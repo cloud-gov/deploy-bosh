@@ -35,9 +35,6 @@ vm_extensions:
 disk_types:
 - name: bosh
   disk_size: 300000
-  cloud_properties:
-    type: gp2
-    encrypted: true
 
 compilation:
   network: bosh
