@@ -2,8 +2,7 @@ networks:
 - name: default
   type: dynamic
   subnets:
-  - &network-z1
-    az: z1
+  - az: z1
     range: (( grab terraform_outputs.private_subnet_cidr_az1 ))
     gateway: (( grab terraform_outputs.private_subnet_gateway_az1 ))
     reserved:
@@ -167,9 +166,6 @@ vm_extensions:
   cloud_properties:
     security_groups:
     - (( grab terraform_outputs.kubernetes_ec2_security_group ))
-- name: diego-platform-cell-profile
-  cloud_properties:
-    iam_instance_profile: (( grab terraform_outputs.platform_profile ))
 - name: logsearch-ingestor-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.logsearch_ingestor_profile ))
