@@ -77,3 +77,6 @@ vm_extensions:
 - name: blobstore-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.cf_blobstore_profile ))
+- name: diego-platform-cell-profile
+  cloud_properties:
+    iam_instance_profile: (( grab terraform_outputs.platform_profile ))
