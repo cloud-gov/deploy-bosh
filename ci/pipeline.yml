@@ -77,7 +77,7 @@ jobs:
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
-      MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/development.yml"
+      MANIFEST_PATH: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/development.yml"
       BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
       BOSH_ENVIRONMENT: {{developmentbosh-target}}
       BOSH_CLIENT: ci
@@ -244,7 +244,7 @@ jobs:
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
-      MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/staging.yml"
+      MANIFEST_PATH: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/staging.yml"
       BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
       BOSH_ENVIRONMENT: {{stagingbosh-target}}
       BOSH_CLIENT: ci
@@ -381,7 +381,7 @@ jobs:
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
-      MANIFEST_PATH: "bosh-config/cloud-config/cloud-config-main.yml"
+      MANIFEST_PATH: "bosh-config/cloud-config/main.yml"
       BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
       BOSH_ENVIRONMENT: {{productionbosh-target}}
       BOSH_CLIENT: ci
