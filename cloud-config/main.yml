@@ -1,6 +1,6 @@
 networks:
 - name: default
-  type: dynamic
+  type: manual
   subnets:
   - az: z1
     range: (( grab terraform_outputs.private_subnet_cidr_az1 ))
