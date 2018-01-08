@@ -9,8 +9,9 @@ fi
 
 export BOSH_NAME=$1
 export BOSH_IP=$2
+export BOSH_UAA_IP=$3
 ENV=${BOSH_NAME//-bosh/}
-export UAA_DOMAIN=${3:-"*.uaa.$ENV-bosh.${ENV}bosh.toolingbosh"}
+export UAA_DOMAIN=${4:-"*.uaa.$ENV-bosh.${ENV}bosh.toolingbosh"}
 
 export TARGET="out"
 
@@ -23,7 +24,7 @@ certstrap --depot-path ${TARGET} request-cert --cn "${BOSH_NAME}-uaa-saml" --dom
 certstrap --depot-path ${TARGET} sign "${BOSH_NAME}-uaa-saml" --CA master-bosh --passphrase ''
 
 # generate a cert for UAA in ssl mode
-certstrap --depot-path ${TARGET} request-cert --cn "${BOSH_NAME}-uaa-web" --domain "${UAA_DOMAIN},localhost" --passphrase ''
+certstrap --depot-path ${TARGET} request-cert --cn "${BOSH_NAME}-uaa-web" --domain "${UAA_DOMAIN},localhost" --ip "${BOSH_UAA_IP}" --passphrase ''
 certstrap --depot-path ${TARGET} sign "${BOSH_NAME}-uaa-web" --CA master-bosh --passphrase ''
 
 # extract the public key for this cert as right now we use it to sign JWTs as well
