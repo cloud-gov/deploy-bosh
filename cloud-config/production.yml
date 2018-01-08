@@ -1,0 +1,6 @@
+vm_extensions:
+- name: cf-router-network-properties
+  cloud_properties:
+    elbs:
+    - (( append ))
+    - (( grab terraform_outputs.star_18f_gov_elb_name ))
