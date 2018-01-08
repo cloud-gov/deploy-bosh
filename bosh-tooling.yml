@@ -11,6 +11,7 @@ instance_groups:
   vm_extensions: [bosh-lb]
   networks:
   - name: bosh
+    static_ips: (( grab terraform_outputs.bosh_uaa_static_ips ))
   jobs:
   - name: uaa-customized
     release: uaa-customized

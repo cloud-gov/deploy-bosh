@@ -8,6 +8,7 @@ networks:
     reserved:
     - (( grab terraform_outputs.private_subnet_reserved_az1 ))
     - (( grab terraform_outputs.bosh_static_ip ))
+    - (( grab terraform_outputs.bosh_uaa_static_ip ))
     dns:
     - (( grab terraform_outputs.bosh_static_ip ))
     - (( grab terraform_outputs.vpc_cidr_dns ))
