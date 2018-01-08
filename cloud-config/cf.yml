@@ -74,9 +74,6 @@ vm_extensions:
   cloud_properties:
     elbs:
     - (( grab terraform_outputs.diego_elb_name ))
-- name: star-18f-gov-elb
-  cloud_properties:
-    elbs: (( grab terraform_outputs.star_18f_gov_elb_name ))
 # Instance profiles
 - name: blobstore-profile
   cloud_properties:
