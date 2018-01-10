@@ -160,10 +160,6 @@ vm_extensions:
   name: production-concourse-profile
 - <<: *concourse-iaas-profile
   name: production-concourse-iaas-profile
-- name: staging-monitoring-grafana-lb
-  cloud_properties:
-    elbs:
-    - (( grab terraform_outputs.staging_monitoring_elb_name ))
 
 disk_types:
 - name: bosh
