@@ -116,6 +116,9 @@ vm_types:
 - name: nfs-volume
   cloud_properties:
     instance_type: m3.large
+- name: elasticache-broker
+  cloud_properties:
+    instance_type: t2.medium
 
 disk_types:
 - name: admin-ui
@@ -162,6 +165,10 @@ vm_extensions:
   cloud_properties:
     elbs:
     - (( grab terraform_outputs.kubernetes_elb_name ))
+- name: elasticache-broker-lb
+  cloud_properties:
+    elbs:
+    - (( grab terraform_outputs.elasticache_broker_elb_name ))
 - name: kubernetes-sg
   cloud_properties:
     security_groups:
@@ -178,6 +185,9 @@ vm_extensions:
 - name: kubernetes-minion-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.kubernetes_minion_profile ))
+- name: elasticache-broker-profile
+  cloud_properties:
+    iam_instance_profile: (( grab terraform_outputs.elasticache_broker_profile ))
 
 compilation:
   network: default
