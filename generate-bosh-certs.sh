@@ -2,8 +2,8 @@
 
 set -e
 
-if [ "$#" -lt 2 ]; then
-    echo "USAGE: $0 <bosh name> <bosh ip address>"
+if [ "$#" -lt 3 ]; then
+    echo "USAGE: $0 <bosh name> <bosh ip address> <bosh uaa ip address>"
     exit 99;
 fi
 

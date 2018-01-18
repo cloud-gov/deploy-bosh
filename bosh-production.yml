@@ -6,7 +6,7 @@ instance_groups:
 - name: uaa
   networks:
   - name: production-bosh
-    static_ips: (( grab terraform_outputs.bosh_uaa_static_ip ))
+    static_ips: (( grab terraform_outputs.bosh_uaa_static_ips ))
 - name: bosh
   vm_extensions: [production-bosh-profile]
   networks:
