@@ -165,7 +165,7 @@ disk_types:
 - name: bosh
   disk_size: 16_000
 - name: nessus-manager
-  disk_size: 120000
+  disk_size: 200_000
 - &prometheus-small-disk
   name: staging-prometheus-small
   disk_size: 2048
