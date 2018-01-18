@@ -55,6 +55,10 @@ vm_extensions:
   cloud_properties:
     ephemeral_disk:
       size: 102400
+- name: 200GB_ephemeral_disk
+  cloud_properties:
+    ephemeral_disk:
+      size: 204800
 - name: 500GB_ephemeral_disk
   cloud_properties:
     ephemeral_disk:
