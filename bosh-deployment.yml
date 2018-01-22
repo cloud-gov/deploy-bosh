@@ -3,6 +3,7 @@ meta:
   bosh_domain_name: bosh
   env:
     name: bosh
+  uaa_static_ips: (( join " " terraform_outputs.bosh_uaa_static_ips ))
 
 name: (( param "specify deployment name" ))
 director_uuid: (( param "specify bosh director" ))
@@ -282,7 +283,7 @@ instance_groups:
           PGDBNAME: bosh
           VPC_NAME: (( grab terraform_outputs.stack_description ))
           BOSH_DIRECTOR: (( grab terraform_outputs.bosh_static_ip ))
-          INSTANCE_WHITELIST: (( concat terraform_outputs.nat_private_ip_az1 " " terraform_outputs.nat_private_ip_az2 " " terraform_outputs.master_bosh_static_ip " " terraform_outputs.bosh_static_ip ))
+          INSTANCE_WHITELIST: (( concat terraform_outputs.nat_private_ip_az1 " " terraform_outputs.nat_private_ip_az2 " " terraform_outputs.master_bosh_static_ip " " terraform_outputs.bosh_static_ip  " " meta.uaa_static_ips ))
         entries:
         - script:
             name: unknown-vms.sh

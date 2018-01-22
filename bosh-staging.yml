@@ -6,6 +6,7 @@ instance_groups:
 - name: uaa
   networks:
   - name: staging-bosh
+    static_ips: (( grab terraform_outputs.bosh_uaa_static_ips ))
 - name: bosh
   vm_extensions: [staging-bosh-profile]
   networks:
