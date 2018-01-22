@@ -126,6 +126,10 @@ networks:
       security_groups:
       - (( grab terraform_outputs.bosh_security_group ))
       - (( grab terraform_outputs.production_monitoring_security_group ))
+- name: staging-public-dns
+  type: vip
+- name: production-public-dns
+  type: vip
 
 vm_extensions:
 - name: nessus-manager-lb
