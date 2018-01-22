@@ -5,8 +5,7 @@ networks:
   - az: z1
     range: (( grab terraform_outputs.private_subnet_cidr_az1 ))
     gateway: (( grab terraform_outputs.private_subnet_gateway_az1 ))
-    static:
-    - (( grab terraform_outputs.bosh_static_ip terraform_outputs.bosh_uaa_static_ips ))
+    static: (( grab terraform_outputs.bosh_static_ip terraform_outputs.bosh_uaa_static_ips ))
     reserved:
     - (( grab terraform_outputs.private_subnet_reserved_az1 ))
     dns:
