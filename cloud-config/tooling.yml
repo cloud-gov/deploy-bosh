@@ -126,9 +126,38 @@ networks:
       security_groups:
       - (( grab terraform_outputs.bosh_security_group ))
       - (( grab terraform_outputs.production_monitoring_security_group ))
-- name: staging-public-dns
-  type: vip
-- name: production-public-dns
+- name: dns-private
+  type: manual
+  subnets:
+  - az: z1
+    range: (( grab terraform_outputs.private_subnet_az1_cidr ))
+    reserved: (( grab terraform_outputs.private_subnet_az1_reserved ))
+    gateway: (( grab terraform_outputs.private_subnet_az1_gateway ))
+    static: (( grab terraform_outputs.staging_dns_private_ips terraform_outputs.production_dns_private_ips ))
+    dns:
+    - (( grab terraform_outputs.tooling_bosh_static_ip ))
+    - (( grab terraform_outputs.vpc_cidr_dns ))
+    cloud_properties:
+      subnet: (( grab terraform_outputs.private_subnet_az1 ))
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
+      - (( grab terraform_outputs.dns_security_group ))
+- name: dns-public
+  type: dynamic
+  subnets:
+  - az: z1
+    cloud_properties:
+      subnet: (( grab terraform_outputs.public_subnet_az1 ))
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
+      - (( grab terraform_outputs.dns_security_group ))
+  - az: z2
+    cloud_properties:
+      subnet: (( grab terraform_outputs.public_subnet_az2 ))
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
+      - (( grab terraform_outputs.dns_security_group ))
+- name: dns-public-vip
   type: vip
 
 vm_extensions:
