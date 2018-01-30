@@ -144,7 +144,7 @@ networks:
       subnet: (( grab terraform_outputs.private_subnet_az1 ))
       security_groups:
       - (( grab terraform_outputs.bosh_security_group ))
-      - (( grab terraform_outputs.dns_security_group ))
+      - (( grab terraform_outputs.dns_axfr_security_group ))
 - name: dns-public
   type: dynamic
   subnets:
@@ -159,7 +159,8 @@ networks:
       subnet: (( grab terraform_outputs.public_subnet_az2 ))
       security_groups:
       - (( grab terraform_outputs.bosh_security_group ))
-      - (( grab terraform_outputs.dns_security_group ))
+      - (( grab terraform_outputs.dns_axfr_security_group ))
+      - (( grab terraform_outputs.dns_public_security_group ))
 - name: dns-public-vip
   type: vip
 
