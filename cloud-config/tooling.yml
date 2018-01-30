@@ -153,7 +153,8 @@ networks:
       subnet: (( grab terraform_outputs.public_subnet_az1 ))
       security_groups:
       - (( grab terraform_outputs.bosh_security_group ))
-      - (( grab terraform_outputs.dns_security_group ))
+      - (( grab terraform_outputs.dns_axfr_security_group ))
+      - (( grab terraform_outputs.dns_public_security_group ))
   - az: z2
     cloud_properties:
       subnet: (( grab terraform_outputs.public_subnet_az2 ))
