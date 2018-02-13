@@ -48,3 +48,6 @@ releases:
 - name: pdns
   uri: https://github.com/18F/pdns-release
   branch: master
+- name: prometheus
+  uri: https://github.com/18F/prometheus-boshrelease
+  branch: prom2-job
