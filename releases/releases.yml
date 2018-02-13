@@ -47,4 +47,4 @@ releases:
   branch: master
 - name: pdns
   uri: https://github.com/18F/pdns-release
-  branch: dnssec
+  branch: master
