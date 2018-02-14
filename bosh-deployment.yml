@@ -100,6 +100,11 @@ instance_groups:
           internal:
             hostnames:
             - (( concat "0.uaa." meta.env.name "-bosh." meta.env.name "bosh.toolingbosh" ))
+        servlet:
+          session-cookie:
+            max-age: 900
+            secure: true
+            http-only: true
 
       login:
         url: (( concat "https://0.uaa." meta.env.name "-bosh." meta.env.name "bosh.toolingbosh:8443" ))
