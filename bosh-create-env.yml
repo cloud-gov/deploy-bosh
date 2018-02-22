@@ -10,13 +10,12 @@ inputs:
 - name: bosh-release
 - name: cpi-release
 - name: bosh-stemcell
-- name: common-masterbosh
 - name: secrets-common
 - name: secrets
 - name: terraform-yaml
 - name: bosh-config
-- name: decrypt
 - name: bosh-state
+- name: master-bosh-root-cert
 
 outputs:
 - name: updated-bosh-state

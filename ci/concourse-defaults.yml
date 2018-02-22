@@ -10,6 +10,7 @@ tf-state-file-staging: staging/state.yml
 tf-state-file-production: production/state.yml
 
 common-secrets-file: secrets-common.yml
+master-secrets-file: secrets-master.yml
 tooling-secrets-file: secrets-tooling.yml
 development-secrets-file: secrets-development.yml
 staging-secrets-file: secrets-staging.yml

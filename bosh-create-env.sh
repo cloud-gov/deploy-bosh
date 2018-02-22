@@ -19,17 +19,26 @@ set -x
 
 # generate the manifest
 spruce merge \
-    --prune meta \
-    --prune terraform_outputs \
-    --prune secrets \
-    bosh-config/bosh-create-env-deployment.yml \
-    common-masterbosh/secrets.yml \
-    secrets-common/secrets.yml \
-    secrets/secrets.yml \
-    terraform-yaml/state.yml \
+  --prune meta \
+  --prune terraform_outputs \
+  --prune secrets \
+  bosh-config/bosh-create-env-deployment.yml \
+  secrets-common/secrets.yml \
+  secrets/secrets.yml \
+  terraform-yaml/state.yml \
 > manifest.yml
 
-# and deploy it!
-bosh-cli create-env --state bosh-state/*.json manifest.yml
+bosh interpolate secrets-common/secrets.yml --path /secrets/ca_key > ./ca-concat.key
+csplit -f ca-split ca-concat.key '/-----BEGIN RSA PRIVATE KEY-----/' '{*}'
+private_key=$(ls ca-split* | tail -n 1)
+cat "${private_key}" > ./ca.key
 
+# and deploy it!
+set +e
+bosh-cli create-env --state bosh-state/*.json manifest.yml
+code=$?
+
+# ensure state gets copied to output
 cp bosh-state/*.json updated-bosh-state
+
+exit ${code}

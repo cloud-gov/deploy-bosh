@@ -66,7 +66,6 @@ jobs:
       LINTER_CONFIG: bosh-lint.yml
   - put: developmentbosh-deployment
     params: &bosh-deployment
-      cert: master-bosh-root-cert/master-bosh.crt
       manifest: bosh-manifest/manifest.yml
       releases:
       - bosh-release/*.tgz
@@ -79,27 +78,27 @@ jobs:
     params:
       MANIFEST_PATH: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/development.yml"
       BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
-      BOSH_ENVIRONMENT: {{developmentbosh-target}}
+      BOSH_ENVIRONMENT: ((developmentbosh-target))
       BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: {{development_bosh_uaa_ci_client_secret}}
+      BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
   on_failure:
     put: slack
     params:
       text: |
         :x: FAILED to deploy development BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: {{slack-channel}}
-      username: {{slack-username}}
-      icon_url: {{slack-icon-url}}
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
   on_success:
     put: slack
     params:
       text: |
         :white_check_mark: Successfully deployed development BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: {{slack-channel}}
-      username: {{slack-username}}
-      icon_url: {{slack-icon-url}}
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
 
 - name: common-releases-development
   serial: true
@@ -159,8 +158,8 @@ jobs:
       params:
         BOSH_CA_CERT: certificate/master-bosh.crt
         BOSH_CLIENT: ci
-        BOSH_CLIENT_SECRET: {{development_bosh_uaa_ci_client_secret}}
-        BOSH_ENVIRONMENT: {{developmentbosh-target}}
+        BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
+        BOSH_ENVIRONMENT: ((developmentbosh-target))
       run:
         path: sh
         args:
@@ -175,16 +174,16 @@ jobs:
     params:
       RUNTIME_OVERRIDES: bosh-config/runtime-config/volume-driver.yml
       BOSH_CA_CERT: certificate/master-bosh.crt
-      BOSH_ENVIRONMENT: {{developmentbosh-target}}
+      BOSH_ENVIRONMENT: ((developmentbosh-target))
       BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: {{development_bosh_uaa_ci_client_secret}}
-      TRIPWIRE_LOCALPASS: {{tripwire-localpass-development}}
-      TRIPWIRE_SITEPASS: {{tripwire-sitepass-development}}
-      AWS_REGION: {{aws-region-development}}
-      NESSUS_AGENT_KEY: {{nessus-agent-key-development}}
-      NESSUS_AGENT_SERVER: {{nessus-agent-server-development}}
-      NESSUS_AGENT_PORT: {{nessus-agent-port-development}}
-      NESSUS_AGENT_GROUP: {{nessus-agent-group-development}}
+      BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
+      TRIPWIRE_LOCALPASS: ((tripwire-localpass-development))
+      TRIPWIRE_SITEPASS: ((tripwire-sitepass-development))
+      AWS_REGION: ((aws-region))
+      NESSUS_AGENT_KEY: ((nessus-agent-key-development))
+      NESSUS_AGENT_SERVER: ((nessus-agent-server-development))
+      NESSUS_AGENT_PORT: ((nessus-agent-port-development))
+      NESSUS_AGENT_GROUP: ((nessus-agent-group-development))
       ENVIRONMENT: development
 
 - name: deploy-staging-bosh
@@ -233,7 +232,6 @@ jobs:
   - *lint-manifest
   - put: stagingbosh-deployment
     params: &bosh-deployment
-      cert: master-bosh-root-cert/master-bosh.crt
       manifest: bosh-manifest/manifest.yml
       releases:
       - bosh-release/*.tgz
@@ -246,27 +244,27 @@ jobs:
     params:
       MANIFEST_PATH: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/staging.yml"
       BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
-      BOSH_ENVIRONMENT: {{stagingbosh-target}}
+      BOSH_ENVIRONMENT: ((stagingbosh-target))
       BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: {{staging_bosh_uaa_ci_client_secret}}
+      BOSH_CLIENT_SECRET: ((staging_bosh_uaa_ci_client_secret))
   on_failure:
     put: slack
     params:
       text: |
         :x: FAILED to deploy Staging BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: {{slack-channel}}
-      username: {{slack-username}}
-      icon_url: {{slack-icon-url}}
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
   on_success:
     put: slack
     params:
       text: |
         :white_check_mark: Successfully deployed Staging BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: {{slack-channel}}
-      username: {{slack-username}}
-      icon_url: {{slack-icon-url}}
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
 
 - name: common-releases-staging
   serial: true
@@ -307,23 +305,23 @@ jobs:
       params:
         BOSH_CA_CERT: certificate/master-bosh.crt
         BOSH_CLIENT: ci
-        BOSH_CLIENT_SECRET: {{staging_bosh_uaa_ci_client_secret}}
-        BOSH_ENVIRONMENT: {{stagingbosh-target}}
+        BOSH_CLIENT_SECRET: ((staging_bosh_uaa_ci_client_secret))
+        BOSH_ENVIRONMENT: ((stagingbosh-target))
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config.yml
     params:
       RUNTIME_OVERRIDES: bosh-config/runtime-config/volume-driver.yml
       BOSH_CA_CERT: certificate/master-bosh.crt
-      BOSH_ENVIRONMENT: {{stagingbosh-target}}
+      BOSH_ENVIRONMENT: ((stagingbosh-target))
       BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: {{staging_bosh_uaa_ci_client_secret}}
-      TRIPWIRE_LOCALPASS: {{tripwire-localpass-staging}}
-      TRIPWIRE_SITEPASS: {{tripwire-sitepass-staging}}
-      AWS_REGION: {{aws-region-staging}}
-      NESSUS_AGENT_KEY: {{nessus-agent-key-staging}}
-      NESSUS_AGENT_SERVER: {{nessus-agent-server-staging}}
-      NESSUS_AGENT_PORT: {{nessus-agent-port-staging}}
-      NESSUS_AGENT_GROUP: {{nessus-agent-group-staging}}
+      BOSH_CLIENT_SECRET: ((staging_bosh_uaa_ci_client_secret))
+      TRIPWIRE_LOCALPASS: ((tripwire-localpass-staging))
+      TRIPWIRE_SITEPASS: ((tripwire-sitepass-staging))
+      AWS_REGION: ((aws-region))
+      NESSUS_AGENT_KEY: ((nessus-agent-key-staging))
+      NESSUS_AGENT_SERVER: ((nessus-agent-server-staging))
+      NESSUS_AGENT_PORT: ((nessus-agent-port-staging))
+      NESSUS_AGENT_GROUP: ((nessus-agent-group-staging))
       ENVIRONMENT: staging
 
 - name: deploy-production-bosh
@@ -383,27 +381,27 @@ jobs:
     params:
       MANIFEST_PATH: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/production.yml"
       BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
-      BOSH_ENVIRONMENT: {{productionbosh-target}}
+      BOSH_ENVIRONMENT: ((productionbosh-target))
       BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: {{production_bosh_uaa_ci_client_secret}}
+      BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
   on_failure:
     put: slack
     params:
       text: |
         :x: FAILED to deploy production BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: {{slack-channel}}
-      username: {{slack-username}}
-      icon_url: {{slack-icon-url}}
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
   on_success:
     put: slack
     params:
       text: |
         :white_check_mark: Successfully deployed production BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: {{slack-channel}}
-      username: {{slack-username}}
-      icon_url: {{slack-icon-url}}
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
 
 - name: common-releases-production
   serial: true
@@ -444,23 +442,23 @@ jobs:
       params:
         BOSH_CA_CERT: certificate/master-bosh.crt
         BOSH_CLIENT: ci
-        BOSH_CLIENT_SECRET: {{production_bosh_uaa_ci_client_secret}}
-        BOSH_ENVIRONMENT: {{productionbosh-target}}
+        BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
+        BOSH_ENVIRONMENT: ((productionbosh-target))
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config.yml
     params:
       RUNTIME_OVERRIDES: bosh-config/runtime-config/volume-driver.yml
       BOSH_CA_CERT: certificate/master-bosh.crt
-      BOSH_ENVIRONMENT: {{productionbosh-target}}
+      BOSH_ENVIRONMENT: ((productionbosh-target))
       BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: {{production_bosh_uaa_ci_client_secret}}
-      TRIPWIRE_LOCALPASS: {{tripwire-localpass-production}}
-      TRIPWIRE_SITEPASS: {{tripwire-sitepass-production}}
-      AWS_REGION: {{aws-region-production}}
-      NESSUS_AGENT_KEY: {{nessus-agent-key-production}}
-      NESSUS_AGENT_SERVER: {{nessus-agent-server-production}}
-      NESSUS_AGENT_PORT: {{nessus-agent-port-production}}
-      NESSUS_AGENT_GROUP: {{nessus-agent-group-production}}
+      BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
+      TRIPWIRE_LOCALPASS: ((tripwire-localpass-production))
+      TRIPWIRE_SITEPASS: ((tripwire-sitepass-production))
+      AWS_REGION: ((aws-region))
+      NESSUS_AGENT_KEY: ((nessus-agent-key-production))
+      NESSUS_AGENT_SERVER: ((nessus-agent-server-production))
+      NESSUS_AGENT_PORT: ((nessus-agent-port-production))
+      NESSUS_AGENT_GROUP: ((nessus-agent-group-production))
       ENVIRONMENT: production
 
 - name: deploy-tooling-bosh
@@ -518,33 +516,32 @@ jobs:
       - cpi-release/*.tgz
       stemcells:
       - bosh-stemcell/*.tgz
-      cert: master-bosh-root-cert/master-bosh.crt
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config-tooling.yml
     params:
       MANIFEST_PATH: "bosh-config/cloud-config/tooling.yml"
       BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
-      BOSH_ENVIRONMENT: {{toolingbosh-target}}
+      BOSH_ENVIRONMENT: ((toolingbosh-target))
       BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: {{tooling_bosh_uaa_ci_client_secret}}
+      BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
   on_failure:
     put: slack
     params:
       text: |
         :x: FAILED to deploy Tooling BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: {{slack-channel}}
-      username: {{slack-username}}
-      icon_url: {{slack-icon-url}}
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
   on_success:
     put: slack
     params:
       text: |
         :white_check_mark: Successfully deployed Tooling BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: {{slack-channel}}
-      username: {{slack-username}}
-      icon_url: {{slack-icon-url}}
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
 
 - name: uaa-smoke-tests
   plan:
@@ -557,16 +554,16 @@ jobs:
   - task: smoke-tests
     file: pipeline-tasks/uaa-smoke-tests.yml
     params:
-      BASE_URL: {{uaa-url-opslogin}}
+      BASE_URL: ((uaa-url-opslogin))
   on_failure:
     put: slack
     params:
       text: |
         :x: UAA Smoke Tests for opslogin FAILED
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: {{slack-channel}}
-      username: {{slack-username}}
-      icon_url: {{slack-icon-url}}
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
 
 - name: common-releases-tooling
   serial: true
@@ -617,24 +614,24 @@ jobs:
       params:
         BOSH_CA_CERT: certificate/master-bosh.crt
         BOSH_CLIENT: ci
-        BOSH_CLIENT_SECRET: {{tooling_bosh_uaa_ci_client_secret}}
-        BOSH_ENVIRONMENT: {{toolingbosh-target}}
+        BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
+        BOSH_ENVIRONMENT: ((toolingbosh-target))
   - put: semver-tooling-version
     params: {bump: patch}
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config-tooling.yml
     params:
       BOSH_CA_CERT: certificate/master-bosh.crt
-      BOSH_ENVIRONMENT: {{toolingbosh-target}}
+      BOSH_ENVIRONMENT: ((toolingbosh-target))
       BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: {{tooling_bosh_uaa_ci_client_secret}}
-      TRIPWIRE_LOCALPASS: {{tripwire-localpass-tooling}}
-      TRIPWIRE_SITEPASS: {{tripwire-sitepass-tooling}}
-      AWS_REGION: {{aws-region-tooling}}
-      NESSUS_AGENT_KEY: {{nessus-agent-key-tooling}}
-      NESSUS_AGENT_SERVER: {{nessus-agent-server-tooling}}
-      NESSUS_AGENT_PORT: {{nessus-agent-port-tooling}}
-      NESSUS_AGENT_GROUP: {{nessus-agent-group-tooling}}
+      BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
+      TRIPWIRE_LOCALPASS: ((tripwire-localpass-tooling))
+      TRIPWIRE_SITEPASS: ((tripwire-sitepass-tooling))
+      AWS_REGION: ((aws-region))
+      NESSUS_AGENT_KEY: ((nessus-agent-key-tooling))
+      NESSUS_AGENT_SERVER: ((nessus-agent-server-tooling))
+      NESSUS_AGENT_PORT: ((nessus-agent-port-tooling))
+      NESSUS_AGENT_GROUP: ((nessus-agent-group-tooling))
 
 - name: common-releases-master
   serial: true
@@ -685,34 +682,31 @@ jobs:
       params:
         BOSH_CA_CERT: certificate/master-bosh.crt
         BOSH_CLIENT: admin
-        BOSH_CLIENT_SECRET: {{master_bosh_admin_password}}
-        BOSH_ENVIRONMENT: {{masterbosh-target}}
+        BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
+        BOSH_ENVIRONMENT: ((masterbosh-target))
   - put: semver-master-version
     params: {bump: patch}
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config-tooling.yml
     params:
       BOSH_CA_CERT: certificate/master-bosh.crt
-      BOSH_ENVIRONMENT: {{masterbosh-target}}
+      BOSH_ENVIRONMENT: ((masterbosh-target))
       BOSH_CLIENT: admin
-      BOSH_CLIENT_SECRET: {{master_bosh_admin_password}}
-      TRIPWIRE_LOCALPASS: {{tripwire-localpass-master}}
-      TRIPWIRE_SITEPASS: {{tripwire-sitepass-master}}
-      AWS_REGION: {{aws-region-master}}
-      NESSUS_AGENT_KEY: {{nessus-agent-key-master}}
-      NESSUS_AGENT_SERVER: {{nessus-agent-server-master}}
-      NESSUS_AGENT_PORT: {{nessus-agent-port-master}}
-      NESSUS_AGENT_GROUP: {{nessus-agent-group-master}}
+      BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
+      TRIPWIRE_LOCALPASS: ((tripwire-localpass-master))
+      TRIPWIRE_SITEPASS: ((tripwire-sitepass-master))
+      AWS_REGION: ((aws-region))
+      NESSUS_AGENT_KEY: ((nessus-agent-key-master))
+      NESSUS_AGENT_SERVER: ((nessus-agent-server-master))
+      NESSUS_AGENT_PORT: ((nessus-agent-port-master))
+      NESSUS_AGENT_GROUP: ((nessus-agent-group-master))
 
 - name: deploy-master-bosh
   serial: true
   plan:
   - aggregate:
-    - get: pipeline-tasks
     - get: bosh-config
       resource: bosh-create-env-config
-      trigger: true
-    - get: common-masterbosh
       trigger: true
     - get: secrets-common
     - get: secrets
@@ -732,164 +726,147 @@ jobs:
     - get: bosh-state
       resource: masterbosh-state
     - get: master-bosh-root-cert
-  - task: decrypt-private-key
-    file: pipeline-tasks/decrypt.yml
-    input_mapping:
-      encrypt: common-masterbosh
-    params:
-      INPUT_FILE: encrypt/boshCA.crt
-      OUTPUT_FILE: decrypt/master-bosh.pem
-      PASSPHRASE: {{masterbosh-secrets-passphrase}}
   - task: bosh-create-env
-    tags:
-    - iaas
     file: bosh-config/bosh-create-env.yml
-  - put: masterbosh-state
-    params:
-      file: updated-bosh-state/*.json
+    tags: [iaas]
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
       MANIFEST_PATH: "bosh-config/cloud-config/master.yml"
       BOSH_CA_CERT: master-bosh-root-cert/master-bosh.crt
-      BOSH_ENVIRONMENT: {{masterbosh-target}}
+      BOSH_ENVIRONMENT: ((masterbosh-target))
       BOSH_CLIENT: admin
-      BOSH_CLIENT_SECRET: {{master_bosh_admin_password}}
+      BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
+  ensure:
+    put: masterbosh-state
+    params:
+      file: updated-bosh-state/*.json
   on_failure:
     put: slack
     params:
       text: |
         :x: FAILED to deploy Master BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: {{slack-channel}}
-      username: {{slack-username}}
-      icon_url: {{slack-icon-url}}
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
   on_success:
     put: slack
     params:
       text: |
         :white_check_mark: Successfully deployed Master BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: {{slack-channel}}
-      username: {{slack-username}}
-      icon_url: {{slack-icon-url}}
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
 
 resources:
 - name: master-bosh-root-cert
   type: s3-iam
   source:
-    bucket: {{production-bucket-name}}
-    region_name: {{aws-region}}
+    bucket: ((production-bucket-name))
+    region_name: ((aws-region))
     versioned_file: master-bosh.crt
 
 - name: common-tooling
   type: cg-common
   source:
-    bucket_name: {{production-bucket-name}}
-    region: {{aws-region}}
+    bucket_name: ((production-bucket-name))
+    region: ((aws-region))
     secrets_files:
     - tooling-bosh-main.yml
     - tooling-bosh-external.yml
-    secrets_passphrase: {{tooling-secrets-passphrase}}
+    secrets_passphrase: ((tooling-secrets-passphrase))
     bosh_cert: bosh-tooling.pem
 
 - name: common-development
   type: cg-common
   source:
-    bucket_name: {{production-bucket-name}}
-    region: {{aws-region}}
+    bucket_name: ((production-bucket-name))
+    region: ((aws-region))
     secrets_files:
     - development-bosh-main.yml
     - development-bosh-external.yml
-    secrets_passphrase: {{development-secrets-passphrase}}
+    secrets_passphrase: ((development-secrets-passphrase))
     bosh_cert: bosh-tooling.pem
 
 - name: secrets-common
   type: cg-common
   source:
-    bucket_name: {{common-bucket-name}}
-    region: {{aws-region}}
-    secrets_file: {{common-secrets-file}}
-    secrets_passphrase: {{common_secrets_secrets_passphrase}}
+    bucket_name: ((common-bucket-name))
+    region: ((aws-region))
+    secrets_file: ((common-secrets-file))
+    secrets_passphrase: ((common_secrets_secrets_passphrase))
 
 - name: secrets-master
   type: cg-common
   source:
-    bucket_name: {{master-bucket-name}}
-    region: {{aws-region}}
-    secrets_file: {{master-secrets-file}}
-    secrets_passphrase: {{master_secrets_secrets_passphrase}}
+    bucket_name: ((master-bucket-name))
+    region: ((aws-region))
+    secrets_file: ((master-secrets-file))
+    secrets_passphrase: ((master_secrets_secrets_passphrase))
 
 - name: secrets-tooling
   type: cg-common
   source:
-    bucket_name: {{tooling-bucket-name}}
-    region: {{aws-region}}
-    secrets_file: {{tooling-secrets-file}}
-    secrets_passphrase: {{tooling_secrets_secrets_passphrase}}
+    bucket_name: ((tooling-bucket-name))
+    region: ((aws-region))
+    secrets_file: ((tooling-secrets-file))
+    secrets_passphrase: ((tooling_secrets_secrets_passphrase))
 
 - name: secrets-development
   type: cg-common
   source:
-    bucket_name: {{development-bucket-name}}
-    region: {{aws-region}}
-    secrets_file: {{development-secrets-file}}
-    secrets_passphrase: {{development_secrets_secrets_passphrase}}
+    bucket_name: ((development-bucket-name))
+    region: ((aws-region))
+    secrets_file: ((development-secrets-file))
+    secrets_passphrase: ((development_secrets_secrets_passphrase))
 
 - name: secrets-staging
   type: cg-common
   source:
-    bucket_name: {{staging-bucket-name}}
-    region: {{aws-region}}
-    secrets_file: {{staging-secrets-file}}
-    secrets_passphrase: {{staging_secrets_secrets_passphrase}}
+    bucket_name: ((staging-bucket-name))
+    region: ((aws-region))
+    secrets_file: ((staging-secrets-file))
+    secrets_passphrase: ((staging_secrets_secrets_passphrase))
 
 - name: secrets-production
   type: cg-common
   source:
-    bucket_name: {{production-bucket-name}}
-    region: {{aws-region}}
-    secrets_file: {{production-secrets-file}}
-    secrets_passphrase: {{production_secrets_secrets_passphrase}}
+    bucket_name: ((production-bucket-name))
+    region: ((aws-region))
+    secrets_file: ((production-secrets-file))
+    secrets_passphrase: ((production_secrets_secrets_passphrase))
 
 - name: common-staging
   type: cg-common
   source:
-    bucket_name: {{production-bucket-name}}
-    region: {{aws-region}}
+    bucket_name: ((production-bucket-name))
+    region: ((aws-region))
     secrets_files:
     - staging-bosh-main.yml
     - staging-bosh-external.yml
-    secrets_passphrase: {{staging-secrets-passphrase}}
+    secrets_passphrase: ((staging-secrets-passphrase))
     bosh_cert: bosh-tooling.pem
 
 - name: common-production
   type: cg-common
   source:
-    bucket_name: {{production-bucket-name}}
-    region: {{aws-region}}
+    bucket_name: ((production-bucket-name))
+    region: ((aws-region))
     secrets_files:
     - production-bosh-main.yml
     - production-bosh-external.yml
-    secrets_passphrase: {{prod-secrets-passphrase}}
+    secrets_passphrase: ((prod-secrets-passphrase))
     bosh_cert: bosh-tooling.pem
 
 - name: masterbosh-state
   type: s3-iam
   source:
-    bucket: cloud-gov-varz
+    bucket: ((master-bucket-name))
     region_name: us-gov-west-1
     versioned_file: master-bosh-state.json
     server_side_encryption: AES256
-
-- name: common-masterbosh
-  type: cg-common
-  source:
-    bucket_name: {{production-bucket-name}}
-    region: {{aws-region}}
-    secrets_file: master-bosh.yml
-    secrets_passphrase: {{masterbosh-secrets-passphrase}}
-    bosh_cert: master-bosh.pem
 
 - name: bosh-release
   type: bosh-io-release
@@ -929,20 +906,20 @@ resources:
 - name: bosh-config
   type: git
   source:
-    uri: {{bosh-config-git-url}}
-    branch: {{bosh-config-git-branch}}
+    uri: ((bosh-config-git-url))
+    branch: ((bosh-config-git-branch))
 
 - name: bosh-config-development
   type: git
   source:
-    uri: {{bosh-config-development-git-url}}
-    branch: {{bosh-config-development-git-branch}}
+    uri: ((bosh-config-development-git-url))
+    branch: ((bosh-config-development-git-branch))
 
 - name: bosh-create-env-config
   type: git
   source:
-    uri: {{bosh-config-git-url}}
-    branch: {{bosh-config-git-branch}}
+    uri: ((bosh-config-git-url))
+    branch: ((bosh-config-git-branch))
     paths:
     - bosh-create-env*
     - cloud-config/*
@@ -955,49 +932,49 @@ resources:
 - name: toolingbosh-deployment
   type: bosh-deployment
   source:
-    target: {{masterbosh-target}}
+    target: ((masterbosh-target))
     client: admin
-    client_secret: {{master_bosh_admin_password}}
-    ca_cert: {{common_ca_cert}}
+    client_secret: ((master_bosh_admin_password))
+    ca_cert: ((common_ca_cert))
     deployment: toolingbosh
 
 - name: developmentbosh-deployment
   type: bosh-deployment
   source:
-    target: {{toolingbosh-target}}
+    target: ((toolingbosh-target))
     client: ci
-    client_secret: {{tooling_bosh_uaa_ci_client_secret}}
-    ca_cert: {{common_ca_cert}}
+    client_secret: ((tooling_bosh_uaa_ci_client_secret))
+    ca_cert: ((common_ca_cert))
     deployment: developmentbosh
 
 - name: stagingbosh-deployment
   type: bosh-deployment
   source:
-    target: {{toolingbosh-target}}
+    target: ((toolingbosh-target))
     client: ci
-    client_secret: {{tooling_bosh_uaa_ci_client_secret}}
-    ca_cert: {{common_ca_cert}}
+    client_secret: ((tooling_bosh_uaa_ci_client_secret))
+    ca_cert: ((common_ca_cert))
     deployment: stagingbosh
 
 - name: productionbosh-deployment
   type: bosh-deployment
   source:
-    target: {{toolingbosh-target}}
+    target: ((toolingbosh-target))
     client: ci
-    client_secret: {{tooling_bosh_uaa_ci_client_secret}}
-    ca_cert: {{common_ca_cert}}
+    client_secret: ((tooling_bosh_uaa_ci_client_secret))
+    ca_cert: ((common_ca_cert))
     deployment: productionbosh
 
 - name: pipeline-tasks
   type: git
   source:
-    uri: {{pipeline-tasks-git-url}}
-    branch: {{pipeline-tasks-git-branch}}
+    uri: ((pipeline-tasks-git-url))
+    branch: ((pipeline-tasks-git-branch))
 
 - name: slack
   type: slack-notification
   source:
-    url: {{slack-webhook-url}}
+    url: ((slack-webhook-url))
 
 - name: cg-s3-fisma-release
   type: s3-iam
@@ -1056,51 +1033,51 @@ resources:
   source:
     owner: bosh-prometheus
     repository: node-exporter-boshrelease
-    access_token: {{github-release-access-token}}  # Note: Use any personal access token with no scopes
+    access_token: ((github-release-access-token))  # Note: Use any personal access token with no scopes
 
 - name: semver-master-version
   type: semver-iam
   source:
     driver: s3
-    bucket: {{semver-bucket}}
-    key: {{semver-master-key}}
-    region_name: {{aws-region}}
+    bucket: ((semver-bucket))
+    key: ((semver-master-key))
+    region_name: ((aws-region))
 
 - name: semver-tooling-version
   type: semver-iam
   source:
     driver: s3
-    bucket: {{semver-bucket}}
-    key: {{semver-tooling-key}}
-    region_name: {{aws-region}}
+    bucket: ((semver-bucket))
+    key: ((semver-tooling-key))
+    region_name: ((aws-region))
 
 - name: terraform-yaml-tooling
   type: s3-iam
   source:
-    bucket: {{tf-state-bucket-tooling}}
-    versioned_file: {{tf-state-file-tooling}}
-    region_name: {{aws-region}}
+    bucket: ((tf-state-bucket-tooling))
+    versioned_file: ((tf-state-file-tooling))
+    region_name: ((aws-region))
 
 - name: terraform-yaml-development
   type: s3-iam
   source:
-    bucket: {{tf-state-bucket-development}}
-    versioned_file: {{tf-state-file-development}}
-    region_name: {{aws-region}}
+    bucket: ((tf-state-bucket-development))
+    versioned_file: ((tf-state-file-development))
+    region_name: ((aws-region))
 
 - name: terraform-yaml-staging
   type: s3-iam
   source:
-    bucket: {{tf-state-bucket-staging}}
-    versioned_file: {{tf-state-file-staging}}
-    region_name: {{aws-region}}
+    bucket: ((tf-state-bucket-staging))
+    versioned_file: ((tf-state-file-staging))
+    region_name: ((aws-region))
 
 - name: terraform-yaml-production
   type: s3-iam
   source:
-    bucket: {{tf-state-bucket-production}}
-    versioned_file: {{tf-state-file-production}}
-    region_name: {{aws-region}}
+    bucket: ((tf-state-bucket-production))
+    versioned_file: ((tf-state-file-production))
+    region_name: ((aws-region))
 
 resource_types:
 - name: cg-common
@@ -1129,6 +1106,6 @@ resource_types:
     repository: governmentpaas/semver-resource
 
 s3-release-params: &s3-release-params
-  bucket: {{s3-bosh-releases-bucket}}
-  region_name: {{aws-region}}
+  bucket: ((s3-bosh-releases-bucket))
+  region_name: ((aws-region))
   private: true
