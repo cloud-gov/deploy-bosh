@@ -117,6 +117,11 @@ instance_groups:
   - name: director
     release: bosh
     properties:
+      # Just for laffs
+      agent:
+        env:
+          bosh:
+            password: (( grab secrets.bosh_vcap_password ))
       director:
         address: 127.0.0.1
         name: master-bosh
