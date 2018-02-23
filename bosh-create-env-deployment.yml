@@ -66,7 +66,7 @@ instance_groups:
         allow_legacy_agents: false
         address: 127.0.0.1
         tls:
-          ca: (( grab secrets.ca_cert ))
+          ca: (( grab secrets.ca_cert_store ))
           client_ca:
             certificate: (( grab secrets.ca_cert ))
             private_key: (( grab secrets.ca_key ))

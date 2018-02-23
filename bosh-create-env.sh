@@ -28,10 +28,7 @@ spruce merge \
   terraform-yaml/state.yml \
 > manifest.yml
 
-bosh interpolate secrets-common/secrets.yml --path /secrets/ca_key > ./ca-concat.key
-csplit -f ca-split ca-concat.key '/-----BEGIN RSA PRIVATE KEY-----/' '{*}'
-private_key=$(ls ca-split* | tail -n 1)
-cat "${private_key}" > ./ca.key
+bosh interpolate secrets-common/secrets.yml --path /secrets/ca_key > ./ca.key
 
 # and deploy it!
 set +e
