@@ -16,6 +16,21 @@ development-secrets-file: secrets-development.yml
 staging-secrets-file: secrets-staging.yml
 production-secrets-file: secrets-production.yml
 
+semver-master-key: common-releases-master-version
+semver-tooling-key: common-releases-tooling-version
+
+nessus-agent-group-development: cf-development
+nessus-agent-group-master: masterbosh
+nessus-agent-group-production: cf-production
+nessus-agent-group-staging: cf-staging
+nessus-agent-group-tooling: cf-tooling
+
+nessus-agent-port-development: 8834
+nessus-agent-port-master: 8834
+nessus-agent-port-production: 8834
+nessus-agent-port-staging: 8834
+nessus-agent-port-tooling: 8834
+
 slack-channel: "#cg-platform"
 slack-icon-url: https://avatars1.githubusercontent.com/u/7809479?v=3&s=40
 slack-username: concourse
