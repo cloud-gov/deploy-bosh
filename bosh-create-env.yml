@@ -15,7 +15,7 @@ inputs:
 - name: terraform-yaml
 - name: bosh-config
 - name: bosh-state
-- name: master-bosh-root-cert
+- name: ca-cert-store
 
 outputs:
 - name: updated-bosh-state

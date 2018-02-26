@@ -7,7 +7,7 @@ image_resource:
 
 inputs:
 - {name: bosh-config}
-- {name: master-bosh-root-cert}
+- {name: ca-cert-store}
 - {name: terraform-yaml}
 - {name: terraform-yaml-development}
 - {name: terraform-yaml-staging}
