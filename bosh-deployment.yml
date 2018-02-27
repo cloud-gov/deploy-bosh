@@ -138,7 +138,7 @@ instance_groups:
         #allow_legacy_agents: false # this should be uncommented once all deployments are updated to use mtls
         password: (( grab secrets.bosh_nats_password ))
         tls:
-          ca: (( grab secrets.ca_cert_store ))
+          ca: (( grab secrets.ca_cert ))
           client_ca:
             certificate: (( grab secrets.ca_cert ))
             private_key: (( grab secrets.ca_key ))
@@ -206,7 +206,7 @@ instance_groups:
         director_account:
           user: admin
           password: (( grab secrets.bosh_admin_password ))
-          ca_cert: (( grab secrets.ca_cert_store ))
+          ca_cert: (( grab secrets.ca_cert ))
           client_id: hm
           client_secret: (( grab secrets.bosh_uaa_hm_client_secret ))
         resurrector_enabled: true
