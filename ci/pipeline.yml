@@ -50,6 +50,7 @@ jobs:
         - |
           bosh-config/generate.sh \
             bosh-config/bosh-development.yml \
+            bosh-config/bosh-meta-production.yml \
             terraform-yaml/state.yml \
             common/decrypted-development-bosh-main.yml \
             common/decrypted-development-bosh-external.yml \
@@ -223,6 +224,7 @@ jobs:
         - |
           bosh-config/generate.sh \
             bosh-config/bosh-staging.yml \
+            bosh-config/bosh-meta-production.yml \
             terraform-yaml/state.yml \
             common/decrypted-staging-bosh-main.yml \
             common/decrypted-staging-bosh-external.yml \
@@ -367,6 +369,7 @@ jobs:
         - |
           bosh-config/generate.sh \
             bosh-config/bosh-production.yml \
+            bosh-config/bosh-meta-production.yml \
             terraform-yaml/state.yml \
             common/decrypted-production-bosh-main.yml \
             common/decrypted-production-bosh-external.yml \
@@ -498,6 +501,7 @@ jobs:
           bosh-config/generate.sh \
             bosh-config/bosh-tooling.yml \
             bosh-config/bosh-tooling-uaa.yml \
+            bosh-config/bosh-meta-production.yml \
             terraform-yaml/state.yml \
             common/decrypted-tooling-bosh-main.yml \
             common/decrypted-tooling-bosh-external.yml \
