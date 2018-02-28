@@ -240,7 +240,7 @@ jobs:
       stemcells:
       - bosh-stemcell/*.tgz
   - task: update-cloud-config
-    file: bosh-config/ci/update-cloud-config-tooling.yml
+    file: bosh-config/ci/update-cloud-config-tooling-development.yml
     params:
       MANIFEST_PATH: "bosh-config/cloud-config/tooling.yml"
       BOSH_CA_CERT: ca-cert-store/ca-cert-store.crt
