@@ -6,7 +6,6 @@ meta:
   uaa_static_ips: (( join " " terraform_outputs.bosh_uaa_static_ips ))
 
 name: (( param "specify deployment name" ))
-director_uuid: (( param "specify bosh director" ))
 
 releases:
 - {name: bosh, version: latest}

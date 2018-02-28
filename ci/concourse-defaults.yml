@@ -25,11 +25,7 @@ nessus-agent-group-production: cf-production
 nessus-agent-group-staging: cf-staging
 nessus-agent-group-tooling: cf-tooling
 
-nessus-agent-port-development: 8834
-nessus-agent-port-master: 8834
-nessus-agent-port-production: 8834
-nessus-agent-port-staging: 8834
-nessus-agent-port-tooling: 8834
+nessus-agent-port: 8834
 
 slack-channel: "#cg-platform"
 slack-icon-url: https://avatars1.githubusercontent.com/u/7809479?v=3&s=40

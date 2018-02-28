@@ -178,12 +178,12 @@ jobs:
       BOSH_ENVIRONMENT: ((developmentbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
-      TRIPWIRE_LOCALPASS: ((tripwire-localpass-development))
-      TRIPWIRE_SITEPASS: ((tripwire-sitepass-development))
+      TRIPWIRE_LOCALPASS: ((tripwire-localpass))
+      TRIPWIRE_SITEPASS: ((tripwire-sitepass))
       AWS_REGION: ((aws-region))
-      NESSUS_AGENT_KEY: ((nessus-agent-key-development))
-      NESSUS_AGENT_SERVER: ((nessus-agent-server-development))
-      NESSUS_AGENT_PORT: ((nessus-agent-port-development))
+      NESSUS_AGENT_KEY: ((nessus-agent-key))
+      NESSUS_AGENT_SERVER: ((nessus-agent-server))
+      NESSUS_AGENT_PORT: ((nessus-agent-port))
       NESSUS_AGENT_GROUP: ((nessus-agent-group-development))
       ENVIRONMENT: development
 
@@ -317,12 +317,12 @@ jobs:
       BOSH_ENVIRONMENT: ((stagingbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((staging_bosh_uaa_ci_client_secret))
-      TRIPWIRE_LOCALPASS: ((tripwire-localpass-staging))
-      TRIPWIRE_SITEPASS: ((tripwire-sitepass-staging))
+      TRIPWIRE_LOCALPASS: ((tripwire-localpass))
+      TRIPWIRE_SITEPASS: ((tripwire-sitepass))
       AWS_REGION: ((aws-region))
-      NESSUS_AGENT_KEY: ((nessus-agent-key-staging))
-      NESSUS_AGENT_SERVER: ((nessus-agent-server-staging))
-      NESSUS_AGENT_PORT: ((nessus-agent-port-staging))
+      NESSUS_AGENT_KEY: ((nessus-agent-key))
+      NESSUS_AGENT_SERVER: ((nessus-agent-server))
+      NESSUS_AGENT_PORT: ((nessus-agent-port))
       NESSUS_AGENT_GROUP: ((nessus-agent-group-staging))
       ENVIRONMENT: staging
 
@@ -455,12 +455,12 @@ jobs:
       BOSH_ENVIRONMENT: ((productionbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
-      TRIPWIRE_LOCALPASS: ((tripwire-localpass-production))
-      TRIPWIRE_SITEPASS: ((tripwire-sitepass-production))
+      TRIPWIRE_LOCALPASS: ((tripwire-localpass))
+      TRIPWIRE_SITEPASS: ((tripwire-sitepass))
       AWS_REGION: ((aws-region))
-      NESSUS_AGENT_KEY: ((nessus-agent-key-production))
-      NESSUS_AGENT_SERVER: ((nessus-agent-server-production))
-      NESSUS_AGENT_PORT: ((nessus-agent-port-production))
+      NESSUS_AGENT_KEY: ((nessus-agent-key))
+      NESSUS_AGENT_SERVER: ((nessus-agent-server))
+      NESSUS_AGENT_PORT: ((nessus-agent-port))
       NESSUS_AGENT_GROUP: ((nessus-agent-group-production))
       ENVIRONMENT: production
 
@@ -629,12 +629,12 @@ jobs:
       BOSH_ENVIRONMENT: ((toolingbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
-      TRIPWIRE_LOCALPASS: ((tripwire-localpass-tooling))
-      TRIPWIRE_SITEPASS: ((tripwire-sitepass-tooling))
+      TRIPWIRE_LOCALPASS: ((tripwire-localpass))
+      TRIPWIRE_SITEPASS: ((tripwire-sitepass))
       AWS_REGION: ((aws-region))
-      NESSUS_AGENT_KEY: ((nessus-agent-key-tooling))
-      NESSUS_AGENT_SERVER: ((nessus-agent-server-tooling))
-      NESSUS_AGENT_PORT: ((nessus-agent-port-tooling))
+      NESSUS_AGENT_KEY: ((nessus-agent-key))
+      NESSUS_AGENT_SERVER: ((nessus-agent-server))
+      NESSUS_AGENT_PORT: ((nessus-agent-port))
       NESSUS_AGENT_GROUP: ((nessus-agent-group-tooling))
 
 - name: common-releases-master
@@ -697,12 +697,12 @@ jobs:
       BOSH_ENVIRONMENT: ((masterbosh-target))
       BOSH_CLIENT: admin
       BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
-      TRIPWIRE_LOCALPASS: ((tripwire-localpass-master))
-      TRIPWIRE_SITEPASS: ((tripwire-sitepass-master))
+      TRIPWIRE_LOCALPASS: ((tripwire-localpass))
+      TRIPWIRE_SITEPASS: ((tripwire-sitepass))
       AWS_REGION: ((aws-region))
-      NESSUS_AGENT_KEY: ((nessus-agent-key-master))
-      NESSUS_AGENT_SERVER: ((nessus-agent-server-master))
-      NESSUS_AGENT_PORT: ((nessus-agent-port-master))
+      NESSUS_AGENT_KEY: ((nessus-agent-key))
+      NESSUS_AGENT_SERVER: ((nessus-agent-server))
+      NESSUS_AGENT_PORT: ((nessus-agent-port))
       NESSUS_AGENT_GROUP: ((nessus-agent-group-master))
 
 - name: deploy-master-bosh
