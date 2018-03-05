@@ -1,3 +1,7 @@
+bosh_release_bucket: cloud-gov-bosh-releases
+release_blobstore_bucket: cloud-gov-release-blobstore
+aws_region: us-gov-west-1
+
 releases:
 - name: fisma
   uri: https://github.com/18F/cg-harden-boshrelease
