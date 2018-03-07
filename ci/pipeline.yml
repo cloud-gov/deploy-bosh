@@ -768,36 +768,34 @@ resources:
 - name: ca-cert-store
   type: s3-iam
   source:
-    bucket: ((production-bucket-name))
+    bucket: ((secrets-bucket))
     region_name: ((aws-region))
     versioned_file: ca-cert-store.crt
 
 - name: common-tooling
   type: cg-common
   source:
-    bucket_name: ((production-bucket-name))
+    bucket_name: ((secrets-bucket))
     region: ((aws-region))
     secrets_files:
     - tooling-bosh-main.yml
     - tooling-bosh-external.yml
     secrets_passphrase: ((tooling-secrets-passphrase))
-    bosh_cert: bosh-tooling.pem
 
 - name: common-development
   type: cg-common
   source:
-    bucket_name: ((production-bucket-name))
+    bucket_name: ((secrets-bucket))
     region: ((aws-region))
     secrets_files:
     - development-bosh-main.yml
     - development-bosh-external.yml
     secrets_passphrase: ((development-secrets-passphrase))
-    bosh_cert: bosh-tooling.pem
 
 - name: secrets-common
   type: cg-common
   source:
-    bucket_name: ((common-bucket-name))
+    bucket_name: ((secrets-bucket))
     region: ((aws-region))
     secrets_file: ((common-secrets-file))
     secrets_passphrase: ((common_secrets_secrets_passphrase))
@@ -805,7 +803,7 @@ resources:
 - name: secrets-master
   type: cg-common
   source:
-    bucket_name: ((master-bucket-name))
+    bucket_name: ((secrets-bucket))
     region: ((aws-region))
     secrets_file: ((master-secrets-file))
     secrets_passphrase: ((master_secrets_secrets_passphrase))
@@ -813,7 +811,7 @@ resources:
 - name: secrets-tooling
   type: cg-common
   source:
-    bucket_name: ((tooling-bucket-name))
+    bucket_name: ((secrets-bucket))
     region: ((aws-region))
     secrets_file: ((tooling-secrets-file))
     secrets_passphrase: ((tooling_secrets_secrets_passphrase))
@@ -821,7 +819,7 @@ resources:
 - name: secrets-development
   type: cg-common
   source:
-    bucket_name: ((development-bucket-name))
+    bucket_name: ((secrets-bucket))
     region: ((aws-region))
     secrets_file: ((development-secrets-file))
     secrets_passphrase: ((development_secrets_secrets_passphrase))
@@ -829,7 +827,7 @@ resources:
 - name: secrets-staging
   type: cg-common
   source:
-    bucket_name: ((staging-bucket-name))
+    bucket_name: ((secrets-bucket))
     region: ((aws-region))
     secrets_file: ((staging-secrets-file))
     secrets_passphrase: ((staging_secrets_secrets_passphrase))
@@ -837,7 +835,7 @@ resources:
 - name: secrets-production
   type: cg-common
   source:
-    bucket_name: ((production-bucket-name))
+    bucket_name: ((secrets-bucket))
     region: ((aws-region))
     secrets_file: ((production-secrets-file))
     secrets_passphrase: ((production_secrets_secrets_passphrase))
@@ -845,30 +843,28 @@ resources:
 - name: common-staging
   type: cg-common
   source:
-    bucket_name: ((production-bucket-name))
+    bucket_name: ((secrets-bucket))
     region: ((aws-region))
     secrets_files:
     - staging-bosh-main.yml
     - staging-bosh-external.yml
     secrets_passphrase: ((staging-secrets-passphrase))
-    bosh_cert: bosh-tooling.pem
 
 - name: common-production
   type: cg-common
   source:
-    bucket_name: ((production-bucket-name))
+    bucket_name: ((secrets-bucket))
     region: ((aws-region))
     secrets_files:
     - production-bosh-main.yml
     - production-bosh-external.yml
     secrets_passphrase: ((prod-secrets-passphrase))
-    bosh_cert: bosh-tooling.pem
 
 - name: masterbosh-state
   type: s3-iam
   source:
-    bucket: ((master-bucket-name))
-    region_name: us-gov-west-1
+    bucket: ((secrets-bucket))
+    region_name: ((aws-region))
     versioned_file: master-bosh-state.json
     server_side_encryption: AES256
 
@@ -1058,28 +1054,28 @@ resources:
 - name: terraform-yaml-tooling
   type: s3-iam
   source:
-    bucket: ((tf-state-bucket-tooling))
+    bucket: ((tf-state-bucket))
     versioned_file: ((tf-state-file-tooling))
     region_name: ((aws-region))
 
 - name: terraform-yaml-development
   type: s3-iam
   source:
-    bucket: ((tf-state-bucket-development))
+    bucket: ((tf-state-bucket))
     versioned_file: ((tf-state-file-development))
     region_name: ((aws-region))
 
 - name: terraform-yaml-staging
   type: s3-iam
   source:
-    bucket: ((tf-state-bucket-staging))
+    bucket: ((tf-state-bucket))
     versioned_file: ((tf-state-file-staging))
     region_name: ((aws-region))
 
 - name: terraform-yaml-production
   type: s3-iam
   source:
-    bucket: ((tf-state-bucket-production))
+    bucket: ((tf-state-bucket))
     versioned_file: ((tf-state-file-production))
     region_name: ((aws-region))
 

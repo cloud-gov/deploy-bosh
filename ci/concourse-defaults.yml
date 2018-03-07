@@ -4,6 +4,13 @@ bosh-config-git-branch: master
 pipeline-tasks-git-url: https://github.com/18F/cg-pipeline-tasks.git
 pipeline-tasks-git-branch: master
 
+aws-region: us-gov-west-1
+
+s3-bosh-releases-bucket: cloud-gov-bosh-releases
+tf-state-bucket: terraform-state
+secrets-bucket: cloud-gov-varz
+semver-bucket: cg-semver
+
 tf-state-file-tooling: tooling/state.yml
 tf-state-file-development: development/state.yml
 tf-state-file-staging: staging/state.yml
@@ -30,3 +37,5 @@ nessus-agent-port: 8834
 slack-channel: "#cg-platform"
 slack-icon-url: https://avatars1.githubusercontent.com/u/7809479?v=3&s=40
 slack-username: concourse
+
+uaa-url-opslogin: https://opslogin.fr.cloud.gov

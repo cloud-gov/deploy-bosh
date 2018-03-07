@@ -1,4 +1,4 @@
----
+--
 jobs:
 - name: deploy-development-bosh
   serial: true
@@ -489,14 +489,14 @@ resources:
 - name: ca-cert-store
   type: s3-iam
   source:
-    bucket: ((production-bucket-name))
+    bucket: ((secrets-bucket))
     region_name: ((aws-region))
     versioned_file: ca-cert-store.crt
 
 - name: common-tooling
   type: cg-common
   source:
-    bucket_name: ((production-bucket-name))
+    bucket_name: ((secrets-bucket))
     region: ((aws-region))
     secrets_files:
     - tooling-bosh-main.yml
@@ -506,7 +506,7 @@ resources:
 - name: common-development
   type: cg-common
   source:
-    bucket_name: ((production-bucket-name))
+    bucket_name: ((secrets-bucket))
     region: ((aws-region))
     secrets_files:
     - development-bosh-main.yml
@@ -516,7 +516,7 @@ resources:
 - name: secrets-common
   type: cg-common
   source:
-    bucket_name: ((common-bucket-name))
+    bucket_name: ((secrets-bucket))
     region: ((aws-region))
     secrets_file: ((common-secrets-file))
     secrets_passphrase: ((common_secrets_secrets_passphrase))
@@ -524,7 +524,7 @@ resources:
 - name: secrets-master
   type: cg-common
   source:
-    bucket_name: ((master-bucket-name))
+    bucket_name: ((secrets-bucket))
     region: ((aws-region))
     secrets_file: ((master-secrets-file))
     secrets_passphrase: ((master_secrets_secrets_passphrase))
@@ -532,7 +532,7 @@ resources:
 - name: secrets-tooling
   type: cg-common
   source:
-    bucket_name: ((tooling-bucket-name))
+    bucket_name: ((secrets-bucket))
     region: ((aws-region))
     secrets_file: ((tooling-secrets-file))
     secrets_passphrase: ((tooling_secrets_secrets_passphrase))
@@ -540,7 +540,7 @@ resources:
 - name: secrets-development
   type: cg-common
   source:
-    bucket_name: ((development-bucket-name))
+    bucket_name: ((secrets-bucket))
     region: ((aws-region))
     secrets_file: ((development-secrets-file))
     secrets_passphrase: ((development_secrets_secrets_passphrase))
@@ -548,8 +548,8 @@ resources:
 - name: masterbosh-state
   type: s3-iam
   source:
-    bucket: ((master-bucket-name))
-    region_name: us-gov-west-1
+    bucket: ((secrets-bucket))
+    region_name: ((aws-region))
     versioned_file: master-bosh-state.json
     server_side_encryption: AES256
 
@@ -721,14 +721,14 @@ resources:
 - name: terraform-yaml-tooling
   type: s3-iam
   source:
-    bucket: ((tf-state-bucket-tooling))
+    bucket: ((tf-state-bucket))
     versioned_file: ((tf-state-file-tooling))
     region_name: ((aws-region))
 
 - name: terraform-yaml-development
   type: s3-iam
   source:
-    bucket: ((tf-state-bucket-development))
+    bucket: ((tf-state-bucket))
     versioned_file: ((tf-state-file-development))
     region_name: ((aws-region))
 
