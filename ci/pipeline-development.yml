@@ -620,7 +620,7 @@ resources:
     target: ((masterbosh-target))
     client: admin
     client_secret: ((master_bosh_admin_password))
-    ca_cert: ((common_ca_cert))
+    ca_cert: ((common_ca_cert_store))
     deployment: toolingbosh
 
 - name: developmentbosh-deployment
@@ -629,7 +629,7 @@ resources:
     target: ((toolingbosh-target))
     client: ci
     client_secret: ((tooling_bosh_uaa_ci_client_secret))
-    ca_cert: ((common_ca_cert))
+    ca_cert: ((common_ca_cert_store))
     deployment: developmentbosh
 
 - name: pipeline-tasks
