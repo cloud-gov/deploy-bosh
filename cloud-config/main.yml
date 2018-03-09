@@ -71,7 +71,7 @@ vm_types:
     instance_type: t2.large
 - name: logsearch_maintenance
   cloud_properties:
-    instance_type: t2.medium
+    instance_type: t2.large
 - name: kubernetes_consul
   cloud_properties:
     instance_type: m3.large
