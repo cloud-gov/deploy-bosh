@@ -22,8 +22,7 @@ vm_types:
 - name: production-prometheus-large
   cloud_properties:
     instance_type: m4.2xlarge
-- &concourse-web-vm
-  name: staging-concourse-web
+- name: staging-concourse-web
   cloud_properties:
     instance_type: t2.medium
     ephemeral_disk:
@@ -40,8 +39,11 @@ vm_types:
     instance_type: m4.large
     ephemeral_disk:
       size: 300000
-- <<: *concourse-web-vm
-  name: production-concourse-web
+- name: production-concourse-web
+  cloud_properties:
+    instance_type: t2.large
+    ephemeral_disk:
+      size: 45000
 - <<: *concourse-worker-vm
   name: production-concourse-worker
 - <<: *concourse-iaas-worker-vm
