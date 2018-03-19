@@ -14,8 +14,8 @@ instance_groups:
   - name: uaa
     properties:
       uaa:
-        url: https://opsuaa.fr.cloud.gov
-        issuer: https://opslogin.fr.cloud.gov
+        url: (( concat "https://opsuaa." meta.domain ))
+        issuer: (( concat "https://opslogin." meta.domain ))
         clients:
           concourse_production:
             <<: *client-template
@@ -82,7 +82,7 @@ instance_groups:
             - (( replace ))
 
       login:
-        url: https://opslogin.fr.cloud.gov
+        url: (( concat "https://opslogin." meta.domain ))
 
 - name: bosh
   jobs:
@@ -91,4 +91,4 @@ instance_groups:
       director:
         user_management:
           uaa:
-            url: https://opslogin.fr.cloud.gov
+            url: (( concat "https://opslogin." meta.domain ))

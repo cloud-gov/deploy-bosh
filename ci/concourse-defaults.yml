@@ -1,0 +1,44 @@
+bosh-config-git-url: https://github.com/18F/cg-deploy-bosh.git
+bosh-config-git-branch: master
+
+bosh-config-development-git-url: https://github.com/18F/cg-deploy-bosh.git
+bosh-config-development-git-branch: master
+
+pipeline-tasks-git-url: https://github.com/18F/cg-pipeline-tasks.git
+pipeline-tasks-git-branch: master
+
+aws-region: us-gov-west-1
+
+s3-bosh-releases-bucket: cloud-gov-bosh-releases
+tf-state-bucket: terraform-state
+secrets-bucket: cloud-gov-varz
+semver-bucket: cg-semver
+
+tf-state-file-tooling: tooling/state.yml
+tf-state-file-development: development/state.yml
+tf-state-file-staging: staging/state.yml
+tf-state-file-production: production/state.yml
+
+common-secrets-file: secrets-common.yml
+master-secrets-file: secrets-master.yml
+tooling-secrets-file: secrets-tooling.yml
+development-secrets-file: secrets-development.yml
+staging-secrets-file: secrets-staging.yml
+production-secrets-file: secrets-production.yml
+
+semver-master-key: common-releases-master-version
+semver-tooling-key: common-releases-tooling-version
+
+nessus-agent-group-development: cf-development
+nessus-agent-group-master: masterbosh
+nessus-agent-group-production: cf-production
+nessus-agent-group-staging: cf-staging
+nessus-agent-group-tooling: cf-tooling
+
+nessus-agent-port: 8834
+
+slack-channel: "#cg-platform"
+slack-icon-url: https://avatars1.githubusercontent.com/u/7809479?v=3&s=40
+slack-username: concourse
+
+uaa-url-opslogin: https://opslogin.fr.cloud.gov

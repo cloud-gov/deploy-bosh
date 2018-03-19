@@ -22,25 +22,25 @@ resources:
 - name: <%= release['name'] %>-release-tarball
   type: s3-iam
   source:
-    bucket: cloud-gov-bosh-releases
+    bucket: <%= bosh_release_bucket %>
     regexp: <%= release['name'] %>-(.*).tgz
-    region_name: us-gov-west-1
+    region_name: <%= aws_region %>
     server_side_encryption: AES256
 
 - name: <%= release['name'] %>-final-builds-dir-tarball
   type: s3-iam
   source:
-    bucket: cloud-gov-bosh-releases
+    bucket: <%= bosh_release_bucket %>
     versioned_file: final-builds-dir-<%= release['name'] %>.tgz
-    region_name: us-gov-west-1
+    region_name: <%= aws_region %>
     server_side_encryption: AES256
 
 - name: <%= release['name'] %>-releases-dir-tarball
   type: s3-iam
   source:
-    bucket: cloud-gov-bosh-releases
+    bucket: <%= bosh_release_bucket %>
     versioned_file: releases-dir-<%= release['name'] %>.tgz
-    region_name: us-gov-west-1
+    region_name: <%= aws_region %>
     server_side_encryption: AES256
 <% end %>
 
@@ -65,8 +65,8 @@ jobs:
         ---
         blobstore:
           options:
-            region: us-gov-west-1
-            bucket_name: cloud-gov-release-blobstore
+            region: <%= aws_region %>
+            bucket_name: <%= release_blobstore_bucket %>
             credentials_source: env_or_profile
             server_side_encryption: AES256
   - aggregate:

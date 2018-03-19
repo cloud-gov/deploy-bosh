@@ -9,6 +9,7 @@ inputs:
 - {name: bosh-config}
 - {name: ca-cert-store}
 - {name: terraform-yaml}
+- {name: terraform-yaml-development}
 
 run:
-  path: bosh-config/ci/update-cloud-config.sh
+  path: bosh-config/ci/update-cloud-config-tooling.sh

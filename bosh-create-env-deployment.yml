@@ -1,10 +1,4 @@
 ---
-meta:
-  passwords:
-    postgres: (( param "specify postgres password" ))
-    mbus: (( param "specify mbus password" ))
-    vcap: (( param "specify vcap password" ))
-
 name: master-bosh
 
 releases:
@@ -20,7 +14,7 @@ resource_pools:
   network: private
   env:
     bosh:
-      password: (( grab meta.passwords.vcap ))
+      password: (( grab secrets.bosh_vcap_password ))
   stemcell:
     url: (( grab $STEMCELL_URL ))
     sha1: (( grab $STEMCELL_SHA1 ))
@@ -102,7 +96,7 @@ instance_groups:
         listen_address: 127.0.0.1
         host: 127.0.0.1
         user: postgres
-        password: (( grab meta.passwords.postgres ))
+        password: (( grab secrets.bosh_postgres_password ))
         database: bosh
         adapter: postgres
 
@@ -199,11 +193,11 @@ cloud_provider:
     host: (( grab terraform_outputs.master_bosh_static_ip ))
     port: 22
     user: vcap
-    private_key: ./decrypt/master-bosh.pem
-  mbus: (( concat "https://mbus:" meta.passwords.mbus "@" terraform_outputs.master_bosh_static_ip ":6868" ))
+    private_key: ./ca.key
+  mbus: (( concat "https://mbus:" secrets.bosh_mbus_password "@" terraform_outputs.master_bosh_static_ip ":6868" ))
   properties:
     aws: (( grab instance_groups.bosh.jobs.aws_cpi.properties.aws ))
     agent:
-      mbus: (( concat "https://mbus:" meta.passwords.mbus "@0.0.0.0:6868" ))
+      mbus: (( concat "https://mbus:" secrets.bosh_mbus_password "@0.0.0.0:6868" ))
     blobstore: {provider: local, path: /var/vcap/micro_bosh/data/cache}
     ntp: (( grab instance_groups.bosh.jobs.director.properties.ntp ))

@@ -50,7 +50,7 @@ jobs:
         - |
           bosh-config/generate.sh \
             bosh-config/bosh-development.yml \
-            bosh-config/bosh-meta-production.yml \
+            bosh-config/bosh-meta-development.yml \
             terraform-yaml/state.yml \
             common/decrypted-development-bosh-main.yml \
             common/decrypted-development-bosh-external.yml \
@@ -86,7 +86,7 @@ jobs:
     put: slack
     params:
       text: |
-        :x: FAILED to deploy development BOSH
+        :x: FAILED to deploy DEV development BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: ((slack-channel))
       username: ((slack-username))
@@ -95,7 +95,7 @@ jobs:
     put: slack
     params:
       text: |
-        :white_check_mark: Successfully deployed development BOSH
+        :white_check_mark: Successfully deployed DEV development BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: ((slack-channel))
       username: ((slack-username))
@@ -187,283 +187,6 @@ jobs:
       NESSUS_AGENT_GROUP: ((nessus-agent-group-development))
       ENVIRONMENT: development
 
-- name: deploy-staging-bosh
-  serial: true
-  plan:
-  - aggregate:
-    - get: ca-cert-store
-    - get: pipeline-tasks
-    - get: bosh-config
-      trigger: true
-    - get: bosh-release
-      trigger: true
-    - get: uaa-release
-      trigger: true
-    - get: cpi-release
-      trigger: true
-    - get: secureproxy-release
-      trigger: true
-    - get: bosh-stemcell
-    - get: common
-      resource: common-staging
-      trigger: true
-    - get: secrets-common
-    - get: secrets
-      resource: secrets-staging
-    - get: terraform-yaml
-      resource: terraform-yaml-staging
-    - get: semver-tooling-version
-      passed: [common-releases-tooling]
-  - task: bosh-manifest
-    config:
-      <<: *manifest-config
-      run:
-        path: sh
-        args:
-        - -exc
-        - |
-          bosh-config/generate.sh \
-            bosh-config/bosh-staging.yml \
-            bosh-config/bosh-meta-production.yml \
-            terraform-yaml/state.yml \
-            common/decrypted-staging-bosh-main.yml \
-            common/decrypted-staging-bosh-external.yml \
-            secrets-common/secrets.yml \
-            secrets/secrets.yml \
-            > bosh-manifest/manifest.yml
-  - *lint-manifest
-  - put: stagingbosh-deployment
-    params: &bosh-deployment
-      manifest: bosh-manifest/manifest.yml
-      releases:
-      - bosh-release/*.tgz
-      - uaa-release/*.tgz
-      - cpi-release/*.tgz
-      stemcells:
-      - bosh-stemcell/*.tgz
-  - task: update-cloud-config
-    file: bosh-config/ci/update-cloud-config.yml
-    params:
-      MANIFEST_PATH: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/staging.yml"
-      BOSH_CA_CERT: ca-cert-store/ca-cert-store.crt
-      BOSH_ENVIRONMENT: ((stagingbosh-target))
-      BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: ((staging_bosh_uaa_ci_client_secret))
-  on_failure:
-    put: slack
-    params:
-      text: |
-        :x: FAILED to deploy Staging BOSH
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: ((slack-channel))
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully deployed Staging BOSH
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: ((slack-channel))
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
-
-- name: common-releases-staging
-  serial: true
-  plan:
-  - aggregate:
-    - get: certificate
-      resource: ca-cert-store
-    - get: bosh-config
-    - get: terraform-yaml
-      resource: terraform-yaml-staging
-    - get: cg-s3-fisma-release
-      trigger: true
-    - get: cg-s3-tripwire-release
-      trigger: true
-    - get: cg-s3-awslogs-release
-      trigger: true
-    - get: cg-s3-nessus-agent-release
-      trigger: true
-    - get: cg-s3-clamav-release
-      trigger: true
-    - get: cg-s3-snort-release
-      trigger: true
-    - get: cron-release
-      trigger: true
-    - get: node-exporter-release
-      trigger: true
-    - get: syslog-release
-      trigger: true
-    - get: ntp-release
-      trigger: true
-    - get: nfs-volume-release
-      trigger: true
-    - get: stagingbosh-deployment
-      passed: [deploy-staging-bosh]
-  - task: upload-releases
-    config:
-      <<: *upload-releases-config
-      params:
-        BOSH_CA_CERT: certificate/ca-cert-store.crt
-        BOSH_CLIENT: ci
-        BOSH_CLIENT_SECRET: ((staging_bosh_uaa_ci_client_secret))
-        BOSH_ENVIRONMENT: ((stagingbosh-target))
-  - task: update-runtime-config
-    file: bosh-config/ci/update-runtime-config.yml
-    params:
-      RUNTIME_OVERRIDES: bosh-config/runtime-config/volume-driver.yml
-      BOSH_CA_CERT: certificate/ca-cert-store.crt
-      BOSH_ENVIRONMENT: ((stagingbosh-target))
-      BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: ((staging_bosh_uaa_ci_client_secret))
-      TRIPWIRE_LOCALPASS: ((tripwire-localpass))
-      TRIPWIRE_SITEPASS: ((tripwire-sitepass))
-      AWS_REGION: ((aws-region))
-      NESSUS_AGENT_KEY: ((nessus-agent-key))
-      NESSUS_AGENT_SERVER: ((nessus-agent-server))
-      NESSUS_AGENT_PORT: ((nessus-agent-port))
-      NESSUS_AGENT_GROUP: ((nessus-agent-group-staging))
-      ENVIRONMENT: staging
-
-- name: deploy-production-bosh
-  serial: true
-  plan:
-  - aggregate:
-    - get: ca-cert-store
-    - get: pipeline-tasks
-    - get: bosh-config
-      trigger: true
-      passed: [deploy-staging-bosh]
-    - get: bosh-release
-      trigger: true
-      passed: [deploy-staging-bosh]
-    - get: uaa-release
-      trigger: true
-      passed: [deploy-staging-bosh]
-    - get: cpi-release
-      trigger: true
-      passed: [deploy-staging-bosh]
-    - get: secureproxy-release
-      trigger: true
-      passed: [deploy-staging-bosh]
-    - get: bosh-stemcell
-      passed: [deploy-staging-bosh]
-    - get: semver-tooling-version
-      passed: [common-releases-tooling]
-    - get: common
-      resource: common-production
-      trigger: true
-    - get: secrets-common
-    - get: secrets
-      resource: secrets-production
-    - get: terraform-yaml
-      resource: terraform-yaml-production
-  - task: bosh-manifest
-    config:
-      <<: *manifest-config
-      run:
-        path: sh
-        args:
-        - -exc
-        - |
-          bosh-config/generate.sh \
-            bosh-config/bosh-production.yml \
-            bosh-config/bosh-meta-production.yml \
-            terraform-yaml/state.yml \
-            common/decrypted-production-bosh-main.yml \
-            common/decrypted-production-bosh-external.yml \
-            secrets-common/secrets.yml \
-            secrets/secrets.yml \
-            > bosh-manifest/manifest.yml
-  - *lint-manifest
-  - put: productionbosh-deployment
-    params: *bosh-deployment
-  - task: update-cloud-config
-    file: bosh-config/ci/update-cloud-config.yml
-    params:
-      MANIFEST_PATH: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/production.yml"
-      BOSH_CA_CERT: ca-cert-store/ca-cert-store.crt
-      BOSH_ENVIRONMENT: ((productionbosh-target))
-      BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
-  on_failure:
-    put: slack
-    params:
-      text: |
-        :x: FAILED to deploy production BOSH
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: ((slack-channel))
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully deployed production BOSH
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: ((slack-channel))
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
-
-- name: common-releases-production
-  serial: true
-  plan:
-  - aggregate:
-    - get: certificate
-      resource: ca-cert-store
-    - get: bosh-config
-    - get: terraform-yaml
-      resource: terraform-yaml-production
-    - get: cg-s3-fisma-release
-      trigger: true
-    - get: cg-s3-tripwire-release
-      trigger: true
-    - get: cg-s3-awslogs-release
-      trigger: true
-    - get: cg-s3-nessus-agent-release
-      trigger: true
-    - get: cg-s3-clamav-release
-      trigger: true
-    - get: cg-s3-snort-release
-      trigger: true
-    - get: cron-release
-      trigger: true
-    - get: ntp-release
-      trigger: true
-    - get: node-exporter-release
-      trigger: true
-    - get: syslog-release
-      trigger: true
-    - get: nfs-volume-release
-      trigger: true
-    - get: productionbosh-deployment
-      passed: [deploy-production-bosh]
-  - task: upload-releases
-    config:
-      <<: *upload-releases-config
-      params:
-        BOSH_CA_CERT: certificate/ca-cert-store.crt
-        BOSH_CLIENT: ci
-        BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
-        BOSH_ENVIRONMENT: ((productionbosh-target))
-  - task: update-runtime-config
-    file: bosh-config/ci/update-runtime-config.yml
-    params:
-      RUNTIME_OVERRIDES: bosh-config/runtime-config/volume-driver.yml
-      BOSH_CA_CERT: certificate/ca-cert-store.crt
-      BOSH_ENVIRONMENT: ((productionbosh-target))
-      BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
-      TRIPWIRE_LOCALPASS: ((tripwire-localpass))
-      TRIPWIRE_SITEPASS: ((tripwire-sitepass))
-      AWS_REGION: ((aws-region))
-      NESSUS_AGENT_KEY: ((nessus-agent-key))
-      NESSUS_AGENT_SERVER: ((nessus-agent-server))
-      NESSUS_AGENT_PORT: ((nessus-agent-port))
-      NESSUS_AGENT_GROUP: ((nessus-agent-group-production))
-      ENVIRONMENT: production
-
 - name: deploy-tooling-bosh
   serial: true
   plan:
@@ -486,8 +209,6 @@ jobs:
     - get: terraform-yaml
       resource: terraform-yaml-tooling
     - get: terraform-yaml-development
-    - get: terraform-yaml-staging
-    - get: terraform-yaml-production
     - get: semver-master-version
       passed: [common-releases-master]
   - task: bosh-manifest
@@ -501,7 +222,7 @@ jobs:
           bosh-config/generate.sh \
             bosh-config/bosh-tooling.yml \
             bosh-config/bosh-tooling-uaa.yml \
-            bosh-config/bosh-meta-production.yml \
+            bosh-config/bosh-meta-development.yml \
             terraform-yaml/state.yml \
             common/decrypted-tooling-bosh-main.yml \
             common/decrypted-tooling-bosh-external.yml \
@@ -521,7 +242,7 @@ jobs:
       stemcells:
       - bosh-stemcell/*.tgz
   - task: update-cloud-config
-    file: bosh-config/ci/update-cloud-config-tooling.yml
+    file: bosh-config/ci/update-cloud-config-tooling-development.yml
     params:
       MANIFEST_PATH: "bosh-config/cloud-config/tooling.yml"
       BOSH_CA_CERT: ca-cert-store/ca-cert-store.crt
@@ -532,7 +253,7 @@ jobs:
     put: slack
     params:
       text: |
-        :x: FAILED to deploy Tooling BOSH
+        :x: FAILED to deploy DEV Tooling BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: ((slack-channel))
       username: ((slack-username))
@@ -541,7 +262,7 @@ jobs:
     put: slack
     params:
       text: |
-        :white_check_mark: Successfully deployed Tooling BOSH
+        :white_check_mark: Successfully deployed DEV Tooling BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: ((slack-channel))
       username: ((slack-username))
@@ -563,7 +284,7 @@ jobs:
     put: slack
     params:
       text: |
-        :x: UAA Smoke Tests for opslogin FAILED
+        :x: UAA Smoke Tests for DEV opslogin FAILED
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: ((slack-channel))
       username: ((slack-username))
@@ -577,7 +298,7 @@ jobs:
       resource: ca-cert-store
     - get: bosh-config
     - get: terraform-yaml
-      resource: terraform-yaml-production
+      resource: terraform-yaml-development
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -645,7 +366,7 @@ jobs:
       resource: ca-cert-store
     - get: bosh-config
     - get: terraform-yaml
-      resource: terraform-yaml-production
+      resource: terraform-yaml-development
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -749,7 +470,7 @@ jobs:
     put: slack
     params:
       text: |
-        :x: FAILED to deploy Master BOSH
+        :x: FAILED to deploy DEV Master BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: ((slack-channel))
       username: ((slack-username))
@@ -758,7 +479,7 @@ jobs:
     put: slack
     params:
       text: |
-        :white_check_mark: Successfully deployed Master BOSH
+        :white_check_mark: Successfully deployed DEV Master BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: ((slack-channel))
       username: ((slack-username))
@@ -823,42 +544,6 @@ resources:
     region: ((aws-region))
     secrets_file: ((development-secrets-file))
     secrets_passphrase: ((development_secrets_secrets_passphrase))
-
-- name: secrets-staging
-  type: cg-common
-  source:
-    bucket_name: ((secrets-bucket))
-    region: ((aws-region))
-    secrets_file: ((staging-secrets-file))
-    secrets_passphrase: ((staging_secrets_secrets_passphrase))
-
-- name: secrets-production
-  type: cg-common
-  source:
-    bucket_name: ((secrets-bucket))
-    region: ((aws-region))
-    secrets_file: ((production-secrets-file))
-    secrets_passphrase: ((production_secrets_secrets_passphrase))
-
-- name: common-staging
-  type: cg-common
-  source:
-    bucket_name: ((secrets-bucket))
-    region: ((aws-region))
-    secrets_files:
-    - staging-bosh-main.yml
-    - staging-bosh-external.yml
-    secrets_passphrase: ((staging-secrets-passphrase))
-
-- name: common-production
-  type: cg-common
-  source:
-    bucket_name: ((secrets-bucket))
-    region: ((aws-region))
-    secrets_files:
-    - production-bosh-main.yml
-    - production-bosh-external.yml
-    secrets_passphrase: ((prod-secrets-passphrase))
 
 - name: masterbosh-state
   type: s3-iam
@@ -946,24 +631,6 @@ resources:
     client_secret: ((tooling_bosh_uaa_ci_client_secret))
     ca_cert: ((common_ca_cert_store))
     deployment: developmentbosh
-
-- name: stagingbosh-deployment
-  type: bosh-deployment
-  source:
-    target: ((toolingbosh-target))
-    client: ci
-    client_secret: ((tooling_bosh_uaa_ci_client_secret))
-    ca_cert: ((common_ca_cert_store))
-    deployment: stagingbosh
-
-- name: productionbosh-deployment
-  type: bosh-deployment
-  source:
-    target: ((toolingbosh-target))
-    client: ci
-    client_secret: ((tooling_bosh_uaa_ci_client_secret))
-    ca_cert: ((common_ca_cert_store))
-    deployment: productionbosh
 
 - name: pipeline-tasks
   type: git
@@ -1063,20 +730,6 @@ resources:
   source:
     bucket: ((tf-state-bucket))
     versioned_file: ((tf-state-file-development))
-    region_name: ((aws-region))
-
-- name: terraform-yaml-staging
-  type: s3-iam
-  source:
-    bucket: ((tf-state-bucket))
-    versioned_file: ((tf-state-file-staging))
-    region_name: ((aws-region))
-
-- name: terraform-yaml-production
-  type: s3-iam
-  source:
-    bucket: ((tf-state-bucket))
-    versioned_file: ((tf-state-file-production))
     region_name: ((aws-region))
 
 resource_types:
