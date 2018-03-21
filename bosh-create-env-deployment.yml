@@ -137,7 +137,8 @@ instance_groups:
       nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
       blobstore: (( grab instance_groups.bosh.jobs.blobstore.properties.blobstore ))
       dns: (( grab instance_groups.bosh.jobs.powerdns.properties.dns ))
-      ntp: [time.nist.gov]
+      ntp:
+      - time.nist.gov
 
   - name: health_monitor
     release: bosh
@@ -200,4 +201,5 @@ cloud_provider:
     agent:
       mbus: (( concat "https://mbus:" secrets.bosh_mbus_password "@0.0.0.0:6868" ))
     blobstore: {provider: local, path: /var/vcap/micro_bosh/data/cache}
-    ntp: (( grab instance_groups.bosh.jobs.director.properties.ntp ))
+    ntp:
+    - (( grab terraform_outputs.bosh_static_ip ))
