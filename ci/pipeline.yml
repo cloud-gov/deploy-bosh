@@ -49,7 +49,7 @@ jobs:
         - |
           bosh-config/generate.sh \
             bosh-config/bosh-staging.yml \
-            bosh-config/bosh-meta-production.yml \
+            bosh-config/bosh-meta-((meta.metaname)).yml \
             terraform-yaml/state.yml \
             common/decrypted-staging-bosh-main.yml \
             common/decrypted-staging-bosh-external.yml \
@@ -86,7 +86,7 @@ jobs:
     put: slack
     params:
       text: |
-        :x: FAILED to deploy Staging BOSH
+        :x: FAILED to deploy ((meta.env)) Staging BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: ((slack-channel))
       username: ((slack-username))
@@ -95,7 +95,7 @@ jobs:
     put: slack
     params:
       text: |
-        :white_check_mark: Successfully deployed Staging BOSH
+        :white_check_mark: Successfully deployed ((meta.env)) Staging BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: ((slack-channel))
       username: ((slack-username))
@@ -228,7 +228,7 @@ jobs:
         - |
           bosh-config/generate.sh \
             bosh-config/bosh-production.yml \
-            bosh-config/bosh-meta-production.yml \
+            bosh-config/bosh-meta-((meta.metaname)).yml \
             terraform-yaml/state.yml \
             common/decrypted-production-bosh-main.yml \
             common/decrypted-production-bosh-external.yml \
@@ -250,7 +250,7 @@ jobs:
     put: slack
     params:
       text: |
-        :x: FAILED to deploy production BOSH
+        :x: FAILED to deploy ((meta.env)) production BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: ((slack-channel))
       username: ((slack-username))
@@ -259,7 +259,7 @@ jobs:
     put: slack
     params:
       text: |
-        :white_check_mark: Successfully deployed production BOSH
+        :white_check_mark: Successfully deployed ((meta.env)) production BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: ((slack-channel))
       username: ((slack-username))
@@ -359,7 +359,7 @@ jobs:
           bosh-config/generate.sh \
             bosh-config/bosh-tooling.yml \
             bosh-config/bosh-tooling-uaa.yml \
-            bosh-config/bosh-meta-production.yml \
+            bosh-config/bosh-meta-((meta.metaname)).yml \
             terraform-yaml/state.yml \
             common/decrypted-tooling-bosh-main.yml \
             common/decrypted-tooling-bosh-external.yml \
@@ -390,7 +390,7 @@ jobs:
     put: slack
     params:
       text: |
-        :x: FAILED to deploy Tooling BOSH
+        :x: FAILED to deploy ((meta.env)) Tooling BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: ((slack-channel))
       username: ((slack-username))
@@ -399,7 +399,7 @@ jobs:
     put: slack
     params:
       text: |
-        :white_check_mark: Successfully deployed Tooling BOSH
+        :white_check_mark: Successfully deployed ((meta.env)) Tooling BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: ((slack-channel))
       username: ((slack-username))
@@ -421,7 +421,7 @@ jobs:
     put: slack
     params:
       text: |
-        :x: UAA Smoke Tests for opslogin FAILED
+        :x: UAA Smoke Tests for ((meta.env)) opslogin FAILED
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: ((slack-channel))
       username: ((slack-username))
@@ -607,7 +607,7 @@ jobs:
     put: slack
     params:
       text: |
-        :x: FAILED to deploy Master BOSH
+        :x: FAILED to deploy ((meta.env)) Master BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: ((slack-channel))
       username: ((slack-username))
@@ -616,7 +616,7 @@ jobs:
     put: slack
     params:
       text: |
-        :white_check_mark: Successfully deployed Master BOSH
+        :white_check_mark: Successfully deployed ((meta.env)) Master BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: ((slack-channel))
       username: ((slack-username))
