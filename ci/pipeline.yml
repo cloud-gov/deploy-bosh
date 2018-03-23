@@ -29,20 +29,8 @@ jobs:
     - get: semver-tooling-version
       passed: [common-releases-tooling]
   - task: bosh-manifest
-    config: &manifest-config
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: 18fgsa/concourse-task
-      inputs:
-      - name: common
-      - name: bosh-config
-      - name: terraform-yaml
-      - name: secrets-common
-      - name: secrets
-      outputs:
-      - name: bosh-manifest
+    config:
+      <<: *manifest-config
       run:
         path: sh
         args:
@@ -57,23 +45,9 @@ jobs:
             secrets-common/secrets.yml \
             secrets/secrets.yml \
             > bosh-manifest/manifest.yml
-  - &lint-manifest
-    task: lint-manifest
-    file: pipeline-tasks/lint-manifest.yml
-    input_mapping:
-      pipeline-config: bosh-config
-      lint-manifest: bosh-manifest
-    params:
-      LINTER_CONFIG: bosh-lint.yml
+  - *lint-manifest
   - put: developmentbosh-deployment
-    params: &bosh-deployment
-      manifest: bosh-manifest/manifest.yml
-      releases:
-      - bosh-release/*.tgz
-      - uaa-release/*.tgz
-      - cpi-release/*.tgz
-      stemcells:
-      - bosh-stemcell/*.tgz
+    params: *bosh-deployment
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
@@ -215,8 +189,20 @@ jobs:
     - get: semver-tooling-version
       passed: [common-releases-tooling]
   - task: bosh-manifest
-    config:
-      <<: *manifest-config
+    config: &manifest-config
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: 18fgsa/concourse-task
+      inputs:
+      - name: common
+      - name: bosh-config
+      - name: terraform-yaml
+      - name: secrets-common
+      - name: secrets
+      outputs:
+      - name: bosh-manifest
       run:
         path: sh
         args:
@@ -231,7 +217,14 @@ jobs:
             secrets-common/secrets.yml \
             secrets/secrets.yml \
             > bosh-manifest/manifest.yml
-  - *lint-manifest
+  - &lint-manifest
+    task: lint-manifest
+    file: pipeline-tasks/lint-manifest.yml
+    input_mapping:
+      pipeline-config: bosh-config
+      lint-manifest: bosh-manifest
+    params:
+      LINTER_CONFIG: bosh-lint.yml
   - put: stagingbosh-deployment
     params: &bosh-deployment
       manifest: bosh-manifest/manifest.yml
@@ -239,6 +232,7 @@ jobs:
       - bosh-release/*.tgz
       - uaa-release/*.tgz
       - cpi-release/*.tgz
+      - secureproxy-release/*.tgz
       stemcells:
       - bosh-stemcell/*.tgz
   - task: update-cloud-config
