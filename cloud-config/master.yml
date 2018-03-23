@@ -28,6 +28,8 @@ vm_extensions:
   cloud_properties:
     elbs:
     - (( grab terraform_outputs.bosh_uaa_elb_name ))
+    lb_target_groups:
+    - (( grab terraform_outputs.opsuaa_target_group ))
 
 disk_types:
 - name: bosh
