@@ -74,6 +74,8 @@ vm_extensions:
     - (( grab terraform_outputs.cf_main_elb_name ))
     - (( grab terraform_outputs.cf_apps_elb_name ))
     - (( grab terraform_outputs.cf_logging_elb_name ))
+    lb_target_groups:
+    - (( grab terraform_outputs.cf_target_group ))
 - name: diego-ssh-proxy-network-properties
   cloud_properties:
     elbs:
