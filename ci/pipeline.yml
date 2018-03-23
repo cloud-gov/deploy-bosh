@@ -1,166 +1,5 @@
 ---
 jobs:
-- name: deploy-development-bosh
-  serial: true
-  plan:
-  - aggregate:
-    - get: ca-cert-store
-    - get: pipeline-tasks
-    - get: bosh-config
-      resource: bosh-config-development
-      trigger: true
-    - get: bosh-release
-      trigger: true
-    - get: uaa-release
-      trigger: true
-    - get: cpi-release
-      trigger: true
-    - get: secureproxy-release
-      trigger: true
-    - get: bosh-stemcell
-    - get: common
-      resource: common-development
-      trigger: true
-    - get: secrets-common
-    - get: secrets
-      resource: secrets-development
-    - get: terraform-yaml
-      resource: terraform-yaml-development
-    - get: semver-tooling-version
-      passed: [common-releases-tooling]
-  - task: bosh-manifest
-    config:
-      <<: *manifest-config
-      run:
-        path: sh
-        args:
-        - -exc
-        - |
-          bosh-config/generate.sh \
-            bosh-config/bosh-development.yml \
-            bosh-config/bosh-meta-production.yml \
-            terraform-yaml/state.yml \
-            common/decrypted-development-bosh-main.yml \
-            common/decrypted-development-bosh-external.yml \
-            secrets-common/secrets.yml \
-            secrets/secrets.yml \
-            > bosh-manifest/manifest.yml
-  - *lint-manifest
-  - put: developmentbosh-deployment
-    params: *bosh-deployment
-  - task: update-cloud-config
-    file: bosh-config/ci/update-cloud-config.yml
-    params:
-      MANIFEST_PATH: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/development.yml"
-      BOSH_CA_CERT: ca-cert-store/ca-cert-store.crt
-      BOSH_ENVIRONMENT: ((developmentbosh-target))
-      BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
-  on_failure:
-    put: slack
-    params:
-      text: |
-        :x: FAILED to deploy development BOSH
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: ((slack-channel))
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully deployed development BOSH
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: ((slack-channel))
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
-
-- name: common-releases-development
-  serial: true
-  plan:
-  - aggregate:
-    - get: certificate
-      resource: ca-cert-store
-    - get: bosh-config
-      resource: bosh-config-development
-    - get: terraform-yaml
-      resource: terraform-yaml-development
-    - get: cg-s3-fisma-release
-      trigger: true
-    - get: cg-s3-tripwire-release
-      trigger: true
-    - get: cg-s3-awslogs-release
-      resource: cg-s3-awslogs-release-development
-      trigger: true
-    - get: cg-s3-nessus-agent-release
-      trigger: true
-    - get: cg-s3-clamav-release
-      trigger: true
-    - get: cg-s3-snort-release
-      trigger: true
-    - get: cron-release
-      trigger: true
-    - get: ntp-release
-      trigger: true
-    - get: node-exporter-release
-      trigger: true
-    - get: syslog-release
-      trigger: true
-    - get: nfs-volume-release
-      trigger: true
-    - get: developmentbosh-deployment
-      passed: [deploy-development-bosh]
-  - task: upload-releases
-    config: &upload-releases-config
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: 18fgsa/concourse-task
-      inputs:
-      - {name: certificate}
-      - {name: cg-s3-fisma-release, path: releases/fisma}
-      - {name: cg-s3-tripwire-release, path: releases/tripwire}
-      - {name: cg-s3-awslogs-release, path: releases/awslogs}
-      - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
-      - {name: cg-s3-clamav-release, path: releases/clamav}
-      - {name: cg-s3-snort-release, path: releases/snort}
-      - {name: cron-release, path: releases/cron}
-      - {name: ntp-release, path: releases/ntp}
-      - {name: node-exporter-release, path: releases/node-exporter}
-      - {name: syslog-release, path: releases/syslog}
-      - {name: nfs-volume-release, path: releases/nfs-volume}
-      params:
-        BOSH_CA_CERT: certificate/ca-cert-store.crt
-        BOSH_CLIENT: ci
-        BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
-        BOSH_ENVIRONMENT: ((developmentbosh-target))
-      run:
-        path: sh
-        args:
-        - -exc
-        - |
-          for release in releases/**/*.tgz; do
-            bosh upload-release "${release}"
-          done
-          bosh -n clean-up
-  - task: update-runtime-config
-    file: bosh-config/ci/update-runtime-config.yml
-    params:
-      RUNTIME_OVERRIDES: bosh-config/runtime-config/volume-driver.yml
-      BOSH_CA_CERT: certificate/ca-cert-store.crt
-      BOSH_ENVIRONMENT: ((developmentbosh-target))
-      BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
-      TRIPWIRE_LOCALPASS: ((tripwire-localpass))
-      TRIPWIRE_SITEPASS: ((tripwire-sitepass))
-      AWS_REGION: ((aws-region))
-      NESSUS_AGENT_KEY: ((nessus-agent-key))
-      NESSUS_AGENT_SERVER: ((nessus-agent-server))
-      NESSUS_AGENT_PORT: ((nessus-agent-port))
-      NESSUS_AGENT_GROUP: ((nessus-agent-group-development))
-      ENVIRONMENT: development
-
 - name: deploy-staging-bosh
   serial: true
   plan:
@@ -296,13 +135,39 @@ jobs:
     - get: stagingbosh-deployment
       passed: [deploy-staging-bosh]
   - task: upload-releases
-    config:
-      <<: *upload-releases-config
+    config: &upload-releases-config
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: 18fgsa/concourse-task
+      inputs:
+      - {name: certificate}
+      - {name: cg-s3-fisma-release, path: releases/fisma}
+      - {name: cg-s3-tripwire-release, path: releases/tripwire}
+      - {name: cg-s3-awslogs-release, path: releases/awslogs}
+      - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
+      - {name: cg-s3-clamav-release, path: releases/clamav}
+      - {name: cg-s3-snort-release, path: releases/snort}
+      - {name: cron-release, path: releases/cron}
+      - {name: ntp-release, path: releases/ntp}
+      - {name: node-exporter-release, path: releases/node-exporter}
+      - {name: syslog-release, path: releases/syslog}
+      - {name: nfs-volume-release, path: releases/nfs-volume}
       params:
         BOSH_CA_CERT: certificate/ca-cert-store.crt
         BOSH_CLIENT: ci
         BOSH_CLIENT_SECRET: ((staging_bosh_uaa_ci_client_secret))
         BOSH_ENVIRONMENT: ((stagingbosh-target))
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          for release in releases/**/*.tgz; do
+            bosh upload-release "${release}"
+          done
+          bosh -n clean-up
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config.yml
     params:
@@ -479,7 +344,6 @@ jobs:
       resource: secrets-tooling
     - get: terraform-yaml
       resource: terraform-yaml-tooling
-    - get: terraform-yaml-development
     - get: terraform-yaml-staging
     - get: terraform-yaml-production
     - get: semver-master-version
@@ -776,16 +640,6 @@ resources:
     - tooling-bosh-external.yml
     secrets_passphrase: ((tooling-secrets-passphrase))
 
-- name: common-development
-  type: cg-common
-  source:
-    bucket_name: ((secrets-bucket))
-    region: ((aws-region))
-    secrets_files:
-    - development-bosh-main.yml
-    - development-bosh-external.yml
-    secrets_passphrase: ((development-secrets-passphrase))
-
 - name: secrets-common
   type: cg-common
   source:
@@ -809,14 +663,6 @@ resources:
     region: ((aws-region))
     secrets_file: ((tooling-secrets-file))
     secrets_passphrase: ((tooling_secrets_secrets_passphrase))
-
-- name: secrets-development
-  type: cg-common
-  source:
-    bucket_name: ((secrets-bucket))
-    region: ((aws-region))
-    secrets_file: ((development-secrets-file))
-    secrets_passphrase: ((development_secrets_secrets_passphrase))
 
 - name: secrets-staging
   type: cg-common
@@ -903,12 +749,6 @@ resources:
     uri: ((bosh-config-git-url))
     branch: ((bosh-config-git-branch))
 
-- name: bosh-config-development
-  type: git
-  source:
-    uri: ((bosh-config-development-git-url))
-    branch: ((bosh-config-development-git-branch))
-
 - name: bosh-create-env-config
   type: git
   source:
@@ -931,15 +771,6 @@ resources:
     client_secret: ((master_bosh_admin_password))
     ca_cert: ((common_ca_cert_store))
     deployment: toolingbosh
-
-- name: developmentbosh-deployment
-  type: bosh-deployment
-  source:
-    target: ((toolingbosh-target))
-    client: ci
-    client_secret: ((tooling_bosh_uaa_ci_client_secret))
-    ca_cert: ((common_ca_cert_store))
-    deployment: developmentbosh
 
 - name: stagingbosh-deployment
   type: bosh-deployment
@@ -988,9 +819,6 @@ resources:
   source:
     regexp: awslogs-(.*).tgz
     <<: *s3-release-params
-
-- <<: *awslogs-release
-  name: cg-s3-awslogs-release-development
 
 - name: cg-s3-nessus-agent-release
   type: s3-iam
@@ -1050,13 +878,6 @@ resources:
   source:
     bucket: ((tf-state-bucket))
     versioned_file: ((tf-state-file-tooling))
-    region_name: ((aws-region))
-
-- name: terraform-yaml-development
-  type: s3-iam
-  source:
-    bucket: ((tf-state-bucket))
-    versioned_file: ((tf-state-file-development))
     region_name: ((aws-region))
 
 - name: terraform-yaml-staging
