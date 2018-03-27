@@ -1,7 +1,7 @@
 vm_types:
 - name: bosh
   cloud_properties:
-    instance_type: m3.xlarge
+    instance_type: m4.xlarge
 - name: pdns
   cloud_properties:
     instance_type: t2.medium
@@ -30,7 +30,7 @@ vm_types:
 - &concourse-worker-vm
   name: staging-concourse-worker
   cloud_properties:
-    instance_type: m3.xlarge
+    instance_type: m4.xlarge
     ephemeral_disk:
       size: 300000
 - &concourse-iaas-worker-vm
