@@ -13,12 +13,6 @@ if ! fly --target "${fly_target}" workers > /dev/null; then
 fi
 
 config=$(mktemp)
-${dir}/generate.rb "${releases_yaml}" > "${config}"
-if $NO_FLY = "true" ; then
-  echo ${config}
-else
-  fly -t "${fly_target}" set-pipeline -p "${PIPELINE:-bosh-releases}" -c "${config}"
-  rm "${config}"
-fi
-
-
+"${dir}/generate.rb" "${releases_yaml}" > "${config}"
+fly -t "${fly_target}" set-pipeline -p "${PIPELINE:-bosh-releases}" -c "${config}"
+rm "${config}"
