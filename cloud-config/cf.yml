@@ -70,10 +70,6 @@ vm_extensions:
 # Load balancers
 - name: cf-router-network-properties
   cloud_properties:
-    elbs:
-    - (( grab terraform_outputs.cf_main_elb_name ))
-    - (( grab terraform_outputs.cf_apps_elb_name ))
-    - (( grab terraform_outputs.cf_logging_elb_name ))
     lb_target_groups:
     - (( grab terraform_outputs.cf_target_group ))
     - (( grab terraform_outputs.cf_apps_target_group ))
