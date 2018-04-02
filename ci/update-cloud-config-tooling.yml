@@ -9,7 +9,6 @@ inputs:
 - {name: bosh-config}
 - {name: ca-cert-store}
 - {name: terraform-yaml}
-- {name: terraform-yaml-development}
 - {name: terraform-yaml-staging}
 - {name: terraform-yaml-production}
 
