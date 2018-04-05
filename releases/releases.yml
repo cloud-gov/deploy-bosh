@@ -52,3 +52,6 @@ releases:
 - name: prometheus
   uri: https://github.com/18F/prometheus-boshrelease
   branch: prom2-job
+- name: postfix
+  uri: https://github.com/18F/postfix-boshrelease
+  branch: master
