@@ -5,6 +5,9 @@ vm_types:
 - name: pdns
   cloud_properties:
     instance_type: t2.medium
+- name: smtp-small
+  cloud_properties:
+    instance_type: t2.small
 - name: nessus-manager
   cloud_properties:
     instance_type: t2.medium
