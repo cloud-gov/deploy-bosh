@@ -176,7 +176,7 @@ networks:
     static: (( grab terraform_outputs.production_smtp_private_ip ))
     dns:
     - (( grab terraform_outputs.tooling_bosh_static_ip ))
-    - (( grab terraform_outputs.vpc_cidr_smtp ))
+    - (( grab terraform_outputs.vpc_cidr_dns ))
     cloud_properties:
       subnet: (( grab terraform_outputs.private_subnet_az1 ))
       security_groups:
