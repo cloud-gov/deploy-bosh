@@ -170,26 +170,18 @@ networks:
 vm_extensions:
 - name: nessus-manager-lb
   cloud_properties:
-    elbs:
-    - (( grab terraform_outputs.nessus_elb_name ))
     lb_target_groups:
     - (( grab terraform_outputs.nessus_target_group ))
 - name: staging-prometheus-lb
   cloud_properties:
-    elbs:
-    - (( grab terraform_outputs.staging_prometheus_elb_name ))
     lb_target_groups:
     - (( grab terraform_outputs.staging_monitoring_lb_target_group ))
 - name: production-prometheus-lb
   cloud_properties:
-    elbs:
-    - (( grab terraform_outputs.production_prometheus_elb_name ))
     lb_target_groups:
     - (( grab terraform_outputs.production_monitoring_lb_target_group ))
 - name: staging-concourse-lb
   cloud_properties:
-    elbs:
-    - (( grab terraform_outputs.staging_concourse_elb_name ))
     lb_target_groups:
     - (( grab terraform_outputs.staging_concourse_lb_target_group ))
 - &concourse-profile
@@ -202,8 +194,6 @@ vm_extensions:
     iam_instance_profile: (( grab terraform_outputs.concourse_iaas_worker_profile ))
 - name: production-concourse-lb
   cloud_properties:
-    elbs:
-    - (( grab terraform_outputs.production_concourse_elb_name ))
     lb_target_groups:
     - (( grab terraform_outputs.production_concourse_lb_target_group ))
 - <<: *concourse-profile
