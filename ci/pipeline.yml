@@ -241,7 +241,7 @@ jobs:
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
-      MANIFEST_PATH: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/production.yml"
+      MANIFEST_PATH: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml"
       BOSH_CA_CERT: ca-cert-store/ca-cert-store.crt
       BOSH_ENVIRONMENT: ((productionbosh-target))
       BOSH_CLIENT: ci

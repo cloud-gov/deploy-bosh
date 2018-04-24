@@ -116,8 +116,8 @@ disk_types:
 vm_extensions:
 - name: shibboleth-lb
   cloud_properties:
-    elbs:
-    - (( grab terraform_outputs.shibboleth_elb_name ))
+    lb_target_groups:
+    - (( grab terraform_outputs.shibboleth_lb_target_group ))
 - name: logsearch-lb
   cloud_properties:
     elbs:
@@ -128,8 +128,8 @@ vm_extensions:
     - (( grab terraform_outputs.platform_syslog_elb_name ))
 - name: platform-kibana-lb
   cloud_properties:
-    elbs:
-    - (( grab terraform_outputs.platform_kibana_elb_name ))
+    lb_target_groups:
+    - (( grab terraform_outputs.platform_kibana_lb_target_group ))
 - name: kubernetes-lb
   cloud_properties:
     elbs:
