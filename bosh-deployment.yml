@@ -50,7 +50,7 @@ instance_groups:
           password: (( grab terraform_outputs.bosh_rds_password ))
 
       uaa:
-        url: (( concat "https://0.uaa." meta.env.name "-bosh." meta.env.name "bosh.toolingbosh:8443" ))
+        url: (( concat "https://0.uaa." meta.env "-bosh." meta.env "bosh.toolingbosh:8443" ))
         sslCertificate: (( grab secrets.bosh_uaa_web_cert ))
         sslPrivateKey: (( grab secrets.bosh_uaa_web_key ))
         jwt:
@@ -98,7 +98,7 @@ instance_groups:
         zones:
           internal:
             hostnames:
-            - (( concat "0.uaa." meta.env.name "-bosh." meta.env.name "bosh.toolingbosh" ))
+            - (( concat "0.uaa." meta.env "-bosh." meta.env "bosh.toolingbosh" ))
         servlet:
           session-cookie:
             max-age: 900
@@ -106,7 +106,7 @@ instance_groups:
             http-only: true
 
       login:
-        url: (( concat "https://0.uaa." meta.env.name "-bosh." meta.env.name "bosh.toolingbosh:8443" ))
+        url: (( concat "https://0.uaa." meta.env "-bosh." meta.env "bosh.toolingbosh:8443" ))
         protocol: https
         brand: oss
         brand_title: cloud.gov
@@ -190,7 +190,7 @@ instance_groups:
         user_management:
           provider: uaa
           uaa:
-            url: (( concat "https://0.uaa." meta.env.name "-bosh." meta.env.name "bosh.toolingbosh:8443" ))
+            url: (( concat "https://0.uaa." meta.env "-bosh." meta.env "bosh.toolingbosh:8443" ))
             public_key: (( grab secrets.bosh_uaa_web_public_key ))
       nats: (( grab instance_groups.bosh.jobs.nats.properties.nats ))
       blobstore: (( grab instance_groups.bosh.jobs.blobstore.properties.blobstore ))
