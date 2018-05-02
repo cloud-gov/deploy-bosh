@@ -7,7 +7,7 @@ for file in ${MANIFEST_PATH:-}; do
   files=(${files[@]} "${file}")
 done
 
-for environment in "development" "staging" "production"; do
+for environment in "staging" "production"; do
   if [ -s terraform-yaml-${environment}/state.yml ]; then
     ENVIRONMENT=${environment} spruce merge --prune terraform_outputs \
       bosh-config/cloud-config/bosh.yml \
