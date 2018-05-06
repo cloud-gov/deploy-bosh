@@ -52,3 +52,6 @@ releases:
 - name: postfix
   uri: https://github.com/18F/postfix-boshrelease
   branch: master
+- name: nfs-volume
+  uri: https://github.com/18F/nfs-volume-release
+  branch: master
