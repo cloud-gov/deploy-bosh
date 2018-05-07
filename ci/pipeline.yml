@@ -1014,11 +1014,9 @@ resources:
     <<: *s3-release-params
 
 - name: node-exporter-release
-  type: github-release
+  type: bosh-io-release
   source:
-    owner: bosh-prometheus
-    repository: node-exporter-boshrelease
-    access_token: ((github-release-access-token))  # Note: Use any personal access token with no scopes
+    repository: cloudfoundry-community/node-exporter-boshrelease
 
 - name: semver-master-version
   type: semver-iam
