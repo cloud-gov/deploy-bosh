@@ -17,7 +17,6 @@ inputs:
 - {name: cg-s3-snort-release, path: releases/snort}
 - {name: node-exporter-release, path: releases/node-exporter}
 - {name: syslog-release, path: releases/syslog}
-- {name: nfs-volume-release, path: releases/nfs-volume}
 
 run:
   path: bosh-config/ci/update-runtime-config.sh

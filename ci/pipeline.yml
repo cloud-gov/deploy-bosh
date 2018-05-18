@@ -132,8 +132,6 @@ jobs:
       trigger: true
     - get: syslog-release
       trigger: true
-    - get: nfs-volume-release
-      trigger: true
     - get: developmentbosh-deployment
       passed: [deploy-development-bosh]
   - task: upload-releases
@@ -155,7 +153,6 @@ jobs:
       - {name: ntp-release, path: releases/ntp}
       - {name: node-exporter-release, path: releases/node-exporter}
       - {name: syslog-release, path: releases/syslog}
-      - {name: nfs-volume-release, path: releases/nfs-volume}
       params:
         BOSH_CA_CERT: certificate/ca-cert-store.crt
         BOSH_CLIENT: ci
@@ -173,7 +170,6 @@ jobs:
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config.yml
     params:
-      RUNTIME_OVERRIDES: bosh-config/runtime-config/volume-driver.yml
       BOSH_CA_CERT: certificate/ca-cert-store.crt
       BOSH_ENVIRONMENT: ((developmentbosh-target))
       BOSH_CLIENT: ci
@@ -297,8 +293,6 @@ jobs:
       trigger: true
     - get: ntp-release
       trigger: true
-    - get: nfs-volume-release
-      trigger: true
     - get: stagingbosh-deployment
       passed: [deploy-staging-bosh]
   - task: upload-releases
@@ -312,7 +306,6 @@ jobs:
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config.yml
     params:
-      RUNTIME_OVERRIDES: bosh-config/runtime-config/volume-driver.yml
       BOSH_CA_CERT: certificate/ca-cert-store.crt
       BOSH_ENVIRONMENT: ((stagingbosh-target))
       BOSH_CLIENT: ci
@@ -435,8 +428,6 @@ jobs:
       trigger: true
     - get: syslog-release
       trigger: true
-    - get: nfs-volume-release
-      trigger: true
     - get: productionbosh-deployment
       passed: [deploy-production-bosh]
   - task: upload-releases
@@ -450,7 +441,6 @@ jobs:
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config.yml
     params:
-      RUNTIME_OVERRIDES: bosh-config/runtime-config/volume-driver.yml
       BOSH_CA_CERT: certificate/ca-cert-store.crt
       BOSH_ENVIRONMENT: ((productionbosh-target))
       BOSH_CLIENT: ci
@@ -898,11 +888,6 @@ resources:
   source:
     repository: cloudfoundry/syslog-release
 
-- name: nfs-volume-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/nfs-volume-release
-
 - name: bosh-config
   type: git
   source:
@@ -1029,11 +1014,9 @@ resources:
     <<: *s3-release-params
 
 - name: node-exporter-release
-  type: github-release
+  type: bosh-io-release
   source:
-    owner: bosh-prometheus
-    repository: node-exporter-boshrelease
-    access_token: ((github-release-access-token))  # Note: Use any personal access token with no scopes
+    repository: cloudfoundry-community/node-exporter-boshrelease
 
 - name: semver-master-version
   type: semver-iam
