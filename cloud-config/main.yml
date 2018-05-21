@@ -92,6 +92,9 @@ vm_types:
 - name: elasticache-broker
   cloud_properties:
     instance_type: t2.medium
+- name: domains-broker
+  cloud_properties:
+    instance_type: t2.medium
 
 disk_types:
 - name: admin-ui
@@ -138,6 +141,10 @@ vm_extensions:
   cloud_properties:
     elbs:
     - (( grab terraform_outputs.elasticache_broker_elb_name ))
+- name: domains-broker-lb
+  cloud_properties:
+    lb_target_groups:
+    - (( grab terraform_outputs.domains_broker_internal_target_group ))
 - name: kubernetes-sg
   cloud_properties:
     security_groups:
@@ -157,6 +164,9 @@ vm_extensions:
 - name: elasticache-broker-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.elasticache_broker_profile ))
+- name: domains-broker-profile
+  cloud_properties:
+    iam_instance_profile: (( grab terraform_outputs.domains_broker_profile ))
 
 compilation:
   network: default

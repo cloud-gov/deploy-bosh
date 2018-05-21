@@ -70,9 +70,7 @@ vm_extensions:
 # Load balancers
 - name: cf-router-network-properties
   cloud_properties:
-    lb_target_groups:
-    - (( grab terraform_outputs.cf_target_group ))
-    - (( grab terraform_outputs.cf_apps_target_group ))
+    lb_target_groups: (( grab terraform_outputs.cf_target_group terraform_outputs.cf_apps_target_group terraform_outputs.domains_broker_target_group_apps_names terraform_outputs.domains_broker_target_group_challenge_names ))
 - name: diego-ssh-proxy-network-properties
   cloud_properties:
     elbs:
