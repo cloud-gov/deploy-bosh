@@ -1,0 +1,29 @@
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/clients/ci?
+  value:
+    override: true
+    authorized-grant-types: client_credentials
+    authorities: bosh.admin
+    scope: ""
+    secret: "((bosh_ci_client_secret))"
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/clients/bosh_exporter?
+  value:
+    override: true
+    authorized-grant-types: client_credentials,refresh_token
+    authorities: bosh.read
+    scope: bosh.read
+    secret: "((bosh_exporter_client_secret))"
+
+- type: replace
+  path: /variables/-
+  value:
+    name: bosh_ci_client_secret
+    type: password
+
+- type: replace
+  path: /variables/-
+  value:
+    name: bosh_exporter_client_secret
+    type: password

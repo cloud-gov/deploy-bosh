@@ -6,8 +6,12 @@ jobs:
   - aggregate:
     - get: ca-cert-store
     - get: pipeline-tasks
+    - get: bosh-deployment
+      trigger: true
     - get: bosh-config
       resource: bosh-config-development
+      trigger: true
+    - get: bosh-stemcell
       trigger: true
     - get: bosh-release
       trigger: true
@@ -15,65 +19,42 @@ jobs:
       trigger: true
     - get: cpi-release
       trigger: true
-    - get: secureproxy-release
-      trigger: true
-    - get: bosh-stemcell
     - get: common
       resource: common-development
       trigger: true
-    - get: secrets-common
-    - get: secrets
-      resource: secrets-development
     - get: terraform-yaml
       resource: terraform-yaml-development
     - get: semver-tooling-version
       passed: [common-releases-tooling]
-  - task: bosh-manifest
-    config: &manifest-config
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: 18fgsa/concourse-task
-      inputs:
-      - name: common
-      - name: bosh-config
-      - name: terraform-yaml
-      - name: secrets-common
-      - name: secrets
-      outputs:
-      - name: bosh-manifest
-      run:
-        path: sh
-        args:
-        - -exc
-        - |
-          bosh-config/generate.sh \
-            bosh-config/bosh-development.yml \
-            bosh-config/bosh-meta-production.yml \
-            terraform-yaml/state.yml \
-            common/decrypted-development-bosh-main.yml \
-            common/decrypted-development-bosh-external.yml \
-            secrets-common/secrets.yml \
-            secrets/secrets.yml \
-            > bosh-manifest/manifest.yml
-  - &lint-manifest
-    task: lint-manifest
-    file: pipeline-tasks/lint-manifest.yml
-    input_mapping:
-      pipeline-config: bosh-config
-      lint-manifest: bosh-manifest
-    params:
-      LINTER_CONFIG: bosh-lint.yml
+  - task: terraform-secrets
+    file: bosh-config/ci/terraform-secrets.yml
   - put: developmentbosh-deployment
     params: &bosh-deployment
-      manifest: bosh-manifest/manifest.yml
+      manifest: bosh-deployment/bosh.yml
+      stemcells:
+      - bosh-stemcell/*.tgz
       releases:
       - bosh-release/*.tgz
       - uaa-release/*.tgz
       - cpi-release/*.tgz
-      stemcells:
-      - bosh-stemcell/*.tgz
+      ops_files:
+      - bosh-deployment/uaa.yml
+      - bosh-deployment/aws/cpi.yml
+      - bosh-deployment/aws/iam-instance-profile.yml
+      - bosh-config/operations/name.yml
+      - bosh-config/operations/releases.yml
+      - bosh-config/operations/s3-blobstore.yml
+      - bosh-config/operations/external-db.yml
+      - bosh-config/operations/uaa-clients.yml
+      - bosh-config/operations/uaa-encryption.yml
+      - bosh-config/operations/cloud-config.yml
+      - bosh-config/operations/cpi.yml
+      - bosh-config/operations/ntp.yml
+      vars_files:
+      - bosh-config/variables/development.yml
+      - terraform-secrets/terraform.yml
+      - terraform-yaml/state.yml
+      - common/secrets.yml
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
@@ -211,8 +192,20 @@ jobs:
     - get: semver-tooling-version
       passed: [common-releases-tooling]
   - task: bosh-manifest
-    config:
-      <<: *manifest-config
+    config: &manifest-config
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: 18fgsa/concourse-task
+      inputs:
+      - name: common
+      - name: bosh-config
+      - name: terraform-yaml
+      - name: secrets-common
+      - name: secrets
+      outputs:
+      - name: bosh-manifest
       run:
         path: sh
         args:
@@ -227,7 +220,14 @@ jobs:
             secrets-common/secrets.yml \
             secrets/secrets.yml \
             > bosh-manifest/manifest.yml
-  - *lint-manifest
+  - &lint-manifest
+    task: lint-manifest
+    file: pipeline-tasks/lint-manifest.yml
+    input_mapping:
+      pipeline-config: bosh-config
+      lint-manifest: bosh-manifest
+    params:
+      LINTER_CONFIG: bosh-lint.yml
   - put: stagingbosh-deployment
     params: &bosh-deployment
       manifest: bosh-manifest/manifest.yml
@@ -777,9 +777,7 @@ resources:
   source:
     bucket_name: ((secrets-bucket))
     region: ((aws-region))
-    secrets_files:
-    - development-bosh-main.yml
-    - development-bosh-external.yml
+    secrets_file: development-bosh-main.yml
     secrets_passphrase: ((development-secrets-passphrase))
 
 - name: secrets-common
@@ -805,14 +803,6 @@ resources:
     region: ((aws-region))
     secrets_file: ((tooling-secrets-file))
     secrets_passphrase: ((tooling_secrets_secrets_passphrase))
-
-- name: secrets-development
-  type: cg-common
-  source:
-    bucket_name: ((secrets-bucket))
-    region: ((aws-region))
-    secrets_file: ((development-secrets-file))
-    secrets_passphrase: ((development_secrets_secrets_passphrase))
 
 - name: secrets-staging
   type: cg-common
@@ -887,6 +877,12 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry/syslog-release
+
+- name: bosh-deployment
+  type: git
+  source:
+    uri: https://github.com/cloudfoundry/bosh-deployment.git
+    branch: master
 
 - name: bosh-config
   type: git

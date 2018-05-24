@@ -1,0 +1,1 @@
+internal_ip: ((terraform_outputs.bosh_static_ip))
