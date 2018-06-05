@@ -1,0 +1,4 @@
+director_name: bosh
+environment: staging
+deployment_name: stagingbosh
+instance_profile: staging-bosh-profile
