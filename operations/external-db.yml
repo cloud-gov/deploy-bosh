@@ -1,0 +1,50 @@
+- type: remove
+  path: /instance_groups/name=bosh/jobs/name=postgres-9.4
+
+- type: remove
+  path: /instance_groups/name=bosh/properties/postgres
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/director/db
+  value:
+    host: ((terraform_outputs.bosh_rds_host_curr))
+    port: ((terraform_outputs.bosh_rds_port))
+    user: ((terraform_outputs.bosh_rds_username))
+    password: ((terraform_outputs.bosh_rds_password))
+    database: bosh
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/registry?/db
+  value:
+    host: ((terraform_outputs.bosh_rds_host_curr))
+    port: ((terraform_outputs.bosh_rds_port))
+    user: ((terraform_outputs.bosh_rds_username))
+    password: ((terraform_outputs.bosh_rds_password))
+    database: bosh
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaadb
+  value:
+    address: ((terraform_outputs.bosh_rds_host_curr))
+    port: ((terraform_outputs.bosh_rds_port))
+    user: ((terraform_outputs.bosh_rds_username))
+    password: ((terraform_outputs.bosh_rds_password))
+    db_scheme: postgresql
+    roles:
+    - name: bosh
+      password: ((terraform_outputs.bosh_rds_password))
+      tag: admin
+    databases:
+    - name: bosh_uaadb
+      tag: uaa
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/dns?/db
+  value:
+    host: ((terraform_outputs.bosh_rds_host_curr))
+    port: ((terraform_outputs.bosh_rds_port))
+    user: ((terraform_outputs.bosh_rds_username))
+    password: ((terraform_outputs.bosh_rds_password))
+
+- type: remove
+  path: /variables/name=postgres_password

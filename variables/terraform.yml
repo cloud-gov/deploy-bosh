@@ -1,0 +1,2 @@
+internal_ip: ((terraform_outputs.bosh_static_ip))
+dns_recursor_ip: ((terraform_outputs.vpc_cidr_dns))

@@ -1,0 +1,15 @@
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore/provider
+  value: s3
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore/credentials_source?
+  value: env_or_profile
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore/server_side_encryption?
+  value: AES256
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore/bucket_name?
+  value: ((terraform_outputs.bosh_blobstore_bucket))
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore/s3_region?
+  value: ((terraform_outputs.vpc_region))

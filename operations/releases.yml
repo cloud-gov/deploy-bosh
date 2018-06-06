@@ -1,0 +1,17 @@
+- type: replace
+  path: /releases/name=bosh
+  value:
+    name: bosh
+    version: latest
+
+- type: replace
+  path: /releases/name=uaa
+  value:
+    name: uaa
+    version: latest
+
+- type: replace
+  path: /releases/name=bosh-aws-cpi
+  value:
+    name: bosh-aws-cpi
+    version: latest
