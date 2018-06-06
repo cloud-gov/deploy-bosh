@@ -38,5 +38,13 @@
     - name: bosh_uaadb
       tag: uaa
 
+- type: replace
+  path: /instance_groups/name=bosh/properties/dns?/db
+  value:
+    host: ((terraform_outputs.bosh_rds_host_curr))
+    port: ((terraform_outputs.bosh_rds_port))
+    user: ((terraform_outputs.bosh_rds_username))
+    password: ((terraform_outputs.bosh_rds_password))
+
 - type: remove
   path: /variables/name=postgres_password
