@@ -45,7 +45,6 @@ jobs:
       - bosh-config/operations/s3-blobstore.yml
       - bosh-config/operations/external-db.yml
       - bosh-config/operations/uaa-clients.yml
-      - bosh-config/operations/uaa-encryption.yml
       - bosh-config/operations/cloud-config.yml
       - bosh-config/operations/cpi.yml
       - bosh-config/operations/ntp.yml
