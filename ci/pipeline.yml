@@ -18,8 +18,7 @@ jobs:
       trigger: true
     - get: cpi-release
       trigger: true
-    - get: common
-      resource: common-development
+    - get: common-development
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-development
@@ -54,7 +53,7 @@ jobs:
       - bosh-config/variables/development.yml
       - terraform-secrets/terraform.yml
       - terraform-yaml/state.yml
-      - common/secrets.yml
+      - common-development/development-bosh-decrypted.yml
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
@@ -181,8 +180,7 @@ jobs:
       trigger: true
     - get: cpi-release
       trigger: true
-    - get: common
-      resource: common-staging
+    - get: common-staging
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-staging
@@ -197,7 +195,7 @@ jobs:
       - bosh-config/variables/staging.yml
       - terraform-secrets/terraform.yml
       - terraform-yaml/state.yml
-      - common/secrets.yml
+      - common-staging/staging-bosh-decrypted.yml
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
@@ -318,7 +316,7 @@ jobs:
       - bosh-config/variables/production.yml
       - terraform-secrets/terraform.yml
       - terraform-yaml/state.yml
-      - common/secrets.yml
+      - common/production-bosh-decrypted.yml
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
@@ -738,12 +736,11 @@ resources:
     secrets_passphrase: ((tooling-secrets-passphrase))
 
 - name: common-development
-  type: cg-common
+  type: s3-iam
   source:
-    bucket_name: ((secrets-bucket))
-    region: ((aws-region))
-    secrets_file: development-bosh-main.yml
-    secrets_passphrase: ((development-secrets-passphrase))
+    bucket: ((secrets-bucket))
+    region_name: ((aws-region))
+    versioned_file: development-bosh-decrypted.yml
 
 - name: secrets-common
   type: cg-common
@@ -770,24 +767,18 @@ resources:
     secrets_passphrase: ((tooling_secrets_secrets_passphrase))
 
 - name: common-staging
-  type: cg-common
+  type: s3-iam
   source:
-    bucket_name: ((secrets-bucket))
-    region: ((aws-region))
-    secrets_files:
-    - staging-bosh-main.yml
-    - staging-bosh-external.yml
-    secrets_passphrase: ((staging-secrets-passphrase))
+    bucket: ((secrets-bucket))
+    region_name: ((aws-region))
+    versioned_file: staging-bosh-decrypted.yml
 
 - name: common-production
-  type: cg-common
+  type: s3-iam
   source:
-    bucket_name: ((secrets-bucket))
-    region: ((aws-region))
-    secrets_files:
-    - production-bosh-main.yml
-    - production-bosh-external.yml
-    secrets_passphrase: ((prod-secrets-passphrase))
+    bucket: ((secrets-bucket))
+    region_name: ((aws-region))
+    versioned_file: production-bosh-decrypted.yml
 
 - name: masterbosh-state
   type: s3-iam
