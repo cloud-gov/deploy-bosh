@@ -58,7 +58,7 @@ jobs:
     file: bosh-config/ci/update-cloud-config.yml
     params:
       MANIFEST_PATH: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/development.yml"
-      BOSH_CA_CERT: ca-cert-store/ca-cert-store.crt
+      BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((developmentbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
@@ -134,7 +134,7 @@ jobs:
       - {name: node-exporter-release, path: releases/node-exporter}
       - {name: syslog-release, path: releases/syslog}
       params:
-        BOSH_CA_CERT: certificate/ca-cert-store.crt
+        BOSH_CA_CERT: ((common_ca_cert_store))
         BOSH_CLIENT: ci
         BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
         BOSH_ENVIRONMENT: ((developmentbosh-target))
@@ -150,7 +150,7 @@ jobs:
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config.yml
     params:
-      BOSH_CA_CERT: certificate/ca-cert-store.crt
+      BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((developmentbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
@@ -200,7 +200,7 @@ jobs:
     file: bosh-config/ci/update-cloud-config.yml
     params:
       MANIFEST_PATH: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/staging.yml"
-      BOSH_CA_CERT: ca-cert-store/ca-cert-store.crt
+      BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((stagingbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((staging_bosh_uaa_ci_client_secret))
@@ -258,14 +258,14 @@ jobs:
     config:
       <<: *upload-releases-config
       params:
-        BOSH_CA_CERT: certificate/ca-cert-store.crt
+        BOSH_CA_CERT: ((common_ca_cert_store))
         BOSH_CLIENT: ci
         BOSH_CLIENT_SECRET: ((staging_bosh_uaa_ci_client_secret))
         BOSH_ENVIRONMENT: ((stagingbosh-target))
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config.yml
     params:
-      BOSH_CA_CERT: certificate/ca-cert-store.crt
+      BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((stagingbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((staging_bosh_uaa_ci_client_secret))
@@ -321,7 +321,7 @@ jobs:
     file: bosh-config/ci/update-cloud-config.yml
     params:
       MANIFEST_PATH: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml"
-      BOSH_CA_CERT: ca-cert-store/ca-cert-store.crt
+      BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((productionbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
@@ -379,14 +379,14 @@ jobs:
     config:
       <<: *upload-releases-config
       params:
-        BOSH_CA_CERT: certificate/ca-cert-store.crt
+        BOSH_CA_CERT: ((common_ca_cert_store))
         BOSH_CLIENT: ci
         BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
         BOSH_ENVIRONMENT: ((productionbosh-target))
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config.yml
     params:
-      BOSH_CA_CERT: certificate/ca-cert-store.crt
+      BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((productionbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
@@ -477,7 +477,7 @@ jobs:
     file: bosh-config/ci/update-cloud-config-tooling.yml
     params:
       MANIFEST_PATH: "bosh-config/cloud-config/tooling.yml"
-      BOSH_CA_CERT: ca-cert-store/ca-cert-store.crt
+      BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((toolingbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
@@ -569,7 +569,7 @@ jobs:
       - {name: node-exporter-release, path: releases/node-exporter}
       - {name: syslog-release, path: releases/syslog}
       params:
-        BOSH_CA_CERT: certificate/ca-cert-store.crt
+        BOSH_CA_CERT: ((common_ca_cert_store))
         BOSH_CLIENT: ci
         BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
         BOSH_ENVIRONMENT: ((toolingbosh-target))
@@ -578,7 +578,7 @@ jobs:
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config-tooling.yml
     params:
-      BOSH_CA_CERT: certificate/ca-cert-store.crt
+      BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((toolingbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
@@ -637,7 +637,7 @@ jobs:
       - {name: node-exporter-release, path: releases/node-exporter}
       - {name: syslog-release, path: releases/syslog}
       params:
-        BOSH_CA_CERT: certificate/ca-cert-store.crt
+        BOSH_CA_CERT: ((common_ca_cert_store))
         BOSH_CLIENT: admin
         BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
         BOSH_ENVIRONMENT: ((masterbosh-target))
@@ -646,7 +646,7 @@ jobs:
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config-tooling.yml
     params:
-      BOSH_CA_CERT: certificate/ca-cert-store.crt
+      BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((masterbosh-target))
       BOSH_CLIENT: admin
       BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
@@ -690,7 +690,7 @@ jobs:
     file: bosh-config/ci/update-cloud-config.yml
     params:
       MANIFEST_PATH: "bosh-config/cloud-config/master.yml"
-      BOSH_CA_CERT: ca-cert-store/ca-cert-store.crt
+      BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((masterbosh-target))
       BOSH_CLIENT: admin
       BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
