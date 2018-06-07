@@ -46,6 +46,7 @@ jobs:
       - bosh-config/operations/external-db.yml
       - bosh-config/operations/uaa-clients.yml
       - bosh-config/operations/cloud-config.yml
+      - bosh-config/operations/update.yml
       - bosh-config/operations/cpi.yml
       - bosh-config/operations/ntp.yml
       vars_files:
