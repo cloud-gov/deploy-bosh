@@ -20,6 +20,7 @@
           PGDBNAME: bosh
           VPC_NAME: ((terraform_outputs.stack_description))
           BOSH_DIRECTOR: ((terraform_outputs.bosh_static_ip))
+          GATEWAY_HOST: ((gateway_host))
           INSTANCE_WHITELIST: ((terraform_outputs.nat_private_ip_az1)) ((terraform_outputs.nat_private_ip_az2)) ((terraform_outputs.master_bosh_static_ip)) ((terraform_outputs.bosh_static_ip))
         entries:
         - minute: '*'

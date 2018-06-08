@@ -2,3 +2,4 @@ director_name: bosh
 environment: staging
 deployment_name: stagingbosh
 instance_profile: staging-bosh-profile
+gateway_host: 1.prometheus.staging-monitoring.prometheus-staging.toolingbosh

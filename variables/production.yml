@@ -2,3 +2,4 @@ director_name: bosh
 environment: production
 deployment_name: productionbosh
 instance_profile: production-bosh-profile
+gateway_host: 0.prometheus.production-monitoring.prometheus-production.toolingbosh
