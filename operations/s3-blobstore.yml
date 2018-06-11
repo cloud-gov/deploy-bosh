@@ -13,3 +13,6 @@
 - type: replace
   path: /instance_groups/name=bosh/properties/blobstore/s3_region?
   value: ((terraform_outputs.vpc_region))
+
+- type: remove
+  path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores
