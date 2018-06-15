@@ -12,12 +12,6 @@ jobs:
       trigger: true
     - get: bosh-stemcell
       trigger: true
-    - get: bosh-release
-      trigger: true
-    - get: uaa-release
-      trigger: true
-    - get: cpi-release
-      trigger: true
     - get: common-development
       trigger: true
     - get: terraform-yaml
@@ -31,14 +25,12 @@ jobs:
       manifest: bosh-deployment/bosh.yml
       stemcells:
       - bosh-stemcell/*.tgz
-      releases:
-      - bosh-release/*.tgz
-      - uaa-release/*.tgz
-      - cpi-release/*.tgz
       ops_files:
       - bosh-deployment/uaa.yml
       - bosh-deployment/aws/cpi.yml
       - bosh-deployment/aws/iam-instance-profile.yml
+      - bosh-deployment/misc/source-releases/bosh.yml
+      - bosh-deployment/misc/source-releases/uaa.yml
       - bosh-deployment/misc/powerdns.yml
       - bosh-config/operations/name.yml
       - bosh-config/operations/releases.yml
@@ -175,12 +167,6 @@ jobs:
       trigger: true
     - get: bosh-stemcell
       trigger: true
-    - get: bosh-release
-      trigger: true
-    - get: uaa-release
-      trigger: true
-    - get: cpi-release
-      trigger: true
     - get: common-staging
       trigger: true
     - get: terraform-yaml
@@ -292,13 +278,6 @@ jobs:
       trigger: true
     - get: bosh-stemcell
       passed: [deploy-staging-bosh]
-    - get: bosh-release
-      passed: [deploy-staging-bosh]
-      trigger: true
-    - get: uaa-release
-      passed: [deploy-staging-bosh]
-      trigger: true
-    - get: cpi-release
       passed: [deploy-staging-bosh]
       trigger: true
     - get: semver-tooling-version
