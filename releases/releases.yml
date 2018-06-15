@@ -58,3 +58,6 @@ releases:
 - name: domain-broker
   uri: https://github.com/18F/cf-domain-broker-alb-boshrelease
   branch: wip
+- name: elasticache-broker
+  uri: https://github.com/alphagov/paas-elasticache-broker-boshrelease
+  branch: master
