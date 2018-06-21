@@ -8,6 +8,10 @@ releases:
 - name: bosh-aws-cpi
   url: (( grab $RELEASES_BOSH_AWS_CPI_URL ))
   sha1: (( grab $RELEASES_BOSH_AWS_CPI_SHA1 ))
+- name: bpm
+  version: 0.6.0
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/bpm-release?v=0.6.0
+  sha1: 4f0f239abdc801d71de9063625aa56e3c42634b5
 
 resource_pools:
 - name: vms
@@ -59,6 +63,9 @@ instance_groups:
     - (( grab terraform_outputs.master_bosh_static_ip ))
 
   jobs:
+  - name: bpm
+    release: bpm
+    properties: {}
   - name: nats
     release: bosh
     properties:
