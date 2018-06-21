@@ -45,7 +45,7 @@ releases:
   branch: master
 - name: oauth2-proxy
   uri: https://github.com/18F/oauth2-proxy-boshrelease
-  branch: fix-fsnotify  # https://github.com/bitly/oauth2_proxy/issues/573
+  branch: master
 - name: pdns
   uri: https://github.com/18F/pdns-release
   branch: master
