@@ -14,6 +14,10 @@ releases:
 - {name: cron, version: latest}
 - {name: ntp, version: latest}
 - {name: secureproxy, version: latest}
+- name: bpm
+  version: 0.6.0
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/bpm-release?v=0.6.0
+  sha1: 4f0f239abdc801d71de9063625aa56e3c42634b5
 
 update:
   canaries: 1
@@ -128,6 +132,9 @@ instance_groups:
   instances: 1
   azs: [z1]
   jobs:
+  - name: bpm
+    release: bpm
+    properties: {}
   - name: nats
     release: bosh
     properties:
