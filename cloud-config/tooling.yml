@@ -227,7 +227,7 @@ disk_types:
   disk_size: 200_000
 - &prometheus-small-disk
   name: staging-prometheus-small
-  disk_size: 2048
+  disk_size: 8192
 - &prometheus-large-disk
   name: staging-prometheus-large
   disk_size: 200_000
