@@ -39,7 +39,7 @@
 - type: replace
   path: /instance_groups/name=bosh/networks
   value:
-  - name: ((environment))-bosh
+  - name: ((network))
     static_ips: [((internal_ip))]
 
 - type: replace
