@@ -3,18 +3,11 @@ meta:
   env:
     name: tooling
 
-releases:
-- {name: uaa-customized, version: latest}
-
 instance_groups:
 - name: uaa
-  vm_extensions: [bosh-lb]
   networks:
   - name: bosh
     static_ips: (( grab terraform_outputs.bosh_uaa_static_ips ))
-  jobs:
-  - name: uaa-customized
-    release: uaa-customized
 - name: bosh
   vm_extensions: [bosh-profile]
   networks:

@@ -24,7 +24,7 @@ vm_extensions:
 - name: bosh-profile
   cloud_properties:
     iam_instance_profile: (( grab terraform_outputs.bosh_profile ))
-- name: bosh-lb
+- name: opsuaa-lb
   cloud_properties:
     lb_target_groups:
     - (( grab terraform_outputs.opsuaa_target_group ))
