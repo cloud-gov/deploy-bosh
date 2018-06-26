@@ -384,20 +384,11 @@ jobs:
   plan:
   - aggregate:
     - get: ca-cert-store
-    - get: pipeline-tasks
+    - get: bosh-deployment
     - get: bosh-config
-    - get: bosh-release
-    - get: uaa-release
-    - get: uaa-customized-release
-    - get: cpi-release
-    - get: secureproxy-release
     - get: bosh-stemcell
-    - get: common
-      resource: common-tooling
+    - get: common-tooling
       trigger: true
-    - get: secrets-common
-    - get: secrets
-      resource: secrets-tooling
     - get: terraform-yaml
       resource: terraform-yaml-tooling
     - get: terraform-yaml-development
@@ -405,54 +396,16 @@ jobs:
     - get: terraform-yaml-production
     - get: semver-master-version
       passed: [common-releases-master]
-  - task: bosh-manifest
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: 18fgsa/concourse-task
-      inputs:
-      - name: common
-      - name: bosh-config
-      - name: terraform-yaml
-      - name: secrets-common
-      - name: secrets
-      outputs:
-      - name: bosh-manifest
-      run:
-        path: sh
-        args:
-        - -exc
-        - |
-          bosh-config/generate.sh \
-            bosh-config/bosh-tooling.yml \
-            bosh-config/bosh-tooling-uaa.yml \
-            bosh-config/bosh-meta-production.yml \
-            terraform-yaml/state.yml \
-            common/decrypted-tooling-bosh-main.yml \
-            common/decrypted-tooling-bosh-external.yml \
-            secrets-common/secrets.yml \
-            secrets/secrets.yml \
-            > bosh-manifest/manifest.yml
-  - task: lint-manifest
-    file: pipeline-tasks/lint-manifest.yml
-    input_mapping:
-      pipeline-config: bosh-config
-      lint-manifest: bosh-manifest
-    params:
-      LINTER_CONFIG: bosh-lint.yml
+  - task: terraform-secrets
+    file: bosh-config/ci/terraform-secrets.yml
   - put: toolingbosh-deployment
     params:
-      manifest: bosh-manifest/manifest.yml
-      releases:
-      - bosh-release/*.tgz
-      - uaa-release/*.tgz
-      - uaa-customized-release/*.tgz
-      - secureproxy-release/*.tgz
-      - cpi-release/*.tgz
-      stemcells:
-      - bosh-stemcell/*.tgz
+      <<: *bosh-deployment
+      vars_files:
+      - bosh-config/variables/tooling.yml
+      - terraform-secrets/terraform.yml
+      - terraform-yaml/state.yml
+      - common-tooling/tooling-bosh-decrypted.yml
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config-tooling.yml
     params:
@@ -475,28 +428,6 @@ jobs:
     params:
       text: |
         :white_check_mark: Successfully deployed Tooling BOSH
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: ((slack-channel))
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
-
-- name: uaa-smoke-tests
-  plan:
-  - aggregate:
-    - get: pipeline-tasks
-    - get: uaa-customized-release
-      passed: [deploy-tooling-bosh]
-    - get: toolingbosh-deployment
-      trigger: true
-  - task: smoke-tests
-    file: pipeline-tasks/uaa-smoke-tests.yml
-    params:
-      BASE_URL: ((uaa-url-opslogin))
-  on_failure:
-    put: slack
-    params:
-      text: |
-        :x: UAA Smoke Tests for opslogin FAILED
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: ((slack-channel))
       username: ((slack-username))
@@ -706,14 +637,11 @@ resources:
     versioned_file: ca-cert-store.crt
 
 - name: common-tooling
-  type: cg-common
+  type: s3-iam
   source:
-    bucket_name: ((secrets-bucket))
-    region: ((aws-region))
-    secrets_files:
-    - tooling-bosh-main.yml
-    - tooling-bosh-external.yml
-    secrets_passphrase: ((tooling-secrets-passphrase))
+    bucket: ((secrets-bucket))
+    region_name: ((aws-region))
+    versioned_file: tooling-bosh-decrypted.yml
 
 - name: common-development
   type: s3-iam
@@ -737,14 +665,6 @@ resources:
     region: ((aws-region))
     secrets_file: ((master-secrets-file))
     secrets_passphrase: ((master_secrets_secrets_passphrase))
-
-- name: secrets-tooling
-  type: cg-common
-  source:
-    bucket_name: ((secrets-bucket))
-    region: ((aws-region))
-    secrets_file: ((tooling-secrets-file))
-    secrets_passphrase: ((tooling_secrets_secrets_passphrase))
 
 - name: common-staging
   type: s3-iam
@@ -772,11 +692,6 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry/bosh
-
-- name: uaa-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/uaa-release
 
 - name: cpi-release
   type: bosh-io-release
@@ -866,12 +781,6 @@ resources:
     ca_cert: ((common_ca_cert_store))
     deployment: productionbosh
 
-- name: pipeline-tasks
-  type: git
-  source:
-    uri: ((pipeline-tasks-git-url))
-    branch: ((pipeline-tasks-git-branch))
-
 - name: slack
   type: slack-notification
   source:
@@ -915,18 +824,6 @@ resources:
   type: s3-iam
   source:
     regexp: snort-(.*).tgz
-    <<: *s3-release-params
-
-- name: uaa-customized-release
-  type: s3-iam
-  source:
-    regexp: uaa-customized-(.*).tgz
-    <<: *s3-release-params
-
-- name: secureproxy-release
-  type: s3-iam
-  source:
-    regexp: secureproxy-(.*).tgz
     <<: *s3-release-params
 
 - name: node-exporter-release

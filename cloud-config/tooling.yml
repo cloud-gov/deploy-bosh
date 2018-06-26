@@ -53,6 +53,22 @@ vm_types:
   name: production-concourse-iaas-worker
 
 networks:
+- name: opsuaa
+  type: manual
+  subnets:
+  - range: (( grab terraform_outputs.private_subnet_az1_cidr ))
+    reserved: (( grab terraform_outputs.private_subnet_az1_reserved ))
+    gateway: (( grab terraform_outputs.private_subnet_az1_gateway ))
+    static: (( grab terraform_outputs.bosh_uaa_static_ips ))
+    az: z1
+    dns:
+    - (( grab terraform_outputs.tooling_bosh_static_ip ))
+    - (( grab terraform_outputs.vpc_cidr_dns ))
+    cloud_properties:
+      security_groups:
+      - (( grab terraform_outputs.bosh_security_group ))
+      - (( grab terraform_outputs.bosh_uaa_security_group ))
+      subnet: (( grab terraform_outputs.private_subnet_az1 ))
 - name: nessus-manager
   type: manual
   subnets:
@@ -187,6 +203,10 @@ networks:
       - (( grab terraform_outputs.smtp_security_group ))
 
 vm_extensions:
+- name: opsuaa-lb
+  cloud_properties:
+    lb_target_groups:
+    - (( grab terraform_outputs.opsuaa_target_group ))
 - name: nessus-manager-lb
   cloud_properties:
     lb_target_groups:

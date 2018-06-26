@@ -1,5 +1,6 @@
 director_name: bosh
 environment: development
 deployment_name: developmentbosh
+network: development-bosh
 instance_profile: development-bosh-profile
 gateway_host: 1.prometheus.staging-monitoring.prometheus-staging.toolingbosh
