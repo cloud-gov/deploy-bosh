@@ -2,7 +2,7 @@
 
 set -eux
 
-bosh interpolate secrets/master-bosh-decrypted.yml --path default_ca.private_key > ./ca.key
+bosh interpolate common/master-bosh-decrypted.yml --path "/default_ca/private_key" > ./ca.key
 
 # and deploy it!
 set +e
@@ -11,8 +11,10 @@ bosh create-env \
   --state bosh-state/*.json \
   --ops-file bosh-deployment/aws/cpi.yml \
   --ops-file bosh-deployment/aws/iam-instance-profile.yml \
+  --ops-file bosh-deployment/aws/cli-iam-instance-profile.yml \
   --ops-file bosh-deployment/misc/powerdns.yml \
   --ops-file bosh-deployment/misc/source-releases/bosh.yml \
+  --ops-file bosh-config/operations/cpi.yml \
   --ops-file bosh-config/operations/encryption.yml \
   --vars-file bosh-config/variables/master.yml \
   --vars-file terraform-yaml/state.yml \

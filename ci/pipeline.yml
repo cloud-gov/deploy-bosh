@@ -573,6 +573,8 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - get: bosh-deployment
+      trigger: true
     - get: bosh-config
       resource: bosh-create-env-config
       trigger: true
@@ -582,6 +584,7 @@ jobs:
       resource: terraform-yaml-tooling
     - get: bosh-state
       resource: masterbosh-state
+    - get: ca-cert-store
   - task: terraform-secrets
     file: bosh-config/ci/terraform-secrets.yml
     params:

@@ -1,2 +1,2 @@
 director_name: master-bosh
-private_key: ./ca.key
+private_key: ../ca.key
