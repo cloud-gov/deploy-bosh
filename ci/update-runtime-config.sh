@@ -10,15 +10,13 @@ pushd releases
       tar xf *.tgz
       release=$(grep "^name" release.MF | awk '{print $2}')
       version=$(grep "^version" release.MF | awk '{print $2}' | sed -e "s/['\"']//g")
-      declare -x "release_${release//-/_}"=${version}
+      declare -x "runtime_release_${release//-/_}"=${version}
     popd
   done
 popd
 
-files=("bosh-config/runtime-config/base.yml" "terraform-yaml/state.yml")
-if [ -n "${RUNTIME_OVERRIDES:-}" ]; then
-  files=(${files[@]} "${RUNTIME_OVERRIDES}")
-fi
-spruce merge --prune terraform_outputs "${files[@]}" > runtime-config-merged.yml
-
-bosh-cli -n update-runtime-config runtime-config-merged.yml
+bosh -n update-runtime-config \
+  bosh-config/runtime-config/runtime.yml \
+  --vars-env runtime \
+  --vars-file terraform-yaml/state.yml \
+  --vars-file common/*.yml

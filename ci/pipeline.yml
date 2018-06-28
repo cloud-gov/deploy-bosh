@@ -83,6 +83,8 @@ jobs:
       resource: bosh-config-development
     - get: terraform-yaml
       resource: terraform-yaml-development
+    - get: common-development
+      trigger: true
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -141,19 +143,13 @@ jobs:
           bosh -n clean-up
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config.yml
+    input_mapping:
+      common: common-development
     params:
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((developmentbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
-      TRIPWIRE_LOCALPASS: ((tripwire-localpass))
-      TRIPWIRE_SITEPASS: ((tripwire-sitepass))
-      AWS_REGION: ((aws-region))
-      NESSUS_AGENT_KEY: ((nessus-agent-key))
-      NESSUS_AGENT_SERVER: ((nessus-agent-server))
-      NESSUS_AGENT_PORT: ((nessus-agent-port))
-      NESSUS_AGENT_GROUP: ((nessus-agent-group-development))
-      ENVIRONMENT: development
 
 - name: deploy-staging-bosh
   serial: true
@@ -218,6 +214,8 @@ jobs:
     - get: bosh-config
     - get: terraform-yaml
       resource: terraform-yaml-staging
+    - get: common-staging
+      trigger: true
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -250,19 +248,13 @@ jobs:
         BOSH_ENVIRONMENT: ((stagingbosh-target))
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config.yml
+    input_mapping:
+      common: common-staging
     params:
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((stagingbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((staging_bosh_uaa_ci_client_secret))
-      TRIPWIRE_LOCALPASS: ((tripwire-localpass))
-      TRIPWIRE_SITEPASS: ((tripwire-sitepass))
-      AWS_REGION: ((aws-region))
-      NESSUS_AGENT_KEY: ((nessus-agent-key))
-      NESSUS_AGENT_SERVER: ((nessus-agent-server))
-      NESSUS_AGENT_PORT: ((nessus-agent-port))
-      NESSUS_AGENT_GROUP: ((nessus-agent-group-staging))
-      ENVIRONMENT: staging
 
 - name: deploy-production-bosh
   serial: true
@@ -332,6 +324,8 @@ jobs:
     - get: bosh-config
     - get: terraform-yaml
       resource: terraform-yaml-production
+    - get: common-production
+      trigger: true
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -364,19 +358,13 @@ jobs:
         BOSH_ENVIRONMENT: ((productionbosh-target))
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config.yml
+    input_mapping:
+      common: common-development
     params:
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((productionbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
-      TRIPWIRE_LOCALPASS: ((tripwire-localpass))
-      TRIPWIRE_SITEPASS: ((tripwire-sitepass))
-      AWS_REGION: ((aws-region))
-      NESSUS_AGENT_KEY: ((nessus-agent-key))
-      NESSUS_AGENT_SERVER: ((nessus-agent-server))
-      NESSUS_AGENT_PORT: ((nessus-agent-port))
-      NESSUS_AGENT_GROUP: ((nessus-agent-group-production))
-      ENVIRONMENT: production
 
 - name: deploy-tooling-bosh
   serial: true
@@ -441,6 +429,8 @@ jobs:
     - get: bosh-config
     - get: terraform-yaml
       resource: terraform-yaml-production
+    - get: common-tooling
+      trigger: true
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -486,19 +476,14 @@ jobs:
   - put: semver-tooling-version
     params: {bump: patch}
   - task: update-runtime-config
-    file: bosh-config/ci/update-runtime-config-tooling.yml
+    file: bosh-config/ci/update-runtime-config.yml
+    input_mapping:
+      common: common-tooling
     params:
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((toolingbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
-      TRIPWIRE_LOCALPASS: ((tripwire-localpass))
-      TRIPWIRE_SITEPASS: ((tripwire-sitepass))
-      AWS_REGION: ((aws-region))
-      NESSUS_AGENT_KEY: ((nessus-agent-key))
-      NESSUS_AGENT_SERVER: ((nessus-agent-server))
-      NESSUS_AGENT_PORT: ((nessus-agent-port))
-      NESSUS_AGENT_GROUP: ((nessus-agent-group-tooling))
 
 - name: common-releases-master
   serial: true
@@ -509,6 +494,8 @@ jobs:
     - get: bosh-config
     - get: terraform-yaml
       resource: terraform-yaml-production
+    - get: common-master
+      trigger: true
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -555,18 +542,13 @@ jobs:
     params: {bump: patch}
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config-tooling.yml
+    input_mapping:
+      common: common-master
     params:
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((masterbosh-target))
       BOSH_CLIENT: admin
       BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
-      TRIPWIRE_LOCALPASS: ((tripwire-localpass))
-      TRIPWIRE_SITEPASS: ((tripwire-sitepass))
-      AWS_REGION: ((aws-region))
-      NESSUS_AGENT_KEY: ((nessus-agent-key))
-      NESSUS_AGENT_SERVER: ((nessus-agent-server))
-      NESSUS_AGENT_PORT: ((nessus-agent-port))
-      NESSUS_AGENT_GROUP: ((nessus-agent-group-master))
 
 - name: deploy-master-bosh
   serial: true
