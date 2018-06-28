@@ -33,7 +33,6 @@ jobs:
       - bosh-deployment/misc/source-releases/uaa.yml
       - bosh-deployment/misc/powerdns.yml
       - bosh-config/operations/name.yml
-      - bosh-config/operations/releases.yml
       - bosh-config/operations/s3-blobstore.yml
       - bosh-config/operations/external-db.yml
       - bosh-config/operations/uaa-clients.yml

@@ -1,8 +1,0 @@
-# TODO: Delete after bosh-deployment updates to 266.3 or higher
-- type: replace
-  path: /releases/name=bosh
-  value:
-    name: bosh
-    version: "266.3.0"
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh?v=266.3.0
-    sha1: f2fc37fd5384ef741b5892b138eeebe25974c359
