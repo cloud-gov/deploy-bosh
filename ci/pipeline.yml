@@ -572,27 +572,22 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - get: bosh-deployment
+      trigger: true
     - get: bosh-config
       resource: bosh-create-env-config
       trigger: true
-    - get: secrets-common
-    - get: secrets
-      resource: secrets-master
-    - get: bosh-release
-      params:
-        tarball: false
-      trigger: true
-    - get: cpi-release
-      params:
-        tarball: false
-      trigger: true
-    - get: bosh-stemcell
-      trigger: true
+    - get: common
+      resource: common-master
     - get: terraform-yaml
       resource: terraform-yaml-tooling
     - get: bosh-state
       resource: masterbosh-state
     - get: ca-cert-store
+  - task: terraform-secrets
+    file: bosh-config/ci/terraform-secrets.yml
+    params:
+      VARS_FILE: terraform-master.yml
   - task: bosh-create-env
     file: bosh-config/bosh-create-env.yml
     tags: [iaas]
@@ -635,6 +630,13 @@ resources:
     region_name: ((aws-region))
     versioned_file: ca-cert-store.crt
 
+- name: common-master
+  type: s3-iam
+  source:
+    bucket: ((secrets-bucket))
+    region_name: ((aws-region))
+    versioned_file: master-bosh-decrypted.yml
+
 - name: common-tooling
   type: s3-iam
   source:
@@ -648,22 +650,6 @@ resources:
     bucket: ((secrets-bucket))
     region_name: ((aws-region))
     versioned_file: development-bosh-decrypted.yml
-
-- name: secrets-common
-  type: cg-common
-  source:
-    bucket_name: ((secrets-bucket))
-    region: ((aws-region))
-    secrets_file: ((common-secrets-file))
-    secrets_passphrase: ((common_secrets_secrets_passphrase))
-
-- name: secrets-master
-  type: cg-common
-  source:
-    bucket_name: ((secrets-bucket))
-    region: ((aws-region))
-    secrets_file: ((master-secrets-file))
-    secrets_passphrase: ((master_secrets_secrets_passphrase))
 
 - name: common-staging
   type: s3-iam
@@ -686,16 +672,6 @@ resources:
     region_name: ((aws-region))
     versioned_file: master-bosh-state.json
     server_side_encryption: AES256
-
-- name: bosh-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry/bosh
-
-- name: cpi-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry-incubator/bosh-aws-cpi-release
 
 - name: cron-release
   type: bosh-io-release
@@ -875,11 +851,6 @@ resources:
     region_name: ((aws-region))
 
 resource_types:
-- name: cg-common
-  type: docker-image
-  source:
-    repository: 18fgsa/cg-common-resource
-
 - name: bosh-deployment
   type: docker-image
   source:

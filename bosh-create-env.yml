@@ -7,15 +7,12 @@ image_resource:
     repository: 18fgsa/concourse-task
 
 inputs:
-- name: bosh-release
-- name: cpi-release
-- name: bosh-stemcell
-- name: secrets-common
-- name: secrets
+- name: bosh-deployment
+- name: common
 - name: terraform-yaml
 - name: bosh-config
 - name: bosh-state
-- name: ca-cert-store
+- name: terraform-secrets
 
 outputs:
 - name: updated-bosh-state
