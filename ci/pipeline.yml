@@ -359,7 +359,7 @@ jobs:
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config.yml
     input_mapping:
-      common: common-development
+      common: common-production
     params:
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((productionbosh-target))
@@ -541,7 +541,7 @@ jobs:
   - put: semver-master-version
     params: {bump: patch}
   - task: update-runtime-config
-    file: bosh-config/ci/update-runtime-config-tooling.yml
+    file: bosh-config/ci/update-runtime-config.yml
     input_mapping:
       common: common-master
     params:
