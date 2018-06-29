@@ -80,6 +80,8 @@ jobs:
   - aggregate:
     - get: certificate
       resource: ca-cert-store
+    - get: bosh-deployment
+      trigger: true
     - get: bosh-config
       resource: bosh-config-development
     - get: terraform-yaml

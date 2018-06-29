@@ -20,3 +20,7 @@ bosh -n update-runtime-config \
   --vars-env runtime \
   --vars-file terraform-yaml/state.yml \
   --vars-file common/*.yml
+
+bosh -n update-runtime-config --name dns \
+  bosh-deployment/runtime-configs/dns.yml \
+  --vars-file common/*.yml
