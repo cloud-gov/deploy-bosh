@@ -46,5 +46,15 @@
     user: ((terraform_outputs.bosh_rds_username))
     password: ((terraform_outputs.bosh_rds_password))
 
+- type: replace
+  path: /instance_groups/name=bosh/properties/credhub?/data_storage
+  value:
+    host: ((terraform_outputs.credhub_rds_host_curr))
+    port: ((terraform_outputs.credhub_rds_port))
+    user: ((terraform_outputs.credhub_rds_username))
+    password: ((terraform_outputs.credhub_rds_password))
+    database: credhub
+    require_tls: true
+
 - type: remove
   path: /variables/name=postgres_password
