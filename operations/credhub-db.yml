@@ -6,3 +6,4 @@
     user: ((terraform_outputs.credhub_rds_username))
     password: ((terraform_outputs.credhub_rds_password))
     database: credhub
+    
