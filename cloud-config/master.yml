@@ -12,7 +12,7 @@ networks:
     gateway: (( grab terraform_outputs.private_subnet_az1_gateway ))
     static:
     - (( grab terraform_outputs.tooling_bosh_static_ip ))
-    reserved: (( grab terraform_outputs.private_subnet_az1_reserved terraform_outputs.master_bosh_static_ip terraform_outputs.staging_dns_private_ips terraform_outputs.production_dns_private_ips terraform_outputs.production_smtp_private_ip ))
+    reserved: (( grab terraform_outputs.private_subnet_az1_reserved terraform_outputs.master_bosh_static_ip terraform_outputs.bosh_uaa_static_ips terraform_outputs.staging_dns_private_ips terraform_outputs.production_dns_private_ips terraform_outputs.production_smtp_private_ip ))
     dns:
     - (( grab terraform_outputs.vpc_cidr_dns ))
     cloud_properties:
