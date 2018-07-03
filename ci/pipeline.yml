@@ -389,6 +389,21 @@ jobs:
     params:
       <<: *bosh-deployment
       ops_files:
+      - bosh-deployment/uaa.yml
+      - bosh-deployment/aws/cpi.yml
+      - bosh-deployment/aws/iam-instance-profile.yml
+      - bosh-deployment/misc/source-releases/bosh.yml
+      - bosh-deployment/misc/source-releases/uaa.yml
+      - bosh-deployment/misc/powerdns.yml
+      - bosh-config/operations/name.yml
+      - bosh-config/operations/s3-blobstore.yml
+      - bosh-config/operations/external-db.yml
+      - bosh-config/operations/uaa-clients.yml
+      - bosh-config/operations/cloud-config.yml
+      - bosh-config/operations/update.yml
+      - bosh-config/operations/cron.yml
+      - bosh-config/operations/cpi.yml
+      - bosh-config/operations/ntp.yml
       - bosh-config/operations/toolingbosh-tld.yml
       vars_files:
       - bosh-config/variables/tooling.yml
