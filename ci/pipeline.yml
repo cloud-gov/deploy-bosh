@@ -388,6 +388,8 @@ jobs:
   - put: toolingbosh-deployment
     params:
       <<: *bosh-deployment
+      ops_files:
+      - bosh-config/operations/toolingbosh-tld.yml
       vars_files:
       - bosh-config/variables/tooling.yml
       - terraform-secrets/terraform.yml
