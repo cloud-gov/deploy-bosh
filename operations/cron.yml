@@ -99,4 +99,4 @@
               done
 
               curl -X PUT --data-binary "@${metrics}" "${GATEWAY_IP}:${PROMETHEUS_PUSH_GATEWAY_PORT:-9091}/metrics/job/bosh_unknown_instance/vpc_name/${VPC_NAME}"
-:             rm "${metrics}"
+              rm "${metrics}"
