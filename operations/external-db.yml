@@ -54,6 +54,7 @@
     port: ((terraform_outputs.credhub_rds_port))
     username: ((terraform_outputs.credhub_rds_username))
     password: ((terraform_outputs.credhub_rds_password))
+    database: credhub
     require_tls: true
 
 - type: remove
