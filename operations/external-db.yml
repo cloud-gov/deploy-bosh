@@ -47,7 +47,7 @@
     password: ((terraform_outputs.bosh_rds_password))
 
 - type: replace
-  path: /instance_groups/name=bosh/properties/credhub?/data_storage
+  path: /instance_groups/name=bosh/jobs/name=credhub/properties/credhub/data_storage
   value:
     host: ((terraform_outputs.credhub_rds_host))
     port: ((terraform_outputs.credhub_rds_port))
