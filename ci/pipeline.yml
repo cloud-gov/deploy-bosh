@@ -45,7 +45,7 @@ jobs:
       - bosh-config/variables/development.yml
       - terraform-secrets/terraform.yml
       - terraform-yaml/state.yml
-      - common-development/development-bosh-decrypted.yml
+      - common-development/development-bosh.yml
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
@@ -177,7 +177,7 @@ jobs:
       - bosh-config/variables/staging.yml
       - terraform-secrets/terraform.yml
       - terraform-yaml/state.yml
-      - common-staging/staging-bosh-decrypted.yml
+      - common-staging/staging-bosh.yml
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
@@ -287,7 +287,7 @@ jobs:
       - bosh-config/variables/production.yml
       - terraform-secrets/terraform.yml
       - terraform-yaml/state.yml
-      - common/production-bosh-decrypted.yml
+      - common/production-bosh.yml
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
@@ -409,7 +409,7 @@ jobs:
       - bosh-config/variables/tooling.yml
       - terraform-secrets/terraform.yml
       - terraform-yaml/state.yml
-      - common-tooling/tooling-bosh-decrypted.yml
+      - common-tooling/tooling-bosh.yml
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config-tooling.yml
     params:
@@ -634,35 +634,35 @@ resources:
   source:
     bucket: ((secrets-bucket))
     region_name: ((aws-region))
-    versioned_file: master-bosh-decrypted.yml
+    versioned_file: master-bosh.yml
 
 - name: common-tooling
   type: s3-iam
   source:
     bucket: ((secrets-bucket))
     region_name: ((aws-region))
-    versioned_file: tooling-bosh-decrypted.yml
+    versioned_file: tooling-bosh.yml
 
 - name: common-development
   type: s3-iam
   source:
     bucket: ((secrets-bucket))
     region_name: ((aws-region))
-    versioned_file: development-bosh-decrypted.yml
+    versioned_file: development-bosh.yml
 
 - name: common-staging
   type: s3-iam
   source:
     bucket: ((secrets-bucket))
     region_name: ((aws-region))
-    versioned_file: staging-bosh-decrypted.yml
+    versioned_file: staging-bosh.yml
 
 - name: common-production
   type: s3-iam
   source:
     bucket: ((secrets-bucket))
     region_name: ((aws-region))
-    versioned_file: production-bosh-decrypted.yml
+    versioned_file: production-bosh.yml
 
 - name: masterbosh-state
   type: s3-iam
