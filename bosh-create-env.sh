@@ -2,7 +2,7 @@
 
 set -eux
 
-bosh interpolate common/master-bosh-decrypted.yml --path "/default_ca/private_key" > ./ca.key
+bosh interpolate common/master-bosh.yml --path "/default_ca/private_key" > ./ca.key
 
 # and deploy it!
 set +e
@@ -19,7 +19,7 @@ bosh create-env \
   --vars-file bosh-config/variables/master.yml \
   --vars-file terraform-yaml/state.yml \
   --vars-file terraform-secrets/terraform.yml \
-  --vars-file common/master-bosh-decrypted.yml
+  --vars-file common/master-bosh.yml
 code=$?
 set -e
 
