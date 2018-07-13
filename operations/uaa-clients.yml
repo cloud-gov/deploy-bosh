@@ -17,6 +17,16 @@
     secret: "((bosh_exporter_client_secret))"
 
 - type: replace
+  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/clients/concourse_to_dev_credhub?
+  value:
+    override: true
+    authorized-grant-types: client_credentials
+    scope: ""
+    authorities: credhub.read,credhub.write
+    access-token-validity: 3600
+    secret: ((uaa_clients_concourse_to_dev_credhub))
+
+- type: replace
   path: /variables/-
   value:
     name: bosh_ci_client_secret
@@ -26,4 +36,10 @@
   path: /variables/-
   value:
     name: bosh_exporter_client_secret
+    type: password
+
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_concourse_to_dev_credhub
     type: password
