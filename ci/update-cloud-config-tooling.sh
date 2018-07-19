@@ -1,22 +1,21 @@
 #!/bin/bash
 
-set -eu
+set -eux
 
-files=("bosh-config/cloud-config/base.yml" "terraform-yaml/state.yml")
-for file in ${MANIFEST_PATH:-}; do
-  files=(${files[@]} "${file}")
+args=("--vars-file" "terraform-yaml/state.yml")
+for ops in ${OPS_PATHS:-}; do
+  args=(${args[@]} "${ops}")
 done
 
 for environment in "development" "staging" "production"; do
   if [ -s terraform-yaml-${environment}/state.yml ]; then
-    ENVIRONMENT=${environment} spruce merge --prune terraform_outputs \
+    cloud_config_environment=${environment} bosh interpolate merge \
       bosh-config/cloud-config/bosh.yml \
       terraform-yaml-${environment}/state.yml \
+      --vars-env cloud_config \
       > ${environment}-bosh.yml
-    files=(${files[@]} ${environment}-bosh.yml)
+    args=(${args[@]} "--ops-file" "${environment}-bosh.yml")
   fi
 done
 
-spruce merge --prune terraform_outputs "${files[@]}" > cloud-config-final.yml
-
-bosh-cli -n update-cloud-config cloud-config-final.yml
+bosh -n update-cloud-config bosh-config/cloud-config/base.yml "${args[@]}"

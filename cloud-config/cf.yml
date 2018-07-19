@@ -1,84 +1,151 @@
-vm_types:
-- name: minimal
-  cloud_properties:
-    instance_type: m4.large
-    ephemeral_disk:
-      size: 10240
-- name: small
-  cloud_properties:
-    instance_type: m4.large
-    ephemeral_disk:
-      size: 10240
-- name: small-highmem
-  cloud_properties:
-    instance_type: r4.xlarge
-    ephemeral_disk:
-      size: 10240
+- type: replace
+  path: /vm_types/-
+  value:
+    name: minimal
+    cloud_properties:
+      instance_type: m4.large
+      ephemeral_disk:
+        size: 10240
+- type: replace
+  path: /vm_types/-
+  value:
+    name: small
+    cloud_properties:
+      instance_type: m4.large
+      ephemeral_disk:
+        size: 10240
+- type: replace
+  path: /vm_types/-
+  value:
+    name: small-highmem
+    cloud_properties:
+      instance_type: r4.xlarge
+      ephemeral_disk:
+        size: 10240
 
-disk_types:
-- name: default
-  disk_size: 1024
-- name: 1GB
-  disk_size: 1024
-- name: 5GB
-  disk_size: 5120
-- name: 10GB
-  disk_size: 10240
-- name: 50GB
-  disk_size: 51200
-- name: 100GB
-  disk_size: 102400
-- name: 500GB
-  disk_size: 512000
-- name: 1TB
-  disk_size: 1048576
-
-vm_extensions:
 # Ephemeral disks
-- name: 1GB_ephemeral_disk
-  cloud_properties:
-    ephemeral_disk:
-      size: 1024
-- name: 5GB_ephemeral_disk
-  cloud_properties:
-    ephemeral_disk:
-      size: 1024
-- name: 10GB_ephemeral_disk
-  cloud_properties:
-    ephemeral_disk:
-      size: 10240
-- name: 50GB_ephemeral_disk
-  cloud_properties:
-    ephemeral_disk:
-      size: 51200
-- name: 100GB_ephemeral_disk
-  cloud_properties:
-    ephemeral_disk:
-      size: 102400
-- name: 200GB_ephemeral_disk
-  cloud_properties:
-    ephemeral_disk:
-      size: 204800
-- name: 500GB_ephemeral_disk
-  cloud_properties:
-    ephemeral_disk:
-      size: 512000
-- name: 1TB_ephemeral_disk
-  cloud_properties:
-    ephemeral_disk:
-      size: 1048576
+- type: replace
+  path: /disk_types/-
+  value:
+    name: default
+    disk_size: 1024
+- type: replace
+  path: /disk_types/-
+  value:
+    name: 1GB
+    disk_size: 1024
+- type: replace
+  path: /disk_types/-
+  value:
+    name: 5GB
+    disk_size: 5120
+- type: replace
+  path: /disk_types/-
+  value:
+    name: 10GB
+    disk_size: 10240
+- type: replace
+  path: /disk_types/-
+  value:
+    name: 50GB
+    disk_size: 51200
+- type: replace
+  path: /disk_types/-
+  value:
+    name: 100GB
+    disk_size: 102400
+- type: replace
+  path: /disk_types/-
+  value:
+    name: 500GB
+    disk_size: 512000
+- type: replace
+  path: /disk_types/-
+  value:
+    name: 1TB
+    disk_size: 1048576
+
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: 1GB_ephemeral_disk
+    cloud_properties:
+      ephemeral_disk:
+        size: 1024
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: 5GB_ephemeral_disk
+    cloud_properties:
+      ephemeral_disk:
+        size: 1024
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: 10GB_ephemeral_disk
+    cloud_properties:
+      ephemeral_disk:
+        size: 10240
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: 50GB_ephemeral_disk
+    cloud_properties:
+      ephemeral_disk:
+        size: 51200
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: 100GB_ephemeral_disk
+    cloud_properties:
+      ephemeral_disk:
+        size: 102400
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: 200GB_ephemeral_disk
+    cloud_properties:
+      ephemeral_disk:
+        size: 204800
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: 500GB_ephemeral_disk
+    cloud_properties:
+      ephemeral_disk:
+        size: 512000
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: 1TB_ephemeral_disk
+    cloud_properties:
+      ephemeral_disk:
+        size: 1048576
+
 # Load balancers
-- name: cf-router-network-properties
-  cloud_properties:
-    lb_target_groups: (( grab terraform_outputs.cf_target_group terraform_outputs.cf_apps_target_group terraform_outputs.domains_broker_target_group_apps_names terraform_outputs.domains_broker_target_group_challenge_names ))
-- name: diego-ssh-proxy-network-properties
-  cloud_properties:
-    elbs:
-    - (( grab terraform_outputs.diego_elb_name ))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: cf-router-network-properties
+    cloud_properties:
+      lb_target_groups: ((terraform_outputs.cf_router_target_groups))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: diego-ssh-proxy-network-properties
+    cloud_properties:
+      elbs: [((terraform_outputs.diego_elb_name))]
+
 # Instance profiles
-- name: blobstore-profile
-  cloud_properties:
-    iam_instance_profile: (( grab terraform_outputs.cf_blobstore_profile ))
-- name: diego-platform-cell-profile
-  cloud_properties:
-    iam_instance_profile: (( grab terraform_outputs.platform_profile ))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: blobstore-profile
+    cloud_properties:
+      iam_instance_profile: ((terraform_outputs.cf_blobstore_profile))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: diego-platform-cell-profile
+    cloud_properties:
+      iam_instance_profile: ((terraform_outputs.platform_profile))

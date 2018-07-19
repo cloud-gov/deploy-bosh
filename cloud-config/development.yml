@@ -1,40 +1,31 @@
-vm_types:
-- name: logsearch_es_master
-  cloud_properties:
-    instance_type: t2.large
-- name: logsearch_es_data
-  cloud_properties:
-    instance_type: t2.large
-- name: logsearch_queue
-  cloud_properties:
-    instance_type: t2.large
-- name: logsearch_ingestor
-  cloud_properties:
-    instance_type: t2.large
-- name: logsearch_parser
-  cloud_properties:
-    instance_type: t2.large
-- name: logsearch_kibana
-  cloud_properties:
-    instance_type: t2.large
-- name: logsearch_maintenance
-  cloud_properties:
-    instance_type: t2.large
-- name: logsearch_cluster_monitor
-  cloud_properties:
-    instance_type: t2.large
-- name: kubernetes_consul
-  cloud_properties:
-    instance_type: t2.large
-- name: kubernetes_etcd
-  cloud_properties:
-    instance_type: t2.large
-- name: kubernetes_minion
-  cloud_properties:
-    instance_type: r4.large
+- type: replace
+  path: /vm_types/name=logsearch_es_master/cloud_properties/instance_type
+  value: t2.large
+- type: replace
+  path: /vm_types/name=logsearch_es_data/cloud_properties/instance_type
+  value: t2.large
+- type: replace
+  path: /vm_types/name=logsearch_ingestor/cloud_properties/instance_type
+  value: t2.large
+- type: replace
+  path: /vm_types/name=logsearch_kibana/cloud_properties/instance_type
+  value: t2.large
+- type: replace
+  path: /vm_types/name=logsearch_maintenance/cloud_properties/instance_type
+  value: t2.large
+- type: replace
+  path: /vm_types/name=kubernetes_consul/cloud_properties/instance_type
+  value: t2.large
+- type: replace
+  path: /vm_types/name=kubernetes_etcd/cloud_properties/instance_type
+  value: t2.large
+- type: replace
+  path: /vm_types/name=kubernetes_minion/cloud_properties/instance_type
+  value: r4.large
 
-disk_types:
-- name: logsearch_es_data
-  disk_size: 150_000
-- name: logsearch_es_platform_data
-  disk_size: 50_000
+- type: replace
+  path: /disk_types/name=logsearch_es_data/disk_size
+  value: 150_000
+- type: replace
+  path: /disk_types/name=logsearch_es_platform_data/disk_size
+  value: 50_000
