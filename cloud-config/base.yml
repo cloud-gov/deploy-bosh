@@ -1,16 +1,16 @@
 azs:
 - name: z1
   cloud_properties:
-    availability_zone: (( grab terraform_outputs.az1 ))
+    availability_zone: ((terraform_outputs.az1))
 - name: z2
   cloud_properties:
-    availability_zone: (( grab terraform_outputs.az2 ))
+    availability_zone: ((terraform_outputs.az2))
 
 vm_types:
 - name: compilation
   cloud_properties:
     instance_type: c3.xlarge
-    iam_instance_profile: (( grab terraform_outputs.bosh_compilation_profile ))
+    iam_instance_profile: ((terraform_outputs.bosh_compilation_profile))
     ephemeral_disk:
       size: 30000
 - name: errand_small
@@ -23,7 +23,10 @@ vm_types:
 vm_extensions:
 - name: errand-profile
   cloud_properties:
-    iam_instance_profile: (( grab terraform_outputs.bosh_compilation_profile ))
+    iam_instance_profile: ((terraform_outputs.bosh_compilation_profile))
+
+networks: []
+disk_types: []
 
 compilation:
   workers: 5

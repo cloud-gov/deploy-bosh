@@ -49,7 +49,7 @@ jobs:
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
-      MANIFEST_PATH: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/development.yml"
+      OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/development.yml"
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((developmentbosh-target))
       BOSH_CLIENT: ci
@@ -181,7 +181,7 @@ jobs:
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
-      MANIFEST_PATH: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/staging.yml"
+      OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/staging.yml"
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((stagingbosh-target))
       BOSH_CLIENT: ci
@@ -291,7 +291,7 @@ jobs:
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
-      MANIFEST_PATH: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml"
+      OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml"
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((productionbosh-target))
       BOSH_CLIENT: ci
@@ -413,7 +413,7 @@ jobs:
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config-tooling.yml
     params:
-      MANIFEST_PATH: "bosh-config/cloud-config/tooling.yml"
+      OPS_PATHS: "bosh-config/cloud-config/tooling.yml"
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((toolingbosh-target))
       BOSH_CLIENT: ci
@@ -593,7 +593,7 @@ jobs:
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
-      MANIFEST_PATH: "bosh-config/cloud-config/master.yml"
+      OPS_PATHS: "bosh-config/cloud-config/master.yml"
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((masterbosh-target))
       BOSH_CLIENT: admin
