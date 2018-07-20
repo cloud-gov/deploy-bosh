@@ -16,6 +16,7 @@ jobs:
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-development
+    - get: terraform-yaml-isolation-segment-development
     - get: semver-tooling-version
       passed: [common-releases-tooling]
   - task: terraform-secrets
@@ -48,13 +49,25 @@ jobs:
       - terraform-yaml/state.yml
       - common-development/development-bosh.yml
   - task: update-cloud-config
-    file: bosh-config/ci/update-cloud-config.yml
-    params:
-      OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/development.yml"
-      BOSH_CA_CERT: ((common_ca_cert_store))
-      BOSH_ENVIRONMENT: ((developmentbosh-target))
-      BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: 18fgsa/concourse-task
+      inputs:
+      - {name: bosh-config}
+      - {name: ca-cert-store}
+      - {name: terraform-yaml}
+      - {name: terraform-yaml-isolation-segment-development}
+      params:
+        OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/development.yml"
+        BOSH_CA_CERT: ((common_ca_cert_store))
+        BOSH_ENVIRONMENT: ((developmentbosh-target))
+        BOSH_CLIENT: ci
+        BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
+      run:
+        path: bosh-config/ci/update-cloud-config.sh
   on_failure:
     put: slack
     params:
@@ -849,6 +862,13 @@ resources:
   source:
     bucket: ((tf-state-bucket))
     versioned_file: ((tf-state-file-production))
+    region_name: ((aws-region))
+
+- name: terraform-yaml-isolation-segment-development
+  type: s3-iam
+  source:
+    bucket: ((tf-state-bucket))
+    versioned_file: ((tf-state-file-isolation-segment-development))
     region_name: ((aws-region))
 
 resource_types:
