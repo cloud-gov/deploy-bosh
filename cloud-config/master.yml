@@ -7,6 +7,7 @@
 
 - type: replace
   path: /networks/-
+  value:
     name: bosh
     type: manual
     subnets:
@@ -22,15 +23,17 @@
 
 - type: replace
   path: /vm_extensions/-
+  value:
     name: bosh-profile
     cloud_properties:
       iam_instance_profile: ((terraform_outputs.bosh_profile))
 
 - type: replace
   path: /disk_types/-
+  value:
     name: bosh
     disk_size: 300000
 
 - type: replace
-  path: /compilation/network
+  path: /compilation/network?
   value: bosh
