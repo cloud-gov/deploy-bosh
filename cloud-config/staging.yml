@@ -1,6 +1,11 @@
 - type: replace
+  path: /vm_types/name=small-highmem/cloud_properties/instance_type
+  value: m4.large
+
+- type: replace
   path: /vm_types/name=logsearch_es_data/cloud_properties/instance_type
   value: t2.large
+
 - type: replace
   path: /vm_types/name=kubernetes_consul/cloud_properties/instance_type
   value: t2.large
