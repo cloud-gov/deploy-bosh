@@ -153,5 +153,6 @@
       pCfTa27ng9mMMC2YLqWQpW4TkqjDin2ZC+5X/mbrjzTvVg==
       -----END CERTIFICATE-----
 
+
 - type: remove
   path: /variables/name=postgres_password
