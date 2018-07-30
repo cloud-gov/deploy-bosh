@@ -23,7 +23,7 @@
     cloud_properties:
       instance_type: t2.medium
       ephemeral_disk:
-        size: 30000
+        size: 30_000
 - type: replace
   path: /vm_types/-
   value:
@@ -55,15 +55,15 @@
     cloud_properties:
       instance_type: t2.medium
       ephemeral_disk:
-        size: 45000
+        size: 45_000
 - type: replace
   path: /vm_types/-
-  value: &concourse-worker-vm
+  value:
     name: staging-concourse-worker
     cloud_properties:
-      instance_type: m4.xlarge
+      instance_type: m4.large
       ephemeral_disk:
-        size: 300000
+        size: 50_000
 - type: replace
   path: /vm_types/-
   value: &concourse-iaas-worker-vm
@@ -71,7 +71,7 @@
     cloud_properties:
       instance_type: m4.large
       ephemeral_disk:
-        size: 300000
+        size: 300_000
 - type: replace
   path: /vm_types/-
   value:
@@ -79,12 +79,15 @@
     cloud_properties:
       instance_type: t2.large
       ephemeral_disk:
-        size: 45000
+        size: 45_000
 - type: replace
   path: /vm_types/-
   value:
-    <<: *concourse-worker-vm
     name: production-concourse-worker
+    cloud_properties:
+      instance_type: m4.xlarge
+      ephemeral_disk:
+        size: 300_000
 - type: replace
   path: /vm_types/-
   value:
