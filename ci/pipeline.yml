@@ -41,6 +41,7 @@ jobs:
       - bosh-config/operations/update.yml
       - bosh-config/operations/cron.yml
       - bosh-config/operations/cpi.yml
+      - bosh-config/operations/dns.yml
       - bosh-config/operations/ntp.yml
       vars_files:
       - bosh-config/variables/development.yml
@@ -80,6 +81,8 @@ jobs:
   - aggregate:
     - get: certificate
       resource: ca-cert-store
+    - get: bosh-deployment
+      trigger: true
     - get: bosh-config
       resource: bosh-config-development
     - get: terraform-yaml

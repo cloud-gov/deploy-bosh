@@ -7,6 +7,7 @@ image_resource:
 
 inputs:
 - {name: bosh-config}
+- {name: bosh-deployment}
 - {name: certificate}
 - {name: terraform-yaml}
 - {name: common}
