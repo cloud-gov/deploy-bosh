@@ -39,14 +39,6 @@
       tag: uaa
 
 - type: replace
-  path: /instance_groups/name=bosh/properties/dns?/db
-  value:
-    host: ((terraform_outputs.bosh_rds_host_curr))
-    port: ((terraform_outputs.bosh_rds_port))
-    user: ((terraform_outputs.bosh_rds_username))
-    password: ((terraform_outputs.bosh_rds_password))
-
-- type: replace
   path: /instance_groups/name=bosh/jobs/name=credhub/properties/credhub/data_storage
   value:
     type: postgres

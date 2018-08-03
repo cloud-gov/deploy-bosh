@@ -32,7 +32,6 @@ jobs:
       - bosh-deployment/aws/iam-instance-profile.yml
       - bosh-deployment/misc/source-releases/bosh.yml
       - bosh-deployment/misc/source-releases/uaa.yml
-      - bosh-deployment/misc/powerdns.yml
       - bosh-config/operations/name.yml
       - bosh-config/operations/s3-blobstore.yml
       - bosh-config/operations/external-db.yml
