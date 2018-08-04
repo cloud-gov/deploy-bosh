@@ -1,8 +1,0 @@
-# TODO: Move to cf deployment after https://github.com/cloudfoundry/bosh-dns-aliases-release/pull/5 is resolved
-- type: replace
-  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties/handlers?/-
-  value:
-    domain: service.kubernetes.
-    source:
-      type: dns
-      recursors: ((kubernetes_recursors))
