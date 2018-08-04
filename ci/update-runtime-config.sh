@@ -23,5 +23,4 @@ bosh -n update-runtime-config \
 
 bosh -n update-runtime-config --name dns \
   bosh-deployment/runtime-configs/dns.yml \
-  --vars-file common/*.yml \
-  --ops-file bosh-config/operations/kubernetes-dns.yml
+  --vars-file common/*.yml
