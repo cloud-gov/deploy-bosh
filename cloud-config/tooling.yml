@@ -105,9 +105,7 @@
       gateway: ((terraform_outputs.private_subnet_az1_gateway))
       static: ((terraform_outputs.bosh_uaa_static_ips))
       az: z1
-      dns:
-      - ((terraform_outputs.tooling_bosh_static_ip))
-      - ((terraform_outputs.vpc_cidr_dns))
+      dns: [((terraform_outputs.vpc_cidr_dns))]
       cloud_properties:
         security_groups:
         - ((terraform_outputs.bosh_security_group))
@@ -125,9 +123,7 @@
       static:
       - ((terraform_outputs.nessus_static_ip))
       az: z1
-      dns:
-      - ((terraform_outputs.tooling_bosh_static_ip))
-      - ((terraform_outputs.vpc_cidr_dns))
+      dns: [((terraform_outputs.vpc_cidr_dns))]
       cloud_properties:
         security_groups:
         - ((terraform_outputs.bosh_security_group))
@@ -144,9 +140,7 @@
       reserved:
       - ((terraform_outputs.staging_concourse_subnet_reserved))
       az: z2
-      dns:
-      - ((terraform_outputs.tooling_bosh_static_ip))
-      - ((terraform_outputs.vpc_cidr_dns))
+      dns: [((terraform_outputs.vpc_cidr_dns))]
       cloud_properties:
         subnet: ((terraform_outputs.staging_concourse_subnet))
         security_groups:
@@ -163,9 +157,7 @@
       reserved:
       - ((terraform_outputs.production_concourse_subnet_reserved))
       az: z1
-      dns:
-      - ((terraform_outputs.tooling_bosh_static_ip))
-      - ((terraform_outputs.vpc_cidr_dns))
+      dns: [((terraform_outputs.vpc_cidr_dns))]
       cloud_properties:
         subnet: ((terraform_outputs.production_concourse_subnet))
         security_groups:
@@ -182,9 +174,7 @@
       reserved:
       - ((terraform_outputs.staging_monitoring_subnet_reserved))
       az: z2
-      dns:
-      - ((terraform_outputs.tooling_bosh_static_ip))
-      - ((terraform_outputs.vpc_cidr_dns))
+      dns: [((terraform_outputs.vpc_cidr_dns))]
       cloud_properties:
         subnet: ((terraform_outputs.staging_monitoring_subnet))
         security_groups:
@@ -201,9 +191,7 @@
       reserved:
       - ((terraform_outputs.production_monitoring_subnet_reserved))
       az: z1
-      dns:
-      - ((terraform_outputs.tooling_bosh_static_ip))
-      - ((terraform_outputs.vpc_cidr_dns))
+      dns: [((terraform_outputs.vpc_cidr_dns))]
       cloud_properties:
         subnet: ((terraform_outputs.production_monitoring_subnet))
         security_groups:
@@ -220,9 +208,7 @@
       reserved: ((terraform_outputs.private_subnet_az1_reserved))
       gateway: ((terraform_outputs.private_subnet_az1_gateway))
       static: ((terraform_outputs.dns_private_ips))
-      dns:
-      - ((terraform_outputs.tooling_bosh_static_ip))
-      - ((terraform_outputs.vpc_cidr_dns))
+      dns: [((terraform_outputs.vpc_cidr_dns))]
       cloud_properties:
         subnet: ((terraform_outputs.private_subnet_az1))
         security_groups:
@@ -264,9 +250,7 @@
       reserved: ((terraform_outputs.private_subnet_az1_reserved))
       gateway: ((terraform_outputs.private_subnet_az1_gateway))
       static: ((terraform_outputs.production_smtp_private_ip))
-      dns:
-      - ((terraform_outputs.tooling_bosh_static_ip))
-      - ((terraform_outputs.vpc_cidr_dns))
+      dns: [((terraform_outputs.vpc_cidr_dns))]
       cloud_properties:
         subnet: ((terraform_outputs.private_subnet_az1))
         security_groups:
