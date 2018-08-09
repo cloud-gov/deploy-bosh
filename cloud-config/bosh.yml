@@ -8,9 +8,7 @@
       gateway: ((terraform_outputs.private_subnet_gateway_az1))
       static: ((terraform_outputs.bosh_network_static_ips))
       reserved: [((terraform_outputs.private_subnet_reserved_az1))]
-      dns:
-      - ((terraform_outputs.bosh_static_ip))
-      - ((terraform_outputs.vpc_cidr_dns))
+      dns: [((terraform_outputs.vpc_cidr_dns))]
       cloud_properties:
         subnet: ((terraform_outputs.private_subnet_az1))
         security_groups: [((terraform_outputs.bosh_security_group))]
