@@ -1,7 +1,3 @@
 - type: replace
   path: /name
   value: ((deployment_name))
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/dns?/domain_name
-  value: ((director_name))
