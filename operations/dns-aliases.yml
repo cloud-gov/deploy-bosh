@@ -1,0 +1,6 @@
+# Allow tooling services to resolve the prometheus push gateway
+- type: replace
+  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties/aliases?
+  value:
+    prometheus-staging.service.cf.internal: ["*.prometheus.staging-monitoring.prometheus-staging.bosh"]
+    prometheus-production.service.cf.internal: ["*.prometheus.production-monitoring.prometheus-production.bosh"]
