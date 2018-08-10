@@ -4,3 +4,6 @@
   value:
     prometheus-staging.service.cf.internal: ["*.prometheus.staging-monitoring.prometheus-staging.bosh"]
     prometheus-production.service.cf.internal: ["*.prometheus.production-monitoring.prometheus-production.bosh"]
+    prometheus-tooling.service.cf.internal: ["*.prometheus-tooling.production-monitoring.prometheus-production.bosh"]
+    alertmanager-staging.service.cf.internal: ["*.alertmanager.staging-monitoring.prometheus-staging.bosh"]
+    alertmanager-production.service.cf.internal: ["*.alertmanager.production-monitoring.prometheus-production.bosh"]
