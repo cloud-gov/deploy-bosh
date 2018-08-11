@@ -3,4 +3,5 @@ environment: production
 deployment_name: productionbosh
 network: production-bosh
 instance_profile: production-bosh-profile
-gateway_host: 0.prometheus.production-monitoring.prometheus-production.toolingbosh
+gateway_host: prometheus-production.service.cf.internal
+gateway_deployment: ""

@@ -21,6 +21,7 @@
           VPC_NAME: ((terraform_outputs.stack_description))
           BOSH_DIRECTOR: ((terraform_outputs.bosh_static_ip))
           GATEWAY_HOST: ((gateway_host))
+          GATEWAY_DEPLOYMENT: ((gateway_deployment))
           INSTANCE_WHITELIST: ((terraform_outputs.master_bosh_static_ip)) ((terraform_outputs.bosh_static_ip))
         entries:
         - minute: '*'
@@ -44,8 +45,11 @@
               AWSCLI=/var/vcap/packages/awslogs/bin/aws
               export LD_LIBRARY_PATH=/var/vcap/packages/awslogs/lib
 
-              # get the push gateway ip from toolingbosh
-              GATEWAY_IP=$(dig +short @${TOOLING_BOSH} ${GATEWAY_HOST})
+              # Hack: look up push gateway address in database if gateway is managed by the current director
+              if [ -n "${GATEWAY_DEPLOYMENT}" ]; then
+                GATEWAY_HOST=$($PSQL -h ${PGHOST} -U ${PGUSERNAME} -d ${PGDBNAME} -t -c \
+                  "select ip from local_dns_records where deployment = '${GATEWAY_DEPLOYMENT}' and instance_group = 'prometheus'")
+              fi
 
               # build JMESpath filter to exclude a list of instances based on their PrivateIpAddress
               query_filter() {
@@ -98,5 +102,5 @@
 
               done
 
-              curl -X PUT --data-binary "@${metrics}" "${GATEWAY_IP}:${PROMETHEUS_PUSH_GATEWAY_PORT:-9091}/metrics/job/bosh_unknown_instance/vpc_name/${VPC_NAME}"
+              curl -X PUT --data-binary "@${metrics}" "${GATEWAY_HOST}:${GATEWAY_PORT:-9091}/metrics/job/bosh_unknown_instance/vpc_name/${VPC_NAME}"
               rm "${metrics}"
