@@ -48,7 +48,7 @@
               # Hack: look up push gateway address in database if gateway is managed by the current director
               if [ -n "${GATEWAY_DEPLOYMENT}" ]; then
                 GATEWAY_HOST=$($PSQL -h ${PGHOST} -U ${PGUSERNAME} -d ${PGDBNAME} -t -c \
-                  "select ip from local_dns_records where deployment = '${GATEWAY_DEPLOYMENT}' and instance_group = 'prometheus'")
+                  "select ip from local_dns_records where deployment = '${GATEWAY_DEPLOYMENT}' and instance_group = 'prometheus' limit 1")
               fi
 
               # build JMESpath filter to exclude a list of instances based on their PrivateIpAddress
