@@ -61,3 +61,6 @@ releases:
 - name: elasticache-broker
   uri: https://github.com/alphagov/paas-elasticache-broker-boshrelease
   branch: master
+- name: falco
+  uri: https://github.com/cloudfoundry-community/falco-boshrelease
+  branch: master
