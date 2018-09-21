@@ -13,3 +13,10 @@ inputs:
 
 run:
   path: bosh-config/ci/update-cloud-config-tooling.sh
+
+params:
+  OPS_PATHS:
+  BOSH_CA_CERT:
+  BOSH_ENVIRONMENT:
+  BOSH_CLIENT:
+  BOSH_CLIENT_SECRET:
