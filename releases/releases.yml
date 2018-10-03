@@ -31,6 +31,9 @@ releases:
 - name: admin-ui
   uri: https://github.com/jmcarp/admin-ui-boshrelease
   branch: deploy
+- name: cron
+  uri: https://github.com/cloudfoundry-community/cron-boshrelease
+  branch: master
 - name: kubernetes
   uri: https://github.com/18F/kubernetes-release
   branch: master
@@ -63,4 +66,4 @@ releases:
   branch: master
 - name: falco
   uri: https://github.com/cloudfoundry-community/falco-boshrelease
-  branch: master
+  branch: gardener
