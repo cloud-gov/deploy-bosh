@@ -668,9 +668,14 @@ resources:
     server_side_encryption: AES256
 
 - name: cron-release
-  type: bosh-io-release
+  # type: bosh-io-release
+  # source:
+  #   repository: cloudfoundry-community/cron-boshrelease
+  # Use our own version until community release is updated
+  type: s3-iam
   source:
-    repository: cloudfoundry-community/cron-boshrelease
+    regexp: cron-(.*).tgz
+    <<: *s3-release-params
 
 - name: ntp-release
   type: bosh-io-release
