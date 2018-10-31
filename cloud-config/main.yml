@@ -161,7 +161,7 @@
   path: /disk_types/-
   value:
     name: logsearch_es_data
-    disk_size: 2_500_000
+    disk_size: 3_500_000
 - type: replace
   path: /disk_types/-
   value:
