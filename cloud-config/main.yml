@@ -166,12 +166,12 @@
   path: /disk_types/-
   value:
     name: logsearch_es_platform_data
-    disk_size: 1_750_000
+    disk_size: 2_750_000
 - type: replace
   path: /disk_types/-
   value:
     name: logsearch_ingestor
-    disk_size: 35_000
+    disk_size: 64_000
 - type: replace
   path: /disk_types/-
   value:
