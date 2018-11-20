@@ -79,7 +79,7 @@
   value:
     name: production-concourse-web
     cloud_properties:
-      instance_type: t2.large
+      instance_type: t2.xlarge
       ephemeral_disk:
         size: 45_000
 - type: replace
