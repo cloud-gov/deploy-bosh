@@ -11,7 +11,7 @@ releases:
   branch: master
 - name: awslogs
   uri: https://github.com/18F/cg-awslogs-boshrelease
-  branch: master
+  branch: master-trusty
   tag_filter: trusty-*
 - name: clamav
   uri: https://github.com/18F/cg-clamav-boshrelease
