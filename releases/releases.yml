@@ -13,6 +13,9 @@ releases:
   uri: https://github.com/18F/cg-awslogs-boshrelease
   branch: master-trusty
   tag_filter: trusty-*
+- name: awslogs-xenial
+  uri: https://github.com/18F/cg-awslogs-boshrelease
+  branch: upgrade-to-xenial
 - name: clamav
   uri: https://github.com/18F/cg-clamav-boshrelease
   branch: master
