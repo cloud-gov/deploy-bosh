@@ -93,8 +93,11 @@ jobs:
       trigger: true
     - get: cg-s3-tripwire-release
       trigger: true
-    - get: cg-s3-awslogs-release
-      resource: cg-s3-awslogs-release-development
+    - get: cg-s3-awslogs-trusty-release
+      resource: cg-s3-awslogs-trusty-release-development
+      trigger: true
+    - get: cg-s3-awslogs-xenial-release
+      resource: cg-s3-awslogs-xenial-release-development
       trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
@@ -123,7 +126,8 @@ jobs:
       - {name: certificate}
       - {name: cg-s3-fisma-release, path: releases/fisma}
       - {name: cg-s3-tripwire-release, path: releases/tripwire}
-      - {name: cg-s3-awslogs-release, path: releases/awslogs-trusty}
+      - {name: cg-s3-awslogs-trusty-release, path: releases/awslogs-trusty}
+      - {name: cg-s3-awslogs-xenial-release, path: releases/awslogs-xenial}
       - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
       - {name: cg-s3-clamav-release, path: releases/clamav}
       - {name: cg-s3-snort-release, path: releases/snort}
@@ -226,7 +230,7 @@ jobs:
       trigger: true
     - get: cg-s3-tripwire-release
       trigger: true
-    - get: cg-s3-awslogs-release
+    - get: cg-s3-awslogs-trusty-release
       trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
@@ -338,7 +342,7 @@ jobs:
       trigger: true
     - get: cg-s3-tripwire-release
       trigger: true
-    - get: cg-s3-awslogs-release
+    - get: cg-s3-awslogs-trusty-release
       trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
@@ -445,7 +449,7 @@ jobs:
       trigger: true
     - get: cg-s3-tripwire-release
       trigger: true
-    - get: cg-s3-awslogs-release
+    - get: cg-s3-awslogs-trusty-release
       trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
@@ -470,7 +474,7 @@ jobs:
       - {name: certificate}
       - {name: cg-s3-fisma-release, path: releases/fisma}
       - {name: cg-s3-tripwire-release, path: releases/tripwire}
-      - {name: cg-s3-awslogs-release, path: releases/awslogs-trusty}
+      - {name: cg-s3-awslogs-trusty-release, path: releases/awslogs-trusty}
       - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
       - {name: cg-s3-clamav-release, path: releases/clamav}
       - {name: cg-s3-snort-release, path: releases/snort}
@@ -512,7 +516,7 @@ jobs:
       trigger: true
     - get: cg-s3-tripwire-release
       trigger: true
-    - get: cg-s3-awslogs-release
+    - get: cg-s3-awslogs-trusty-release
       trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
@@ -537,7 +541,7 @@ jobs:
       - {name: certificate}
       - {name: cg-s3-fisma-release, path: releases/fisma}
       - {name: cg-s3-tripwire-release, path: releases/tripwire}
-      - {name: cg-s3-awslogs-release, path: releases/awslogs-trusty}
+      - {name: cg-s3-awslogs-trusty-release, path: releases/awslogs-trusty}
       - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
       - {name: cg-s3-clamav-release, path: releases/clamav}
       - {name: cg-s3-snort-release, path: releases/snort}
@@ -772,15 +776,25 @@ resources:
     regexp: tripwire-(.*).tgz
     <<: *s3-release-params
 
-- &awslogs-release
-  name: cg-s3-awslogs-release
+- &awslogs-trusty-release
+  name: cg-s3-awslogs-trusty-release
   type: s3-iam
   source:
-    regexp: awslogs-trusty(.*).tgz
+    regexp: awslogs-trusty-(.*).tgz
     <<: *s3-release-params
 
-- <<: *awslogs-release
-  name: cg-s3-awslogs-release-development
+- <<: *awslogs-trusty-release
+  name: cg-s3-awslogs-trusty-release-development
+
+- &awslogs-xenial-release
+  name: cg-s3-awslogs-xenial-release
+  type: s3-iam
+  source:
+    regexp: awslogs-xenial-(.*).tgz
+    <<: *s3-release-params
+
+- <<: *awslogs-xenial-release
+  name: cg-s3-awslogs-xenial-release-development
 
 - name: cg-s3-nessus-agent-release
   type: s3-iam
