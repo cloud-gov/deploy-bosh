@@ -3,3 +3,4 @@
 
 - type: remove
   path: /instance_groups/name=bosh/jobs/name=postgres-9.4?
+
