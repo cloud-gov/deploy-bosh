@@ -14,6 +14,7 @@ bosh create-env \
   --ops-file bosh-deployment/aws/cli-iam-instance-profile.yml \
   --ops-file bosh-deployment/misc/powerdns.yml \
   --ops-file bosh-deployment/misc/source-releases/bosh.yml \
+  --ops-file bosh-deployment/jumpbox-user.yml \
   --ops-file bosh-config/operations/cpi.yml \
   --ops-file bosh-config/operations/encryption.yml \
   --ops-file bosh-config/operations/remove-postgres.yml \
