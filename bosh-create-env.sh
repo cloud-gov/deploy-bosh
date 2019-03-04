@@ -21,7 +21,8 @@ bosh create-env \
   --vars-file bosh-config/variables/master.yml \
   --vars-file terraform-yaml/state.yml \
   --vars-file terraform-secrets/terraform.yml \
-  --vars-file common/master-bosh.yml
+  --vars-file common/master-bosh.yml \
+  --vars-store ./creds.yml
 code=$?
 set -e
 
