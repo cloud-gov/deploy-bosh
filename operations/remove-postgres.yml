@@ -1,6 +1,5 @@
-- type: remove
+- type: replace
   path: /instance_groups/name=bosh/jobs/name=postgres-10?
-
-- type: remove
-  path: /instance_groups/name=bosh/jobs/name=postgres-9.4?
-
+  value:
+    name: postgres-9.4
+    release: bosh
