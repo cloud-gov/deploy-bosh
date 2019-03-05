@@ -601,6 +601,9 @@ jobs:
     put: masterbosh-state
     params:
       file: updated-bosh-state/*.json
+    put: jumpbox-creds
+    params:
+      file: jumpbox-creds/creds.yml
   on_failure:
     put: slack
     params:
