@@ -597,13 +597,13 @@ jobs:
       BOSH_ENVIRONMENT: ((masterbosh-target))
       BOSH_CLIENT: admin
       BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
+  - put: jumpbox-credz
+    params:
+      file: jumpbox-creds/creds.yml
   ensure:
     put: masterbosh-state
     params:
       file: updated-bosh-state/*.json
-    put: jumpbox-creds
-    params:
-      file: jumpbox-creds/creds.yml
   on_failure:
     put: slack
     params:
@@ -672,6 +672,14 @@ resources:
     bucket: ((secrets-bucket))
     region_name: ((aws-region))
     versioned_file: master-bosh-state.json
+    server_side_encryption: AES256
+
+- name: jumpbox-credz
+  type: s3-iam
+  source:
+    bucket: ((secrets-bucket))
+    region_name: ((aws-region))
+    versioned_file: creds.yml
     server_side_encryption: AES256
 
 - name: cron-release
