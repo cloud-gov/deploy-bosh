@@ -16,7 +16,6 @@ inputs:
 
 outputs:
 - name: updated-bosh-state
-- name: jumpbox-creds
 
 run:
   path: bosh-config/bosh-create-env.sh

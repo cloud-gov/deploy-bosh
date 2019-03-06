@@ -28,7 +28,5 @@ set -e
 
 # ensure state gets copied to output
 cp bosh-state/*.json updated-bosh-state
-# copy jumpbox creds to output
-cp ./creds.yml jumpbox-creds
 
 exit ${code}
