@@ -23,7 +23,7 @@ addons:
     tripwire:
       localpass: ((tripwire_localpass))
       sitepass: ((tripwire_sitepass))
-    awslogs-xenial:
+    awslogs:
       region: ((terraform_outputs.vpc_region))
     nessus-agent:
       key: ((nessus_agent_key))
