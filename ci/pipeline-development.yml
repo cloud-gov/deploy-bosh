@@ -17,7 +17,7 @@ jobs:
       trigger: true
     - get: secureproxy-release
       trigger: true
-    - get: bosh-stemcell
+    - get: bosh-stemcell-xenial
     - get: common
       resource: common-development
       trigger: true
@@ -73,7 +73,7 @@ jobs:
       - uaa-release/*.tgz
       - cpi-release/*.tgz
       stemcells:
-      - bosh-stemcell/*.tgz
+      - bosh-stemcell-xenial/*.tgz
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
@@ -195,7 +195,7 @@ jobs:
     - get: uaa-customized-release
     - get: cpi-release
     - get: secureproxy-release
-    - get: bosh-stemcell
+    - get: bosh-stemcell-xenial
     - get: common
       resource: common-tooling
       trigger: true
@@ -236,7 +236,7 @@ jobs:
       - secureproxy-release/*.tgz
       - cpi-release/*.tgz
       stemcells:
-      - bosh-stemcell/*.tgz
+      - bosh-stemcell-xenial/*.tgz
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config-tooling-development.yml
     params:
@@ -440,7 +440,7 @@ jobs:
       params:
         tarball: false
       trigger: true
-    - get: bosh-stemcell
+    - get: bosh-stemcell-xenial
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-tooling
@@ -600,10 +600,10 @@ resources:
     - bosh-create-env*
     - cloud-config/*
 
-- name: bosh-stemcell
+- name: bosh-stemcell-xenial
   type: bosh-io-stemcell
   source:
-    name: bosh-aws-xen-hvm-ubuntu-trusty-go_agent
+    name: bosh-aws-xen-hvm-ubuntu-xenial-go_agent
 
 - name: toolingbosh-deployment
   type: bosh-deployment
