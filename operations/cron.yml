@@ -42,8 +42,8 @@
               # apps from other packages on this host we need
               PSQL=/var/vcap/packages/postgres-9.4/bin/psql
 
-              AWSCLI=/var/vcap/packages/awslogs-trusty/bin/aws
-              export LD_LIBRARY_PATH=/var/vcap/packages/awslogs-trusty/lib
+              AWSCLI=/var/vcap/packages/awslogs-xenial/bin/aws
+              export LD_LIBRARY_PATH=/var/vcap/packages/awslogs-xenial/lib
 
               # Hack: look up push gateway address in database if gateway is managed by the current director
               if [ -n "${GATEWAY_DEPLOYMENT}" ]; then
