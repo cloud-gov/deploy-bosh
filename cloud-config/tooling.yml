@@ -17,7 +17,7 @@
   value:
     name: smtp-small
     cloud_properties:
-      instance_type: t3.small
+      instance_type: t2.medium
 - type: replace
   path: /vm_types/-
   value:
