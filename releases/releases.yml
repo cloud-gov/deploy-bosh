@@ -9,10 +9,6 @@ releases:
 - name: nessus-agent
   uri: https://github.com/18F/cg-nessus-agent-boshrelease
   branch: master
-- name: awslogs-trusty
-  uri: https://github.com/18F/cg-awslogs-boshrelease
-  branch: master-trusty
-  tag_filter: trusty-*
 - name: awslogs-xenial
   uri: https://github.com/18F/cg-awslogs-boshrelease
   branch: upgrade-to-xenial
