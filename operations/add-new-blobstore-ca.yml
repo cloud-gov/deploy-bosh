@@ -1,11 +1,10 @@
----
 - type: replace
   path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores?/provider=dav/options/tls/cert/ca
-  value: ((blobstore_server_tls_2.ca))((blobstore_server_tls.ca))
+  value: ((blobstore_server_tls.ca))((blobstore_server_tls_2.ca))
 
 - type: replace
   path: /instance_groups/name=bosh/properties/blobstore/tls?/cert/ca
-  value: ((blobstore_server_tls_2.ca))((blobstore_server_tls.ca))
+  value: ((blobstore_server_tls.ca))((blobstore_server_tls_2.ca))
 
 - type: replace
   path: /variables/-
