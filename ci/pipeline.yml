@@ -43,6 +43,7 @@ jobs:
       - bosh-config/operations/dns.yml
       - bosh-config/operations/ntp.yml
       - bosh-config/operations/source-release-credhub.yml
+      - bosh-config/operations/remove-old-blobstore-ca.yml
       vars_files:
       - bosh-config/variables/development.yml
       - terraform-secrets/terraform.yml
