@@ -1,0 +1,22 @@
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore/tls?/cert/ca
+  value: ((blobstore_server_tls_2.ca))((blobstore_server_tls.ca))
+
+- type: replace
+  path: /variables/-
+  value:
+    name: blobstore_ca_2
+    type: certificate
+    options:
+      is_ca: true
+      common_name: default.blobstore-ca.bosh-internal
+
+- type: replace
+  path: /variables/-
+  value:
+    name: blobstore_server_tls_2
+    type: certificate
+    options:
+      ca: blobstore_ca_2
+      common_name: ((internal_ip))
+      alternative_names: [((internal_ip))]
