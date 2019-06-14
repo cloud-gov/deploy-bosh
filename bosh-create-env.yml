@@ -16,6 +16,7 @@ inputs:
 
 outputs:
 - name: updated-bosh-state
+- name: master-creds
 
 run:
   path: bosh-config/bosh-create-env.sh
