@@ -30,6 +30,5 @@ set -e
 
 # ensure state gets copied to output
 cp bosh-state/*.json updated-bosh-state
-cp ./creds.yml master-creds
 
 exit ${code}
