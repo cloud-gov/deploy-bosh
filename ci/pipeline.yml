@@ -407,7 +407,7 @@ jobs:
       - terraform-yaml/state.yml
       - common-tooling/tooling-bosh.yml
       ops_files:
-      - bosh-config/ops/add-new-saml-key.yml
+      - bosh-config/operations/add-new-saml-key.yml
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config-tooling.yml
     params:
