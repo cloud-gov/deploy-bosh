@@ -1,0 +1,24 @@
+- path: /variables/-
+  type: replace
+  value:
+    name: uaa_service_provider_ssl_key_2
+    options:
+      alternative_names:
+      - ((internal_ip))
+      ca: default_ca
+      common_name: ((internal_ip))
+    type: certificate
+
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
+  value:
+    name: uaa
+    properties:
+      login:
+        saml:
+          activeKeyId: uaa-saml-key-1
+          keys:
+            uaa-saml-key-2:
+              certificate: ((uaa_service_provider_ssl_key_2.certificate))
+              key: ((uaa_service_provider_ssl_key_2.private_key))
+              passphrase: ""
