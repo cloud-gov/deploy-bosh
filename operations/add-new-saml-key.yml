@@ -9,7 +9,7 @@
       common_name: ((internal_ip))
     type: certificate
 
-- path: /instance_groups/name=bosh/jobs/name=uaa/properties/login/saml/keys/-
+- path: /instance_groups/name=bosh/jobs/name=uaa/properties/login/saml/keys/
   type: replace
   value:
     uaa-saml-key-2:
