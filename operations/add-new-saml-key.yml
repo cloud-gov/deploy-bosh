@@ -16,7 +16,6 @@
     properties:
       login:
         saml:
-          activeKeyId: uaa-saml-key-1
           keys:
             uaa-saml-key-2:
               certificate: ((uaa_service_provider_ssl_key_2.certificate))
