@@ -11,6 +11,7 @@
 
 - path: /instance_groups/name=bosh/jobs/name=uaa/properties/login/saml/keys/-
   type: replace
+  value:
     uaa-saml-key-2:
       certificate: ((uaa_service_provider_ssl_key_2.certificate))
       key: ((uaa_service_provider_ssl_key_2.private_key))
