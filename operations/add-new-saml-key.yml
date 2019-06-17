@@ -1,0 +1,21 @@
+- path: /variables/-
+  type: replace
+  value:
+    name: uaa_service_provider_ssl_key_2
+    options:
+      alternative_names:
+      - ((internal_ip))
+      ca: default_ca
+      common_name: ((internal_ip))
+    type: certificate
+# To add file, just increment integer here first
+- path: /instance_groups/name=bosh/jobs/name=uaa/properties/login/saml/keys/uaa-saml-key-2?
+  type: replace
+  value:
+    certificate: ((uaa_service_provider_ssl_key_2.certificate))
+    key: ((uaa_service_provider_ssl_key_2.private_key))
+    passphrase: ""
+# To rotate, increment this key after adding to the chain in operation above
+- path: /instance_groups/name=bosh/jobs/name=uaa/properties/login/saml/activeKeyId
+  type: replace
+  value: uaa-saml-key-2
