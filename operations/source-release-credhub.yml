@@ -1,8 +1,0 @@
-# this is here until we can switch to upstream pre-compiled for xenial stemcells
-- type: replace
-  path: /releases/name=credhub?
-  value:
-    name: "credhub"
-    version: "2.1.2"
-    url: "https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.1.2"
-    sha1: "754a24dbffe8bc5efce7e698d935b5f4df541f38"
