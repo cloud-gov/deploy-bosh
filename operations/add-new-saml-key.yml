@@ -20,5 +20,5 @@
   type: replace
   value: uaa-saml-key-2
 
-- path: /instance_groups/name=bosh/jobs/name=uaa/properties/login/saml/keys/uaa-saml-key-2
+- path: /instance_groups/name=bosh/jobs/name=uaa/properties/login/saml/keys/uaa-saml-key-1
   type: remove
