@@ -10,7 +10,7 @@ jobs:
     - get: bosh-config
       resource: bosh-config-development
       trigger: true
-    - get: bosh-stemcell
+    - get: bosh-stemcell-xenial
       trigger: true
     - get: common-development
       trigger: true
@@ -24,7 +24,7 @@ jobs:
     params: &bosh-deployment
       manifest: bosh-deployment/bosh.yml
       stemcells:
-      - bosh-stemcell/*.tgz
+      - bosh-stemcell-xenial/*.tgz
       ops_files:
       - bosh-deployment/uaa.yml
       - bosh-deployment/credhub.yml
@@ -96,9 +96,6 @@ jobs:
     - get: cg-s3-awslogs-xenial-release
       resource: cg-s3-awslogs-xenial-release-development
       trigger: true
-    - get: cg-s3-awslogs-xenial-release
-      resource: cg-s3-awslogs-xenial-release-development
-      trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
     - get: cg-s3-clamav-release
@@ -126,7 +123,6 @@ jobs:
       - {name: certificate}
       - {name: cg-s3-fisma-release, path: releases/fisma}
       - {name: cg-s3-tripwire-release, path: releases/tripwire}
-      - {name: cg-s3-awslogs-xenial-release, path: releases/awslogs-xenial}
       - {name: cg-s3-awslogs-xenial-release, path: releases/awslogs-xenial}
       - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
       - {name: cg-s3-clamav-release, path: releases/clamav}
@@ -168,7 +164,7 @@ jobs:
       trigger: true
     - get: bosh-config
       trigger: true
-    - get: bosh-stemcell
+    - get: bosh-stemcell-xenial
       trigger: true
     - get: common-staging
       trigger: true
@@ -277,7 +273,7 @@ jobs:
     - get: bosh-config
       passed: [deploy-staging-bosh]
       trigger: true
-    - get: bosh-stemcell
+    - get: bosh-stemcell-xenial
       passed: [deploy-staging-bosh]
       passed: [deploy-staging-bosh]
       trigger: true
@@ -385,7 +381,7 @@ jobs:
     - get: ca-cert-store
     - get: bosh-deployment
     - get: bosh-config
-    - get: bosh-stemcell
+    - get: bosh-stemcell-xenial
     - get: common-tooling
       trigger: true
     - get: terraform-yaml
@@ -406,6 +402,22 @@ jobs:
       - terraform-yaml/state.yml
       - common-tooling/tooling-bosh.yml
       ops_files:
+      - bosh-deployment/uaa.yml
+      - bosh-deployment/credhub.yml
+      - bosh-deployment/aws/cpi.yml
+      - bosh-deployment/aws/iam-instance-profile.yml
+      - bosh-deployment/misc/source-releases/bosh.yml
+      - bosh-deployment/misc/source-releases/uaa.yml
+      - bosh-config/operations/name.yml
+      - bosh-config/operations/s3-blobstore.yml
+      - bosh-config/operations/external-db.yml
+      - bosh-config/operations/uaa-clients.yml
+      - bosh-config/operations/cloud-config.yml
+      - bosh-config/operations/update.yml
+      - bosh-config/operations/cron.yml
+      - bosh-config/operations/cpi.yml
+      - bosh-config/operations/dns.yml
+      - bosh-config/operations/ntp.yml
       - bosh-config/operations/add-new-saml-key.yml
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config-tooling.yml
@@ -681,7 +693,10 @@ resources:
   type: s3-iam
   source:
     regexp: cron-(.*).tgz
-    <<: *s3-release-params
+    s3-release-params: &s3-release-params
+      bucket: ((s3-bosh-releases-bucket))
+      region_name: ((aws-region))
+      private: true
 
 - name: ntp-release
   type: bosh-io-release
@@ -720,7 +735,7 @@ resources:
     - bosh-create-env*
     - cloud-config/*
 
-- name: bosh-stemcell
+- name: bosh-stemcell-xenial
   type: bosh-io-stemcell
   source:
     name: bosh-aws-xen-hvm-ubuntu-xenial-go_agent
