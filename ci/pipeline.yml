@@ -3,7 +3,7 @@ jobs:
 - name: deploy-development-bosh
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: ca-cert-store
     - get: bosh-deployment
       trigger: true
@@ -78,7 +78,7 @@ jobs:
 - name: common-releases-development
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: certificate
       resource: ca-cert-store
     - get: bosh-deployment
@@ -162,7 +162,7 @@ jobs:
 - name: deploy-staging-bosh
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: ca-cert-store
     - get: bosh-deployment
       trigger: true
@@ -216,7 +216,7 @@ jobs:
 - name: common-releases-staging
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: certificate
       resource: ca-cert-store
     - get: bosh-deployment
@@ -269,7 +269,7 @@ jobs:
 - name: deploy-production-bosh
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: ca-cert-store
     - get: bosh-deployment
       passed: [deploy-staging-bosh]
@@ -328,7 +328,7 @@ jobs:
 - name: common-releases-production
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: certificate
       resource: ca-cert-store
     - get: bosh-deployment
@@ -381,7 +381,7 @@ jobs:
 - name: deploy-tooling-bosh
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: ca-cert-store
     - get: bosh-deployment
     - get: bosh-config
@@ -437,7 +437,7 @@ jobs:
 - name: common-releases-tooling
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: certificate
       resource: ca-cert-store
     - get: bosh-deployment
@@ -504,7 +504,7 @@ jobs:
 - name: common-releases-master
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: certificate
       resource: ca-cert-store
     - get: bosh-deployment
@@ -571,7 +571,7 @@ jobs:
 - name: deploy-master-bosh
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: bosh-deployment
       trigger: true
     - get: bosh-config
