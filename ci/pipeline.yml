@@ -3,14 +3,14 @@ jobs:
 - name: deploy-development-bosh
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: ca-cert-store
     - get: bosh-deployment
       trigger: true
     - get: bosh-config
       resource: bosh-config-development
       trigger: true
-    - get: bosh-stemcell
+    - get: bosh-stemcell-xenial
       trigger: true
     - get: common-development
       trigger: true
@@ -24,7 +24,7 @@ jobs:
     params: &bosh-deployment
       manifest: bosh-deployment/bosh.yml
       stemcells:
-      - bosh-stemcell/*.tgz
+      - bosh-stemcell-xenial/*.tgz
       ops_files:
       - bosh-deployment/uaa.yml
       - bosh-deployment/credhub.yml
@@ -78,7 +78,7 @@ jobs:
 - name: common-releases-development
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: certificate
       resource: ca-cert-store
     - get: bosh-deployment
@@ -92,9 +92,6 @@ jobs:
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
-      trigger: true
-    - get: cg-s3-awslogs-xenial-release
-      resource: cg-s3-awslogs-xenial-release-development
       trigger: true
     - get: cg-s3-awslogs-xenial-release
       resource: cg-s3-awslogs-xenial-release-development
@@ -126,7 +123,6 @@ jobs:
       - {name: certificate}
       - {name: cg-s3-fisma-release, path: releases/fisma}
       - {name: cg-s3-tripwire-release, path: releases/tripwire}
-      - {name: cg-s3-awslogs-xenial-release, path: releases/awslogs-xenial}
       - {name: cg-s3-awslogs-xenial-release, path: releases/awslogs-xenial}
       - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
       - {name: cg-s3-clamav-release, path: releases/clamav}
@@ -162,13 +158,13 @@ jobs:
 - name: deploy-staging-bosh
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: ca-cert-store
     - get: bosh-deployment
       trigger: true
     - get: bosh-config
       trigger: true
-    - get: bosh-stemcell
+    - get: bosh-stemcell-xenial
       trigger: true
     - get: common-staging
       trigger: true
@@ -216,7 +212,7 @@ jobs:
 - name: common-releases-staging
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: certificate
       resource: ca-cert-store
     - get: bosh-deployment
@@ -269,7 +265,7 @@ jobs:
 - name: deploy-production-bosh
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: ca-cert-store
     - get: bosh-deployment
       passed: [deploy-staging-bosh]
@@ -277,7 +273,7 @@ jobs:
     - get: bosh-config
       passed: [deploy-staging-bosh]
       trigger: true
-    - get: bosh-stemcell
+    - get: bosh-stemcell-xenial
       passed: [deploy-staging-bosh]
       passed: [deploy-staging-bosh]
       trigger: true
@@ -328,7 +324,7 @@ jobs:
 - name: common-releases-production
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: certificate
       resource: ca-cert-store
     - get: bosh-deployment
@@ -381,11 +377,11 @@ jobs:
 - name: deploy-tooling-bosh
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: ca-cert-store
     - get: bosh-deployment
     - get: bosh-config
-    - get: bosh-stemcell
+    - get: bosh-stemcell-xenial
     - get: common-tooling
       trigger: true
     - get: terraform-yaml
@@ -406,6 +402,22 @@ jobs:
       - terraform-yaml/state.yml
       - common-tooling/tooling-bosh.yml
       ops_files:
+      - bosh-deployment/uaa.yml
+      - bosh-deployment/credhub.yml
+      - bosh-deployment/aws/cpi.yml
+      - bosh-deployment/aws/iam-instance-profile.yml
+      - bosh-deployment/misc/source-releases/bosh.yml
+      - bosh-deployment/misc/source-releases/uaa.yml
+      - bosh-config/operations/name.yml
+      - bosh-config/operations/s3-blobstore.yml
+      - bosh-config/operations/external-db.yml
+      - bosh-config/operations/uaa-clients.yml
+      - bosh-config/operations/cloud-config.yml
+      - bosh-config/operations/update.yml
+      - bosh-config/operations/cron.yml
+      - bosh-config/operations/cpi.yml
+      - bosh-config/operations/dns.yml
+      - bosh-config/operations/ntp.yml
       - bosh-config/operations/add-new-saml-key.yml
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config-tooling.yml
@@ -437,7 +449,7 @@ jobs:
 - name: common-releases-tooling
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: certificate
       resource: ca-cert-store
     - get: bosh-deployment
@@ -504,7 +516,7 @@ jobs:
 - name: common-releases-master
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: certificate
       resource: ca-cert-store
     - get: bosh-deployment
@@ -571,7 +583,7 @@ jobs:
 - name: deploy-master-bosh
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: bosh-deployment
       trigger: true
     - get: bosh-config
@@ -674,14 +686,9 @@ resources:
     server_side_encryption: AES256
 
 - name: cron-release
-  # type: bosh-io-release
-  # source:
-  #   repository: cloudfoundry-community/cron-boshrelease
-  # Use our own version until community release is updated
-  type: s3-iam
+  type: bosh-io-release
   source:
-    regexp: cron-(.*).tgz
-    <<: *s3-release-params
+    repository: cloudfoundry-community/cron-boshrelease  
 
 - name: ntp-release
   type: bosh-io-release
@@ -720,7 +727,7 @@ resources:
     - bosh-create-env*
     - cloud-config/*
 
-- name: bosh-stemcell
+- name: bosh-stemcell-xenial
   type: bosh-io-stemcell
   source:
     name: bosh-aws-xen-hvm-ubuntu-xenial-go_agent
