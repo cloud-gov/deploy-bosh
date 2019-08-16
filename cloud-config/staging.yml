@@ -14,7 +14,7 @@
   value: t2.large
 - type: replace
   path: /vm_types/name=kubernetes_minion/cloud_properties/instance_type
-  value: r5.2xlarge
+  value: r4.large
 
 - type: replace
   path: /disk_types/name=logsearch_es_data/disk_size
