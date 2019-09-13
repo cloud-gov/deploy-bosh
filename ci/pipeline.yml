@@ -43,6 +43,7 @@ jobs:
       - bosh-config/operations/dns.yml
       - bosh-config/operations/ntp.yml
       - bosh-config/operations/remove-old-blobstore-ca.yml
+      - bosh-config/operations/add-new-saml-key.yml
       vars_files:
       - bosh-config/variables/development.yml
       - terraform-secrets/terraform.yml
@@ -419,6 +420,7 @@ jobs:
       - bosh-config/operations/dns.yml
       - bosh-config/operations/ntp.yml
       - bosh-config/operations/add-new-saml-key.yml
+      - bosh-config/operations/remove-old-blobstore-ca.yml
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config-tooling.yml
     params:
