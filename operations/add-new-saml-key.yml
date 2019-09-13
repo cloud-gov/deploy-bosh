@@ -15,3 +15,8 @@
     certificate: ((uaa_service_provider_ssl_key_2.certificate))
     key: ((uaa_service_provider_ssl_key_2.private_key))
     passphrase: ""
+
+# To rotate, increment this key after adding to the chain in operation above
+- path: /instance_groups/name=bosh/jobs/name=uaa/properties/login/saml/activeKeyId
+  type: replace
+  value: uaa-saml-key-2
