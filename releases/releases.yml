@@ -67,3 +67,6 @@ releases:
 - name: falco
   uri: https://github.com/cloudfoundry-community/falco-boshrelease
   branch: gardener
+- name: elb-log-ingestor
+  uri: https://github.com/18F/cg-elb-log-ingestor-boshrelease
+  branch: master
