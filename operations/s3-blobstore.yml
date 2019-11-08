@@ -25,6 +25,3 @@
       bucket_name: ((terraform_outputs.bosh_blobstore_bucket))
       region: ((terraform_outputs.vpc_region))
       credentials_source: env_or_profile
-      access_key_id: null
-      secret_access_key: null
-
