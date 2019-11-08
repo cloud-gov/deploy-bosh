@@ -16,3 +16,12 @@
 
 - type: remove
   path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores?/-
+  value:
+    provider: s3
+    options:
+      bucket_name: ((terraform_outputs.bosh_blobstore_bucket))
+      region: ((terraform_outputs.vpc_region))
+      credentials_source: env_or_profile
