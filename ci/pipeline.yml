@@ -784,16 +784,6 @@ resources:
 - <<: *awslogs-xenial-release
   name: cg-s3-awslogs-xenial-release-development
 
-- &awslogs-xenial-release
-  name: cg-s3-awslogs-xenial-release
-  type: s3-iam
-  source:
-    regexp: awslogs-xenial-(.*).tgz
-    <<: *s3-release-params
-
-- <<: *awslogs-xenial-release
-  name: cg-s3-awslogs-xenial-release-development
-
 - name: cg-s3-nessus-agent-release
   type: s3-iam
   source:
