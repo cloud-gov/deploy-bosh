@@ -11,28 +11,39 @@ releases:
 addons:
 - name: hardening
   jobs:
-  - {name: harden, release: fisma}
-  - {name: tripwire, release: tripwire}
-  - {name: clamav, release: clamav}
-  - {name: snort, release: snort}
-  - {name: awslogs-xenial, release: awslogs-xenial}
-  - {name: nessus-agent, release: nessus-agent}
-  - {name: node_exporter, release: node-exporter}
-  - {name: syslog_forwarder, release: syslog}
-  properties:
-    tripwire:
-      localpass: ((tripwire_localpass))
-      sitepass: ((tripwire_sitepass))
-    awslogs-xenial:
-      region: ((terraform_outputs.vpc_region))
-    nessus-agent:
-      key: ((nessus_agent_key))
-      group: ((nessus_agent_group))
-      server: ((terraform_outputs.nessus_static_ip))
-      port: 8834
-    syslog:
-      address: ((terraform_outputs.platform_syslog_elb_dns_name))
-      port: 5514
+  - name: harden
+    release: fisma
+  - name: tripwire
+    release: tripwire
+    properties:
+      tripwire:
+        localpass: ((tripwire_localpass))
+        sitepass: ((tripwire_sitepass))
+  - name: clamav
+    release: clamav
+  - name: snort
+    release: snort
+  - name: awslogs-xenial
+    release: awslogs-xenial
+    properties:
+      awslogs-xenial:
+        region: ((terraform_outputs.vpc_region))
+  - name: nessus-agent
+    release: nessus-agent
+    properties:
+      nessus-agent:
+        key: ((nessus_agent_key))
+        group: ((nessus_agent_group))
+        server: ((terraform_outputs.nessus_static_ip))
+        port: 8834
+  - name: node_exporter
+    release: node-exporter
+  - name: syslog_forwarder
+    release: syslog
+    properties:
+      syslog:
+        address: ((terraform_outputs.platform_syslog_elb_dns_name))
+        port: 5514
 
 variables:
 - name: tripwire_localpass

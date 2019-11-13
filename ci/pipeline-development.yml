@@ -3,7 +3,7 @@ jobs:
 - name: deploy-development-bosh
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: ca-cert-store
     - get: pipeline-tasks
     - get: bosh-config
@@ -104,7 +104,7 @@ jobs:
 - name: common-releases-development
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: certificate
       resource: ca-cert-store
     - get: bosh-config
@@ -186,7 +186,7 @@ jobs:
 - name: deploy-tooling-bosh
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: ca-cert-store
     - get: pipeline-tasks
     - get: bosh-config
@@ -266,7 +266,7 @@ jobs:
 
 - name: uaa-smoke-tests
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pipeline-tasks
     - get: uaa-customized-release
       passed: [deploy-tooling-bosh]
@@ -289,7 +289,7 @@ jobs:
 - name: common-releases-tooling
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: certificate
       resource: ca-cert-store
     - get: bosh-config
@@ -357,7 +357,7 @@ jobs:
 - name: common-releases-master
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: certificate
       resource: ca-cert-store
     - get: bosh-config
@@ -425,7 +425,7 @@ jobs:
 - name: deploy-master-bosh
   serial: true
   plan:
-  - aggregate:
+  - in_parallel:
     - get: bosh-config
       resource: bosh-create-env-config
       trigger: true

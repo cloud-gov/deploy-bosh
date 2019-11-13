@@ -48,7 +48,7 @@ jobs:
 <% releases.map do |release| %>
 - name: build-<%= release['name'] %>-release
   plan:
-  - aggregate:
+  - in_parallel:
     - get: release-git-repo
       resource: <%= release['name'] %>-release-git-repo
       trigger: true
@@ -69,7 +69,7 @@ jobs:
             bucket_name: <%= release_blobstore_bucket %>
             credentials_source: env_or_profile
             server_side_encryption: AES256
-  - aggregate:
+  - in_parallel:
     - put: <%= release['name'] %>-release-tarball
       tags: [iaas]
       params:

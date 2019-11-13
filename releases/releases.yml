@@ -11,7 +11,7 @@ releases:
   branch: master
 - name: awslogs-xenial
   uri: https://github.com/18F/cg-awslogs-boshrelease
-  branch: upgrade-to-xenial
+  branch: master
 - name: clamav
   uri: https://github.com/18F/cg-clamav-boshrelease
   branch: master
@@ -67,3 +67,6 @@ releases:
 - name: falco
   uri: https://github.com/cloudfoundry-community/falco-boshrelease
   branch: gardener
+- name: elb-log-ingestor
+  uri: https://github.com/18F/cg-elb-log-ingestor-boshrelease
+  branch: master

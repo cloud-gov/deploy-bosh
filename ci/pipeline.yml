@@ -1,4 +1,9 @@
 ---
+meta:
+  s3-release-params: &s3-release-params
+    bucket: ((s3-bosh-releases-bucket))
+    region_name: ((aws-region))
+    private: true
 jobs:
 - name: deploy-development-bosh
   serial: true
@@ -42,8 +47,9 @@ jobs:
       - bosh-config/operations/cpi.yml
       - bosh-config/operations/dns.yml
       - bosh-config/operations/ntp.yml
-      - bosh-config/operations/remove-old-blobstore-ca.yml
       - bosh-config/operations/add-new-saml-key.yml
+      - bosh-config/operations/remove-old-blobstore-ca.yml
+      - bosh-config/operations/credhub-source.yml
       vars_files:
       - bosh-config/variables/development.yml
       - terraform-secrets/terraform.yml
@@ -778,16 +784,6 @@ resources:
 - <<: *awslogs-xenial-release
   name: cg-s3-awslogs-xenial-release-development
 
-- &awslogs-xenial-release
-  name: cg-s3-awslogs-xenial-release
-  type: s3-iam
-  source:
-    regexp: awslogs-xenial-(.*).tgz
-    <<: *s3-release-params
-
-- <<: *awslogs-xenial-release
-  name: cg-s3-awslogs-xenial-release-development
-
 - name: cg-s3-nessus-agent-release
   type: s3-iam
   source:
@@ -876,7 +872,3 @@ resource_types:
   source:
     repository: governmentpaas/semver-resource
 
-s3-release-params: &s3-release-params
-  bucket: ((s3-bosh-releases-bucket))
-  region_name: ((aws-region))
-  private: true
