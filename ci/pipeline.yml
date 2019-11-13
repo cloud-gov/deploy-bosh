@@ -47,6 +47,7 @@ jobs:
       - bosh-config/operations/cpi.yml
       - bosh-config/operations/dns.yml
       - bosh-config/operations/ntp.yml
+      - bosh-config/operations/add-new-saml-key.yml
       - bosh-config/operations/remove-old-blobstore-ca.yml
       - bosh-config/operations/credhub-source.yml
       vars_files:
@@ -407,26 +408,6 @@ jobs:
       - terraform-secrets/terraform.yml
       - terraform-yaml/state.yml
       - common-tooling/tooling-bosh.yml
-      ops_files:
-      - bosh-deployment/uaa.yml
-      - bosh-deployment/credhub.yml
-      - bosh-deployment/aws/cpi.yml
-      - bosh-deployment/aws/iam-instance-profile.yml
-      - bosh-deployment/misc/source-releases/bosh.yml
-      - bosh-deployment/misc/source-releases/uaa.yml
-      - bosh-deployment/misc/source-releases/credhub.yml
-      - bosh-config/operations/name.yml
-      - bosh-config/operations/s3-blobstore.yml
-      - bosh-config/operations/external-db.yml
-      - bosh-config/operations/uaa-clients.yml
-      - bosh-config/operations/cloud-config.yml
-      - bosh-config/operations/update.yml
-      - bosh-config/operations/cron.yml
-      - bosh-config/operations/cpi.yml
-      - bosh-config/operations/dns.yml
-      - bosh-config/operations/ntp.yml
-      - bosh-config/operations/add-new-saml-key.yml
-      - bosh-config/operations/credhub-source.yml
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config-tooling.yml
     params:
