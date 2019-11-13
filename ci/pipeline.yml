@@ -31,6 +31,7 @@ jobs:
       - bosh-deployment/aws/cpi.yml
       - bosh-deployment/aws/iam-instance-profile.yml
       - bosh-deployment/misc/source-releases/bosh.yml
+      - bosh-deployment/misc/source-releases/credhub.yml
       - bosh-deployment/misc/source-releases/uaa.yml
       - bosh-config/operations/name.yml
       - bosh-config/operations/s3-blobstore.yml
