@@ -20,6 +20,7 @@ bosh create-env \
   --ops-file bosh-config/operations/cpi.yml \
   --ops-file bosh-config/operations/encryption.yml \
   --ops-file bosh-config/operations/add-postgres-9.yml \
+  --ops-file bosh-config/operations/credhub-source.yml \
   --vars-file bosh-config/variables/master.yml \
   --vars-file terraform-yaml/state.yml \
   --vars-file terraform-secrets/terraform.yml \
