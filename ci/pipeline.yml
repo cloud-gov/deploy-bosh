@@ -559,15 +559,6 @@ jobs:
         BOSH_ENVIRONMENT: ((masterbosh-target))
   - put: semver-master-version
     params: {bump: patch}
-  - task: update-runtime-config
-    file: bosh-config/ci/update-runtime-config.yml
-    input_mapping:
-      common: common-master
-    params:
-      BOSH_CA_CERT: ((common_ca_cert_store))
-      BOSH_ENVIRONMENT: ((masterbosh-target))
-      BOSH_CLIENT: admin
-      BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
 
 - name: deploy-master-bosh
   serial: true
@@ -596,6 +587,15 @@ jobs:
     file: bosh-config/ci/update-cloud-config.yml
     params:
       OPS_PATHS: "bosh-config/cloud-config/master.yml"
+      BOSH_CA_CERT: ((common_ca_cert_store))
+      BOSH_ENVIRONMENT: ((masterbosh-target))
+      BOSH_CLIENT: admin
+      BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
+  - task: update-runtime-config
+    file: bosh-config/ci/update-runtime-config.yml
+    input_mapping:
+      common: common-master
+    params:
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((masterbosh-target))
       BOSH_CLIENT: admin
