@@ -7,3 +7,7 @@
     prometheus-tooling.service.cf.internal: ["*.prometheus-tooling.production-monitoring.prometheus-production.bosh"]
     alertmanager-staging.service.cf.internal: ["*.alertmanager.staging-monitoring.prometheus-staging.bosh"]
     alertmanager-production.service.cf.internal: ["*.alertmanager.production-monitoring.prometheus-production.bosh"]
+
+- type: replace
+  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties/log_level?
+  value: WARN
