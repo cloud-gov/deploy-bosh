@@ -1,3 +1,7 @@
 - type: replace
   path: /instance_groups/name=bosh/properties/director/local_dns/include_index?
   value: true
+
+- type: replace
+  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties/log_level?
+  value: WARN
