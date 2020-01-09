@@ -161,6 +161,7 @@ jobs:
       BOSH_ENVIRONMENT: ((developmentbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
+      BOSH_ENV_NAME: development
 
 - name: deploy-staging-bosh
   serial: true
@@ -268,6 +269,7 @@ jobs:
       BOSH_ENVIRONMENT: ((stagingbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((staging_bosh_uaa_ci_client_secret))
+      BOSH_ENV_NAME: staging
 
 - name: deploy-production-bosh
   serial: true
@@ -380,6 +382,8 @@ jobs:
       BOSH_ENVIRONMENT: ((productionbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
+      BOSH_ENV_NAME: production
+
 
 - name: deploy-tooling-bosh
   serial: true
@@ -568,6 +572,7 @@ jobs:
       BOSH_ENVIRONMENT: ((masterbosh-target))
       BOSH_CLIENT: admin
       BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
+      BOSH_ENV_NAME: master
 
 - name: deploy-master-bosh
   serial: true

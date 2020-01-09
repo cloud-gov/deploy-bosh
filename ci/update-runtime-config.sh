@@ -15,6 +15,10 @@ pushd releases
   done
 popd
 
+if [[ ${BOSH_ENV_NAME} =~ (tooling|master|production) ]]; then
+  declare -x "rutime_release_fisma"=34
+fi
+
 bosh -n update-runtime-config \
   bosh-config/runtime-config/runtime.yml \
   --vars-env runtime \
