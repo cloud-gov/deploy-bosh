@@ -16,7 +16,7 @@ pushd releases
 popd
 
 if [[ ${BOSH_ENV_NAME} =~ (tooling|master|production) ]]; then
-  declare -x "rutime_release_fisma"=34
+  declare -x "runtime_release_fisma"=34
 fi
 
 bosh -n update-runtime-config \
