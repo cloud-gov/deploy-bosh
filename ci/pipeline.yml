@@ -505,6 +505,7 @@ jobs:
       BOSH_ENVIRONMENT: ((toolingbosh-target))
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
+      BOSH_ENV_NAME: tooling
 
 - name: common-releases-master
   serial: true
