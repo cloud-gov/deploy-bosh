@@ -290,6 +290,20 @@
 - type: replace
   path: /vm_extensions/-
   value:
+    name: staging-doomsday-lb
+    cloud_properties:
+      lb_target_groups:
+      - ((terraform_outputs.staging_monitoring_lb_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: production-doomsday-lb
+    cloud_properties:
+      lb_target_groups:
+      - ((terraform_outputs.production_monitoring_lb_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value:
     name: staging-concourse-lb
     cloud_properties:
       lb_target_groups:
