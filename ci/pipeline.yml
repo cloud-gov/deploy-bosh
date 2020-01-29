@@ -50,6 +50,7 @@ jobs:
       - bosh-config/operations/add-new-saml-key.yml
       - bosh-config/operations/remove-old-blobstore-ca.yml
       - bosh-config/operations/credhub-source.yml
+      - bosh-config/operations/reserved-ips.yml
       vars_files:
       - bosh-config/variables/development.yml
       - terraform-secrets/terraform.yml
