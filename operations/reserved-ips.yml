@@ -1,5 +1,6 @@
 # this dumb workaround allows us to manually plug in IP addresses
 # that AWS has claimed in the services network (usually ELBs/ALBs)
+# set this variable in Credhub, as a list of IP addresses manually collected from AWS
 - type: replace
   path: /networks/services/subnets/az=z1/reserved-
   value: ((services_z1_reserved_ips))
