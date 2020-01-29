@@ -2,4 +2,4 @@
 # that AWS has claimed in the services network (usually ELBs/ALBs)
 - type: replace
   path: /networks/services/subnets/az=z1/reserved-
-  value: ((services_reserved_ips))
+  value: ((services_z1_reserved_ips))
