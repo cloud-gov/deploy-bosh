@@ -50,7 +50,6 @@ jobs:
       - bosh-config/operations/add-new-saml-key.yml
       - bosh-config/operations/remove-old-blobstore-ca.yml
       - bosh-config/operations/credhub-source.yml
-      - bosh-config/operations/reserved-ips.yml
       vars_files:
       - bosh-config/variables/development.yml
       - terraform-secrets/terraform.yml
@@ -59,7 +58,7 @@ jobs:
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
-      OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/development.yml"
+      OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/development.yml bosh-config/cloud-config/reserved-ips.yml"
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((developmentbosh-target))
       BOSH_CLIENT: ci
@@ -194,7 +193,7 @@ jobs:
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
-      OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/staging.yml"
+      OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/staging.yml bosh-config/cloud-config/reserved-ips.yml"
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((stagingbosh-target))
       BOSH_CLIENT: ci
@@ -307,7 +306,7 @@ jobs:
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
-      OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml"
+      OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/reserved-ips.yml"
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((productionbosh-target))
       BOSH_CLIENT: ci
