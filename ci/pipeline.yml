@@ -17,8 +17,6 @@ jobs:
       trigger: true
     - get: bosh-stemcell-xenial
       trigger: true
-    - get: common-development
-      trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-development
     - get: semver-tooling-version
@@ -54,7 +52,6 @@ jobs:
       - bosh-config/variables/development.yml
       - terraform-secrets/terraform.yml
       - terraform-yaml/state.yml
-      - common-development/development-bosh.yml
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
@@ -94,8 +91,6 @@ jobs:
       resource: bosh-config-development
     - get: terraform-yaml
       resource: terraform-yaml-development
-    - get: common-development
-      trigger: true
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -650,13 +645,6 @@ resources:
     bucket: ((secrets-bucket))
     region_name: ((aws-region))
     versioned_file: tooling-bosh.yml
-
-- name: common-development
-  type: s3-iam
-  source:
-    bucket: ((secrets-bucket))
-    region_name: ((aws-region))
-    versioned_file: development-bosh.yml
 
 - name: common-staging
   type: s3-iam
