@@ -149,8 +149,6 @@ jobs:
           bosh -n clean-up
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config.yml
-    input_mapping:
-      common: common-development
     params:
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((developmentbosh-target))
@@ -169,8 +167,6 @@ jobs:
       trigger: true
     - get: bosh-stemcell-xenial
       trigger: true
-    - get: common-staging
-      trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-staging
     - get: semver-tooling-version
@@ -184,7 +180,6 @@ jobs:
       - bosh-config/variables/staging.yml
       - terraform-secrets/terraform.yml
       - terraform-yaml/state.yml
-      - common-staging/staging-bosh.yml
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
@@ -223,8 +218,6 @@ jobs:
     - get: bosh-config
     - get: terraform-yaml
       resource: terraform-yaml-staging
-    - get: common-staging
-      trigger: true
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -257,8 +250,6 @@ jobs:
         BOSH_ENVIRONMENT: ((stagingbosh-target))
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config.yml
-    input_mapping:
-      common: common-staging
     params:
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((stagingbosh-target))
@@ -645,13 +636,6 @@ resources:
     bucket: ((secrets-bucket))
     region_name: ((aws-region))
     versioned_file: tooling-bosh.yml
-
-- name: common-staging
-  type: s3-iam
-  source:
-    bucket: ((secrets-bucket))
-    region_name: ((aws-region))
-    versioned_file: staging-bosh.yml
 
 - name: common-production
   type: s3-iam
