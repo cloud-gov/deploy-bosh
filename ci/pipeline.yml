@@ -93,7 +93,8 @@ jobs:
       resource: terraform-yaml-development
     - get: cg-s3-fisma-release
       trigger: true
-    - get: cg-s3-tripwire-release-development
+    - get: cg-s3-tripwire-release
+      resource: cg-s3-tripwire-release-development
       trigger: true
     - get: cg-s3-awslogs-xenial-release
       resource: cg-s3-awslogs-xenial-release-development
