@@ -93,7 +93,7 @@ jobs:
       resource: terraform-yaml-development
     - get: cg-s3-fisma-release
       trigger: true
-    - get: cg-s3-tripwire-release
+    - get: cg-s3-tripwire-release-development
       trigger: true
     - get: cg-s3-awslogs-xenial-release
       resource: cg-s3-awslogs-xenial-release-development
@@ -746,11 +746,15 @@ resources:
     regexp: fisma-(.*).tgz
     <<: *s3-release-params
 
-- name: cg-s3-tripwire-release
+- &tripwire-release
+  name: cg-s3-tripwire-release
   type: s3-iam
   source:
     regexp: tripwire-(.*).tgz
     <<: *s3-release-params
+
+- <<: *tripwire-release
+  name: cg-s3-tripwire-release-development
 
 - &awslogs-xenial-release
   name: cg-s3-awslogs-xenial-release
