@@ -53,4 +53,4 @@ variables:
 - name: nessus_agent_key
   type: password
 - name: nessus_agent_group
-  type: value
+  type: password
