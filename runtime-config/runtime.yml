@@ -50,3 +50,7 @@ variables:
   type: password
 - name: tripwire_sitepass
   type: password
+- name: nessus_agent_key
+  type: password
+- name: nessus_agent_group
+  type: value
