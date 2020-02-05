@@ -372,8 +372,6 @@ jobs:
     - get: bosh-deployment
     - get: bosh-config
     - get: bosh-stemcell-xenial
-    - get: common-tooling
-      trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-tooling
     - get: terraform-yaml-development
@@ -390,7 +388,6 @@ jobs:
       - bosh-config/variables/tooling.yml
       - terraform-secrets/terraform.yml
       - terraform-yaml/state.yml
-      - common-tooling/tooling-bosh.yml
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config-tooling.yml
     params:
@@ -429,8 +426,6 @@ jobs:
     - get: bosh-config
     - get: terraform-yaml
       resource: terraform-yaml-production
-    - get: common-tooling
-      trigger: true
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -477,8 +472,6 @@ jobs:
     params: {bump: patch}
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config.yml
-    input_mapping:
-      common: common-tooling
     params:
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((toolingbosh-target))
@@ -622,13 +615,6 @@ resources:
     bucket: ((secrets-bucket))
     region_name: ((aws-region))
     versioned_file: master-bosh.yml
-
-- name: common-tooling
-  type: s3-iam
-  source:
-    bucket: ((secrets-bucket))
-    region_name: ((aws-region))
-    versioned_file: tooling-bosh.yml
 
 - name: masterbosh-state
   type: s3-iam
