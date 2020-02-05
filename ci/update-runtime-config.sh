@@ -18,10 +18,8 @@ popd
 bosh -n update-runtime-config \
   bosh-config/runtime-config/runtime.yml \
   --vars-env runtime \
-  --vars-file terraform-yaml/state.yml \
-  --vars-file common/*.yml
+  --vars-file terraform-yaml/state.yml
 
 bosh -n update-runtime-config --name dns \
   bosh-deployment/runtime-configs/dns.yml \
-  --vars-file common/*.yml \
   --ops-file bosh-config/operations/dns-aliases.yml

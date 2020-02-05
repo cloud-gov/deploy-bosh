@@ -10,7 +10,6 @@ inputs:
 - {name: bosh-deployment}
 - {name: certificate}
 - {name: terraform-yaml}
-- {name: common}
 - {name: cg-s3-fisma-release, path: releases/fisma}
 - {name: cg-s3-tripwire-release, path: releases/tripwire}
 - {name: cg-s3-awslogs-xenial-release, path: releases/awslogs-xenial}
