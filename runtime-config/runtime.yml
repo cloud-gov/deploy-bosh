@@ -32,8 +32,8 @@ addons:
     release: nessus-agent
     properties:
       nessus-agent:
-        key: ((nessus_agent_key))
-        group: ((nessus_agent_group))
+        key: ((/nessus_agent_key))
+        group: ((/nessus_agent_group))
         server: ((terraform_outputs.nessus_static_ip))
         port: 8834
   - name: node_exporter
