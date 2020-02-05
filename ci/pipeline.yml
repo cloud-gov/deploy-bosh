@@ -275,9 +275,6 @@ jobs:
       trigger: true
     - get: semver-tooling-version
       passed: [common-releases-tooling]
-    - get: common
-      resource: common-production
-      trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-production
   - task: terraform-secrets
@@ -289,7 +286,6 @@ jobs:
       - bosh-config/variables/production.yml
       - terraform-secrets/terraform.yml
       - terraform-yaml/state.yml
-      - common/production-bosh.yml
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
@@ -328,8 +324,6 @@ jobs:
     - get: bosh-config
     - get: terraform-yaml
       resource: terraform-yaml-production
-    - get: common-production
-      trigger: true
     - get: cg-s3-fisma-release
       trigger: true
     - get: cg-s3-tripwire-release
@@ -362,8 +356,6 @@ jobs:
         BOSH_ENVIRONMENT: ((productionbosh-target))
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config.yml
-    input_mapping:
-      common: common-production
     params:
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((productionbosh-target))
@@ -637,13 +629,6 @@ resources:
     bucket: ((secrets-bucket))
     region_name: ((aws-region))
     versioned_file: tooling-bosh.yml
-
-- name: common-production
-  type: s3-iam
-  source:
-    bucket: ((secrets-bucket))
-    region_name: ((aws-region))
-    versioned_file: production-bosh.yml
 
 - name: masterbosh-state
   type: s3-iam
