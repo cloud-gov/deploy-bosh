@@ -20,5 +20,5 @@
         server time-d-wwv.nist.gov
 
 - type: replace
-  path: /instance_groups/name=bosh/properties/ntp
+  path: /instance_groups/name=bosh/properties/agent/env/bosh/ntp
   value: [((internal_ip))]
