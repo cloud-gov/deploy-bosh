@@ -35,6 +35,7 @@ jobs:
       - bosh-deployment/aws/iam-instance-profile.yml
       - bosh-deployment/misc/source-releases/bosh.yml
       - bosh-deployment/misc/source-releases/uaa.yml
+      - bosh-deployment/misc/source-releases/credhub.yml
       - bosh-config/operations/name.yml
       - bosh-config/operations/s3-blobstore.yml
       - bosh-config/operations/external-db.yml
@@ -47,7 +48,6 @@ jobs:
       - bosh-config/operations/ntp.yml
       - bosh-config/operations/add-new-saml-key.yml
       - bosh-config/operations/remove-old-blobstore-ca.yml
-      - bosh-config/operations/credhub-source.yml
       vars_files:
       - bosh-config/variables/development.yml
       - terraform-secrets/terraform.yml
