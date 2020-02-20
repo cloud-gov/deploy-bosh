@@ -14,13 +14,14 @@ bosh create-env \
   --ops-file bosh-deployment/aws/cli-iam-instance-profile.yml \
   --ops-file bosh-deployment/misc/powerdns.yml \
   --ops-file bosh-deployment/misc/source-releases/bosh.yml \
+  --ops-file bosh-deployment/misc/source-releases/credhub.yml \
+  --ops-file bosh-deployment/misc/source-releases/uaa.yml \
   --ops-file bosh-deployment/jumpbox-user.yml \
   --ops-file bosh-deployment/uaa.yml \
   --ops-file bosh-deployment/credhub.yml \
   --ops-file bosh-config/operations/cpi.yml \
   --ops-file bosh-config/operations/encryption.yml \
   --ops-file bosh-config/operations/add-postgres-9.yml \
-  --ops-file bosh-config/operations/credhub-source.yml \
   --vars-file bosh-config/variables/master.yml \
   --vars-file terraform-yaml/state.yml \
   --vars-file terraform-secrets/terraform.yml \
