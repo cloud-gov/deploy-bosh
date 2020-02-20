@@ -43,8 +43,9 @@
 
 - type: replace
   path: /instance_groups/name=bosh/jobs/name=uaa/properties/ca_certs
-  value: |-
-    # rds-ca-2017-root.pem
+  value: 
+    - |+
+      # rds-ca-2017-root.pem
       -----BEGIN CERTIFICATE-----
       MIIECjCCAvKgAwIBAgICEAAwDQYJKoZIhvcNAQELBQAwgZMxCzAJBgNVBAYTAlVT
       MRAwDgYDVQQHDAdTZWF0dGxlMRMwEQYDVQQIDApXYXNoaW5ndG9uMSIwIAYDVQQK
@@ -69,6 +70,7 @@
       RuUCvyQecy2ZFNAa3jmd5ycNdL63RWe8oayRBpQBxPPCbHfILxGZEdJbCH9aJ2D/
       l8oHIDnvOLdv7/cBjyYuvmprgPtu3QEkbre5Hln/
       -----END CERTIFICATE-----
+    - |+
       # rds-ca-2015-root.pem
       -----BEGIN CERTIFICATE-----
       MIID9DCCAtygAwIBAgIBQjANBgkqhkiG9w0BAQUFADCBijELMAkGA1UEBhMCVVMx
@@ -94,6 +96,7 @@
       A9dY7IHSubtCK/i8wxMVqfd5GtbA8mmpeJFwnDvm9rBEsHybl08qlax9syEwsUYr
       /40NawZfTUU=
       -----END CERTIFICATE-----
+    - |+
       # rds-ca-2012-us-gov-west-1.pem
       -----BEGIN CERTIFICATE-----
       MIIDQzCCAqygAwIBAgIJAMGs6m/j+u8sMA0GCSqGSIb3DQEBBQUAMHUxCzAJBgNV
@@ -115,6 +118,7 @@
       7YNTZWbF2VkHUDqekXimvL3q1JEvHDKPkLJrxEic1zTU1uazb9uJeb1aVWTq6N8R
       bx56xd/e3o7RYcPfLD45y7RRXKz3AmE=
       -----END CERTIFICATE-----
+    - |+
       # rds-ca-bundle-us-gov-west-1.pem
       -----BEGIN CERTIFICATE-----
       MIIECjCCAvKgAwIBAgICEAAwDQYJKoZIhvcNAQELBQAwgZMxCzAJBgNVBAYTAlVT
