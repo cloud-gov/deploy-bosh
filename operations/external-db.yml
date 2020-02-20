@@ -42,7 +42,7 @@
       tag: uaa
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=uaa/properties/ca_certs
+  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/ca_certs
   value: 
     - |+
       # rds-ca-2017-root.pem
