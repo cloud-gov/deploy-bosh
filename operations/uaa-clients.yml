@@ -17,6 +17,15 @@
     secret: "((bosh_exporter_client_secret))"
 
 - type: replace
+  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/clients/doomsday-readonly?
+  value:
+    override: true
+    authorized-grant-types: client_credentials,refresh_token
+    authorities: credhub.write,credhub.read
+    scope: uaa.none
+    secret: "((doomsday-readonly-secret))"
+
+- type: replace
   path: /variables/-
   value:
     name: bosh_ci_client_secret
@@ -26,4 +35,10 @@
   path: /variables/-
   value:
     name: bosh_exporter_client_secret
+    type: password
+
+- type: replace
+  path: /variables/-
+  value:
+    name: doomsday-readonly-secret
     type: password
