@@ -363,7 +363,6 @@ jobs:
       BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
       BOSH_ENV_NAME: production
 
-
 - name: deploy-tooling-bosh
   serial: true
   plan:

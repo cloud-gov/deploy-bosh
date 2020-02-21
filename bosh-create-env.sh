@@ -4,6 +4,7 @@ set -eux
 
 bosh interpolate common/master-bosh.yml --path "/default_ca/private_key" > ./ca.key
 
+# todo (mxplusb): there needs to be interpolation at some point before the deployment.
 # and deploy it!
 set +e
 bosh create-env \
@@ -12,6 +13,8 @@ bosh create-env \
   --ops-file bosh-deployment/aws/cpi.yml \
   --ops-file bosh-deployment/aws/iam-instance-profile.yml \
   --ops-file bosh-deployment/aws/cli-iam-instance-profile.yml \
+  --ops-file bosh-deployment/uaa.yml \
+  --ops-file bosh-deployment/credhub.yml \
   --ops-file bosh-deployment/misc/powerdns.yml \
   --ops-file bosh-deployment/misc/source-releases/bosh.yml \
   --ops-file bosh-deployment/misc/source-releases/credhub.yml \
