@@ -4,26 +4,200 @@ meta:
     bucket: ((s3-bosh-releases-bucket))
     region_name: ((aws-region))
     private: true
+groups:
+- name: all
+  jobs:
+  - deploy-master-bosh
+  - deploy-tooling-bosh
+  - deploy-development-bosh
+  - deploy-staging-bosh
+  - deploy-production-bosh
+  - common-releases-master
+  - common-releases-tooling
+  - common-releases-development
+  - common-releases-staging
+  - common-releases-production
+- name: bosh
+  jobs:
+  - deploy-master-bosh
+  - deploy-tooling-bosh
+  - deploy-development-bosh
+  - deploy-staging-bosh
+  - deploy-production-bosh
+- name: releases
+  jobs:
+  - common-releases-master
+  - common-releases-tooling
+  - common-releases-development
+  - common-releases-staging
+  - common-releases-production
 jobs:
-- name: deploy-development-bosh
+- name: deploy-master-bosh
+  serial: true
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      trigger: true
+    - get: bosh-config
+      resource: bosh-create-env-config
+      trigger: true
+    - get: common
+      trigger: true
+      resource: common-master
+    - get: terraform-yaml
+      trigger: true
+      resource: terraform-yaml-tooling
+    - get: bosh-state
+      resource: masterbosh-state
+    - get: ca-cert-store
+      trigger: true
+  - task: terraform-secrets
+    file: bosh-config/ci/terraform-secrets.yml
+    params:
+      VARS_FILE: terraform-master.yml
+  - task: bosh-create-env
+    file: bosh-config/bosh-create-env.yml
+    tags: [iaas]
+  - task: update-cloud-config
+    file: bosh-config/ci/update-cloud-config.yml
+    params:
+      OPS_PATHS: "bosh-config/cloud-config/master.yml"
+      BOSH_CA_CERT: ((common_ca_cert_store))
+      BOSH_ENVIRONMENT: ((masterbosh-target))
+      BOSH_CLIENT: admin
+      BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
+  ensure:
+    put: masterbosh-state
+    params:
+      file: updated-bosh-state/*.json
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: FAILED to deploy Master BOSH
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+  on_success:
+    put: slack
+    params:
+      text: |
+        :white_check_mark: Successfully deployed Master BOSH
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+
+- name: common-releases-master
+  serial: true
+  plan:
+  - in_parallel:
+    - get: certificate
+      resource: ca-cert-store
+    - get: bosh-deployment
+      passed:
+      - deploy-master-bosh
+      trigger: true
+    - get: bosh-config
+    - get: terraform-yaml
+      resource: terraform-yaml-production
+    - get: common-master
+      trigger: true
+    - get: cg-s3-fisma-release
+      trigger: true
+    - get: cg-s3-tripwire-release
+      trigger: true
+    - get: cg-s3-awslogs-xenial-release
+      trigger: true
+    - get: cg-s3-nessus-agent-release
+      trigger: true
+    - get: cg-s3-clamav-release
+      trigger: true
+    - get: cg-s3-snort-release
+      trigger: true
+    - get: cron-release
+      trigger: true
+    - get: ntp-release
+      trigger: true
+    - get: syslog-release
+      trigger: true
+    - get: node-exporter-release
+      trigger: true
+    - get: masterbosh-state
+      passed: [deploy-master-bosh]
+  - task: upload-releases
+    config: &upload-releases-config
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: 18fgsa/concourse-task
+      inputs:
+      - {name: certificate}
+      - {name: cg-s3-fisma-release, path: releases/fisma}
+      - {name: cg-s3-tripwire-release, path: releases/tripwire}
+      - {name: cg-s3-awslogs-xenial-release, path: releases/awslogs-xenial}
+      - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
+      - {name: cg-s3-clamav-release, path: releases/clamav}
+      - {name: cg-s3-snort-release, path: releases/snort}
+      - {name: cron-release, path: releases/cron}
+      - {name: ntp-release, path: releases/ntp}
+      - {name: node-exporter-release, path: releases/node-exporter}
+      - {name: syslog-release, path: releases/syslog}
+      params:
+        BOSH_CA_CERT: ((common_ca_cert_store))
+        BOSH_CLIENT: admin
+        BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
+        BOSH_ENVIRONMENT: ((masterbosh-target))
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          for release in releases/**/*.tgz; do
+            bosh upload-release "${release}"
+          done
+          bosh -n clean-up
+  - task: update-runtime-config
+    file: bosh-config/ci/update-runtime-config.yml
+    input_mapping:
+      common: common-master
+    params:
+      BOSH_CA_CERT: ((common_ca_cert_store))
+      BOSH_ENVIRONMENT: ((masterbosh-target))
+      BOSH_CLIENT: admin
+      BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
+      BOSH_ENV_NAME: master
+
+- name: deploy-tooling-bosh
   serial: true
   plan:
   - in_parallel:
     - get: ca-cert-store
+      trigger: true
     - get: bosh-deployment
       trigger: true
+      passed:
+      - deploy-master-bosh
     - get: bosh-config
-      resource: bosh-config-development
       trigger: true
+      passed:
+      - common-releases-master
     - get: bosh-stemcell-xenial
       trigger: true
     - get: terraform-yaml
-      resource: terraform-yaml-development
-    - get: semver-tooling-version
-      passed: [common-releases-tooling]
+      trigger: true
+      resource: terraform-yaml-tooling
+    - get: terraform-yaml-development
+      trigger: true
+    - get: terraform-yaml-staging
+      trigger: true
+    - get: terraform-yaml-production
+      trigger: true
   - task: terraform-secrets
     file: bosh-config/ci/terraform-secrets.yml
-  - put: developmentbosh-deployment
+  - put: toolingbosh-deployment
     params: &bosh-deployment
       manifest: bosh-deployment/bosh.yml
       stemcells:
@@ -49,7 +223,151 @@ jobs:
       - bosh-config/operations/add-new-saml-key.yml
       - bosh-config/operations/remove-old-blobstore-ca.yml
       - bosh-config/operations/add-cloud-gov-root-certificate.yml
-      - bosh-config/operations/max-tasks.yml
+      vars_files:
+      - bosh-config/variables/tooling.yml
+      - terraform-secrets/terraform.yml
+      - terraform-yaml/state.yml
+  - task: update-cloud-config
+    file: bosh-config/ci/update-cloud-config-tooling.yml
+    params:
+      OPS_PATHS: "bosh-config/cloud-config/tooling.yml"
+      BOSH_CA_CERT: ((common_ca_cert_store))
+      BOSH_ENVIRONMENT: ((toolingbosh-target))
+      BOSH_CLIENT: ci
+      BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: FAILED to deploy Tooling BOSH
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+  on_success:
+    put: slack
+    params:
+      text: |
+        :white_check_mark: Successfully deployed Tooling BOSH
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+
+- name: common-releases-tooling
+  serial: true
+  plan:
+  - in_parallel:
+    - get: certificate
+      resource: ca-cert-store
+    - get: bosh-deployment
+      trigger: true
+    - get: bosh-config
+      trigger: true
+      passed:
+      - deploy-tooling-bosh
+    - get: terraform-yaml
+      trigger: true
+      resource: terraform-yaml-production
+    - get: cg-s3-fisma-release
+      trigger: true
+      passed:
+      - common-releases-master
+    - get: cg-s3-tripwire-release
+      trigger: true
+      passed:
+      - common-releases-master
+    - get: cg-s3-awslogs-xenial-release
+      trigger: true
+      passed:
+      - common-releases-master
+    - get: cg-s3-nessus-agent-release
+      trigger: true
+      passed:
+      - common-releases-master
+    - get: cg-s3-clamav-release
+      trigger: true
+      passed:
+      - common-releases-master
+    - get: cg-s3-snort-release
+      trigger: true
+      passed:
+      - common-releases-master
+    - get: cron-release
+      trigger: true
+      passed:
+      - common-releases-master
+    - get: ntp-release
+      trigger: true
+      passed:
+      - common-releases-master
+    - get: node-exporter-release
+      trigger: true
+      passed:
+      - common-releases-master
+    - get: syslog-release
+      trigger: true
+      passed:
+      - common-releases-master
+    - get: toolingbosh-deployment
+      trigger: true
+      passed:
+      - deploy-tooling-bosh
+  - task: upload-releases
+    config:
+      <<: *upload-releases-config
+      inputs:
+      - {name: certificate}
+      - {name: cg-s3-fisma-release, path: releases/fisma}
+      - {name: cg-s3-tripwire-release, path: releases/tripwire}
+      - {name: cg-s3-awslogs-xenial-release, path: releases/awslogs-xenial}
+      - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
+      - {name: cg-s3-clamav-release, path: releases/clamav}
+      - {name: cg-s3-snort-release, path: releases/snort}
+      - {name: cron-release, path: releases/cron}
+      - {name: ntp-release, path: releases/ntp}
+      - {name: node-exporter-release, path: releases/node-exporter}
+      - {name: syslog-release, path: releases/syslog}
+      params:
+        BOSH_CA_CERT: ((common_ca_cert_store))
+        BOSH_CLIENT: ci
+        BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
+        BOSH_ENVIRONMENT: ((toolingbosh-target))
+  - task: update-runtime-config
+    file: bosh-config/ci/update-runtime-config.yml
+    params:
+      BOSH_CA_CERT: ((common_ca_cert_store))
+      BOSH_ENVIRONMENT: ((toolingbosh-target))
+      BOSH_CLIENT: ci
+      BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
+      BOSH_ENV_NAME: tooling
+
+- name: deploy-development-bosh
+  serial: true
+  plan:
+  - in_parallel:
+    - get: ca-cert-store
+      trigger: true
+    - get: bosh-deployment
+      trigger: true
+      passed:
+      - deploy-tooling-bosh
+    - get: bosh-config
+      trigger: true
+      passed:
+      - common-releases-tooling
+    - get: bosh-stemcell-xenial
+      trigger: true
+      passed:
+      - deploy-tooling-bosh
+    - get: terraform-yaml
+      trigger: true
+      resource: terraform-yaml-development
+  - task: terraform-secrets
+    file: bosh-config/ci/terraform-secrets.yml
+  - put: developmentbosh-deployment
+    params:
+      <<: *bosh-deployment
       vars_files:
       - bosh-config/variables/development.yml
       - terraform-secrets/terraform.yml
@@ -89,67 +407,64 @@ jobs:
       resource: ca-cert-store
     - get: bosh-deployment
       trigger: true
+      passed:
+      - deploy-development-bosh
     - get: bosh-config
-      resource: bosh-config-development
+      trigger: true
+      passed:
+      - deploy-development-bosh
     - get: terraform-yaml
       resource: terraform-yaml-development
     - get: cg-s3-fisma-release
       trigger: true
+      passed:
+      - common-releases-tooling
     - get: cg-s3-tripwire-release
-      resource: cg-s3-tripwire-release-development
       trigger: true
+      passed:
+      - common-releases-tooling
     - get: cg-s3-awslogs-xenial-release
-      resource: cg-s3-awslogs-xenial-release-development
       trigger: true
+      passed:
+      - common-releases-tooling
     - get: cg-s3-nessus-agent-release
       trigger: true
+      passed:
+      - common-releases-tooling
     - get: cg-s3-clamav-release
       trigger: true
+      passed:
+      - common-releases-tooling
     - get: cg-s3-snort-release
       trigger: true
+      passed:
+      - common-releases-tooling
     - get: cron-release
       trigger: true
+      passed:
+      - common-releases-tooling
     - get: ntp-release
       trigger: true
+      passed:
+      - common-releases-tooling
     - get: node-exporter-release
       trigger: true
+      passed:
+      - common-releases-tooling
     - get: syslog-release
       trigger: true
+      passed:
+      - common-releases-tooling
     - get: developmentbosh-deployment
       passed: [deploy-development-bosh]
   - task: upload-releases
-    config: &upload-releases-config
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: 18fgsa/concourse-task
-      inputs:
-      - {name: certificate}
-      - {name: cg-s3-fisma-release, path: releases/fisma}
-      - {name: cg-s3-tripwire-release, path: releases/tripwire}
-      - {name: cg-s3-awslogs-xenial-release, path: releases/awslogs-xenial}
-      - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
-      - {name: cg-s3-clamav-release, path: releases/clamav}
-      - {name: cg-s3-snort-release, path: releases/snort}
-      - {name: cron-release, path: releases/cron}
-      - {name: ntp-release, path: releases/ntp}
-      - {name: node-exporter-release, path: releases/node-exporter}
-      - {name: syslog-release, path: releases/syslog}
+    config:
+      <<: *upload-releases-config
       params:
         BOSH_CA_CERT: ((common_ca_cert_store))
         BOSH_CLIENT: ci
         BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
         BOSH_ENVIRONMENT: ((developmentbosh-target))
-      run:
-        path: sh
-        args:
-        - -exc
-        - |
-          for release in releases/**/*.tgz; do
-            bosh upload-release "${release}"
-          done
-          bosh -n clean-up
   - task: update-runtime-config
     file: bosh-config/ci/update-runtime-config.yml
     params:
@@ -164,16 +479,22 @@ jobs:
   plan:
   - in_parallel:
     - get: ca-cert-store
+      trigger: true
     - get: bosh-deployment
       trigger: true
+      passed:
+      - common-releases-development
     - get: bosh-config
       trigger: true
+      passed:
+      - common-releases-development
     - get: bosh-stemcell-xenial
       trigger: true
+      passed:
+      - deploy-development-bosh
     - get: terraform-yaml
+      trigger: true
       resource: terraform-yaml-staging
-    - get: semver-tooling-version
-      passed: [common-releases-tooling]
   - task: terraform-secrets
     file: bosh-config/ci/terraform-secrets.yml
   - put: stagingbosh-deployment
@@ -218,29 +539,54 @@ jobs:
       resource: ca-cert-store
     - get: bosh-deployment
       trigger: true
+      passed:
+      - deploy-staging-bosh
     - get: bosh-config
+      trigger: true
+      passed:
+      - deploy-staging-bosh
     - get: terraform-yaml
       resource: terraform-yaml-staging
     - get: cg-s3-fisma-release
       trigger: true
+      passed:
+      - common-releases-development
     - get: cg-s3-tripwire-release
       trigger: true
+      passed:
+      - common-releases-development
     - get: cg-s3-awslogs-xenial-release
       trigger: true
+      passed:
+      - common-releases-development
     - get: cg-s3-nessus-agent-release
       trigger: true
+      passed:
+      - common-releases-development
     - get: cg-s3-clamav-release
       trigger: true
+      passed:
+      - common-releases-development
     - get: cg-s3-snort-release
       trigger: true
+      passed:
+      - common-releases-development
     - get: cron-release
       trigger: true
+      passed:
+      - common-releases-development
     - get: node-exporter-release
       trigger: true
+      passed:
+      - common-releases-development
     - get: syslog-release
       trigger: true
+      passed:
+      - common-releases-development
     - get: ntp-release
       trigger: true
+      passed:
+      - common-releases-development
     - get: stagingbosh-deployment
       passed: [deploy-staging-bosh]
   - task: upload-releases
@@ -265,19 +611,21 @@ jobs:
   plan:
   - in_parallel:
     - get: ca-cert-store
+      trigger: true
     - get: bosh-deployment
-      passed: [deploy-staging-bosh]
+      passed:
+      - common-releases-staging
       trigger: true
     - get: bosh-config
-      passed: [deploy-staging-bosh]
+      passed:
+      - common-releases-staging
       trigger: true
     - get: bosh-stemcell-xenial
-      passed: [deploy-staging-bosh]
-      passed: [deploy-staging-bosh]
+      passed:
+      - deploy-staging-bosh
       trigger: true
-    - get: semver-tooling-version
-      passed: [common-releases-tooling]
     - get: terraform-yaml
+      trigger: true
       resource: terraform-yaml-production
   - task: terraform-secrets
     file: bosh-config/ci/terraform-secrets.yml
@@ -328,24 +676,44 @@ jobs:
       resource: terraform-yaml-production
     - get: cg-s3-fisma-release
       trigger: true
+      passed:
+      - common-releases-staging
     - get: cg-s3-tripwire-release
       trigger: true
+      passed:
+      - common-releases-staging
     - get: cg-s3-awslogs-xenial-release
       trigger: true
+      passed:
+      - common-releases-staging
     - get: cg-s3-nessus-agent-release
       trigger: true
+      passed:
+      - common-releases-staging
     - get: cg-s3-clamav-release
       trigger: true
+      passed:
+      - common-releases-staging
     - get: cg-s3-snort-release
       trigger: true
+      passed:
+      - common-releases-staging
     - get: cron-release
       trigger: true
+      passed:
+      - common-releases-staging
     - get: ntp-release
       trigger: true
+      passed:
+      - common-releases-staging
     - get: node-exporter-release
       trigger: true
+      passed:
+      - common-releases-staging
     - get: syslog-release
       trigger: true
+      passed:
+      - common-releases-staging
     - get: productionbosh-deployment
       passed: [deploy-production-bosh]
   - task: upload-releases
@@ -364,243 +732,6 @@ jobs:
       BOSH_CLIENT: ci
       BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
       BOSH_ENV_NAME: production
-
-- name: deploy-tooling-bosh
-  serial: true
-  plan:
-  - in_parallel:
-    - get: ca-cert-store
-    - get: bosh-deployment
-    - get: bosh-config
-    - get: bosh-stemcell-xenial
-    - get: terraform-yaml
-      resource: terraform-yaml-tooling
-    - get: terraform-yaml-development
-    - get: terraform-yaml-staging
-    - get: terraform-yaml-production
-    - get: semver-master-version
-      passed: [common-releases-master]
-  - task: terraform-secrets
-    file: bosh-config/ci/terraform-secrets.yml
-  - put: toolingbosh-deployment
-    params:
-      <<: *bosh-deployment
-      vars_files:
-      - bosh-config/variables/tooling.yml
-      - terraform-secrets/terraform.yml
-      - terraform-yaml/state.yml
-  - task: update-cloud-config
-    file: bosh-config/ci/update-cloud-config-tooling.yml
-    params:
-      OPS_PATHS: "bosh-config/cloud-config/tooling.yml"
-      BOSH_CA_CERT: ((common_ca_cert_store))
-      BOSH_ENVIRONMENT: ((toolingbosh-target))
-      BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
-  on_failure:
-    put: slack
-    params:
-      text: |
-        :x: FAILED to deploy Tooling BOSH
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: ((slack-channel))
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully deployed Tooling BOSH
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: ((slack-channel))
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
-
-- name: common-releases-tooling
-  serial: true
-  plan:
-  - in_parallel:
-    - get: certificate
-      resource: ca-cert-store
-    - get: bosh-deployment
-      trigger: true
-    - get: bosh-config
-    - get: terraform-yaml
-      resource: terraform-yaml-production
-    - get: cg-s3-fisma-release
-      trigger: true
-    - get: cg-s3-tripwire-release
-      trigger: true
-    - get: cg-s3-awslogs-xenial-release
-      trigger: true
-    - get: cg-s3-nessus-agent-release
-      trigger: true
-    - get: cg-s3-clamav-release
-      trigger: true
-    - get: cg-s3-snort-release
-      trigger: true
-    - get: cron-release
-      trigger: true
-    - get: ntp-release
-      trigger: true
-    - get: node-exporter-release
-      trigger: true
-    - get: syslog-release
-      trigger: true
-    - get: toolingbosh-deployment
-      passed: [deploy-tooling-bosh]
-  - task: upload-releases
-    config:
-      <<: *upload-releases-config
-      inputs:
-      - {name: certificate}
-      - {name: cg-s3-fisma-release, path: releases/fisma}
-      - {name: cg-s3-tripwire-release, path: releases/tripwire}
-      - {name: cg-s3-awslogs-xenial-release, path: releases/awslogs-xenial}
-      - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
-      - {name: cg-s3-clamav-release, path: releases/clamav}
-      - {name: cg-s3-snort-release, path: releases/snort}
-      - {name: cron-release, path: releases/cron}
-      - {name: ntp-release, path: releases/ntp}
-      - {name: node-exporter-release, path: releases/node-exporter}
-      - {name: syslog-release, path: releases/syslog}
-      params:
-        BOSH_CA_CERT: ((common_ca_cert_store))
-        BOSH_CLIENT: ci
-        BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
-        BOSH_ENVIRONMENT: ((toolingbosh-target))
-  - put: semver-tooling-version
-    params: {bump: patch}
-  - task: update-runtime-config
-    file: bosh-config/ci/update-runtime-config.yml
-    params:
-      BOSH_CA_CERT: ((common_ca_cert_store))
-      BOSH_ENVIRONMENT: ((toolingbosh-target))
-      BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
-      BOSH_ENV_NAME: tooling
-
-- name: common-releases-master
-  serial: true
-  plan:
-  - in_parallel:
-    - get: certificate
-      resource: ca-cert-store
-    - get: bosh-deployment
-      trigger: true
-    - get: bosh-config
-    - get: terraform-yaml
-      resource: terraform-yaml-production
-    - get: common-master
-      trigger: true
-    - get: cg-s3-fisma-release
-      trigger: true
-    - get: cg-s3-tripwire-release
-      trigger: true
-    - get: cg-s3-awslogs-xenial-release
-      trigger: true
-    - get: cg-s3-nessus-agent-release
-      trigger: true
-    - get: cg-s3-clamav-release
-      trigger: true
-    - get: cg-s3-snort-release
-      trigger: true
-    - get: cron-release
-      trigger: true
-    - get: ntp-release
-      trigger: true
-    - get: syslog-release
-      trigger: true
-    - get: node-exporter-release
-      trigger: true
-    - get: masterbosh-state
-      passed: [deploy-master-bosh]
-  - task: upload-releases
-    config:
-      <<: *upload-releases-config
-      inputs:
-      - {name: certificate}
-      - {name: cg-s3-fisma-release, path: releases/fisma}
-      - {name: cg-s3-tripwire-release, path: releases/tripwire}
-      - {name: cg-s3-awslogs-xenial-release, path: releases/awslogs-xenial}
-      - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
-      - {name: cg-s3-clamav-release, path: releases/clamav}
-      - {name: cg-s3-snort-release, path: releases/snort}
-      - {name: cron-release, path: releases/cron}
-      - {name: ntp-release, path: releases/ntp}
-      - {name: node-exporter-release, path: releases/node-exporter}
-      - {name: syslog-release, path: releases/syslog}
-      params:
-        BOSH_CA_CERT: ((common_ca_cert_store))
-        BOSH_CLIENT: admin
-        BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
-        BOSH_ENVIRONMENT: ((masterbosh-target))
-  - put: semver-master-version
-    params: {bump: patch}
-  - task: update-runtime-config
-    file: bosh-config/ci/update-runtime-config.yml
-    input_mapping:
-      common: common-master
-    params:
-      BOSH_CA_CERT: ((common_ca_cert_store))
-      BOSH_ENVIRONMENT: ((masterbosh-target))
-      BOSH_CLIENT: admin
-      BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
-      BOSH_ENV_NAME: master
-
-- name: deploy-master-bosh
-  serial: true
-  plan:
-  - in_parallel:
-    - get: bosh-deployment
-      trigger: true
-    - get: bosh-config
-      resource: bosh-create-env-config
-      trigger: true
-    - get: common
-      resource: common-master
-    - get: terraform-yaml
-      resource: terraform-yaml-tooling
-    - get: bosh-state
-      resource: masterbosh-state
-    - get: ca-cert-store
-  - task: terraform-secrets
-    file: bosh-config/ci/terraform-secrets.yml
-    params:
-      VARS_FILE: terraform-master.yml
-  - task: bosh-create-env
-    file: bosh-config/bosh-create-env.yml
-    tags: [iaas]
-  - task: update-cloud-config
-    file: bosh-config/ci/update-cloud-config.yml
-    params:
-      OPS_PATHS: "bosh-config/cloud-config/master.yml"
-      BOSH_CA_CERT: ((common_ca_cert_store))
-      BOSH_ENVIRONMENT: ((masterbosh-target))
-      BOSH_CLIENT: admin
-      BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
-  ensure:
-    put: masterbosh-state
-    params:
-      file: updated-bosh-state/*.json
-  on_failure:
-    put: slack
-    params:
-      text: |
-        :x: FAILED to deploy Master BOSH
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: ((slack-channel))
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully deployed Master BOSH
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: ((slack-channel))
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
 
 resources:
 - name: ca-cert-store
@@ -651,12 +782,6 @@ resources:
   source:
     uri: ((bosh-config-git-url))
     branch: ((bosh-config-git-branch))
-
-- name: bosh-config-development
-  type: git
-  source:
-    uri: ((bosh-config-development-git-url))
-    branch: ((bosh-config-development-git-branch))
 
 - name: bosh-create-env-config
   type: git
@@ -719,25 +844,18 @@ resources:
     regexp: fisma-(.*).tgz
     <<: *s3-release-params
 
-- &tripwire-release
-  name: cg-s3-tripwire-release
+- name: cg-s3-tripwire-release
   type: s3-iam
   source:
     regexp: tripwire-(.*).tgz
     <<: *s3-release-params
 
-- <<: *tripwire-release
-  name: cg-s3-tripwire-release-development
-
-- &awslogs-xenial-release
-  name: cg-s3-awslogs-xenial-release
+- name: cg-s3-awslogs-xenial-release
   type: s3-iam
   source:
     regexp: awslogs-xenial-(.*).tgz
     <<: *s3-release-params
 
-- <<: *awslogs-xenial-release
-  name: cg-s3-awslogs-xenial-release-development
 
 - name: cg-s3-nessus-agent-release
   type: s3-iam
@@ -761,22 +879,6 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry-community/node-exporter-boshrelease
-
-- name: semver-master-version
-  type: semver-iam
-  source:
-    driver: s3
-    bucket: ((semver-bucket))
-    key: ((semver-master-key))
-    region_name: ((aws-region))
-
-- name: semver-tooling-version
-  type: semver-iam
-  source:
-    driver: s3
-    bucket: ((semver-bucket))
-    key: ((semver-tooling-key))
-    region_name: ((aws-region))
 
 - name: terraform-yaml-tooling
   type: s3-iam
