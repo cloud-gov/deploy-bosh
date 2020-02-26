@@ -22,6 +22,7 @@ bosh create-env \
   --ops-file bosh-deployment/jumpbox-user.yml \
   --ops-file bosh-config/operations/cpi.yml \
   --ops-file bosh-config/operations/encryption.yml \
+  --ops-file bosh-config/operations/add-cloud-gov-root-certificate.yml \
   --vars-file bosh-config/variables/master.yml \
   --vars-file terraform-yaml/state.yml \
   --vars-file terraform-secrets/terraform.yml \
