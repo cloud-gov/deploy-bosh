@@ -25,9 +25,6 @@ vm_types:
 - name: r5d.4xlarge
   cloud_properties:
     instance_type: r5d.4xlarge
-- name: g3.8xlarge
-  cloud_properties:
-    instance_type: g3.8xlarge
 - name: m5ad.4xlarge
   cloud_properties:
     instance_type: m5ad.4xlarge
@@ -37,9 +34,6 @@ vm_types:
 - name: r3.4xlarge
   cloud_properties:
     instance_type: r3.4xlarge
-- name: i2.xlarge
-  cloud_properties:
-    instance_type: i2.xlarge
 - name: m5d.large
   cloud_properties:
     instance_type: m5d.large
@@ -70,9 +64,6 @@ vm_types:
 - name: r3.8xlarge
   cloud_properties:
     instance_type: r3.8xlarge
-- name: i3en.24xlarge
-  cloud_properties:
-    instance_type: i3en.24xlarge
 - name: t2.micro
   cloud_properties:
     instance_type: t2.micro
@@ -88,15 +79,9 @@ vm_types:
 - name: m5ad.8xlarge
   cloud_properties:
     instance_type: m5ad.8xlarge
-- name: g3.4xlarge
-  cloud_properties:
-    instance_type: g3.4xlarge
 - name: m5a.2xlarge
   cloud_properties:
     instance_type: m5a.2xlarge
-- name: i3en.3xlarge
-  cloud_properties:
-    instance_type: i3en.3xlarge
 - name: m5d.metal
   cloud_properties:
     instance_type: m5d.metal
@@ -130,9 +115,6 @@ vm_types:
 - name: r5ad.8xlarge
   cloud_properties:
     instance_type: r5ad.8xlarge
-- name: d2.2xlarge
-  cloud_properties:
-    instance_type: d2.2xlarge
 - name: m4.large
   cloud_properties:
     instance_type: m4.large
@@ -142,12 +124,6 @@ vm_types:
 - name: m5.metal
   cloud_properties:
     instance_type: m5.metal
-- name: p2.8xlarge
-  cloud_properties:
-    instance_type: p2.8xlarge
-- name: i3en.12xlarge
-  cloud_properties:
-    instance_type: i3en.12xlarge
 - name: m5a.4xlarge
   cloud_properties:
     instance_type: m5a.4xlarge
@@ -175,12 +151,6 @@ vm_types:
 - name: t2.large
   cloud_properties:
     instance_type: t2.large
-- name: i2.2xlarge
-  cloud_properties:
-    instance_type: i2.2xlarge
-- name: g3.16xlarge
-  cloud_properties:
-    instance_type: g3.16xlarge
 - name: r5ad.12xlarge
   cloud_properties:
     instance_type: r5ad.12xlarge
@@ -196,21 +166,9 @@ vm_types:
 - name: m3.xlarge
   cloud_properties:
     instance_type: m3.xlarge
-- name: d2.8xlarge
-  cloud_properties:
-    instance_type: d2.8xlarge
-- name: f1.2xlarge
-  cloud_properties:
-    instance_type: f1.2xlarge
-- name: p3.2xlarge
-  cloud_properties:
-    instance_type: p3.2xlarge
 - name: r5ad.24xlarge
   cloud_properties:
     instance_type: r5ad.24xlarge
-- name: g4dn.12xlarge
-  cloud_properties:
-    instance_type: g4dn.12xlarge
 - name: m5.24xlarge
   cloud_properties:
     instance_type: m5.24xlarge
@@ -268,9 +226,6 @@ vm_types:
 - name: x1e.2xlarge
   cloud_properties:
     instance_type: x1e.2xlarge
-- name: g4dn.metal
-  cloud_properties:
-    instance_type: g4dn.metal
 - name: c4.8xlarge
   cloud_properties:
     instance_type: c4.8xlarge
@@ -325,21 +280,12 @@ vm_types:
 - name: t2.nano
   cloud_properties:
     instance_type: t2.nano
-- name: i3.16xlarge
-  cloud_properties:
-    instance_type: i3.16xlarge
 - name: m5a.8xlarge
   cloud_properties:
     instance_type: m5a.8xlarge
 - name: r5.8xlarge
   cloud_properties:
     instance_type: r5.8xlarge
-- name: i2.4xlarge
-  cloud_properties:
-    instance_type: i2.4xlarge
-- name: g4dn.4xlarge
-  cloud_properties:
-    instance_type: g4dn.4xlarge
 - name: c5n.xlarge
   cloud_properties:
     instance_type: c5n.xlarge
@@ -364,12 +310,6 @@ vm_types:
 - name: c3.4xlarge
   cloud_properties:
     instance_type: c3.4xlarge
-- name: d2.xlarge
-  cloud_properties:
-    instance_type: d2.xlarge
-- name: p3dn.24xlarge
-  cloud_properties:
-    instance_type: p3dn.24xlarge
 - name: m5a.24xlarge
   cloud_properties:
     instance_type: m5a.24xlarge
@@ -391,15 +331,6 @@ vm_types:
 - name: r5d.8xlarge
   cloud_properties:
     instance_type: r5d.8xlarge
-- name: f1.4xlarge
-  cloud_properties:
-    instance_type: f1.4xlarge
-- name: g4dn.xlarge
-  cloud_properties:
-    instance_type: g4dn.xlarge
-- name: g4dn.8xlarge
-  cloud_properties:
-    instance_type: g4dn.8xlarge
 - name: c5.9xlarge
   cloud_properties:
     instance_type: c5.9xlarge
@@ -421,33 +352,18 @@ vm_types:
 - name: m5.4xlarge
   cloud_properties:
     instance_type: m5.4xlarge
-- name: f1.16xlarge
-  cloud_properties:
-    instance_type: f1.16xlarge
-- name: p3.8xlarge
-  cloud_properties:
-    instance_type: p3.8xlarge
 - name: c5n.metal
   cloud_properties:
     instance_type: c5n.metal
-- name: i3en.xlarge
-  cloud_properties:
-    instance_type: i3en.xlarge
 - name: r5d.metal
   cloud_properties:
     instance_type: r5d.metal
 - name: r5.xlarge
   cloud_properties:
     instance_type: r5.xlarge
-- name: i3.large
-  cloud_properties:
-    instance_type: i3.large
 - name: c5d.18xlarge
   cloud_properties:
     instance_type: c5d.18xlarge
-- name: i3.xlarge
-  cloud_properties:
-    instance_type: i3.xlarge
 - name: m3.2xlarge
   cloud_properties:
     instance_type: m3.2xlarge
@@ -475,18 +391,12 @@ vm_types:
 - name: m5a.large
   cloud_properties:
     instance_type: m5a.large
-- name: i3en.2xlarge
-  cloud_properties:
-    instance_type: i3en.2xlarge
 - name: x1e.xlarge
   cloud_properties:
     instance_type: x1e.xlarge
 - name: r4.4xlarge
   cloud_properties:
     instance_type: r4.4xlarge
-- name: g4dn.16xlarge
-  cloud_properties:
-    instance_type: g4dn.16xlarge
 - name: t2.xlarge
   cloud_properties:
     instance_type: t2.xlarge
@@ -496,15 +406,9 @@ vm_types:
 - name: m2.xlarge
   cloud_properties:
     instance_type: m2.xlarge
-- name: i3.2xlarge
-  cloud_properties:
-    instance_type: i3.2xlarge
 - name: c5.2xlarge
   cloud_properties:
     instance_type: c5.2xlarge
-- name: i3.metal
-  cloud_properties:
-    instance_type: i3.metal
 - name: r3.xlarge
   cloud_properties:
     instance_type: r3.xlarge
@@ -529,9 +433,6 @@ vm_types:
 - name: m4.2xlarge
   cloud_properties:
     instance_type: m4.2xlarge
-- name: i2.8xlarge
-  cloud_properties:
-    instance_type: i2.8xlarge
 - name: t3a.large
   cloud_properties:
     instance_type: t3a.large
@@ -544,30 +445,18 @@ vm_types:
 - name: m5.2xlarge
   cloud_properties:
     instance_type: m5.2xlarge
-- name: i3.4xlarge
-  cloud_properties:
-    instance_type: i3.4xlarge
 - name: c4.2xlarge
   cloud_properties:
     instance_type: c4.2xlarge
 - name: t2.medium
   cloud_properties:
     instance_type: t2.medium
-- name: p2.16xlarge
-  cloud_properties:
-    instance_type: p2.16xlarge
 - name: r5ad.2xlarge
   cloud_properties:
     instance_type: r5ad.2xlarge
 - name: r5ad.16xlarge
   cloud_properties:
     instance_type: r5ad.16xlarge
-- name: i3.8xlarge
-  cloud_properties:
-    instance_type: i3.8xlarge
-- name: d2.4xlarge
-  cloud_properties:
-    instance_type: d2.4xlarge
 - name: m4.10xlarge
   cloud_properties:
     instance_type: m4.10xlarge
@@ -577,12 +466,6 @@ vm_types:
 - name: r4.2xlarge
   cloud_properties:
     instance_type: r4.2xlarge
-- name: p2.xlarge
-  cloud_properties:
-    instance_type: p2.xlarge
-- name: p3.16xlarge
-  cloud_properties:
-    instance_type: p3.16xlarge
 - name: m5ad.16xlarge
   cloud_properties:
     instance_type: m5ad.16xlarge
@@ -592,9 +475,6 @@ vm_types:
 - name: x1e.16xlarge
   cloud_properties:
     instance_type: x1e.16xlarge
-- name: i3en.metal
-  cloud_properties:
-    instance_type: i3en.metal
 - name: m5d.24xlarge
   cloud_properties:
     instance_type: m5d.24xlarge
@@ -607,9 +487,6 @@ vm_types:
 - name: r5d.16xlarge
   cloud_properties:
     instance_type: r5d.16xlarge
-- name: i3en.large
-  cloud_properties:
-    instance_type: i3en.large
 - name: m5ad.24xlarge
   cloud_properties:
     instance_type: m5ad.24xlarge
@@ -622,12 +499,6 @@ vm_types:
 - name: c5.18xlarge
   cloud_properties:
     instance_type: c5.18xlarge
-- name: g4dn.2xlarge
-  cloud_properties:
-    instance_type: g4dn.2xlarge
-- name: i3en.6xlarge
-  cloud_properties:
-    instance_type: i3en.6xlarge
 - name: m1.medium
   cloud_properties:
     instance_type: m1.medium
