@@ -5,8 +5,3 @@
     canary_watch_time: 1000-600000
     update_watch_time: 1000-600000
     max_in_flight: 4
-
-# this doesn't exist in the default manifest but is part of the job spec.
-- type: replace
-  path: /instance_groups/name=bosh/jobs/name=director/properties?/director?/workers?
-  value: 8
