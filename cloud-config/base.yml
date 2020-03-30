@@ -431,5 +431,5 @@ disk_types: []
 compilation:
   workers: 5
   reuse_compilation_vms: true
-  vm_type: compilation
+  vm_type: c5.xlarge.compilation
   az: z1
