@@ -7,12 +7,6 @@ azs:
     availability_zone: ((terraform_outputs.az2))
 
 vm_types:
-- name: c5.xlarge.compilation
-  cloud_properties:
-    instance_type: c5.xlarge
-    iam_instance_profile: ((terraform_outputs.bosh_compilation_profile))
-    ephemeral_disk:
-      size: 30000
 - cloud_properties:
     instance_type: c4.2xlarge
   name: c4.2xlarge
@@ -76,6 +70,12 @@ vm_types:
 - cloud_properties:
     instance_type: c5d.large
   name: c5d.large
+- cloud_properties:
+    instance_type: c5.xlarge
+    iam_instance_profile: ((terraform_outputs.bosh_compilation_profile))
+    ephemeral_disk:
+      size: 30000
+  name: c5.xlarge.compilation
 - cloud_properties:
     instance_type: c5d.metal
   name: c5d.metal
