@@ -229,21 +229,6 @@ vm_types:
     instance_type: m5d.xlarge
   name: m5d.xlarge
 - cloud_properties:
-    instance_type: r3.2xlarge
-  name: r3.2xlarge
-- cloud_properties:
-    instance_type: r3.4xlarge
-  name: r3.4xlarge
-- cloud_properties:
-    instance_type: r3.8xlarge
-  name: r3.8xlarge
-- cloud_properties:
-    instance_type: r3.large
-  name: r3.large
-- cloud_properties:
-    instance_type: r3.xlarge
-  name: r3.xlarge
-- cloud_properties:
     instance_type: r4.16xlarge
   name: r4.16xlarge
 - cloud_properties:
