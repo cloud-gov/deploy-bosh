@@ -1,4 +1,12 @@
 - type: replace
+  path: /vm_types/-
+  value:
+    name: bosh
+    cloud_properties:
+      instance_type: m4.xlarge
+      ephemeral_disk:
+        size: 20_000
+- type: replace
   path: /networks/-
   value:
     name: opsuaa

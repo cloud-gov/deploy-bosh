@@ -1,7 +1,7 @@
 - type: replace
   path: /vm_types/-
   value:
-    name: m5.large
+    name: bosh
     cloud_properties:
       instance_type: m5.large
 
