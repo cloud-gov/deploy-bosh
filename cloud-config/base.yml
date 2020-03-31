@@ -159,6 +159,11 @@ vm_types:
       size: 20000
   name: m5.xlarge.opsuaa
 - cloud_properties:
+    instance_type: m5.xlarge
+    ephemeral_disk:
+      size: 20000
+  name: m5.xlarge.bosh.director
+- cloud_properties:
     instance_type: m5a.12xlarge
   name: m5a.12xlarge
 - cloud_properties:
