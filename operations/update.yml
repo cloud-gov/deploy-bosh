@@ -5,3 +5,6 @@
     canary_watch_time: 1000-600000
     update_watch_time: 1000-600000
     max_in_flight: 4
+- type: replace
+  path: /instance_groups/name=bosh/vm_type
+  value: m5.xlarge.bosh.director
