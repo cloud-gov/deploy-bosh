@@ -284,6 +284,11 @@ vm_types:
     instance_type: r5.xlarge
   name: r5.xlarge
 - cloud_properties:
+    instance_type: r5.xlarge
+    ephemeral_disk:
+      size: 30000
+  name: r5.xlarge.logsearch.ingestor
+- cloud_properties:
     instance_type: r5a.12xlarge
   name: r5a.12xlarge
 - cloud_properties:
