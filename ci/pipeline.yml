@@ -49,6 +49,7 @@ jobs:
       - bosh-config/operations/add-new-saml-key.yml
       - bosh-config/operations/remove-old-blobstore-ca.yml
       - bosh-config/operations/add-cloud-gov-root-certificate.yml
+      - bosh-config/operations/max-files.yml
       vars_files:
       - bosh-config/variables/development.yml
       - terraform-secrets/terraform.yml
@@ -627,7 +628,7 @@ resources:
 - name: cron-release
   type: bosh-io-release
   source:
-    repository: cloudfoundry-community/cron-boshrelease  
+    repository: cloudfoundry-community/cron-boshrelease
 
 - name: ntp-release
   type: bosh-io-release
@@ -825,4 +826,3 @@ resource_types:
   type: docker-image
   source:
     repository: governmentpaas/semver-resource
-
