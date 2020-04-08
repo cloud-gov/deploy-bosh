@@ -49,7 +49,7 @@ jobs:
       - bosh-config/operations/add-new-saml-key.yml
       - bosh-config/operations/remove-old-blobstore-ca.yml
       - bosh-config/operations/add-cloud-gov-root-certificate.yml
-      - bosh-config/operations/max-files.yml
+      - bosh-config/operations/max-tasks.yml
       vars_files:
       - bosh-config/variables/development.yml
       - terraform-secrets/terraform.yml
