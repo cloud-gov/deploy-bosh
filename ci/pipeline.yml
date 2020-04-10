@@ -100,8 +100,10 @@ jobs:
       - deploy-master-bosh
       trigger: true
     - get: bosh-config
+      trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-production
+      trigger: true
     - get: common-master
       trigger: true
     - get: cg-s3-fisma-release
