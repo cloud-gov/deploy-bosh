@@ -69,22 +69,24 @@
                   echo ${FILTER}
               }
 
-              # get a list of all the instances bosh has created
-              KNOWN_INSTANCES=$($PSQL -h ${PGHOST} -U ${PGUSERNAME} -d ${PGDBNAME} -t -c "select uuid from instances")
 
               # find the AWS VPC ID we want to enumerate
               VPC_ID=$(${AWSCLI} ec2 describe-vpcs --filter Name=tag:Name,Values=${VPC_NAME} --output text --query 'Vpcs[].VpcId')
 
-              metrics=$(mktemp metrics-XXXX.prom)
-
-              # emit a metric for all instances in that VPC
               IFS=$'\n'
-              for vminfo in $(
+              VMS=$(
                       ${AWSCLI} ec2 describe-instances --max-items 1000 --output text  --filter Name=vpc-id,Values=${VPC_ID} --query "
                           Reservations[].Instances[$(query_filter "${BOSH_DIRECTOR} ${INSTANCE_WHITELIST}")]
                           | [].{\"iaas_id\": InstanceId, \"bosh_id\": Tags[?Key==\`id\`].Value | [0]}
                           | [].[iaas_id, bosh_id]"
-                      )
+                          )
+              metrics=$(mktemp metrics-XXXX.prom)
+              #
+              # get a list of all the instances bosh has created
+              KNOWN_INSTANCES=$($PSQL -h ${PGHOST} -U ${PGUSERNAME} -d ${PGDBNAME} -t -c "select uuid from instances")
+
+              # emit a metric for all instances in that VPC
+              for vminfo in ${VMS}
                   do
 
                   iaas_id=$(echo ${vminfo} | cut -f1)
