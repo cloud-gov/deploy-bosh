@@ -4,28 +4,28 @@ aws_region: us-gov-west-1
 
 releases:
 - name: fisma
-  uri: https://github.com/18F/cg-harden-boshrelease
+  uri: https://github.com/cloud-gov/cg-harden-boshrelease
   branch: master
 - name: nessus-agent
-  uri: https://github.com/18F/cg-nessus-agent-boshrelease
+  uri: https://github.com/cloud-gov/cg-nessus-agent-boshrelease
   branch: master
 - name: awslogs-xenial
-  uri: https://github.com/18F/cg-awslogs-boshrelease
+  uri: https://github.com/cloud-gov/cg-awslogs-boshrelease
   branch: master
 - name: clamav
-  uri: https://github.com/18F/cg-clamav-boshrelease
+  uri: https://github.com/cloud-gov/cg-clamav-boshrelease
   branch: master
 - name: tripwire
-  uri: https://github.com/18F/cg-tripwire-boshrelease
+  uri: https://github.com/cloud-gov/cg-tripwire-boshrelease
   branch: master
 - name: nessus-manager
-  uri: https://github.com/18F/cg-nessus-manager-boshrelease
+  uri: https://github.com/cloud-gov/cg-nessus-manager-boshrelease
   branch: master
 - name: shibboleth
-  uri: https://github.com/18F/shibboleth-boshrelease
+  uri: https://github.com/cloud-gov/shibboleth-boshrelease
   branch: master
 - name: uaa-customized
-  uri: https://github.com/18F/uaa-customized-boshrelease
+  uri: https://github.com/cloud-gov/uaa-customized-boshrelease
   branch: master
 - name: admin-ui
   uri: https://github.com/cloudfoundry-community/admin-ui-boshrelease
@@ -34,26 +34,26 @@ releases:
   uri: https://github.com/cloudfoundry-community/cron-boshrelease
   branch: master
 - name: kubernetes
-  uri: https://github.com/18F/kubernetes-release
+  uri: https://github.com/cloud-gov/kubernetes-release
   branch: master
 - name: logsearch
-  uri: https://github.com/18F/logsearch-boshrelease
+  uri: https://github.com/cloud-gov/logsearch-boshrelease
   branch: develop
 - name: logsearch-for-cloudfoundry
-  uri: https://github.com/18F/logsearch-for-cloudfoundry
+  uri: https://github.com/cloud-gov/logsearch-for-cloudfoundry
   branch: develop
 - name: elastalert
-  uri: https://github.com/18F/elastalert-boshrelease
+  uri: https://github.com/cloud-gov/elastalert-boshrelease
   branch: master
 - name: oauth2-proxy
-  uri: https://github.com/18F/oauth2-proxy-boshrelease
+  uri: https://github.com/cloud-gov/oauth2-proxy-boshrelease
   branch: master
 - name: postfix
-  uri: https://github.com/18F/postfix-boshrelease
+  uri: https://github.com/cloud-gov/postfix-boshrelease
   branch: master
 - name: domain-broker
-  uri: https://github.com/18F/cf-domain-broker-alb-boshrelease
+  uri: https://github.com/cloud-gov/cf-domain-broker-alb-boshrelease
   branch: master
 - name: elb-log-ingestor
-  uri: https://github.com/18F/cg-elb-log-ingestor-boshrelease
+  uri: https://github.com/cloud-gov/cg-elb-log-ingestor-boshrelease
   branch: master
