@@ -25,8 +25,8 @@ releases:
   uri: https://github.com/cloud-gov/uaa-customized-boshrelease
   branch: master
 - name: admin-ui
-  uri: https://github.com/cloudfoundry-community/admin-ui-boshrelease
-  branch: master
+  uri: https://github.com/jmcarp/admin-ui-boshrelease
+  branch: deploy
 - name: cron
   uri: https://github.com/cloudfoundry-community/cron-boshrelease
   branch: master
