@@ -26,7 +26,7 @@ releases:
   branch: master
 - name: admin-ui
   uri: https://github.com/cloudfoundry-community/admin-ui-boshrelease
-  branch: deploy
+  branch: master
 - name: cron
   uri: https://github.com/cloudfoundry-community/cron-boshrelease
   branch: master
@@ -53,4 +53,7 @@ releases:
   branch: master
 - name: elb-log-ingestor
   uri: https://github.com/cloud-gov/cg-elb-log-ingestor-boshrelease
+  branch: master
+- name: aide
+  uri: https://github.com/cloud-gov/aide-boshrelease
   branch: master
