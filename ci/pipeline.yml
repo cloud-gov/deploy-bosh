@@ -118,6 +118,8 @@ jobs:
       trigger: true
     - get: cg-s3-snort-release
       trigger: true
+    - get: aide-release
+      trigger: true
     - get: cron-release
       trigger: true
     - get: ntp-release
@@ -143,6 +145,7 @@ jobs:
       - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
       - {name: cg-s3-clamav-release, path: releases/clamav}
       - {name: cg-s3-snort-release, path: releases/snort}
+      - {name: aide-release, path: releases/aide}
       - {name: cron-release, path: releases/cron}
       - {name: ntp-release, path: releases/ntp}
       - {name: node-exporter-release, path: releases/node-exporter}
@@ -295,6 +298,10 @@ jobs:
       trigger: true
       passed:
       - common-releases-master
+    - get: aide-release
+      trigger: true
+      passed:
+      - common-releases-master
     - get: cron-release
       trigger: true
       passed:
@@ -326,6 +333,7 @@ jobs:
       - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
       - {name: cg-s3-clamav-release, path: releases/clamav}
       - {name: cg-s3-snort-release, path: releases/snort}
+      - {name: aide-release, path: releases/aide}
       - {name: cron-release, path: releases/cron}
       - {name: ntp-release, path: releases/ntp}
       - {name: node-exporter-release, path: releases/node-exporter}
@@ -438,6 +446,10 @@ jobs:
       passed:
       - common-releases-tooling
     - get: cg-s3-snort-release
+      trigger: true
+      passed:
+      - common-releases-tooling
+    - get: aide-release
       trigger: true
       passed:
       - common-releases-tooling
@@ -573,6 +585,10 @@ jobs:
       trigger: true
       passed:
       - common-releases-development
+    - get: aide-release
+      trigger: true
+      passed:
+      - common-releases-development
     - get: cron-release
       trigger: true
       passed:
@@ -697,6 +713,10 @@ jobs:
       passed:
       - common-releases-staging
     - get: cg-s3-snort-release
+      trigger: true
+      passed:
+      - common-releases-staging
+    - get: aide-release
       trigger: true
       passed:
       - common-releases-staging
@@ -875,6 +895,12 @@ resources:
   type: s3-iam
   source:
     regexp: snort-(.*).tgz
+    <<: *s3-release-params
+
+- name: aide-release
+  type: s3-iam
+  source:
+    regexp: aide-(.*).tgz
     <<: *s3-release-params
 
 - name: node-exporter-release
