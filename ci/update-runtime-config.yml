@@ -11,7 +11,7 @@ inputs:
 - {name: certificate}
 - {name: terraform-yaml}
 - {name: cg-s3-fisma-release, path: releases/fisma}
-- {name: cg-s3-tripwire-release, path: releases/tripwire}
+- {name: aide-release, path: releases/aide}
 - {name: cg-s3-awslogs-xenial-release, path: releases/awslogs-xenial}
 - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
 - {name: cg-s3-clamav-release, path: releases/clamav}
