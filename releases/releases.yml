@@ -15,9 +15,6 @@ releases:
 - name: clamav
   uri: https://github.com/cloud-gov/cg-clamav-boshrelease
   branch: master
-- name: tripwire
-  uri: https://github.com/cloud-gov/cg-tripwire-boshrelease
-  branch: master
 - name: nessus-manager
   uri: https://github.com/cloud-gov/cg-nessus-manager-boshrelease
   branch: master
