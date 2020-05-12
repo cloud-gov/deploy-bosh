@@ -1,6 +1,6 @@
 releases:
 - {name: fisma, version: ((release_fisma))}
-- {name: tripwire, version: ((release_tripwire))}
+- {name: aide, version: ((release_aide))}
 - {name: clamav, version: ((release_clamav))}
 - {name: snort, version: ((release_snort))}
 - {name: awslogs-xenial, version: ((release_awslogs_xenial))}
@@ -13,12 +13,8 @@ addons:
   jobs:
   - name: harden
     release: fisma
-  - name: tripwire
-    release: tripwire
-    properties:
-      tripwire:
-        localpass: ((tripwire_localpass))
-        sitepass: ((tripwire_sitepass))
+  - name: aide
+    release: aide
   - name: clamav
     release: clamav
   - name: snort
@@ -46,10 +42,6 @@ addons:
         port: 5514
 
 variables:
-- name: tripwire_localpass
-  type: password
-- name: tripwire_sitepass
-  type: password
 - name: nessus_agent_key
   type: password
 - name: nessus_agent_group
