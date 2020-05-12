@@ -108,8 +108,6 @@ jobs:
       trigger: true
     - get: cg-s3-fisma-release
       trigger: true
-    - get: cg-s3-tripwire-release
-      trigger: true
     - get: cg-s3-awslogs-xenial-release
       trigger: true
     - get: cg-s3-nessus-agent-release
@@ -140,7 +138,6 @@ jobs:
       inputs:
       - {name: certificate}
       - {name: cg-s3-fisma-release, path: releases/fisma}
-      - {name: cg-s3-tripwire-release, path: releases/tripwire}
       - {name: cg-s3-awslogs-xenial-release, path: releases/awslogs-xenial}
       - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
       - {name: cg-s3-clamav-release, path: releases/clamav}
@@ -278,10 +275,6 @@ jobs:
       trigger: true
       passed:
       - common-releases-master
-    - get: cg-s3-tripwire-release
-      trigger: true
-      passed:
-      - common-releases-master
     - get: cg-s3-awslogs-xenial-release
       trigger: true
       passed:
@@ -328,7 +321,6 @@ jobs:
       inputs:
       - {name: certificate}
       - {name: cg-s3-fisma-release, path: releases/fisma}
-      - {name: cg-s3-tripwire-release, path: releases/tripwire}
       - {name: cg-s3-awslogs-xenial-release, path: releases/awslogs-xenial}
       - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
       - {name: cg-s3-clamav-release, path: releases/clamav}
@@ -426,10 +418,6 @@ jobs:
     - get: terraform-yaml
       resource: terraform-yaml-development
     - get: cg-s3-fisma-release
-      trigger: true
-      passed:
-      - common-releases-tooling
-    - get: cg-s3-tripwire-release
       trigger: true
       passed:
       - common-releases-tooling
@@ -565,10 +553,6 @@ jobs:
       trigger: true
       passed:
       - common-releases-development
-    - get: cg-s3-tripwire-release
-      trigger: true
-      passed:
-      - common-releases-development
     - get: cg-s3-awslogs-xenial-release
       trigger: true
       passed:
@@ -693,10 +677,6 @@ jobs:
     - get: terraform-yaml
       resource: terraform-yaml-production
     - get: cg-s3-fisma-release
-      trigger: true
-      passed:
-      - common-releases-staging
-    - get: cg-s3-tripwire-release
       trigger: true
       passed:
       - common-releases-staging
@@ -864,12 +844,6 @@ resources:
   type: s3-iam
   source:
     regexp: fisma-(.*).tgz
-    <<: *s3-release-params
-
-- name: cg-s3-tripwire-release
-  type: s3-iam
-  source:
-    regexp: tripwire-(.*).tgz
     <<: *s3-release-params
 
 - name: cg-s3-awslogs-xenial-release
