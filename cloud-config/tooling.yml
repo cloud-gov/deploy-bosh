@@ -299,7 +299,7 @@
   path: /disk_types/-
   value:
     name: bosh
-    disk_size: 80_000
+    disk_size: 92_000
 - type: replace
   path: /disk_types/-
   value:
