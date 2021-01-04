@@ -33,12 +33,6 @@ releases:
 - name: kubernetes
   uri: https://github.com/cloud-gov/kubernetes-release
   branch: master
-- name: logsearch
-  uri: https://github.com/cloud-gov/logsearch-boshrelease
-  branch: develop
-- name: logsearch-for-cloudfoundry
-  uri: https://github.com/cloud-gov/logsearch-for-cloudfoundry
-  branch: develop
 - name: elastalert
   uri: https://github.com/cloud-gov/elastalert-boshrelease
   branch: master
