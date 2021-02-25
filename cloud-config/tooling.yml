@@ -294,6 +294,21 @@
   value:
     <<: *concourse-iaas-profile
     name: production-concourse-iaas-profile
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: production-credhub-lb
+    cloud_properties:
+      lb_target_groups:
+        - ((terraform_outputs.production_credhub_lb_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: staging-credhub-lb
+    cloud_properties:
+      lb_target_groups:
+        - ((terraform_outputs.staging_credhub_lb_target_group))
+
 
 - type: replace
   path: /disk_types/-
