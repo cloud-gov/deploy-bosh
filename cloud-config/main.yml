@@ -155,7 +155,7 @@
 - type: replace
   path: /vm_extensions/-
   value:
-  - name: kubernetes-lb
+    name: kubernetes-lb
     cloud_properties:
       elbs:
       - ((terraform_outputs.kubernetes_elb_name))

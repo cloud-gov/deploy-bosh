@@ -6,22 +6,12 @@
   value: 200_000
 
 - type: remove
-  path: /vm_extensions/-
-  value:
-    name: kubernetes-etcd-profile
+  path: /vm_extensions/name=kubernetes-etcd-profile
 - type: remove
-  path: /vm_extensions/-
-  value:
-    name: kubernetes-master-profile
+  path: /vm_extensions/name=kubernetes-master-profile
 - type: remove
-  path: /vm_extensions/-
-  value:
-    name: kubernetes-minion-profile
+  path: /vm_extensions/name=kubernetes-minion-profile
 - type: remove
-  path: /vm_extensions/-
-  value:
-    name: kubernetes-sg
+  path: /vm_extensions/name=kubernetes-sg
 - type: remove
-  path: /vm_extensions/-
-  value:
-  - name: kubernetes-lb
+  path: /vm_extensions/name=kubernetes-lb
