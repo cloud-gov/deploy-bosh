@@ -43,34 +43,6 @@
         security_groups:
         - ((terraform_outputs.bosh_security_group))
 
-# todo (mxplusb): get rid of these once k8s is using aws type aliases.
-- type: replace
-  path: /vm_types/-
-  value:
-    name: kubernetes_consul
-    cloud_properties:
-      instance_type: m3.large
-- type: replace
-  path: /vm_types/-
-  value:
-    name: kubernetes_etcd
-    cloud_properties:
-      instance_type: t2.medium
-- type: replace
-  path: /vm_types/-
-  value:
-    name: kubernetes_master
-    cloud_properties:
-      instance_type: m3.large
-- type: replace
-  path: /vm_types/-
-  value:
-    name: kubernetes_minion
-    cloud_properties:
-      instance_type: r4.xlarge
-      ephemeral_disk:
-        size: 16_000
-
 - type: replace
   path: /disk_types/-
   value:
@@ -155,13 +127,6 @@
 - type: replace
   path: /vm_extensions/-
   value:
-    name: kubernetes-lb
-    cloud_properties:
-      elbs:
-      - ((terraform_outputs.kubernetes_elb_name))
-- type: replace
-  path: /vm_extensions/-
-  value:
     name: elasticache-broker-lb
     cloud_properties:
       elbs:
@@ -176,34 +141,9 @@
 - type: replace
   path: /vm_extensions/-
   value:
-    name: kubernetes-sg
-    cloud_properties:
-      security_groups:
-      - ((terraform_outputs.kubernetes_ec2_security_group))
-- type: replace
-  path: /vm_extensions/-
-  value:
     name: logsearch-ingestor-profile
     cloud_properties:
       iam_instance_profile: ((terraform_outputs.logsearch_ingestor_profile))
-- type: replace
-  path: /vm_extensions/-
-  value:
-    name: kubernetes-etcd-profile
-    cloud_properties:
-      iam_instance_profile: ((terraform_outputs.etcd_backup_profile))
-- type: replace
-  path: /vm_extensions/-
-  value:
-    name: kubernetes-master-profile
-    cloud_properties:
-      iam_instance_profile: ((terraform_outputs.kubernetes_master_profile))
-- type: replace
-  path: /vm_extensions/-
-  value:
-    name: kubernetes-minion-profile
-    cloud_properties:
-      iam_instance_profile: ((terraform_outputs.kubernetes_minion_profile))
 - type: replace
   path: /vm_extensions/-
   value:
