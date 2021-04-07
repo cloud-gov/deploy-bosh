@@ -1,14 +1,3 @@
-# todo (mxplusb): remove this after k8s is updated with aws ec2 types.
-- type: replace
-  path: /vm_types/name=kubernetes_consul/cloud_properties/instance_type
-  value: t2.large
-- type: replace
-  path: /vm_types/name=kubernetes_etcd/cloud_properties/instance_type
-  value: t2.large
-- type: replace
-  path: /vm_types/name=kubernetes_minion/cloud_properties/instance_type
-  value: r4.large
-
 - type: replace
   path: /disk_types/name=logsearch_es_data/disk_size
   value: 600_000
