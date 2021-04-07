@@ -4,14 +4,3 @@
 - type: replace
   path: /disk_types/name=logsearch_es_platform_data/disk_size
   value: 200_000
-
-- type: remove
-  path: /vm_extensions/name=kubernetes-etcd-profile
-- type: remove
-  path: /vm_extensions/name=kubernetes-master-profile
-- type: remove
-  path: /vm_extensions/name=kubernetes-minion-profile
-- type: remove
-  path: /vm_extensions/name=kubernetes-sg
-- type: remove
-  path: /vm_extensions/name=kubernetes-lb
