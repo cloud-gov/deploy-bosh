@@ -30,12 +30,6 @@ releases:
 - name: cron
   uri: https://github.com/cloudfoundry-community/cron-boshrelease
   branch: master
-- name: kubernetes
-  uri: https://github.com/cloud-gov/kubernetes-release
-  branch: master
-- name: elastalert
-  uri: https://github.com/cloud-gov/elastalert-boshrelease
-  branch: master
 - name: oauth2-proxy
   uri: https://github.com/cloud-gov/oauth2-proxy-boshrelease
   branch: master
@@ -44,9 +38,6 @@ releases:
   branch: master
 - name: domain-broker
   uri: https://github.com/cloud-gov/cf-domain-broker-alb-boshrelease
-  branch: master
-- name: elb-log-ingestor
-  uri: https://github.com/cloud-gov/cg-elb-log-ingestor-boshrelease
   branch: master
 - name: aide
   uri: https://github.com/cloud-gov/aide-boshrelease
