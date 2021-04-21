@@ -1,0 +1,69 @@
+---
+- path: /variables/dns_healthcheck_tls_ca
+  type: replace
+  value:
+    name: "/dns_healthcheck_tls_ca"
+    options:
+      common_name: dns-healthcheck-tls-ca
+      is_ca: true
+    type: certificate
+- path: /variables/dns_healthcheck_server_tls
+  type: replace
+  value: 
+    name: "/dns_healthcheck_server_tls"
+    options:
+      ca: "/dns_healthcheck_tls_ca"
+      common_name: health.bosh-dns
+      alternative_names:  #NEW LINE
+      - health.bosh-dns  #NEW LINE
+      extended_key_usage:
+      - server_auth
+    type: certificate
+    update_mode: converge
+- path: /variables/dns_healthcheck_client_tls
+  type: replace
+  value: 
+    name: "/dns_healthcheck_client_tls"
+    options:
+      ca: "/dns_healthcheck_tls_ca"
+      common_name: health.bosh-dns
+      alternative_names:  #NEW LINE
+      - health.bosh-dns  #NEW LINE
+      extended_key_usage:
+      - client_auth
+    type: certificate
+    update_mode: converge
+- path: /variables/dns_api_tls_ca
+  type: replace
+  value: 
+    name: "/dns_api_tls_ca"
+    options:
+      common_name: dns-api-tls-ca
+      is_ca: true
+    type: certificate
+- path: /variables/dns_api_server_tls
+  type: replace
+  value: 
+    name: "/dns_api_server_tls"
+    options:
+      ca: "/dns_api_tls_ca"
+      common_name: api.bosh-dns
+      alternative_names:  #NEW LINE
+      - api.bosh-dns  #NEW LINE
+      extended_key_usage:
+      - server_auth
+    type: certificate
+    update_mode: converge
+- path: /variables/dns_api_client_tls
+  type: replace
+  value: 
+    name: "/dns_api_client_tls"
+    options:
+      ca: "/dns_api_tls_ca"
+      common_name: api.bosh-dns
+      alternative_names: #NEW LINE
+      - api.bosh-dns   #NEW LINE
+      extended_key_usage:
+      - client_auth
+    type: certificate
+    update_mode: converge
