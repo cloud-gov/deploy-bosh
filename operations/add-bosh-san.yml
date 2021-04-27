@@ -1,13 +1,4 @@
----
-- path: /variables/dns_healthcheck_tls_ca
-  type: replace
-  value:
-    name: "/dns_healthcheck_tls_ca"
-    options:
-      common_name: dns-healthcheck-tls-ca
-      is_ca: true
-    type: certificate
-- path: /variables/dns_healthcheck_server_tls
+- path: /variables/name=~1dns_healthcheck_server_tls
   type: replace
   value: 
     name: "/dns_healthcheck_server_tls"
@@ -20,7 +11,7 @@
       - server_auth
     type: certificate
     update_mode: converge
-- path: /variables/dns_healthcheck_client_tls
+- path: /variables/name=~1dns_healthcheck_client_tls
   type: replace
   value: 
     name: "/dns_healthcheck_client_tls"
@@ -33,15 +24,7 @@
       - client_auth
     type: certificate
     update_mode: converge
-- path: /variables/dns_api_tls_ca
-  type: replace
-  value: 
-    name: "/dns_api_tls_ca"
-    options:
-      common_name: dns-api-tls-ca
-      is_ca: true
-    type: certificate
-- path: /variables/dns_api_server_tls
+- path: /variables/name=~1dns_api_server_tls
   type: replace
   value: 
     name: "/dns_api_server_tls"
@@ -54,7 +37,7 @@
       - server_auth
     type: certificate
     update_mode: converge
-- path: /variables/dns_api_client_tls
+- path: /variables/name=~1dns_api_client_tls
   type: replace
   value: 
     name: "/dns_api_client_tls"
