@@ -4,11 +4,57 @@ releases:
 - {name: clamav, version: ((release_clamav))}
 - {name: snort, version: ((release_snort))}
 - {name: awslogs-xenial, version: ((release_awslogs_xenial))}
+- {name: awslogs-bionic, version: ((release_awslogs_bionic))}
 - {name: nessus-agent, version: ((release_nessus_agent))}
 - {name: node-exporter, version: ((release_node_exporter))}
 - {name: syslog, version: ((release_syslog))}
 
 addons:
+- include:
+    stemcell:
+    - os: ubuntu-xenial
+  jobs:
+  - name: awslogs-xenial
+    release: awslogs-xenial
+    properties:
+      awslogs-xenial:
+        region: us-gov-west-1
+  name: awslogs-xenial
+- include:
+    stemcell:
+    - os: ubuntu-bionic
+  jobs:
+  - name: awslogs-bionic
+    properties:
+      awslogs-bionic:
+        region: us-gov-west-1
+        awslogs_files_config:
+        - name: /var/log/audit/audit.log
+          file: /var/log/audit/audit.log
+          log_group_name: /var/log/audit/audit.log
+          log_stream_name: "{{instance_id}}"
+          initial_position: start_of_file
+          datetime_format: "%Y-%m-%dT%H:%M:%S"
+        - name: /var/log/auth.log
+          file: /var/log/auth.log
+          log_group_name: /var/log/auth.log
+          log_stream_name: "{{instance_id}}"
+          initial_position: start_of_file
+          datetime_format: "%Y-%m-%dT%H:%M:%S"
+        - name: /var/log/dpkg.log
+          file: /var/log/dpkg.log
+          log_group_name: /var/log/dpkg.log
+          log_stream_name: "{{instance_id}}"
+          initial_position: start_of_file
+          datetime_format: "%Y-%m-%dT%H:%M:%S"
+        - name: /var/log/syslog
+          file: /var/log/syslog
+          log_group_name: /var/log/syslog
+          log_stream_name: "{{instance_id}}"
+          initial_position: start_of_file
+          datetime_format: "%Y-%m-%dT%H:%M:%S"
+    release: awslogs-bionic
+  name: awslogs-bionic
 - name: hardening
   jobs:
   - name: harden
@@ -19,11 +65,6 @@ addons:
     release: clamav
   - name: snort
     release: snort
-  - name: awslogs-xenial
-    release: awslogs-xenial
-    properties:
-      awslogs-xenial:
-        region: ((terraform_outputs.vpc_region))
   - name: nessus-agent
     release: nessus-agent
     properties:
