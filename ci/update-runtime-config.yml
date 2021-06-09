@@ -13,6 +13,7 @@ inputs:
 - {name: cg-s3-fisma-release, path: releases/fisma}
 - {name: aide-release, path: releases/aide}
 - {name: cg-s3-awslogs-xenial-release, path: releases/awslogs-xenial}
+- {name: cg-s3-awslogs-bionic-release, path: releases/awslogs-bionic}
 - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
 - {name: cg-s3-clamav-release, path: releases/clamav}
 - {name: cg-s3-snort-release, path: releases/snort}
