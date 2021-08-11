@@ -320,6 +320,11 @@
 - type: replace
   path: /disk_types/-
   value:
+    name: 5GB
+    disk_size: 5120
+- type: replace
+  path: /disk_types/-
+  value:
     name: nessus-manager
     disk_size: 200_000
 - type: replace
