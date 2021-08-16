@@ -53,7 +53,7 @@
     name: 5GB_ephemeral_disk
     cloud_properties:
       ephemeral_disk:
-        size: 1024
+        size: 5120
 - type: replace
   path: /vm_extensions/-
   value:
