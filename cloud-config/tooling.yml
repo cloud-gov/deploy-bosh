@@ -310,7 +310,13 @@
     cloud_properties:
       lb_target_groups:
         - ((terraform_outputs.staging_credhub_lb_target_group))
-
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: 5GB_ephemeral_disk
+    cloud_properties:
+      ephemeral_disk:
+        size: 5120
 
 - type: replace
   path: /disk_types/-
