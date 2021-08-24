@@ -317,6 +317,13 @@
     cloud_properties:
       ephemeral_disk:
         size: 5120
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: 10GB_ephemeral_disk
+    cloud_properties:
+      ephemeral_disk:
+        size: 10240
 
 - type: replace
   path: /disk_types/-
