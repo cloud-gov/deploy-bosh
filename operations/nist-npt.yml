@@ -1,0 +1,11 @@
+# This works with chronyc to set NTP sources for chronyc on Bionic stemcells
+- type: replace
+  path: /instance_groups/name=bosh/properties/agent/env/bosh/ntp
+  value:
+    - server time-a.nist.gov
+    - server time-b.nist.gov
+    - server time-c.nist.gov
+    - server time-d.nist.gov
+    - server time-b-wwv.nist.gov
+    - server time-c-wwv.nist.gov
+    - server time-d-wwv.nist.gov
