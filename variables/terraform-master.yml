@@ -7,3 +7,4 @@ internal_gw: ((terraform_outputs.private_subnet_az1_gateway))
 subnet_id: ((terraform_outputs.private_subnet_az1))
 default_security_groups: [((terraform_outputs.bosh_security_group))]
 iam_instance_profile: ((terraform_outputs.master_bosh_profile))
+nessus_agent_server: ((terraform_outputs.nessus_static_ip))

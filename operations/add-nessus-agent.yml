@@ -1,0 +1,20 @@
+# This addes the nessus agent to master-bosh
+
+- path: /releases/-
+  release: nessus-agent
+  type: replace
+  value:
+    name: nessus-agent
+    url: file://releases/nessus-agent/nessus-agent-*.tgz
+
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
+  value:
+    name: nessus-agent
+    properties:
+    properties:
+      nessus-agent:
+        key: ((nessus_agent_key))
+        group: ((nessus_agent_group))
+        server: ((nessus_agent_server))
+        port: 8834
