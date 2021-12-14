@@ -51,9 +51,9 @@ jobs:
       resource: masterbosh-state
     - get: ca-cert-store
       trigger: true
-    - get: cg-s3-nessus-agent-release
+    - get: nessus-agent-release
+      resource: cg-s3-nessus-agent-release
       trigger: true
-      path: releases/nessus-agent
   - task: terraform-secrets
     file: bosh-config/ci/terraform-secrets.yml
     params:
