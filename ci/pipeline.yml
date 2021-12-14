@@ -53,7 +53,6 @@ jobs:
       trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
-      path: releases/nessus-agent
   - task: terraform-secrets
     file: bosh-config/ci/terraform-secrets.yml
     params:
