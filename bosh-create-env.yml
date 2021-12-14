@@ -13,6 +13,7 @@ inputs:
 - name: bosh-config
 - name: bosh-state
 - name: terraform-secrets
+- name: nessus-agent-release
 
 outputs:
 - name: updated-bosh-state
