@@ -1,6 +1,6 @@
 # This addes the nessus agent to master-bosh
 
-- path: /releases/-
+- path: /releases/name=nessus-agent?
   release: nessus-agent
   type: replace
   value:
