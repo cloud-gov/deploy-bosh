@@ -17,3 +17,4 @@
         group: ((nessus_agent_group))
         server: ((nessus_agent_server))
         port: 8834
+    release: nessus-agent
