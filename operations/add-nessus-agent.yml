@@ -12,7 +12,6 @@
   value:
     name: nessus-agent
     properties:
-    properties:
       nessus-agent:
         key: ((nessus_agent_key))
         group: ((nessus_agent_group))
