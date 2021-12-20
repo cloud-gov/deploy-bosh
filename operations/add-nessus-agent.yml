@@ -5,7 +5,7 @@
   type: replace
   value:
     name: nessus-agent
-    url: file://../nessus-agent-release/nessus-agent-*.tgz
+    url: file://../nessus-agent-release/nessus-agent-43.tgz
 
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
