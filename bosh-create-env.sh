@@ -3,7 +3,8 @@
 set -eux
 
 bosh interpolate common/master-bosh.yml --path "/default_ca/private_key" > ./ca.key
-
+AGENT_VER=$(cat nessus-agent-release/version)
+sed -i "s/NESSUS_VER/$AGENT_VER/" bosh-config/operations/add-nessus-agent.yml
 # todo (mxplusb): there needs to be interpolation at some point before the deployment.
 # and deploy it!
 set +e

@@ -5,16 +5,16 @@
   type: replace
   value:
     name: nessus-agent
-    url: file://../nessus-agent-release/nessus-agent-*.tgz
+    url: 'file://../nessus-agent-release/nessus-agent-NESSUS_VER.tgz'
 
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
   value:
     name: nessus-agent
     properties:
-    properties:
       nessus-agent:
         key: ((nessus_agent_key))
         group: ((nessus_agent_group))
         server: ((nessus_agent_server))
         port: 8834
+    release: nessus-agent
