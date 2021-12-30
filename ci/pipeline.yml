@@ -17,6 +17,7 @@ groups:
   - common-releases-development
   - common-releases-staging
   - common-releases-production
+  - common-releases-easta
 - name: bosh
   jobs:
   - deploy-master-bosh
@@ -24,6 +25,7 @@ groups:
   - deploy-development-bosh
   - deploy-staging-bosh
   - deploy-production-bosh
+  - deploy-easta-bosh
 - name: releases
   jobs:
   - common-releases-master
@@ -31,6 +33,7 @@ groups:
   - common-releases-development
   - common-releases-staging
   - common-releases-production
+  - common-releases-easta
 jobs:
 - name: deploy-master-bosh
   serial: true
@@ -755,6 +758,137 @@ jobs:
       BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
       BOSH_ENV_NAME: production
 
+- name: deploy-easta-bosh
+  serial: true
+  plan:
+  - in_parallel:
+    - get: ca-cert-store
+      trigger: true
+    - get: bosh-deployment
+      passed:
+      - common-releases-staging
+      trigger: true
+    - get: bosh-config
+      passed:
+      - common-releases-staging
+      trigger: true
+    - get: bosh-stemcell-bionic
+      passed:
+      - deploy-staging-bosh
+      trigger: true
+    - get: terraform-yaml
+      trigger: true
+      resource: terraform-yaml-easta
+  - task: terraform-secrets
+    file: bosh-config/ci/terraform-secrets.yml
+  - put: eastabosh-deployment
+    params:
+      <<: *bosh-deployment
+      vars_files:
+      - bosh-config/variables/easta.yml
+      - terraform-secrets/terraform.yml
+      - terraform-yaml/state.yml
+  - task: update-cloud-config
+    file: bosh-config/ci/update-cloud-config.yml
+    params:
+      OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml"
+      BOSH_CA_CERT: ((common_ca_cert_store))
+      BOSH_ENVIRONMENT: ((eastabosh-target))
+      BOSH_CLIENT: ci
+      BOSH_CLIENT_SECRET: ((easta_bosh_uaa_ci_client_secret))
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: FAILED to deploy easta BOSH
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+  on_success:
+    put: slack
+    params:
+      text: |
+        :white_check_mark: Successfully deployed easta BOSH
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+
+- name: common-releases-easta
+  serial: true
+  plan:
+  - in_parallel:
+    - get: certificate
+      resource: ca-cert-store
+    - get: bosh-deployment
+      trigger: true
+    - get: bosh-config
+    - get: terraform-yaml
+      resource: terraform-yaml-easta
+    - get: cg-s3-fisma-release
+      trigger: true
+      passed:
+      - common-releases-staging
+    - get: cg-s3-awslogs-xenial-release
+      trigger: true
+      passed:
+      - common-releases-staging
+    - get: cg-s3-awslogs-bionic-release
+      trigger: true
+      passed:
+      - common-releases-staging
+    - get: cg-s3-nessus-agent-release
+      trigger: true
+      passed:
+      - common-releases-staging
+    - get: cg-s3-clamav-release
+      trigger: true
+      passed:
+      - common-releases-staging
+    - get: cg-s3-snort-release
+      trigger: true
+      passed:
+      - common-releases-staging
+    - get: aide-release
+      trigger: true
+      passed:
+      - common-releases-staging
+    - get: cron-release
+      trigger: true
+      passed:
+      - common-releases-staging
+    - get: ntp-release
+      trigger: true
+      passed:
+      - common-releases-staging
+    - get: node-exporter-release
+      trigger: true
+      passed:
+      - common-releases-staging
+    - get: syslog-release
+      trigger: true
+      passed:
+      - common-releases-staging
+    - get: eastabosh-deployment
+      passed: [deploy-easta-bosh]
+  - task: upload-releases
+    config:
+      <<: *upload-releases-config
+      params:
+        BOSH_CA_CERT: ((common_ca_cert_store))
+        BOSH_CLIENT: ci
+        BOSH_CLIENT_SECRET: ((easta_bosh_uaa_ci_client_secret))
+        BOSH_ENVIRONMENT: ((eastabosh-target))
+  - task: update-runtime-config
+    file: bosh-config/ci/update-runtime-config.yml
+    params:
+      BOSH_CA_CERT: ((common_ca_cert_store))
+      BOSH_ENVIRONMENT: ((eastabosh-target))
+      BOSH_CLIENT: ci
+      BOSH_CLIENT_SECRET: ((easta_bosh_uaa_ci_client_secret))
+      BOSH_ENV_NAME: easta
+
 resources:
 - name: ca-cert-store
   type: s3-iam
@@ -855,6 +989,15 @@ resources:
     ca_cert: ((common_ca_cert_store))
     deployment: productionbosh
 
+- name: easta-deployment
+  type: bosh-deployment
+  source:
+    target: ((toolingbosh-target))
+    client: ci
+    client_secret: ((tooling_bosh_uaa_ci_client_secret))
+    ca_cert: ((common_ca_cert_store))
+    deployment: eastabosh
+
 - name: slack
   type: slack-notification
   source:
@@ -933,6 +1076,13 @@ resources:
   source:
     bucket: ((tf-state-bucket))
     versioned_file: ((tf-state-file-production))
+    region_name: ((aws-region))
+
+- name: terraform-yaml-easta
+  type: s3-iam
+  source:
+    bucket: ((tf-state-bucket))
+    versioned_file: ((tf-state-file-easta))
     region_name: ((aws-region))
 
 resource_types:
