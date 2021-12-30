@@ -41,6 +41,9 @@ jobs:
   - in_parallel:
     - get: bosh-deployment
       trigger: true
+    - get: bosh-config-old
+      resource: bosh-create-env-config
+      trigger: true
     - get: bosh-config
       resource: bosh-create-env-config
       trigger: true
@@ -64,6 +67,8 @@ jobs:
   - task: bosh-create-env
     file: bosh-config/bosh-create-env.yml
     tags: [iaas]
+    vars:
+      nessus_agent_release_url: nessus-agent-release:url
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config.yml
     params:
@@ -199,6 +204,8 @@ jobs:
     - get: terraform-yaml-staging
       trigger: true
     - get: terraform-yaml-production
+      trigger: true
+    - get: terraform-yaml-easta
       trigger: true
   - task: terraform-secrets
     file: bosh-config/ci/terraform-secrets.yml
@@ -793,10 +800,6 @@ jobs:
       trigger: true
       passed:
       - common-releases-staging
-    - get: cg-s3-awslogs-xenial-release
-      trigger: true
-      passed:
-      - common-releases-staging
     - get: cg-s3-awslogs-bionic-release
       trigger: true
       passed:
@@ -818,10 +821,6 @@ jobs:
       passed:
       - common-releases-staging
     - get: cron-release
-      trigger: true
-      passed:
-      - common-releases-staging
-    - get: ntp-release
       trigger: true
       passed:
       - common-releases-staging
@@ -905,6 +904,7 @@ resources:
     paths:
     - bosh-create-env*
     - cloud-config/*
+    - operations/*
 
 - name: bosh-stemcell-bionic
   type: bosh-io-stemcell
@@ -947,7 +947,7 @@ resources:
     ca_cert: ((common_ca_cert_store))
     deployment: productionbosh
 
-- name: easta-deployment
+- name: eastabosh-deployment
   type: bosh-deployment
   source:
     target: ((toolingbosh-target))
