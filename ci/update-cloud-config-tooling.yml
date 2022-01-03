@@ -12,6 +12,7 @@ inputs:
 - {name: terraform-yaml-development}
 - {name: terraform-yaml-staging}
 - {name: terraform-yaml-production}
+- {name: terraform-yaml-easta}
 
 run:
   path: bosh-config/ci/update-cloud-config-tooling.sh
