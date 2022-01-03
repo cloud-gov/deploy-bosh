@@ -12,6 +12,7 @@ groups:
   - deploy-development-bosh
   - deploy-staging-bosh
   - deploy-production-bosh
+  - deploy-easta-bosh
   - common-releases-master
   - common-releases-tooling
   - common-releases-development
