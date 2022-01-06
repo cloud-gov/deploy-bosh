@@ -20,3 +20,6 @@ outputs:
 
 run:
   path: bosh-config/bosh-create-env.sh
+
+params:
+  COMMON_FILE:

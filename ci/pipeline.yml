@@ -8,12 +8,14 @@ groups:
 - name: all
   jobs:
   - deploy-master-bosh
+  - deploy-master-east-bosh
   - deploy-tooling-bosh
   - deploy-development-bosh
   - deploy-staging-bosh
   - deploy-production-bosh
   - deploy-easta-bosh
   - common-releases-master
+  - common-releases-master-east
   - common-releases-tooling
   - common-releases-development
   - common-releases-staging
@@ -21,6 +23,7 @@ groups:
   - common-releases-easta
 - name: bosh
   jobs:
+  - deploy-master-east-bosh
   - deploy-master-bosh
   - deploy-tooling-bosh
   - deploy-development-bosh
@@ -29,6 +32,7 @@ groups:
   - deploy-easta-bosh
 - name: releases
   jobs:
+  - common-releases-master-east
   - common-releases-master
   - common-releases-tooling
   - common-releases-development
@@ -68,6 +72,8 @@ jobs:
   - task: bosh-create-env
     file: bosh-config/bosh-create-env.yml
     tags: [iaas]
+    params:
+      COMMON_FILE: common/master-bosh.yml
     vars:
       nessus_agent_release_url: nessus-agent-release:url
   - task: update-cloud-config
@@ -180,6 +186,153 @@ jobs:
       BOSH_CLIENT: admin
       BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
       BOSH_ENV_NAME: master
+
+- name: deploy-master-east-bosh
+  serial: true
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      trigger: true
+    - get: bosh-config-old
+      resource: bosh-create-env-config
+      trigger: true
+    - get: bosh-config
+      resource: bosh-create-env-config
+      trigger: true
+    - get: common
+      trigger: true
+      resource: common-master-east
+    - get: terraform-yaml
+      trigger: true
+      resource: terraform-yaml-tooling-east
+    - get: bosh-state
+      resource: master-east-bosh-state
+    - get: ca-cert-store
+      trigger: true
+    - get: nessus-agent-release
+      resource: cg-s3-nessus-agent-release
+      trigger: true
+  - task: terraform-secrets
+    file: bosh-config/ci/terraform-secrets.yml
+    params:
+      VARS_FILE: terraform-master.yml
+  - task: bosh-create-env
+    file: bosh-config/bosh-create-env.yml
+    tags: [iaas]
+    params:
+      COMMON_FILE: common/master-east-bosh.yml
+    vars:
+      nessus_agent_release_url: nessus-agent-release:url
+  - task: update-cloud-config
+    file: bosh-config/ci/update-cloud-config.yml
+    params:
+      OPS_PATHS: "bosh-config/cloud-config/master.yml"
+      BOSH_CA_CERT: ((common_ca_cert_store))
+      BOSH_ENVIRONMENT: ((master-east-bosh-target))
+      BOSH_CLIENT: admin
+      BOSH_CLIENT_SECRET: ((master_east_bosh_admin_password))
+  ensure:
+    put: master-east-bosh-state
+    params:
+      file: updated-bosh-state/*.json
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: FAILED to deploy Master BOSH
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+  on_success:
+    put: slack
+    params:
+      text: |
+        :white_check_mark: Successfully deployed Master BOSH
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+      channel: ((slack-channel))
+      username: ((slack-username))
+      icon_url: ((slack-icon-url))
+
+- name: common-releases-master-east
+  serial: true
+  plan:
+  - in_parallel:
+    - get: certificate
+      resource: ca-cert-store
+    - get: bosh-deployment
+      passed:
+      - deploy-master-east-bosh
+      trigger: true
+    - get: bosh-config
+      trigger: true
+    - get: terraform-yaml
+      resource: terraform-yaml-production
+      trigger: true
+    - get: common-master-east
+      trigger: true
+    - get: cg-s3-fisma-release
+      trigger: true
+    - get: cg-s3-awslogs-bionic-release
+      trigger: true
+    - get: cg-s3-nessus-agent-release
+      trigger: true
+    - get: cg-s3-clamav-release
+      trigger: true
+    - get: cg-s3-snort-release
+      trigger: true
+    - get: aide-release
+      trigger: true
+    - get: cron-release
+      trigger: true
+    - get: syslog-release
+      trigger: true
+    - get: node-exporter-release
+      trigger: true
+    - get: master-east-bosh-state
+      passed: [deploy-master-east-bosh]
+  - task: upload-releases
+    config: &upload-releases-config
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: 18fgsa/concourse-task
+      inputs:
+      - {name: certificate}
+      - {name: cg-s3-fisma-release, path: releases/fisma}
+      - {name: cg-s3-awslogs-bionic-release, path: releases/awslogs-bionic}
+      - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
+      - {name: cg-s3-clamav-release, path: releases/clamav}
+      - {name: cg-s3-snort-release, path: releases/snort}
+      - {name: aide-release, path: releases/aide}
+      - {name: cron-release, path: releases/cron}
+      - {name: node-exporter-release, path: releases/node-exporter}
+      - {name: syslog-release, path: releases/syslog}
+      params:
+        BOSH_CA_CERT: ((common_ca_cert_store))
+        BOSH_CLIENT: admin
+        BOSH_CLIENT_SECRET: ((master_east_bosh_admin_password))
+        BOSH_ENVIRONMENT: ((master-east-bosh-target))
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          for release in releases/**/*.tgz; do
+            bosh upload-release "${release}"
+          done
+          bosh -n clean-up
+  - task: update-runtime-config
+    file: bosh-config/ci/update-runtime-config.yml
+    input_mapping:
+      common: common-master-east
+    params:
+      BOSH_CA_CERT: ((common_ca_cert_store))
+      BOSH_ENVIRONMENT: ((master-east-bosh-target))
+      BOSH_CLIENT: admin
+      BOSH_CLIENT_SECRET: ((master_east_bosh_admin_password))
+      BOSH_ENV_NAME: master-east
 
 - name: deploy-tooling-bosh
   serial: true
@@ -740,9 +893,10 @@ jobs:
       - common-releases-staging
       trigger: true
     - get: bosh-config
-      passed:
-      - common-releases-staging
-      trigger: true
+      resource: bosh-config-easta
+      #passed:
+      #- common-releases-staging
+      #trigger: true
     - get: bosh-stemcell-bionic
       passed:
       - deploy-staging-bosh
@@ -795,6 +949,7 @@ jobs:
     - get: bosh-deployment
       trigger: true
     - get: bosh-config
+      resource: bosh-config-easta
     - get: terraform-yaml
       resource: terraform-yaml-easta
     - get: cg-s3-fisma-release
@@ -875,6 +1030,21 @@ resources:
     versioned_file: master-bosh-state.json
     server_side_encryption: AES256
 
+- name: common-master-east
+  type: s3-iam
+  source:
+    bucket: ((secrets-bucket))
+    region_name: ((aws-region))
+    versioned_file: master-east-bosh.yml
+
+- name: master-east-bosh-state
+  type: s3-iam
+  source:
+    bucket: ((secrets-bucket))
+    region_name: ((aws-region))
+    versioned_file: master-east-bosh-state.json
+    server_side_encryption: AES256
+
 - name: cron-release
   type: bosh-io-release
   source:
@@ -890,6 +1060,12 @@ resources:
   source:
     uri: https://github.com/cloudfoundry/bosh-deployment.git
     branch: master
+
+- name: bosh-config-easta
+  type: git
+  source:
+    uri: ((bosh-config-git-url))
+    branch: z3
 
 - name: bosh-config
   type: git
@@ -1002,6 +1178,13 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry-community/node-exporter-boshrelease
+
+- name: terraform-yaml-tooling-east
+  type: s3-iam
+  source:
+    bucket: ((tf-state-bucket))
+    versioned_file: ((tf-state-file-tooling-east))
+    region_name: ((aws-region))
 
 - name: terraform-yaml-tooling
   type: s3-iam
