@@ -198,7 +198,7 @@ jobs:
       resource: bosh-create-env-config
       trigger: true
     - get: bosh-config
-      resource: bosh-create-env-config
+      resource: bosh-create-env-config-east
       trigger: true
     - get: common
       trigger: true
@@ -1080,6 +1080,16 @@ resources:
   source:
     uri: ((bosh-config-git-url))
     branch: ((bosh-config-git-branch))
+    paths:
+    - bosh-create-env*
+    - cloud-config/*
+    - operations/*
+
+- name: bosh-create-env-config-east
+  type: git
+  source:
+    uri: ((bosh-config-git-url))
+    branch: east
     paths:
     - bosh-create-env*
     - cloud-config/*

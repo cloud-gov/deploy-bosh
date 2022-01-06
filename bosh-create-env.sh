@@ -26,6 +26,7 @@ bosh create-env \
   --ops-file bosh-config/operations/add-cloud-gov-root-certificate.yml \
   --ops-file bosh-config/operations/masterbosh-ntp.yml \
   --ops-file bosh-config/operations/add-nessus-agent.yml \
+  --ops-file bosh-config/operations/use-fullstemcell.yml \
   --vars-file bosh-config/variables/${BOSH_NAME}.yml \
   --vars-file terraform-yaml/state.yml \
   --vars-file terraform-secrets/terraform.yml \
