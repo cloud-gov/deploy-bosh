@@ -74,6 +74,7 @@ jobs:
     tags: [iaas]
     params:
       COMMON_FILE: common/master-bosh.yml
+      BOSH_NAME: master
     vars:
       nessus_agent_release_url: nessus-agent-release:url
   - task: update-cloud-config
@@ -221,6 +222,7 @@ jobs:
     tags: [iaas]
     params:
       COMMON_FILE: common/master-east-bosh.yml
+      BOSH_NAME: master-east
     vars:
       nessus_agent_release_url: nessus-agent-release:url
   - task: update-cloud-config
