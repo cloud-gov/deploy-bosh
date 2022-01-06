@@ -2,7 +2,7 @@
 
 set -eux
 
-bosh interpolate common/master-bosh.yml --path "/default_ca/private_key" > ./ca.key
+bosh interpolate ${COMMON_FILE} --path "/default_ca/private_key" > ./ca.key
 AGENT_VER=$(cat nessus-agent-release/version)
 sed -i "s/NESSUS_VER/$AGENT_VER/" bosh-config/operations/add-nessus-agent.yml
 # todo (mxplusb): there needs to be interpolation at some point before the deployment.
@@ -26,10 +26,10 @@ bosh create-env \
   --ops-file bosh-config/operations/add-cloud-gov-root-certificate.yml \
   --ops-file bosh-config/operations/masterbosh-ntp.yml \
   --ops-file bosh-config/operations/add-nessus-agent.yml \
-  --vars-file bosh-config/variables/master.yml \
+  --vars-file bosh-config/variables/${BOSH_NAME}.yml \
   --vars-file terraform-yaml/state.yml \
   --vars-file terraform-secrets/terraform.yml \
-  --vars-file common/master-bosh.yml \
+  --vars-file ${COMMON_FILE} \
   --vars-store ./creds.yml
 code=$?
 set -e
