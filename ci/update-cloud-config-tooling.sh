@@ -7,7 +7,7 @@ for ops in ${OPS_PATHS:-}; do
   args=(${args[@]} --ops-file "${ops}")
 done
 
-for environment in "development" "staging" "production" "easta"; do
+for environment in "development" "staging" "production"; do
   if [ -s terraform-yaml-${environment}/state.yml ]; then
     cloud_config_environment=${environment} bosh interpolate \
       bosh-config/cloud-config/bosh.yml \
