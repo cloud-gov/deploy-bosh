@@ -1,7 +1,0 @@
-director_name: bosh
-environment: easta
-deployment_name: eastabosh
-network: easta-bosh
-instance_profile: easta-bosh-profile
-gateway_host: prometheus-production.service.cf.internal
-gateway_deployment: ""
