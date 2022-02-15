@@ -117,6 +117,12 @@
     name: diego-ssh-proxy-network-properties
     cloud_properties:
       elbs: [((terraform_outputs.diego_elb_name))]
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: cf-tcp-router-network-properties
+    cloud_properties:
+      lb_target_groups: ((terraform_outputs.tcp_lb_target_groups))
 
 # Instance profiles
 - type: replace
