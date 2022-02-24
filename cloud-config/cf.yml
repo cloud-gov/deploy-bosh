@@ -123,6 +123,7 @@
     name: cf-tcp-router-network-properties
     cloud_properties:
       lb_target_groups: ((terraform_outputs.tcp_lb_target_groups))
+      security_groups: ((terraform_outputs.tcp_lb_security_groups))
 
 # Instance profiles
 - type: replace
