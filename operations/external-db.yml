@@ -235,11 +235,6 @@
 - type: replace
   path: /instance_groups/name=bosh/jobs/name=credhub/properties/credhub/data_storage
   value:
-    database: credhub
-    host: development-281d802c007d.ci7nkegdizyy.us-gov-west-1.rds.amazonaws.com
-    password: DmxMVfJSVXHTqZzqWicRxFXK6XMfVws8
-    port: 5432
-    require_tls: true
     type: postgres
     host: ((terraform_outputs.credhub_rds_host))
     port: ((terraform_outputs.credhub_rds_port))
