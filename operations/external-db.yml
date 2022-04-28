@@ -48,6 +48,7 @@
   path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/ca_certs?
   value: 
     - |+
+      # UAA requires each cert as an array object
       # RDS US-GOV-WEST-1-BUNDLE.PEM UPDATED APRIL 2022
       # Amazon RDS GovCloud Root CA expires May22
       -----BEGIN CERTIFICATE-----
@@ -234,6 +235,11 @@
 - type: replace
   path: /instance_groups/name=bosh/jobs/name=credhub/properties/credhub/data_storage
   value:
+    database: credhub
+    host: development-281d802c007d.ci7nkegdizyy.us-gov-west-1.rds.amazonaws.com
+    password: DmxMVfJSVXHTqZzqWicRxFXK6XMfVws8
+    port: 5432
+    require_tls: true
     type: postgres
     host: ((terraform_outputs.credhub_rds_host))
     port: ((terraform_outputs.credhub_rds_port))
@@ -242,6 +248,7 @@
     database: credhub
     require_tls: true
     tls_ca: |-
+      # Credhub requires all CA certs to be one single bundle
       # RDS US-GOV-WEST-1-BUNDLE.PEM UPDATED APRIL 2022
       # Amazon RDS GovCloud Root CA expires May22
       -----BEGIN CERTIFICATE-----
@@ -268,7 +275,6 @@
       S0IGvcd2FZjNSNPttNAK7YuBVsZ0m2nIH1SLp//00v7yAHIgytQwwB17PBcp4NXD
       pCfTa27ng9mMMC2YLqWQpW4TkqjDin2ZC+5X/mbrjzTvVg==
       -----END CERTIFICATE-----
-    - |+  
       # Amazon RDS us-gov-west-1 CA expires May22
       -----BEGIN CERTIFICATE-----
       MIIECjCCAvKgAwIBAgICEAAwDQYJKoZIhvcNAQELBQAwgZMxCzAJBgNVBAYTAlVT
@@ -294,7 +300,6 @@
       RuUCvyQecy2ZFNAa3jmd5ycNdL63RWe8oayRBpQBxPPCbHfILxGZEdJbCH9aJ2D/
       l8oHIDnvOLdv7/cBjyYuvmprgPtu3QEkbre5Hln/
       -----END CERTIFICATE-----
-    - |+
       # Amazon RDS us-gov-west-1 Root CA RSA2048 G1 expires April2162
       -----BEGIN CERTIFICATE-----
       MIIEBzCCAu+gAwIBAgIRAMSbo6rMlQ+TZDCb7zg40qUwDQYJKoZIhvcNAQEMBQAw
@@ -320,7 +325,6 @@
       8Zmdbpv8xnUA+oo/QdLLX+eJP/+8tdeDdB6rYFKpJmC2B3EnaKS4X4UpxZJFAgig
       oB6q5jNJ5onkWIfx8luNdbagKSFZXHhSO8KP
       -----END CERTIFICATE-----
-    - |+
       # Amazon RDS us-gov-west-1 Root CA RSA4096 G1 expires May2121
       -----BEGIN CERTIFICATE-----
       MIIGBzCCA++gAwIBAgIRAOzQCoOR21YG2noWOfFcuNIwDQYJKoZIhvcNAQEMBQAw
@@ -357,7 +361,6 @@
       SAzsL0t5ZTI4XvoPFF8dga78/KsBRolqdPjs0UzdlKhwh1ADOkTRgLOaaidMEgsT
       JS/rbzD4FPbvc/g=
       -----END CERTIFICATE-----
-    - |+
       # Amazon RDS us-gov-west-1 Root CA ECC384 G1 expires May2121
       -----BEGIN CERTIFICATE-----
       MIICtDCCAjugAwIBAgIQPyg+edjKVnM2PB4KZVu66jAKBggqhkjOPQQDAzCBmjEL
@@ -376,7 +379,6 @@
       BFr6JV1x8VLbePblHd0V1MwDdRWeAwIwarWfOVdB1ijrwzjROzCwE0uBkHYUPr0Z
       vgwdtlsnwDw9TnjsBrTJkQ0aS8c0Ahl1
       -----END CERTIFICATE-----
-    - |+
       # rds-ca-2015-root.pem
       -----BEGIN CERTIFICATE-----
       MIID9DCCAtygAwIBAgIBQjANBgkqhkiG9w0BAQUFADCBijELMAkGA1UEBhMCVVMx
@@ -402,7 +404,6 @@
       A9dY7IHSubtCK/i8wxMVqfd5GtbA8mmpeJFwnDvm9rBEsHybl08qlax9syEwsUYr
       /40NawZfTUU=
       -----END CERTIFICATE-----
-    - |+
       # rds-ca-2012-us-gov-west-1.pem
       -----BEGIN CERTIFICATE-----
       MIIDQzCCAqygAwIBAgIJAMGs6m/j+u8sMA0GCSqGSIb3DQEBBQUAMHUxCzAJBgNV
