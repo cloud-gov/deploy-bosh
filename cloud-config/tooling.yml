@@ -97,6 +97,36 @@
 - type: replace
   path: /networks/-
   value:
+    name: staging-credhub
+    type: dynamic
+    subnets:
+      - range: ((terraform_outputs.staging_credhub_subnet_cidr_az1))
+        gateway: ((terraform_outputs.staging_credhub_subnet_az1_gateway))
+        reserved:
+          - ((terraform_outputs.staging_credhub_subnet_az1_reserved))
+        az: z1
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.staging_credhub_subnet_az1))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.staging_concourse_security_group))
+            - ((terraform_outputs.staging_credhub_security_group))
+      - range: ((terraform_outputs.staging_credhub_subnet_cidr_az2))
+        gateway: ((terraform_outputs.staging_credhub_subnet_az2_gateway))
+        reserved:
+          - ((terraform_outputs.staging_credhub_subnet_az2_reserved))
+        az: z2
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.staging_credhub_subnet_az2))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.staging_concourse_security_group))
+            - ((terraform_outputs.staging_credhub_security_group))
+- type: replace
+  path: /networks/-
+  value:
     name: production-monitoring
     type: dynamic
     subnets:
