@@ -19,7 +19,7 @@ addons:
     release: clamav
     properties:
       clamav:
-        mirror: ((/clamav_mirror))
+        dbMirror1: ((/clamav_mirror))
         alert_on_stale_defs: ((/clamav_alert_on_stale_defs))
   - name: snort
     release: snort
