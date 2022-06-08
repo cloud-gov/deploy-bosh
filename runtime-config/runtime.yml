@@ -17,6 +17,10 @@ addons:
     release: aide
   - name: clamav
     release: clamav
+    properties:
+      clamav:
+        mirror: ((/clamav_mirror))
+        alert_on_stale_defs: ((/clamav_alert_on_stale_defs))
   - name: snort
     release: snort
   - name: awslogs-bionic
