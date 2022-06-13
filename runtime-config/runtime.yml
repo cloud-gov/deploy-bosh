@@ -25,6 +25,7 @@ addons:
         on_access_enabled: ((/clamav_onaccess_enabled))
         cron:
           schedule: ((/clamav_cron_schedule))
+        include_directories: ((/clamav_include_directories)) 
   - name: snort
     release: snort
   - name: awslogs-bionic
