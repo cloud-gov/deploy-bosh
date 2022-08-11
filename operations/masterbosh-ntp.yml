@@ -2,21 +2,23 @@
 - type: replace
   path: /resource_pools/0/env/bosh/ntp?
   value:
-    - server time-a.nist.gov
-    - server time-b.nist.gov
-    - server time-c.nist.gov
-    - server time-d.nist.gov
-    - server time-b-wwv.nist.gov
-    - server time-c-wwv.nist.gov
-    - server time-d-wwv.nist.gov
+    - 169.254.169.123
+    - time-a.nist.gov
+    - time-b.nist.gov
+    - time-c.nist.gov
+    - time-d.nist.gov
+    - time-b-wwv.nist.gov
+    - time-c-wwv.nist.gov
+    - time-d-wwv.nist.gov
 
 - path: /instance_groups/name=bosh/properties/agent/env/bosh/ntp?
   type: replace
   value:
-    - server time-a.nist.gov
-    - server time-b.nist.gov
-    - server time-c.nist.gov
-    - server time-d.nist.gov
-    - server time-b-wwv.nist.gov
-    - server time-c-wwv.nist.gov
-    - server time-d-wwv.nist.gov
+    - 169.254.169.123
+    - time-a.nist.gov
+    - time-b.nist.gov
+    - time-c.nist.gov
+    - time-d.nist.gov
+    - time-b-wwv.nist.gov
+    - time-c-wwv.nist.gov
+    - time-d-wwv.nist.gov
