@@ -85,10 +85,10 @@
 - type: replace
   path: /vm_extensions/-
   value:
-    name: 250GB_ephemeral_disk
+    name: 300GB_ephemeral_disk
     cloud_properties:
       ephemeral_disk:
-        size: 256000
+        size: 307200
 - type: replace
   path: /vm_extensions/-
   value:
