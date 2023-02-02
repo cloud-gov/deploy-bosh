@@ -9,7 +9,27 @@ releases:
 - {name: syslog, version: ((release_syslog))}
 
 addons:
-- name: hardening
+- include:
+    stemcell:
+    - os: ubuntu-jammy
+  name: hardening-jammy
+  jobs:
+  - name: clamav
+    release: clamav
+    properties:
+      clamav:
+        dbMirror1: ((/clamav_mirror))
+        alert_on_stale_defs: ((/clamav_alert_on_stale_defs))
+        schedule_enabled: ((/clamav_schedule_enabled))
+        on_access_enabled: ((/clamav_onaccess_enabled))
+        cron:
+          schedule: ((/clamav_cron_schedule))
+        include_directories: ((/clamav_include_directories)) 
+        exclude_directories: ((/clamav_exclude_directories))
+- include:
+    stemcell:
+    - os: ubuntu-bionic
+  name: hardening
   jobs:
   - name: harden
     release: fisma
