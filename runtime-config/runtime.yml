@@ -29,7 +29,7 @@ addons:
   - name: syslog_forwarder
     properties:
       syslog:
-        address: internal-development-platform-syslog-85068984.us-gov-west-1.elb.amazonaws.com
+        address: ((terraform_outputs.platform_syslog_elb_dns_name))
         port: 5514
     release: syslog
 - include:
