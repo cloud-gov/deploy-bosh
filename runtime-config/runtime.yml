@@ -26,6 +26,12 @@ addons:
           schedule: ((/clamav_cron_schedule))
         include_directories: ((/clamav_include_directories)) 
         exclude_directories: ((/clamav_exclude_directories))
+  - name: syslog_forwarder
+    properties:
+      syslog:
+        address: internal-development-platform-syslog-85068984.us-gov-west-1.elb.amazonaws.com
+        port: 5514
+    release: syslog
 - include:
     stemcell:
     - os: ubuntu-bionic
