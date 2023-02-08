@@ -24,7 +24,7 @@ addons:
         on_access_enabled: ((/clamav_onaccess_enabled))
         cron:
           schedule: ((/clamav_cron_schedule))
-        include_directories: ((/clamav_include_directories)) 
+        include_directories: ((/clamav_include_directories))
         exclude_directories: ((/clamav_exclude_directories))
   - name: syslog_forwarder
     properties:
@@ -32,6 +32,8 @@ addons:
         address: ((terraform_outputs.platform_syslog_elb_dns_name))
         port: 5514
     release: syslog
+  - name: aide
+    release: aide
 - include:
     stemcell:
     - os: ubuntu-bionic
@@ -51,7 +53,7 @@ addons:
         on_access_enabled: ((/clamav_onaccess_enabled))
         cron:
           schedule: ((/clamav_cron_schedule))
-        include_directories: ((/clamav_include_directories)) 
+        include_directories: ((/clamav_include_directories))
         exclude_directories: ((/clamav_exclude_directories))
   - name: snort
     release: snort
