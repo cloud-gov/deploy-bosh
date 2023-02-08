@@ -36,6 +36,8 @@ addons:
     release: aide
   - name: harden
     release: fisma
+  - name: node_exporter
+    release: node-exporter
 - include:
     stemcell:
     - os: ubuntu-bionic
