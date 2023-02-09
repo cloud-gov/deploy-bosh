@@ -38,6 +38,14 @@ addons:
     release: fisma
   - name: node_exporter
     release: node-exporter
+  - name: nessus-agent
+    release: nessus-agent
+    properties:
+      nessus-agent:
+        key: ((/nessus_agent_key))
+        group: ((/nessus_agent_group))
+        server: ((terraform_outputs.nessus_static_ip))
+        port: 8834
 - include:
     stemcell:
     - os: ubuntu-bionic
