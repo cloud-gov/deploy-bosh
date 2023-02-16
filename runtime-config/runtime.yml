@@ -49,8 +49,6 @@ addons:
 - include:
     stemcell:
     - os: ubuntu-bionic
-    deployments:
-    - domain-broker
   name: hardening
   jobs:
   - name: harden
