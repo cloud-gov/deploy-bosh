@@ -4,6 +4,7 @@ releases:
 - {name: clamav, version: ((release_clamav))}
 - {name: snort, version: ((release_snort))}
 - {name: awslogs-bionic, version: ((release_awslogs_bionic))}
+- {name: awslogs-jammy, version: ((release_awslogs_jammy))}
 - {name: nessus-agent, version: ((release_nessus_agent))}
 - {name: node-exporter, version: ((release_node_exporter))}
 - {name: syslog, version: ((release_syslog))}
@@ -46,6 +47,36 @@ addons:
         group: ((/nessus_agent_group))
         server: ((terraform_outputs.nessus_static_ip))
         port: 8834
+  - name: awslogs-jammy
+    release: awslogs-jammy
+    properties:
+      awslogs-jammy:
+        region: us-gov-west-1
+        awslogs_files_config:
+        - name: /var/log/audit/audit.log
+          file: /var/log/audit/audit.log
+          log_group_name: /var/log/audit/audit.log
+          log_stream_name: "{{instance_id}}"
+          initial_position: start_of_file
+          datetime_format: "%Y-%m-%dT%H:%M:%S"
+        - name: /var/log/auth.log
+          file: /var/log/auth.log
+          log_group_name: /var/log/auth.log
+          log_stream_name: "{{instance_id}}"
+          initial_position: start_of_file
+          datetime_format: "%Y-%m-%dT%H:%M:%S"
+        - name: /var/log/dpkg.log
+          file: /var/log/dpkg.log
+          log_group_name: /var/log/dpkg.log
+          log_stream_name: "{{instance_id}}"
+          initial_position: start_of_file
+          datetime_format: "%Y-%m-%dT%H:%M:%S"
+        - name: /var/log/syslog
+          file: /var/log/syslog
+          log_group_name: /var/log/syslog
+          log_stream_name: "{{instance_id}}"
+          initial_position: start_of_file
+          datetime_format: "%Y-%m-%dT%H:%M:%S"
 - include:
     stemcell:
     - os: ubuntu-bionic
