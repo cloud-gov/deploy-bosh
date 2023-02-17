@@ -12,6 +12,9 @@ releases:
 - name: awslogs-bionic
   uri: https://github.com/cloud-gov/cg-awslogs-boshrelease
   branch: bionic
+- name: awslogs-jammy
+  uri: https://github.com/cloud-gov/cg-awslogs-boshrelease
+  branch: jammy
 - name: clamav
   uri: https://github.com/cloud-gov/cg-clamav-boshrelease
   branch: master
