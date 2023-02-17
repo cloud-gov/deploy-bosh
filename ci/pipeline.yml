@@ -695,6 +695,10 @@ jobs:
       trigger: true
       passed:
       - common-releases-staging
+    - get: cg-s3-awslogs-jammy-release
+      trigger: true
+      passed:
+      - common-releases-staging
     - get: cg-s3-nessus-agent-release
       trigger: true
       passed:
