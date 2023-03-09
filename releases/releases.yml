@@ -15,6 +15,9 @@ releases:
 - name: awslogs-jammy
   uri: https://github.com/cloud-gov/cg-awslogs-boshrelease
   branch: jammy
+- name: jammy_snort
+  uri: https://github.com/cloud-gov/cg-snort-boshrelease
+  branch: jammy-snort
 - name: clamav
   uri: https://github.com/cloud-gov/cg-clamav-boshrelease
   branch: master
