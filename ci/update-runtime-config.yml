@@ -17,6 +17,7 @@ inputs:
 - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
 - {name: cg-s3-clamav-release, path: releases/clamav}
 - {name: cg-s3-snort-release, path: releases/snort}
+- {name: cg-s3-jammy-snort-release, path: releases/jammy-snort}
 - {name: node-exporter-release, path: releases/node-exporter}
 - {name: syslog-release, path: releases/syslog}
 
