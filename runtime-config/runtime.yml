@@ -16,7 +16,7 @@ addons:
     - os: ubuntu-jammy
   name: hardening-jammy
   jobs:
-  - name: jammy-snort
+  - name: snort
     release: jammy-snort
   - name: clamav
     release: clamav
