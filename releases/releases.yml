@@ -8,7 +8,7 @@ releases:
   branch: master
 - name: fisma-jammy
   uri: https://github.com/cloud-gov/cg-harden-boshrelease
-  branch: Jammy-Master
+  branch: jammy-main
 - name: nessus-agent
   uri: https://github.com/cloud-gov/cg-nessus-agent-boshrelease
   branch: master
