@@ -16,6 +16,7 @@ inputs:
 - {name: certificate}
 - {name: terraform-yaml}
 - {name: cg-s3-fisma-release, path: releases/fisma}
+- {name: cg-s3-fisma-jammy-release, path: releases/fisma-jammy}
 - {name: aide-release, path: releases/aide}
 - {name: cg-s3-awslogs-bionic-release, path: releases/awslogs-bionic}
 - {name: cg-s3-awslogs-jammy-release, path: releases/awslogs-jammy}
