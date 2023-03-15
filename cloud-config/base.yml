@@ -443,6 +443,10 @@ vm_types:
   name: x1e.xlarge
 
 vm_extensions:
+- cloud_properties:
+    metadata_options:
+      http_tokens: required
+  name: meta-data-v2
 - name: errand-profile
   cloud_properties:
     iam_instance_profile: ((terraform_outputs.bosh_compilation_profile))
