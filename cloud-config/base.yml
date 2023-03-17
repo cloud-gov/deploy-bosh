@@ -446,6 +446,7 @@ vm_extensions:
 - cloud_properties:
     metadata_options:
       http_tokens: required
+      http_put_response_hop_limit: 2
   name: meta-data-v2
 - name: errand-profile
   cloud_properties:
