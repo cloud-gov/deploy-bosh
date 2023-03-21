@@ -207,7 +207,7 @@ jobs:
       trigger: true
       passed:
       - common-releases-master
-    - get: bosh-stemcell-bionic
+    - get: bosh-stemcell-jammy
       trigger: true
     - get: terraform-yaml
       trigger: true
@@ -224,7 +224,7 @@ jobs:
     params: &bosh-deployment
       manifest: bosh-deployment/bosh.yml
       stemcells:
-      - bosh-stemcell-bionic/*.tgz
+      - bosh-stemcell-jammy/*.tgz
       ops_files:
       - bosh-deployment/uaa.yml
       - bosh-deployment/credhub.yml
@@ -389,7 +389,7 @@ jobs:
       trigger: true
       passed:
       - common-releases-tooling
-    - get: bosh-stemcell-bionic
+    - get: bosh-stemcell-jammy
       trigger: true
       passed:
       - deploy-tooling-bosh
@@ -529,7 +529,7 @@ jobs:
       trigger: true
       passed:
       - common-releases-development
-    - get: bosh-stemcell-bionic
+    - get: bosh-stemcell-jammy
       trigger: true
       passed:
       - deploy-development-bosh
@@ -670,7 +670,7 @@ jobs:
       passed:
       - common-releases-staging
       trigger: true
-    - get: bosh-stemcell-bionic
+    - get: bosh-stemcell-jammy
       passed:
       - deploy-staging-bosh
       trigger: true
@@ -848,10 +848,10 @@ resources:
     - cloud-config/*
     - operations/*
 
-- name: bosh-stemcell-bionic
+- name: bosh-stemcell-jammy
   type: bosh-io-stemcell
   source:
-    name: bosh-aws-xen-hvm-ubuntu-bionic-go_agent
+    name: bosh-aws-xen-hvm-ubuntu-jammy-go_agent
 
 - name: toolingbosh-deployment
   type: bosh-deployment
