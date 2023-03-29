@@ -46,11 +46,6 @@
 - type: replace
   path: /disk_types/-
   value:
-    name: admin-ui
-    disk_size: 5120
-- type: replace
-  path: /disk_types/-
-  value:
     name: shibboleth
     disk_size: 4096
 - type: replace
