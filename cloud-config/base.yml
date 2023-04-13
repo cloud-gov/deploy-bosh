@@ -284,6 +284,8 @@ vm_types:
   name: r5.metal
 - cloud_properties:
     instance_type: r5.xlarge
+    ephemeral_disk:
+      size: 10000
   name: r5.xlarge
 - cloud_properties:
     instance_type: r5.xlarge
@@ -395,6 +397,8 @@ vm_types:
   name: t3.small
 - cloud_properties:
     instance_type: t3.xlarge
+    ephemeral_disk:
+      size: 10000
   name: t3.xlarge
 - cloud_properties:
     instance_type: t3a.2xlarge
