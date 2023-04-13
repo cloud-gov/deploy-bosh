@@ -83,14 +83,6 @@
   value:
     name: nfs-volume
     disk_size: 64_000
-
-- type: replace
-  path: /vm_extensions/-
-  value:
-    name: admin-lb
-    cloud_properties:
-      lb_target_groups:
-      - ((terraform_outputs.admin_lb_target_group))
 - type: replace
   path: /vm_extensions/-
   value:
