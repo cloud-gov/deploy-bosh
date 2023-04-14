@@ -5,13 +5,13 @@ aws_region: us-gov-west-1
 releases:
 - name: fisma
   uri: https://github.com/cloud-gov/cg-harden-boshrelease
-  branch: master
+  branch: main
 - name: fisma-jammy
   uri: https://github.com/cloud-gov/cg-harden-boshrelease
   branch: jammy-main
 - name: nessus-agent
   uri: https://github.com/cloud-gov/cg-nessus-agent-boshrelease
-  branch: master
+  branch: main
 - name: awslogs-bionic
   uri: https://github.com/cloud-gov/cg-awslogs-boshrelease
   branch: bionic
@@ -20,28 +20,28 @@ releases:
   branch: jammy
 - name: clamav
   uri: https://github.com/cloud-gov/cg-clamav-boshrelease
-  branch: master
+  branch: main
 - name: nessus-manager
   uri: https://github.com/cloud-gov/cg-nessus-manager-boshrelease
-  branch: master
+  branch: main
 - name: shibboleth
   uri: https://github.com/cloud-gov/shibboleth-boshrelease
-  branch: master
+  branch: main
 - name: uaa-customized
   uri: https://github.com/cloud-gov/uaa-customized-boshrelease
-  branch: master
+  branch: main
 - name: cron
   uri: https://github.com/cloudfoundry-community/cron-boshrelease
-  branch: master
+  branch: main
 - name: oauth2-proxy
   uri: https://github.com/cloud-gov/oauth2-proxy-boshrelease
-  branch: master
+  branch: main
 - name: postfix
   uri: https://github.com/cloud-gov/postfix-boshrelease
-  branch: master
+  branch: main
 - name: domain-broker
   uri: https://github.com/cloud-gov/cf-domain-broker-alb-boshrelease
-  branch: master
+  branch: main
 - name: aide
   uri: https://github.com/cloud-gov/aide-boshrelease
-  branch: master
+  branch: main
