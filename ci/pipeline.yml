@@ -51,7 +51,9 @@ jobs:
       trigger: true
       resource: terraform-yaml-tooling
     - get: bosh-state
-      resource: masterbosh-state
+      resource: masterbosh-state    
+    - get: bosh-creds
+      resource: masterbosh-creds
     - get: ca-cert-store
       trigger: true
     - get: nessus-agent-release
@@ -78,13 +80,13 @@ jobs:
       BOSH_CLIENT: admin
       BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
   ensure:
-    put: masterbosh-state
-    params:
-      file: updated-bosh-state/*.json
-  ensure:
-    put: masterbosh-creds
-    params:    
-      file: updated-bosh-state/*.yml
+    do:
+    - put: masterbosh-state
+      params:
+        file: updated-bosh-state/*.json
+    - put: masterbosh-creds
+      params:    
+        file: updated-bosh-state/*.yml
   on_failure:
     put: slack
     params:
