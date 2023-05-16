@@ -16,6 +16,7 @@ inputs:
 - name: terraform-yaml
 - name: bosh-config
 - name: bosh-state
+- name: bosh-creds
 - name: terraform-secrets
 - name: nessus-agent-release
 
