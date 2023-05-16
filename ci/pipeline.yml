@@ -81,6 +81,10 @@ jobs:
     put: masterbosh-state
     params:
       file: updated-bosh-state/*.json
+  ensure:
+    put: masterbosh-creds
+    params:    
+      file: updated-bosh-state/*.yml
   on_failure:
     put: slack
     params:
@@ -812,6 +816,14 @@ resources:
     bucket: ((secrets-bucket))
     region_name: ((aws-region))
     versioned_file: master-bosh-state.json
+    server_side_encryption: AES256
+
+- name: masterbosh-creds
+  type: s3-iam
+  source:
+    bucket: ((secrets-bucket))
+    region_name: ((aws-region))
+    versioned_file: master-bosh-creds.yml
     server_side_encryption: AES256
 
 - name: cron-release
