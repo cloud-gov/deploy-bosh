@@ -86,7 +86,7 @@ jobs:
         file: updated-bosh-state/*.json
     - put: masterbosh-creds
       params:    
-        file: updated-bosh-state/*.yml
+        file: updated-bosh-creds/*.yml
   on_failure:
     put: slack
     params:

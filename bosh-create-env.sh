@@ -38,4 +38,4 @@ set -e
 cp bosh-state/*.json updated-bosh-state
 
 # ensure we copy out creds.yml so we don't miss out on any new bosh-deployment variables
-cp creds.yml updated-bosh-state/master-bosh-creds.yml
+cp creds.yml updated-bosh-creds/creds.yml
