@@ -40,10 +40,10 @@
               export PGPASSWORD=${PGPASSWORD}
 
               # apps from other packages on this host we need
-              PSQL=/var/vcap/packages/postgres-9.4/bin/psql
+              PSQL=/var/vcap/packages/toolbelt-psql/bin/psql
 
-              AWSCLI=/var/vcap/packages/awslogs-bionic/venv/bin/aws
-              export LD_LIBRARY_PATH=/var/vcap/packages/awslogs-bionic/venv/lib
+              AWSCLI=/var/vcap/packages/awslogs-jammy/venv/bin/aws
+              export LD_LIBRARY_PATH=/var/vcap/packages/awslogs-jammy/venv/lib
 
               # Hack: look up push gateway address in database if gateway is managed by the current director
               if [ -n "${GATEWAY_DEPLOYMENT}" ]; then
