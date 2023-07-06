@@ -205,6 +205,7 @@ jobs:
       trigger: true
     - get: terraform-yaml-production
       trigger: true
+    - get: toolbelt-release
   - task: terraform-secrets
     file: bosh-config/ci/terraform-secrets.yml
   - put: toolingbosh-deployment
@@ -237,6 +238,8 @@ jobs:
       - bosh-config/variables/tooling.yml
       - terraform-secrets/terraform.yml
       - terraform-yaml/state.yml
+      releases:
+      - toolbelt-release/*.tgz
   - task: update-cloud-config
     file: bosh-config/ci/update-cloud-config-tooling.yml
     params:
@@ -897,6 +900,11 @@ resources:
     bucket: ((tf-state-bucket))
     versioned_file: ((tf-state-file-production))
     region_name: ((aws-region))
+
+- name: toolbelt-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-community/toolbelt-boshrelease
 
 resource_types:
 - name: bosh-deployment
