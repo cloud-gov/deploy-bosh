@@ -502,6 +502,7 @@ jobs:
       trigger: true
       resource: terraform-yaml-staging
     - get: toolbelt-release
+      passed: deploy-development-bosh
   - task: terraform-secrets
     file: bosh-config/ci/terraform-secrets.yml
   - put: stagingbosh-deployment
@@ -631,6 +632,7 @@ jobs:
       trigger: true
       resource: terraform-yaml-production
     - get: toolbelt-release
+      passed: deploy-staging-bosh
   - task: terraform-secrets
     file: bosh-config/ci/terraform-secrets.yml
   - put: productionbosh-deployment
