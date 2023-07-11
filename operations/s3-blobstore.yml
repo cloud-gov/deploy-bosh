@@ -1,4 +1,7 @@
 - type: remove
+  path: /instance_groups/name=bosh/jobs/name=blobstore
+
+- type: remove
   path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores
 
 - type: replace
@@ -10,3 +13,4 @@
       region: ((terraform_outputs.vpc_region))
       credentials_source: env_or_profile
       server_side_encryption: AES256
+
