@@ -159,7 +159,7 @@ jobs:
           aws_secret_access_key: ((ecr_aws_secret))
           repository: harden-concourse-task
           aws_region: us-gov-west-1
-          tag: ((harden-concourse-task-tag))
+          semver_constraint: ">= 1.0.0"
       inputs:
       - {name: certificate}
       - {name: cg-s3-fisma-release, path: releases/fisma}
