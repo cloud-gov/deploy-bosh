@@ -1,0 +1,47 @@
+- path: /variables/name=default_ca?
+  type: replace
+  value:
+    name: default_ca
+    options:
+      common_name: ca
+      is_ca: true
+      duration: 3650
+    type: certificate
+
+- path: /variables/name=nats_ca?
+  type: replace
+  value:
+    name: nats_ca
+    options:
+      common_name: default.nats-ca.bosh-internal
+      is_ca: true
+      duration: 3650
+    type: certificate
+
+- path: /variables/name=blobstore_ca?
+  type: replace
+  value:
+    name: blobstore_ca
+    options:
+      common_name: default.blobstore-ca.bosh-internal
+      is_ca: true
+      duration: 3650
+    type: certificate
+
+    
+- path: /variables/name=credhub_ca?
+  type: replace
+  value:
+    name: credhub_ca
+    options:
+      common_name: CredHub CA
+      is_ca: true
+      duration: 3650
+    type: certificate
+
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/director/trusted_certs?
+  value: ((default_ca))
+
+    
