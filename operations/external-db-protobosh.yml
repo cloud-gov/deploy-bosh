@@ -20,7 +20,10 @@
   path: /releases/-
   value:
     name: toolbelt
-    version: latest
+    url: "https://bosh.io/d/github.com/cloudfoundry-community/toolbelt-boshrelease?v=3.7.0"
+    sha1: "377b390b7f5d358a2dae463109350250a769eb3f"
+    version: "3.7.0"
+
 
 - type: replace
   path: /instance_groups/name=bosh/properties/director/db
