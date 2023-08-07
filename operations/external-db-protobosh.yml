@@ -19,11 +19,10 @@
 - type: replace
   path: /releases/-
   value:
-    name: toolbelt
+    name: "toolbelt"
+    version: "3.7.0"
     url: "https://bosh.io/d/github.com/cloudfoundry-community/toolbelt-boshrelease?v=3.7.0"
     sha1: "377b390b7f5d358a2dae463109350250a769eb3f"
-    version: "3.7.0"
-
 
 - type: replace
   path: /instance_groups/name=bosh/properties/director/db
@@ -438,3 +437,11 @@
 
 - type: remove
   path: /variables/name=postgres_password
+
+
+
+- type: remove
+  path: /instance_groups/name=bosh/jobs/name=bbr-uaadb?
+
+- type: remove
+  path: /instance_groups/name=bosh/jobs/name=bbr-credhubdb?
