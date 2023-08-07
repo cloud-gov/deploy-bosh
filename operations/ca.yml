@@ -42,6 +42,6 @@
 
 - type: replace
   path: /instance_groups/name=bosh/properties/director/trusted_certs?
-  value: ((default_ca))
+  value: ((default_ca.ca))
 
     
