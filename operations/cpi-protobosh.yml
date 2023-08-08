@@ -1,0 +1,19 @@
+- type: replace
+  path: /instance_groups/name=bosh/properties/aws/default_iam_instance_profile?
+  value: ((terraform_outputs.protobosh_profile))
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/aws/default_security_groups
+  value: [((terraform_outputs.bosh_security_group))]
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/aws/region
+  value: ((terraform_outputs.vpc_region))
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/aws/encrypted?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/director/enable_cpi_resize_disk?
+  value: true
