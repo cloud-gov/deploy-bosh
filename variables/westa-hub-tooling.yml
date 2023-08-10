@@ -1,0 +1,7 @@
+director_name: toolingbosh
+environment: tooling
+deployment_name: toolingbosh
+network: bosh
+instance_profile: westa-hub-default
+gateway_host: prometheus-tooling.service.cf.internal
+gateway_deployment: prometheus-production
