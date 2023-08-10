@@ -3,5 +3,5 @@ environment: tooling
 deployment_name: toolingbosh
 network: bosh
 instance_profile: bosh-profile
-gateway_host: ""
+gateway_host: prometheus-tooling.service.cf.internal
 gateway_deployment: prometheus-production
