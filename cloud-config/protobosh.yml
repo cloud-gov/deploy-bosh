@@ -42,7 +42,7 @@
 - type: replace
   path: /vm_extensions/-
   value:
-    name: bosh-profile
+    name: ((terraform_outputs.bosh_profile))
     cloud_properties:
       iam_instance_profile: ((terraform_outputs.bosh_profile))
 
@@ -62,3 +62,17 @@
     name: z3
     cloud_properties:
       availability_zone: ((terraform_outputs.az3))
+
+
+- type: remove
+  path: /vm_types/name=c5.xlarge.compilation
+
+- type: replace
+  path: /vm_types/-
+  value:
+    name: c5.xlarge.compilation
+    cloud_properties:
+      ephemeral_disk:
+        size: 30000
+      iam_instance_profile: ((terraform_outputs.protobosh_compilation_profile))
+      instance_type: c5.xlarge
