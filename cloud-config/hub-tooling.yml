@@ -13,7 +13,7 @@
     type: manual
     subnets:
       - range: ((terraform_outputs.private_subnet_az1_cidr))
-        reserved: ((terraform_outputs.private_subnet_az1_reserved))
+        reserved: ((terraform_outputs.private_subnet_reserved_az1))
         gateway: ((terraform_outputs.private_subnet_az1_gateway))
         static: ((terraform_outputs.bosh_uaa_static_ips_az1))
         az: z1
@@ -24,7 +24,7 @@
             - ((terraform_outputs.bosh_uaa_security_group))
           subnet: ((terraform_outputs.private_subnet_az1))
       - range: ((terraform_outputs.private_subnet_az2_cidr))
-        reserved: ((terraform_outputs.private_subnet_az2_reserved))
+        reserved: ((terraform_outputs.private_subnet_reserved_az2))
         gateway: ((terraform_outputs.private_subnet_az2_gateway))
         static: ((terraform_outputs.bosh_uaa_static_ips_az2))
         az: z2
@@ -35,7 +35,7 @@
             - ((terraform_outputs.bosh_uaa_security_group))
           subnet: ((terraform_outputs.private_subnet_az2))
       - range: ((terraform_outputs.private_subnet_az3_cidr))
-        reserved: ((terraform_outputs.private_subnet_az3_reserved))
+        reserved: ((terraform_outputs.private_subnet_reserved_az3))
         gateway: ((terraform_outputs.private_subnet_az3_gateway))
         static: ((terraform_outputs.bosh_uaa_static_ips_az3))
         az: z3
@@ -53,7 +53,7 @@
     type: manual
     subnets:
       - range: ((terraform_outputs.private_subnet_az3_cidr))
-        reserved: ((terraform_outputs.private_subnet_az3_reserved))
+        reserved: ((terraform_outputs.private_subnet_reserved_az3))
         gateway: ((terraform_outputs.private_subnet_az3_gateway))
         static:
           - ((terraform_outputs.nessus_static_ip))
@@ -137,7 +137,7 @@
           security_groups:
             - ((terraform_outputs.bosh_security_group))
             - ((terraform_outputs.production_concourse_security_group))
-            - ((terraform_outputs.production_credhub_security_group))      
+            - ((terraform_outputs.production_credhub_security_group))
       - range: ((terraform_outputs.production_concourse_subnet_cidr_az3))
         gateway: ((terraform_outputs.production_concourse_subnet_gateway_az3))
         reserved:
@@ -317,23 +317,7 @@
             - ((terraform_outputs.bosh_security_group))
             - ((terraform_outputs.production_monitoring_security_group))
 
-- type: replace
-  path: /networks/-
-  value:
-    name: dns-private
-    type: manual
-    subnets:
-      - az: z1
-        range: ((terraform_outputs.private_subnet_az1_cidr))
-        reserved: ((terraform_outputs.private_subnet_reserved_az1))
-        gateway: ((terraform_outputs.private_subnet_az1_gateway))
-        static: ((terraform_outputs.dns_private_ips))
-        dns: [((terraform_outputs.vpc_cidr_dns))]
-        cloud_properties:
-          subnet: ((terraform_outputs.private_subnet_az1))
-          security_groups:
-            - ((terraform_outputs.bosh_security_group))
-            - ((terraform_outputs.dns_axfr_security_group))
+
 - type: replace
   path: /networks/-
   value:
@@ -350,6 +334,13 @@
       - az: z2
         cloud_properties:
           subnet: ((terraform_outputs.public_subnet_az2))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.dns_axfr_security_group))
+            - ((terraform_outputs.dns_public_security_group))
+      - az: z3
+        cloud_properties:
+          subnet: ((terraform_outputs.public_subnet_az3))
           security_groups:
             - ((terraform_outputs.bosh_security_group))
             - ((terraform_outputs.dns_axfr_security_group))
@@ -574,3 +565,10 @@
 - type: replace
   path: /compilation/network?
   value: production-concourse
+
+- type: replace
+  path: /azs/-
+  value:
+    name: z3
+    cloud_properties:
+      availability_zone: ((terraform_outputs.az3))
