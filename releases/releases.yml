@@ -3,6 +3,9 @@ release_blobstore_bucket: cloud-gov-release-blobstore
 aws_region: us-gov-west-1
 
 releases:
+- name: opensearch
+  uri: https://github.com/cloud-gov/opensearch-boshrelease
+  branch: main
 - name: fisma
   uri: https://github.com/cloud-gov/cg-harden-boshrelease
   branch: main
@@ -32,7 +35,7 @@ releases:
   branch: main
 - name: cron
   uri: https://github.com/cloudfoundry-community/cron-boshrelease
-  branch: main
+  branch: master
 - name: oauth2-proxy
   uri: https://github.com/cloud-gov/oauth2-proxy-boshrelease
   branch: main
