@@ -114,6 +114,13 @@
 - type: replace
   path: /vm_extensions/-
   value:
+    name: cf-router-main-network-properties
+    cloud_properties:
+      lb_target_groups: 
+        - ((terraform_outputs.cf_uaa_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value:
     name: diego-ssh-proxy-network-properties
     cloud_properties:
       elbs: [((terraform_outputs.diego_elb_name))]
