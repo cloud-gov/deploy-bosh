@@ -1,0 +1,574 @@
+- type: replace
+  path: /vm_types/-
+  value:
+    name: bosh
+    cloud_properties:
+      instance_type: m4.xlarge
+      ephemeral_disk:
+        size: 20_000
+- type: replace
+  path: /networks/-
+  value:
+    name: opsuaa
+    type: manual
+    subnets:
+      - range: ((terraform_outputs.private_subnet_az1_cidr))
+        reserved: ((terraform_outputs.private_subnet_reserved_az1))
+        gateway: ((terraform_outputs.private_subnet_az1_gateway))
+        static: ((terraform_outputs.bosh_uaa_static_ips_az1))
+        az: z1
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.bosh_uaa_security_group))
+          subnet: ((terraform_outputs.private_subnet_az1))
+      - range: ((terraform_outputs.private_subnet_az2_cidr))
+        reserved: ((terraform_outputs.private_subnet_reserved_az2))
+        gateway: ((terraform_outputs.private_subnet_az2_gateway))
+        static: ((terraform_outputs.bosh_uaa_static_ips_az2))
+        az: z2
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.bosh_uaa_security_group))
+          subnet: ((terraform_outputs.private_subnet_az2))
+      - range: ((terraform_outputs.private_subnet_az3_cidr))
+        reserved: ((terraform_outputs.private_subnet_reserved_az3))
+        gateway: ((terraform_outputs.private_subnet_az3_gateway))
+        static: ((terraform_outputs.bosh_uaa_static_ips_az3))
+        az: z3
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.bosh_uaa_security_group))
+          subnet: ((terraform_outputs.private_subnet_az3))
+
+- type: replace
+  path: /networks/-
+  value:
+    name: nessus-manager
+    type: manual
+    subnets:
+      - range: ((terraform_outputs.private_subnet_az3_cidr))
+        reserved: ((terraform_outputs.private_subnet_reserved_az3))
+        gateway: ((terraform_outputs.private_subnet_az3_gateway))
+        static:
+          - ((terraform_outputs.nessus_static_ip))
+        az: z3
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.nessus_security_group))
+          subnet: ((terraform_outputs.private_subnet_az3))
+
+- type: replace
+  path: /networks/-
+  value:
+    name: staging-concourse
+    type: manual
+    subnets:
+      - range: ((terraform_outputs.staging_concourse_subnet_cidr_az1))
+        gateway: ((terraform_outputs.staging_concourse_subnet_gateway_az1))
+        reserved:
+          - ((terraform_outputs.staging_concourse_subnet_reserved_az1))
+        az: z1
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.staging_concourse_subnet_az1))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.staging_concourse_security_group))
+            - ((terraform_outputs.staging_credhub_security_group))
+      - range: ((terraform_outputs.staging_concourse_subnet_cidr_az2))
+        gateway: ((terraform_outputs.staging_concourse_subnet_gateway_az2))
+        reserved:
+          - ((terraform_outputs.staging_concourse_subnet_reserved_az2))
+        az: z2
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.staging_concourse_subnet_az2))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.staging_concourse_security_group))
+            - ((terraform_outputs.staging_credhub_security_group))
+      - range: ((terraform_outputs.staging_concourse_subnet_cidr_az3))
+        gateway: ((terraform_outputs.staging_concourse_subnet_gateway_az3))
+        reserved:
+          - ((terraform_outputs.staging_concourse_subnet_reserved_az3))
+        az: z3
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.staging_concourse_subnet_az3))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.staging_concourse_security_group))
+            - ((terraform_outputs.staging_credhub_security_group))
+
+- type: replace
+  path: /networks/-
+  value:
+    name: production-concourse
+    type: manual
+    subnets:
+      - range: ((terraform_outputs.production_concourse_subnet_cidr_az1))
+        gateway: ((terraform_outputs.production_concourse_subnet_gateway_az1))
+        reserved:
+          - ((terraform_outputs.production_concourse_subnet_reserved_az1))
+        az: z1
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.production_concourse_subnet_az1))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.production_concourse_security_group))
+            - ((terraform_outputs.production_credhub_security_group))
+      - range: ((terraform_outputs.production_concourse_subnet_cidr_az2))
+        gateway: ((terraform_outputs.production_concourse_subnet_gateway_az2))
+        reserved:
+          - ((terraform_outputs.production_concourse_subnet_reserved_az2))
+        az: z2
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.production_concourse_subnet_az2))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.production_concourse_security_group))
+            - ((terraform_outputs.production_credhub_security_group))
+      - range: ((terraform_outputs.production_concourse_subnet_cidr_az3))
+        gateway: ((terraform_outputs.production_concourse_subnet_gateway_az3))
+        reserved:
+          - ((terraform_outputs.production_concourse_subnet_reserved_az3))
+        az: z3
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.production_concourse_subnet_az3))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.production_concourse_security_group))
+            - ((terraform_outputs.production_credhub_security_group))
+
+- type: replace
+  path: /networks/-
+  value:
+    name: staging-monitoring
+    type: dynamic
+    subnets:
+      - range: ((terraform_outputs.staging_monitoring_subnet_cidr_az1))
+        gateway: ((terraform_outputs.staging_monitoring_subnet_gateway_az1))
+        reserved:
+          - ((terraform_outputs.staging_monitoring_subnet_reserved_az1))
+        az: z1
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.staging_monitoring_subnet_az1))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.staging_monitoring_security_group))
+      - range: ((terraform_outputs.staging_monitoring_subnet_cidr_az2))
+        gateway: ((terraform_outputs.staging_monitoring_subnet_gateway_az2))
+        reserved:
+          - ((terraform_outputs.staging_monitoring_subnet_reserved_az2))
+        az: z2
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.staging_monitoring_subnet_az2))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.staging_monitoring_security_group))
+      - range: ((terraform_outputs.staging_monitoring_subnet_cidr_az3))
+        gateway: ((terraform_outputs.staging_monitoring_subnet_gateway_az3))
+        reserved:
+          - ((terraform_outputs.staging_monitoring_subnet_reserved_az3))
+        az: z3
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.staging_monitoring_subnet_az3))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.staging_monitoring_security_group))
+
+
+- type: replace
+  path: /networks/-
+  value:
+    name: staging-credhub
+    type: dynamic
+    subnets:
+      - range: ((terraform_outputs.staging_credhub_subnet_cidr_az1))
+        gateway: ((terraform_outputs.staging_credhub_subnet_gateway_az1))
+        reserved:
+          - ((terraform_outputs.staging_credhub_subnet_reserved_az1))
+        az: z1
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.staging_credhub_subnet_az1))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.staging_concourse_security_group))
+            - ((terraform_outputs.staging_credhub_security_group))
+      - range: ((terraform_outputs.staging_credhub_subnet_cidr_az2))
+        gateway: ((terraform_outputs.staging_credhub_subnet_gateway_az2))
+        reserved:
+          - ((terraform_outputs.staging_credhub_subnet_reserved_az2))
+        az: z2
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.staging_credhub_subnet_az2))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.staging_concourse_security_group))
+            - ((terraform_outputs.staging_credhub_security_group))
+      - range: ((terraform_outputs.staging_credhub_subnet_cidr_az3))
+        gateway: ((terraform_outputs.staging_credhub_subnet_gateway_az3))
+        reserved:
+          - ((terraform_outputs.staging_credhub_subnet_reserved_az3))
+        az: z3
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.staging_credhub_subnet_az3))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.staging_concourse_security_group))
+            - ((terraform_outputs.staging_credhub_security_group))
+
+- type: replace
+  path: /networks/-
+  value:
+    name: production-credhub
+    type: dynamic
+    subnets:
+      - range: ((terraform_outputs.production_credhub_subnet_cidr_az1))
+        gateway: ((terraform_outputs.production_credhub_subnet_gateway_az1))
+        reserved:
+          - ((terraform_outputs.production_credhub_subnet_reserved_az1))
+        az: z1
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.production_credhub_subnet_az1))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.production_concourse_security_group))
+            - ((terraform_outputs.production_credhub_security_group))
+      - range: ((terraform_outputs.production_credhub_subnet_cidr_az2))
+        gateway: ((terraform_outputs.production_credhub_subnet_gateway_az2))
+        reserved:
+          - ((terraform_outputs.production_credhub_subnet_reserved_az2))
+        az: z2
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.production_credhub_subnet_az2))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.production_concourse_security_group))
+            - ((terraform_outputs.production_credhub_security_group))
+      - range: ((terraform_outputs.production_credhub_subnet_cidr_az3))
+        gateway: ((terraform_outputs.production_credhub_subnet_gateway_az3))
+        reserved:
+          - ((terraform_outputs.production_credhub_subnet_reserved_az3))
+        az: z3
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.production_credhub_subnet_az3))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.production_concourse_security_group))
+            - ((terraform_outputs.production_credhub_security_group))
+- type: replace
+  path: /networks/-
+  value:
+    name: production-monitoring
+    type: dynamic
+    subnets:
+      - range: ((terraform_outputs.production_monitoring_subnet_cidr_az1))
+        gateway: ((terraform_outputs.production_monitoring_subnet_gateway_az1))
+        reserved:
+          - ((terraform_outputs.production_monitoring_subnet_reserved_az1))
+        az: z1
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.production_monitoring_subnet_az1))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.production_monitoring_security_group))
+      - range: ((terraform_outputs.production_monitoring_subnet_cidr_az2))
+        gateway: ((terraform_outputs.production_monitoring_subnet_gateway_az2))
+        reserved:
+          - ((terraform_outputs.production_monitoring_subnet_reserved_az2))
+        az: z2
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.production_monitoring_subnet_az2))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.production_monitoring_security_group))
+      - range: ((terraform_outputs.production_monitoring_subnet_cidr_az3))
+        gateway: ((terraform_outputs.production_monitoring_subnet_gateway_az3))
+        reserved:
+          - ((terraform_outputs.production_monitoring_subnet_reserved_az3))
+        az: z3
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.production_monitoring_subnet_az3))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.production_monitoring_security_group))
+
+
+- type: replace
+  path: /networks/-
+  value:
+    name: dns-public
+    type: dynamic
+    subnets:
+      - az: z1
+        cloud_properties:
+          subnet: ((terraform_outputs.public_subnet_az1))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.dns_axfr_security_group))
+            - ((terraform_outputs.dns_public_security_group))
+      - az: z2
+        cloud_properties:
+          subnet: ((terraform_outputs.public_subnet_az2))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.dns_axfr_security_group))
+            - ((terraform_outputs.dns_public_security_group))
+      - az: z3
+        cloud_properties:
+          subnet: ((terraform_outputs.public_subnet_az3))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.dns_axfr_security_group))
+            - ((terraform_outputs.dns_public_security_group))
+- type: replace
+  path: /networks/-
+  value:
+    name: dns-public-vip
+    type: vip
+- type: replace
+  path: /networks/-
+  value:
+    name: smtp-private
+    type: manual
+    subnets:
+      - az: z1
+        range: ((terraform_outputs.private_subnet_az1_cidr))
+        reserved: ((terraform_outputs.private_subnet_reserved_az1))
+        gateway: ((terraform_outputs.private_subnet_az1_gateway))
+        static: ((terraform_outputs.production_smtp_private_ip))
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.private_subnet_az1))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.smtp_security_group))
+
+# todo (mxplusb): remove this.
+- type: replace
+  path: /vm_types/-
+  value:
+    name: staging-concourse-web
+    cloud_properties:
+      instance_type: t3.medium
+      ephemeral_disk:
+        size: 45_000
+- type: replace
+  path: /vm_types/-
+  value:
+    name: staging-concourse-worker
+    cloud_properties:
+      instance_type: m5.large
+      ephemeral_disk:
+        size: 50_000
+- type: replace
+  path: /vm_types/-
+  value: &concourse-iaas-worker-vm
+    name: staging-concourse-iaas-worker
+    cloud_properties:
+      instance_type: m5.large
+      ephemeral_disk:
+        size: 300_000
+- type: replace
+  path: /vm_types/-
+  value:
+    name: production-concourse-web
+    cloud_properties:
+      instance_type: t3.xlarge
+      ephemeral_disk:
+        size: 45_000
+- type: replace
+  path: /vm_types/-
+  value:
+    name: production-concourse-worker
+    cloud_properties:
+      instance_type: m5.xlarge
+      ephemeral_disk:
+        size: 300_000
+- type: replace
+  path: /vm_types/-
+  value:
+    <<: *concourse-iaas-worker-vm
+    name: production-concourse-iaas-worker
+
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: opsuaa-lb
+    cloud_properties:
+      lb_target_groups:
+        - ((terraform_outputs.opsuaa_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: nessus-manager-lb
+    cloud_properties:
+      lb_target_groups:
+        - ((terraform_outputs.nessus_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: staging-prometheus-lb
+    cloud_properties:
+      lb_target_groups:
+        - ((terraform_outputs.staging_monitoring_lb_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: production-prometheus-lb
+    cloud_properties:
+      lb_target_groups:
+        - ((terraform_outputs.production_monitoring_lb_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: staging-doomsday-lb
+    cloud_properties:
+      lb_target_groups:
+        - ((terraform_outputs.staging_doomsday_lb_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: production-doomsday-lb
+    cloud_properties:
+      lb_target_groups:
+        - ((terraform_outputs.production_doomsday_lb_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: staging-concourse-lb
+    cloud_properties:
+      lb_target_groups:
+        - ((terraform_outputs.staging_concourse_lb_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value: &concourse-profile
+    name: staging-concourse-profile
+    cloud_properties:
+      iam_instance_profile: ((terraform_outputs.concourse_worker_profile))
+- type: replace
+  path: /vm_extensions/-
+  value: &concourse-iaas-profile
+    name: staging-concourse-iaas-profile
+    cloud_properties:
+      iam_instance_profile: ((terraform_outputs.concourse_iaas_worker_profile))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: production-concourse-lb
+    cloud_properties:
+      lb_target_groups:
+        - ((terraform_outputs.production_concourse_lb_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    <<: *concourse-profile
+    name: production-concourse-profile
+- type: replace
+  path: /vm_extensions/-
+  value:
+    <<: *concourse-iaas-profile
+    name: production-concourse-iaas-profile
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: production-credhub-lb
+    cloud_properties:
+      lb_target_groups:
+        - ((terraform_outputs.production_credhub_lb_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: staging-credhub-lb
+    cloud_properties:
+      lb_target_groups:
+        - ((terraform_outputs.staging_credhub_lb_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: 5GB_ephemeral_disk
+    cloud_properties:
+      ephemeral_disk:
+        size: 5120
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: 10GB_ephemeral_disk
+    cloud_properties:
+      ephemeral_disk:
+        size: 10240
+
+- type: replace
+  path: /disk_types/-
+  value:
+    name: bosh
+    disk_size: 92_000
+- type: replace
+  path: /disk_types/-
+  value:
+    name: 5GB
+    disk_size: 5120
+- type: replace
+  path: /disk_types/-
+  value:
+    name: nessus-manager
+    disk_size: 200_000
+- type: replace
+  path: /disk_types/-
+  value: &prometheus-small-disk
+    name: staging-prometheus-small
+    disk_size: 8192
+- type: replace
+  path: /disk_types/-
+  value: &prometheus-large-disk
+    name: staging-prometheus-large
+    disk_size: 200_000
+- type: replace
+  path: /disk_types/-
+  value:
+    <<: *prometheus-small-disk
+    name: production-prometheus-small
+- type: replace
+  path: /disk_types/-
+  value:
+    <<: *prometheus-large-disk
+    name: production-prometheus-large
+    disk_size: 3_000_000
+    cloud_properties:
+      type: io1
+      iops: 14_000
+
+- type: replace
+  path: /compilation/network?
+  value: production-concourse
+
+- type: replace
+  path: /azs/-
+  value:
+    name: z3
+    cloud_properties:
+      availability_zone: ((terraform_outputs.az3))
