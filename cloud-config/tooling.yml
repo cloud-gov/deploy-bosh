@@ -400,6 +400,8 @@
   value:
     name: nessus-manager
     disk_size: 200_000
+    cloud_properties:
+      type: gp3
 - type: replace
   path: /disk_types/-
   value: &prometheus-small-disk
