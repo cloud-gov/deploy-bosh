@@ -390,6 +390,8 @@
   value:
     name: bosh
     disk_size: 92_000
+    cloud_properties:
+      type: gp3
 - type: replace
   path: /disk_types/-
   value:
