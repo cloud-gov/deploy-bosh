@@ -390,6 +390,8 @@
   value:
     name: bosh
     disk_size: 92_000
+    cloud_properties:
+      type: gp3
 - type: replace
   path: /disk_types/-
   value:
@@ -400,16 +402,22 @@
   value:
     name: nessus-manager
     disk_size: 200_000
+    cloud_properties:
+      type: gp3
 - type: replace
   path: /disk_types/-
   value: &prometheus-small-disk
     name: staging-prometheus-small
     disk_size: 8192
+    cloud_properties:
+      type: gp3
 - type: replace
   path: /disk_types/-
   value: &prometheus-large-disk
     name: staging-prometheus-large
     disk_size: 200_000
+    cloud_properties:
+      type: gp3
 - type: replace
   path: /disk_types/-
   value:
