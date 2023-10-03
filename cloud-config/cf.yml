@@ -123,8 +123,7 @@
   value:
     name: cf-router-logstash-network-properties
     cloud_properties:
-      lb_target_groups: 
-        - ((terraform_outputs.cf_logstash_target_group))
+      lb_target_groups: ((terraform_outputs.cf_logstash_target_group))
 - type: replace
   path: /vm_extensions/-
   value:
