@@ -33,6 +33,8 @@
   value:
     name: bosh
     disk_size: 300000
+    cloud_properties:
+      type: gp3
 
 - type: replace
   path: /compilation/network?
