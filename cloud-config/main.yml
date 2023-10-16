@@ -87,6 +87,41 @@
 - type: replace
   path: /disk_types/-
   value:
+    name: logs_opensearch_es_master
+    disk_size: 102400
+    cloud_properties:
+      type: gp3
+- type: replace
+  path: /disk_types/-
+  value:
+    name: logs_opensearch_es_data
+    disk_size: 12_000_000
+    cloud_properties:
+      type: gp3
+- type: replace
+  path: /disk_types/-
+  value:
+    name: logs_opensearch_es_platform_data
+    disk_size: 3_500_000
+    cloud_properties:
+      type: gp3
+- type: replace
+  path: /disk_types/-
+  value:
+    name: logs_opensearch_ingestor
+    disk_size: 64_000
+    cloud_properties:
+      type: gp3
+- type: replace
+  path: /disk_types/-
+  value:
+    name: logs_opensearch_redis
+    disk_size: 4096
+    cloud_properties:
+      type: gp3
+- type: replace
+  path: /disk_types/-
+  value:
     name: kubernetes
     disk_size: 35_000
 - type: replace
