@@ -146,10 +146,10 @@
 - type: replace
   path: /vm_extensions/-
   value:
-    name: logsearch-lb
+    name: logs_opensearch-lb
     cloud_properties:
       elbs:
-      - ((terraform_outputs.logsearch_elb_name))
+      - ((terraform_outputs.logs_opensearch_elb_name))
 - type: replace
   path: /vm_extensions/-
   value:
