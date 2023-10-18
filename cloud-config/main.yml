@@ -87,6 +87,41 @@
 - type: replace
   path: /disk_types/-
   value:
+    name: logs_opensearch_os_master
+    disk_size: 102400
+    cloud_properties:
+      type: gp3
+- type: replace
+  path: /disk_types/-
+  value:
+    name: logs_opensearch_os_data
+    disk_size: 12_000_000
+    cloud_properties:
+      type: gp3
+- type: replace
+  path: /disk_types/-
+  value:
+    name: logs_opensearch_os_platform_data
+    disk_size: 3_500_000
+    cloud_properties:
+      type: gp3
+- type: replace
+  path: /disk_types/-
+  value:
+    name: logs_opensearch_ingestor
+    disk_size: 64_000
+    cloud_properties:
+      type: gp3
+- type: replace
+  path: /disk_types/-
+  value:
+    name: logs_opensearch_redis
+    disk_size: 4096
+    cloud_properties:
+      type: gp3
+- type: replace
+  path: /disk_types/-
+  value:
     name: kubernetes
     disk_size: 35_000
 - type: replace
@@ -108,6 +143,13 @@
     cloud_properties:
       elbs:
       - ((terraform_outputs.logsearch_elb_name))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: logs_opensearch-lb
+    cloud_properties:
+      elbs:
+      - ((terraform_outputs.logs_opensearch_elb_name))
 - type: replace
   path: /vm_extensions/-
   value:
