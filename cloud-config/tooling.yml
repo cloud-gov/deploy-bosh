@@ -354,7 +354,7 @@
     name: staging-defectdojo-lb
     cloud_properties:
       lb_target_groups:
-        - ((terraform.outputs.staging_defectdojo_lb_target_group))
+        - ((terraform_outputs.staging_defectdojo_lb_target_group))
 - type: replace
   path: /vm_extensions/-
   value:
