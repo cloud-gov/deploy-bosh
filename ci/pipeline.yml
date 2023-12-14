@@ -59,6 +59,9 @@ jobs:
     - get: nessus-agent-release
       resource: cg-s3-nessus-agent-release
       trigger: true
+    - put: stemcell-lock-pool
+      params:
+        claim: updating-stemcells
   - task: terraform-secrets
     file: bosh-config/ci/terraform-secrets.yml
     params:
@@ -87,6 +90,9 @@ jobs:
     - put: masterbosh-creds
       params:    
         file: updated-bosh-creds/*.yml
+    - put: stemcell-lock-pool
+      params:
+        release: stemcell-lock-pool
   on_failure:
     put: slack
     params:
@@ -1011,6 +1017,20 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry-community/toolbelt-boshrelease
+
+- name: stemcell-lock-pool
+  type: pool
+  source:
+    uri: git@github.com:cloud-gov/concourse-locks.git
+    branch: concourse # main is protected, so use a topic branch
+    pool: stemcell
+    username: cg-ci-bot
+    private_key: ((cg-ci-bot-sshkey.private_key))
+    git_config:
+      - name: "user.name"
+        value: "cg-ci-bot"
+      - name: "user.email"
+        value: "no-reply@cloud.gov"
 
 resource_types:
 - name: bosh-deployment
