@@ -4,6 +4,7 @@
     name: cron
     version: latest
 
+
 - type: replace
   path: /instance_groups/name=bosh/jobs/-
   value:
