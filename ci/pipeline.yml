@@ -1033,22 +1033,43 @@ resources:
         value: "no-reply@cloud.gov"
 
 resource_types:
+- name: registry-image
+  type: registry-image
+  source:
+    aws_access_key_id: ((ecr_aws_key))
+    aws_secret_access_key: ((ecr_aws_secret))
+    repository: registry-image-resource
+    aws_region: us-gov-west-1
+    tag: latest
+
 - name: bosh-deployment
   type: docker-image
   source:
     repository: cloudfoundry/bosh-deployment-resource
 
 - name: slack-notification
-  type: docker-image
+  type: registry-image
   source:
-    repository: cfcommunity/slack-notification-resource
+    aws_access_key_id: ((ecr_aws_key))
+    aws_secret_access_key: ((ecr_aws_secret))
+    repository: slack-notification-resource
+    aws_region: us-gov-west-1
+    tag: latest
 
 - name: s3-iam
-  type: docker-image
+  type: registry-image
   source:
-    repository: 18fgsa/s3-resource
+    aws_access_key_id: ((ecr_aws_key))
+    aws_secret_access_key: ((ecr_aws_secret))
+    repository: s3-resource
+    aws_region: us-gov-west-1
+    tag: latest
 
 - name: semver-iam
-  type: docker-image
+  type: registry-image
   source:
-    repository: governmentpaas/semver-resource
+    aws_access_key_id: ((ecr_aws_key))
+    aws_secret_access_key: ((ecr_aws_secret))
+    repository: semver-resource
+    aws_region: us-gov-west-1
+    tag: latest
