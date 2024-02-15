@@ -32,7 +32,7 @@ releases:
   branch: main
 - name: cron
   uri: https://github.com/cloud-gov/cron-boshrelease
-  branch: master
+  branch: main
 - name: oauth2-proxy
   uri: https://github.com/cloud-gov/oauth2-proxy-boshrelease
   branch: main
