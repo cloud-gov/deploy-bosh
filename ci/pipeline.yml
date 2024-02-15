@@ -849,7 +849,7 @@ resources:
 - name: cron-release
   type: bosh-io-release
   source:
-    repository: cloudfoundry-community/cron-boshrelease
+    repository: cloud-gov/cron-boshrelease
 
 - name: syslog-release
   type: bosh-io-release

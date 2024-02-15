@@ -31,8 +31,8 @@ releases:
   uri: https://github.com/cloud-gov/uaa-customized-boshrelease
   branch: main
 - name: cron
-  uri: https://github.com/cloudfoundry-community/cron-boshrelease
-  branch: master
+  uri: https://github.com/cloud-gov/cron-boshrelease
+  branch: main
 - name: oauth2-proxy
   uri: https://github.com/cloud-gov/oauth2-proxy-boshrelease
   branch: main
