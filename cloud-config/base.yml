@@ -143,6 +143,11 @@ vm_types:
     instance_type: m5.large
   name: m5.large
 - cloud_properties:
+    instance_type: m5.large
+    ephemeral_disk:
+      size: 45000
+  name: m5.large.concourse.web
+- cloud_properties:
     instance_type: m5.metal
   name: m5.metal
 - cloud_properties:
