@@ -272,7 +272,7 @@ vm_types:
       size: 300000
   name: m6i.xlarge.concourse.worker
 - cloud_properties:
-    instance_type: m6i.xlarge.opsuaa
+    instance_type: m6i.xlarge
   name: m6i.xlarge.opsuaa
 - cloud_properties:
     instance_type: r4.16xlarge
