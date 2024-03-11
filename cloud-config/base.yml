@@ -262,12 +262,12 @@ vm_types:
     instance_type: m6i.xlarge
   name: m6i.xlarge
 - cloud_properties:
-    instance_type: m6i.xlarge.bosh.director
+    instance_type: m6i.xlarge
     ephemeral_disk:
       size: 20000
   name: m6i.xlarge.bosh.director
 - cloud_properties:
-    instance_type: m6i.xlarge.concourse.worker
+    instance_type: m6i.xlarge
     ephemeral_disk:
       size: 300000
   name: m6i.xlarge.concourse.worker
@@ -418,7 +418,7 @@ vm_types:
     instance_type: r6i.xlarge
   name: r6i.xlarge
 - cloud_properties:
-    instance_type: r6i.xlarge.logsearch.ingestor
+    instance_type: r6i.xlarge
     ephemeral_disk:
       size: 30000
   name: r6i.xlarge.logsearch.ingestor
