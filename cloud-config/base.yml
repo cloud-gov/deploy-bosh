@@ -104,6 +104,15 @@ vm_types:
     instance_type: c5n.xlarge
   name: c5n.xlarge
 - cloud_properties:
+    instance_type: c6i.2xlarge
+  name: c6i.2xlarge
+- cloud_properties:
+    instance_type: c6i.large
+  name: c6i.large
+- cloud_properties:
+    instance_type: c6i.xlarge
+  name: c6i.xlarge
+- cloud_properties:
     instance_type: m4.10xlarge
   name: m4.10xlarge
 - cloud_properties:
@@ -244,6 +253,28 @@ vm_types:
     instance_type: m5d.xlarge
   name: m5d.xlarge
 - cloud_properties:
+    instance_type: m6i.2xlarge
+  name: m6i.2xlarge
+- cloud_properties:
+    instance_type: m6i.large
+  name: m6i.large
+- cloud_properties:
+    instance_type: m6i.xlarge
+  name: m6i.xlarge
+- cloud_properties:
+    instance_type: m6i.xlarge.bosh.director
+    ephemeral_disk:
+      size: 20000
+  name: m6i.xlarge.bosh.director
+- cloud_properties:
+    instance_type: m6i.xlarge.concourse.worker
+    ephemeral_disk:
+      size: 300000
+  name: m6i.xlarge.concourse.worker
+- cloud_properties:
+    instance_type: m6i.xlarge.opsuaa
+  name: m6i.xlarge.opsuaa
+- cloud_properties:
     instance_type: r4.16xlarge
   name: r4.16xlarge
 - cloud_properties:
@@ -375,6 +406,22 @@ vm_types:
 - cloud_properties:
     instance_type: r5d.xlarge
   name: r5d.xlarge
+- cloud_properties:
+    instance_type: r6i.2xlarge
+  name: r6i.2xlarge
+- cloud_properties:
+    instance_type: r6i.large
+    ephemeral_disk:
+      size: 10000
+  name: r6i.large
+- cloud_properties:
+    instance_type: r6i.xlarge
+  name: r6i.xlarge
+- cloud_properties:
+    instance_type: r6i.xlarge.logsearch.ingestor
+    ephemeral_disk:
+      size: 30000
+  name: r6i.xlarge.logsearch.ingestor
 - cloud_properties:
     instance_type: t3.2xlarge
   name: t3.2xlarge
