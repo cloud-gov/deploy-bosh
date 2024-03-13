@@ -17,3 +17,7 @@
 - type: replace
   path: /instance_groups/name=bosh/properties/director/enable_cpi_resize_disk?
   value: true
+
+- type: replace
+  path: /tags?/cg_environment?
+  value: ((environment))
