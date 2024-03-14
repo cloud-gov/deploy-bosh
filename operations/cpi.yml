@@ -19,5 +19,5 @@
   value: true
 
 - type: replace
-  path: /tags?/cg_environment?
+  path: /tags?/environment?
   value: ((environment))
