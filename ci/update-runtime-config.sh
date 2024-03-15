@@ -18,7 +18,9 @@ popd
 bosh -n update-runtime-config \
   bosh-config/runtime-config/runtime.yml \
   --vars-env runtime \
+  --var=bosh_environment=${BOSH_ENV_NAME} \
   --vars-file terraform-yaml/state.yml
+
 
 bosh -n update-runtime-config --name dns \
   bosh-deployment/runtime-configs/dns.yml \
