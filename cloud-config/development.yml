@@ -1,6 +1,6 @@
 - type: replace
   path: /disk_types/name=logsearch_es_data/disk_size
-  value: 200_000
+  value: 300_000
 - type: replace
   path: /disk_types/name=logsearch_es_platform_data/disk_size
   value: 200_000
