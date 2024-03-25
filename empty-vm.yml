@@ -15,7 +15,7 @@ instance_groups:
         on_access_enabled: ((/clamav_onaccess_enabled))
         schedule_enabled: ((/clamav_schedule_enabled))
     release: clamav
-  name: empty-vm-bionic
+  name: empty-vm
   networks:
   - name: default
   persistent_disk: 10240
