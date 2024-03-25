@@ -129,7 +129,7 @@ jobs:
             trigger: true
           - get: common-master
             trigger: true
-          - get: cg-s3-fisma-jammy-releasse
+          - get: cg-s3-fisma-jammy-release
             trigger: true
           - get: cg-s3-awslogs-jammy-release
             trigger: true
