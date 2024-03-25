@@ -129,19 +129,13 @@ jobs:
             trigger: true
           - get: common-master
             trigger: true
-          - get: cg-s3-fisma-release
-            trigger: true
-          - get: cg-s3-fisma-jammy-release
-            trigger: true
-          - get: cg-s3-awslogs-bionic-release
+          - get: cg-s3-fisma-jammy-releasse
             trigger: true
           - get: cg-s3-awslogs-jammy-release
             trigger: true
           - get: cg-s3-nessus-agent-release
             trigger: true
           - get: cg-s3-clamav-release
-            trigger: true
-          - get: cg-s3-snort-release
             trigger: true
           - get: cg-s3-jammy-snort-release
             trigger: true

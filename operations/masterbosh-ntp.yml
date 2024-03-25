@@ -1,4 +1,4 @@
-# This works with chronyc to set NTP sources for chronyc on Bionic stemcell masterbosh using create-env
+# This works with chronyc to set NTP sources for chronyc on jammy stemcell masterbosh using create-env
 - type: replace
   path: /resource_pools/0/env/bosh/ntp?
   value:

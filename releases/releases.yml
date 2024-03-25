@@ -3,45 +3,39 @@ release_blobstore_bucket: cloud-gov-release-blobstore
 aws_region: us-gov-west-1
 
 releases:
-- name: fisma
-  uri: https://github.com/cloud-gov/cg-harden-boshrelease
-  branch: main
-- name: fisma-jammy
-  uri: https://github.com/cloud-gov/cg-harden-boshrelease
-  branch: jammy-main
-- name: nessus-agent
-  uri: https://github.com/cloud-gov/cg-nessus-agent-boshrelease
-  branch: main
-- name: awslogs-bionic
-  uri: https://github.com/cloud-gov/cg-awslogs-boshrelease
-  branch: bionic
-- name: awslogs-jammy
-  uri: https://github.com/cloud-gov/cg-awslogs-boshrelease
-  branch: jammy
-- name: clamav
-  uri: https://github.com/cloud-gov/cg-clamav-boshrelease
-  branch: main
-- name: nessus-manager
-  uri: https://github.com/cloud-gov/cg-nessus-manager-boshrelease
-  branch: main
-- name: shibboleth
-  uri: https://github.com/cloud-gov/shibboleth-boshrelease
-  branch: main
-- name: uaa-customized
-  uri: https://github.com/cloud-gov/uaa-customized-boshrelease
-  branch: main
-- name: cron
-  uri: https://github.com/cloud-gov/cron-boshrelease
-  branch: main
-- name: oauth2-proxy
-  uri: https://github.com/cloud-gov/oauth2-proxy-boshrelease
-  branch: main
-- name: postfix
-  uri: https://github.com/cloud-gov/postfix-boshrelease
-  branch: main
-- name: domain-broker
-  uri: https://github.com/cloud-gov/cf-domain-broker-alb-boshrelease
-  branch: main
-- name: aide
-  uri: https://github.com/cloud-gov/aide-boshrelease
-  branch: main
+  - name: fisma-jammy
+    uri: https://github.com/cloud-gov/cg-harden-boshrelease
+    branch: jammy-main
+  - name: nessus-agent
+    uri: https://github.com/cloud-gov/cg-nessus-agent-boshrelease
+    branch: main
+  - name: awslogs-jammy
+    uri: https://github.com/cloud-gov/cg-awslogs-boshrelease
+    branch: jammy
+  - name: clamav
+    uri: https://github.com/cloud-gov/cg-clamav-boshrelease
+    branch: main
+  - name: nessus-manager
+    uri: https://github.com/cloud-gov/cg-nessus-manager-boshrelease
+    branch: main
+  - name: shibboleth
+    uri: https://github.com/cloud-gov/shibboleth-boshrelease
+    branch: main
+  - name: uaa-customized
+    uri: https://github.com/cloud-gov/uaa-customized-boshrelease
+    branch: main
+  - name: cron
+    uri: https://github.com/cloud-gov/cron-boshrelease
+    branch: main
+  - name: oauth2-proxy
+    uri: https://github.com/cloud-gov/oauth2-proxy-boshrelease
+    branch: main
+  - name: postfix
+    uri: https://github.com/cloud-gov/postfix-boshrelease
+    branch: main
+  - name: domain-broker
+    uri: https://github.com/cloud-gov/cf-domain-broker-alb-boshrelease
+    branch: main
+  - name: aide
+    uri: https://github.com/cloud-gov/aide-boshrelease
+    branch: main

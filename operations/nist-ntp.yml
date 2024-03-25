@@ -1,4 +1,4 @@
-# This works with chronyc to set NTP sources for chronyc on Bionic stemcells
+# This works with chronyc to set NTP sources for chronyc on jammy stemcells
 - type: replace
   path: /instance_groups/name=bosh/properties/agent/env/bosh/ntp
   value:

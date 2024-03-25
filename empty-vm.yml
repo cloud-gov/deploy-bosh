@@ -1,34 +1,34 @@
 instance_groups:
-- azs:
-  - z1
-  instances: 1
-  jobs:
-  - name: clamav
-    properties:
-      clamav:
-        alert_on_stale_defs: ((/clamav_alert_on_stale_defs))
-        cron:
-          schedule: ((/clamav_cron_schedule))
-        dbMirror1: ((/clamav_mirror))
-        exclude_directories: ((/clamav_exclude_directories))
-        include_directories: ((/clamav_include_directories))
-        on_access_enabled: ((/clamav_onaccess_enabled))
-        schedule_enabled: ((/clamav_schedule_enabled))
-    release: clamav
-  name: empty-vm-bionic
-  networks:
-  - name: default
-  persistent_disk: 10240
-  stemcell: default
-  vm_type: t3.medium
+  - azs:
+      - z1
+    instances: 1
+    jobs:
+      - name: clamav
+        properties:
+          clamav:
+            alert_on_stale_defs: ((/clamav_alert_on_stale_defs))
+            cron:
+              schedule: ((/clamav_cron_schedule))
+            dbMirror1: ((/clamav_mirror))
+            exclude_directories: ((/clamav_exclude_directories))
+            include_directories: ((/clamav_include_directories))
+            on_access_enabled: ((/clamav_onaccess_enabled))
+            schedule_enabled: ((/clamav_schedule_enabled))
+        release: clamav
+    name: empty-vm
+    networks:
+      - name: default
+    persistent_disk: 10240
+    stemcell: default
+    vm_type: t3.medium
 name: empty-jammy-test
 releases:
-- name: clamav
-  version: 37
+  - name: clamav
+    version: 37
 stemcells:
-- alias: default
-  os: ubuntu-jammy
-  version: latest
+  - alias: default
+    os: ubuntu-jammy
+    version: latest
 update:
   canaries: 2
   canary_watch_time: 5000-60000

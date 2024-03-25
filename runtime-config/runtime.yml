@@ -1,159 +1,87 @@
 releases:
-- {name: fisma, version: ((release_fisma))}
-- {name: fisma-jammy, version: ((release_fisma_jammy))}
-- {name: aide, version: ((release_aide))}
-- {name: clamav, version: ((release_clamav))}
-- {name: snort, version: ((release_snort))}
-- {name: jammy-snort, version: ((release_jammy_snort))}
-- {name: awslogs-bionic, version: ((release_awslogs_bionic))}
-- {name: awslogs-jammy, version: ((release_awslogs_jammy))}
-- {name: nessus-agent, version: ((release_nessus_agent))}
-- {name: node-exporter, version: ((release_node_exporter))}
-- {name: syslog, version: ((release_syslog))}
+  - { name: fisma-jammy, version: ((release_fisma_jammy)) }
+  - { name: aide, version: ((release_aide)) }
+  - { name: clamav, version: ((release_clamav)) }
+  - { name: jammy-snort, version: ((release_jammy_snort)) }
+  - { name: awslogs-jammy, version: ((release_awslogs_jammy)) }
+  - { name: nessus-agent, version: ((release_nessus_agent)) }
+  - { name: node-exporter, version: ((release_node_exporter)) }
+  - { name: syslog, version: ((release_syslog)) }
 
 addons:
-- include:
-    stemcell:
-    - os: ubuntu-jammy
-  name: hardening-jammy
-  jobs:
-  - name: snort
-    release: jammy-snort
-  - name: clamav
-    release: clamav
-    properties:
-      clamav:
-        dbMirror1: ((/clamav_mirror))
-        alert_on_stale_defs: ((/clamav_alert_on_stale_defs))
-        schedule_enabled: ((/clamav_schedule_enabled))
-        on_access_enabled: ((/clamav_onaccess_enabled))
-        cron:
-          schedule: ((/clamav_cron_schedule))
-        include_directories: ((/clamav_include_directories))
-        exclude_directories: ((/clamav_exclude_directories))
-  - name: syslog_forwarder
-    properties:
-      syslog:
-        address: ((terraform_outputs.platform_syslog_elb_dns_name))
-        port: 5514
-    release: syslog
-  - name: aide
-    release: aide
-  - name: harden
-    release: fisma-jammy
-  - name: node_exporter
-    release: node-exporter
-  - name: nessus-agent
-    release: nessus-agent
-    properties:
-      nessus-agent:
-        key: ((/nessus_agent_key))
-        group: ((/nessus_agent_group))
-        server: ((terraform_outputs.nessus_static_ip))
-        port: 8834
-  - name: awslogs-jammy
-    release: awslogs-jammy
-    properties:
-      awslogs-jammy:
-        region: us-gov-west-1
-        awslogs_files_config:
-        - name: /var/log/audit/audit.log
-          file: /var/log/audit/audit.log
-          log_group_name: /var/log/audit/audit.log
-          log_stream_name: "{{instance_id}}"
-          initial_position: start_of_file
-          datetime_format: "%Y-%m-%dT%H:%M:%S"
-        - name: /var/log/auth.log
-          file: /var/log/auth.log
-          log_group_name: /var/log/auth.log
-          log_stream_name: "{{instance_id}}"
-          initial_position: start_of_file
-          datetime_format: "%Y-%m-%dT%H:%M:%S"
-        - name: /var/log/dpkg.log
-          file: /var/log/dpkg.log
-          log_group_name: /var/log/dpkg.log
-          log_stream_name: "{{instance_id}}"
-          initial_position: start_of_file
-          datetime_format: "%Y-%m-%dT%H:%M:%S"
-        - name: /var/log/syslog
-          file: /var/log/syslog
-          log_group_name: /var/log/syslog
-          log_stream_name: "{{instance_id}}"
-          initial_position: start_of_file
-          datetime_format: "%Y-%m-%dT%H:%M:%S"
-- include:
-    stemcell:
-    - os: ubuntu-bionic
-  name: hardening
-  jobs:
-  - name: harden
-    release: fisma
-  - name: aide
-    release: aide
-  - name: clamav
-    release: clamav
-    properties:
-      clamav:
-        dbMirror1: ((/clamav_mirror))
-        alert_on_stale_defs: ((/clamav_alert_on_stale_defs))
-        schedule_enabled: ((/clamav_schedule_enabled))
-        on_access_enabled: ((/clamav_onaccess_enabled))
-        cron:
-          schedule: ((/clamav_cron_schedule))
-        include_directories: ((/clamav_include_directories))
-        exclude_directories: ((/clamav_exclude_directories))
-  - name: snort
-    release: snort
-  - name: awslogs-bionic
-    release: awslogs-bionic
-    properties:
-      awslogs-bionic:
-        region: us-gov-west-1
-        awslogs_files_config:
-        - name: /var/log/audit/audit.log
-          file: /var/log/audit/audit.log
-          log_group_name: /var/log/audit/audit.log
-          log_stream_name: "{{instance_id}}"
-          initial_position: start_of_file
-          datetime_format: "%Y-%m-%dT%H:%M:%S"
-        - name: /var/log/auth.log
-          file: /var/log/auth.log
-          log_group_name: /var/log/auth.log
-          log_stream_name: "{{instance_id}}"
-          initial_position: start_of_file
-          datetime_format: "%Y-%m-%dT%H:%M:%S"
-        - name: /var/log/dpkg.log
-          file: /var/log/dpkg.log
-          log_group_name: /var/log/dpkg.log
-          log_stream_name: "{{instance_id}}"
-          initial_position: start_of_file
-          datetime_format: "%Y-%m-%dT%H:%M:%S"
-        - name: /var/log/syslog
-          file: /var/log/syslog
-          log_group_name: /var/log/syslog
-          log_stream_name: "{{instance_id}}"
-          initial_position: start_of_file
-          datetime_format: "%Y-%m-%dT%H:%M:%S"
-  - name: nessus-agent
-    release: nessus-agent
-    properties:
-      nessus-agent:
-        key: ((/nessus_agent_key))
-        group: ((/nessus_agent_group))
-        server: ((terraform_outputs.nessus_static_ip))
-        port: 8834
-  - name: node_exporter
-    release: node-exporter
-  - name: syslog_forwarder
-    release: syslog
-    properties:
-      syslog:
-        address: ((terraform_outputs.platform_syslog_elb_dns_name))
-        port: 5514
+  - include:
+      stemcell:
+        - os: ubuntu-jammy
+    name: hardening-jammy
+    jobs:
+      - name: snort
+        release: jammy-snort
+      - name: clamav
+        release: clamav
+        properties:
+          clamav:
+            dbMirror1: ((/clamav_mirror))
+            alert_on_stale_defs: ((/clamav_alert_on_stale_defs))
+            schedule_enabled: ((/clamav_schedule_enabled))
+            on_access_enabled: ((/clamav_onaccess_enabled))
+            cron:
+              schedule: ((/clamav_cron_schedule))
+            include_directories: ((/clamav_include_directories))
+            exclude_directories: ((/clamav_exclude_directories))
+      - name: syslog_forwarder
+        properties:
+          syslog:
+            address: ((terraform_outputs.platform_syslog_elb_dns_name))
+            port: 5514
+        release: syslog
+      - name: aide
+        release: aide
+      - name: harden
+        release: fisma-jammy
+      - name: node_exporter
+        release: node-exporter
+      - name: nessus-agent
+        release: nessus-agent
+        properties:
+          nessus-agent:
+            key: ((/nessus_agent_key))
+            group: ((/nessus_agent_group))
+            server: ((terraform_outputs.nessus_static_ip))
+            port: 8834
+      - name: awslogs-jammy
+        release: awslogs-jammy
+        properties:
+          awslogs-jammy:
+            region: us-gov-west-1
+            awslogs_files_config:
+              - name: /var/log/audit/audit.log
+                file: /var/log/audit/audit.log
+                log_group_name: /var/log/audit/audit.log
+                log_stream_name: "{{instance_id}}"
+                initial_position: start_of_file
+                datetime_format: "%Y-%m-%dT%H:%M:%S"
+              - name: /var/log/auth.log
+                file: /var/log/auth.log
+                log_group_name: /var/log/auth.log
+                log_stream_name: "{{instance_id}}"
+                initial_position: start_of_file
+                datetime_format: "%Y-%m-%dT%H:%M:%S"
+              - name: /var/log/dpkg.log
+                file: /var/log/dpkg.log
+                log_group_name: /var/log/dpkg.log
+                log_stream_name: "{{instance_id}}"
+                initial_position: start_of_file
+                datetime_format: "%Y-%m-%dT%H:%M:%S"
+              - name: /var/log/syslog
+                file: /var/log/syslog
+                log_group_name: /var/log/syslog
+                log_stream_name: "{{instance_id}}"
+                initial_position: start_of_file
+                datetime_format: "%Y-%m-%dT%H:%M:%S"
 tags:
   environment: ((bosh_environment))
 variables:
-- name: nessus_agent_key
-  type: password
-- name: nessus_agent_group
-  type: password
+  - name: nessus_agent_key
+    type: password
+  - name: nessus_agent_group
+    type: password
