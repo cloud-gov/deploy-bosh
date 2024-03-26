@@ -129,19 +129,13 @@ jobs:
       trigger: true
     - get: common-master
       trigger: true
-    - get: cg-s3-fisma-release
-      trigger: true
     - get: cg-s3-fisma-jammy-release
-      trigger: true
-    - get: cg-s3-awslogs-bionic-release
       trigger: true
     - get: cg-s3-awslogs-jammy-release
       trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
     - get: cg-s3-clamav-release
-      trigger: true
-    - get: cg-s3-snort-release
       trigger: true
     - get: cg-s3-jammy-snort-release
       trigger: true
@@ -168,13 +162,10 @@ jobs:
           tag: ((harden-concourse-task-tag))
       inputs:
       - {name: certificate}
-      - {name: cg-s3-fisma-release, path: releases/fisma}
       - {name: cg-s3-fisma-jammy-release, path: releases/fisma-jammy}
-      - {name: cg-s3-awslogs-bionic-release, path: releases/awslogs-bionic}
       - {name: cg-s3-awslogs-jammy-release, path: releases/awslogs-jammy}
       - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
       - {name: cg-s3-clamav-release, path: releases/clamav}
-      - {name: cg-s3-snort-release, path: releases/snort}
       - {name: cg-s3-jammy-snort-release, path: releases/jammy-snort}
       - {name: aide-release, path: releases/aide}
       - {name: cron-release, path: releases/cron}
@@ -307,15 +298,7 @@ jobs:
     - get: terraform-yaml
       trigger: true
       resource: terraform-yaml-production
-    - get: cg-s3-fisma-release
-      trigger: true
-      passed:
-      - common-releases-master
     - get: cg-s3-fisma-jammy-release
-      trigger: true
-      passed:
-      - common-releases-master
-    - get: cg-s3-awslogs-bionic-release
       trigger: true
       passed:
       - common-releases-master
@@ -328,10 +311,6 @@ jobs:
       passed:
       - common-releases-master
     - get: cg-s3-clamav-release
-      trigger: true
-      passed:
-      - common-releases-master
-    - get: cg-s3-snort-release
       trigger: true
       passed:
       - common-releases-master
@@ -364,13 +343,10 @@ jobs:
       <<: *upload-releases-config
       inputs:
       - {name: certificate}
-      - {name: cg-s3-fisma-release, path: releases/fisma}
       - {name: cg-s3-fisma-jammy-release, path: releases/fisma-jammy}
-      - {name: cg-s3-awslogs-bionic-release, path: releases/awslogs-bionic}
       - {name: cg-s3-awslogs-jammy-release, path: releases/awslogs-jammy}
       - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
       - {name: cg-s3-clamav-release, path: releases/clamav}
-      - {name: cg-s3-snort-release, path: releases/snort}
       - {name: cg-s3-jammy-snort-release, path: releases/jammy-snort}
       - {name: aide-release, path: releases/aide}
       - {name: cron-release, path: releases/cron}
@@ -466,15 +442,7 @@ jobs:
       - deploy-development-bosh
     - get: terraform-yaml
       resource: terraform-yaml-development
-    - get: cg-s3-fisma-release
-      trigger: true
-      passed:
-      - common-releases-tooling
     - get: cg-s3-fisma-jammy-release
-      trigger: true
-      passed:
-      - common-releases-tooling
-    - get: cg-s3-awslogs-bionic-release
       trigger: true
       passed:
       - common-releases-tooling
@@ -487,10 +455,6 @@ jobs:
       passed:
       - common-releases-tooling
     - get: cg-s3-clamav-release
-      trigger: true
-      passed:
-      - common-releases-tooling
-    - get: cg-s3-snort-release
       trigger: true
       passed:
       - common-releases-tooling
@@ -609,15 +573,7 @@ jobs:
       - deploy-staging-bosh
     - get: terraform-yaml
       resource: terraform-yaml-staging
-    - get: cg-s3-fisma-release
-      trigger: true
-      passed:
-      - common-releases-development
     - get: cg-s3-fisma-jammy-release
-      trigger: true
-      passed:
-      - common-releases-development
-    - get: cg-s3-awslogs-bionic-release
       trigger: true
       passed:
       - common-releases-development
@@ -630,10 +586,6 @@ jobs:
       passed:
       - common-releases-development
     - get: cg-s3-clamav-release
-      trigger: true
-      passed:
-      - common-releases-development
-    - get: cg-s3-snort-release
       trigger: true
       passed:
       - common-releases-development
@@ -748,15 +700,7 @@ jobs:
     - get: bosh-config
     - get: terraform-yaml
       resource: terraform-yaml-production
-    - get: cg-s3-fisma-release
-      trigger: true
-      passed:
-      - common-releases-staging
     - get: cg-s3-fisma-jammy-release
-      trigger: true
-      passed:
-      - common-releases-staging
-    - get: cg-s3-awslogs-bionic-release
       trigger: true
       passed:
       - common-releases-staging
@@ -769,10 +713,6 @@ jobs:
       passed:
       - common-releases-staging
     - get: cg-s3-clamav-release
-      trigger: true
-      passed:
-      - common-releases-staging
-    - get: cg-s3-snort-release
       trigger: true
       passed:
       - common-releases-staging
@@ -926,22 +866,10 @@ resources:
   source:
     url: ((slack-webhook-url))
 
-- name: cg-s3-fisma-release
-  type: s3-iam
-  source:
-    regexp: fisma-([0-9]+).tgz
-    <<: *s3-release-params
-
 - name: cg-s3-fisma-jammy-release
   type: s3-iam
   source:
     regexp: fisma-jammy-(.*).tgz
-    <<: *s3-release-params
-
-- name: cg-s3-awslogs-bionic-release
-  type: s3-iam
-  source:
-    regexp: awslogs-bionic-(.*).tgz
     <<: *s3-release-params
 
 - name: cg-s3-awslogs-jammy-release
@@ -960,12 +888,6 @@ resources:
   type: s3-iam
   source:
     regexp: clamav-(.*).tgz
-    <<: *s3-release-params
-
-- name: cg-s3-snort-release
-  type: s3-iam
-  source:
-    regexp: snort-(.*).tgz
     <<: *s3-release-params
 
 - name: cg-s3-jammy-snort-release
