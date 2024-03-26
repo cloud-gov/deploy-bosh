@@ -259,6 +259,11 @@ vm_types:
     instance_type: m6i.large
   name: m6i.large
 - cloud_properties:
+    ephemeral_disk:
+      size: 45000
+    instance_type: m6i.large
+  name: m6i.large.concourse.web
+- cloud_properties:
     instance_type: m6i.xlarge
   name: m6i.xlarge
 - cloud_properties:
