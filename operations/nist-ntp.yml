@@ -1,5 +1,5 @@
-# This works with chronyc to set NTP sources for chronyc on Jammy stemcells
-jammy: replace
+# This works with chronyc to set NTP sources for chronyc on Bionic stemcells
+- type: replace
   path: /instance_groups/name=bosh/properties/agent/env/bosh/ntp
   value:
     - server time-a.nist.gov
@@ -9,3 +9,4 @@ jammy: replace
     - server time-b-wwv.nist.gov
     - server time-c-wwv.nist.gov
     - server time-d-wwv.nist.gov
+    
