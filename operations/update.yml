@@ -7,4 +7,4 @@
     max_in_flight: 4
 - type: replace
   path: /instance_groups/name=bosh/vm_type
-  value: m5.xlarge.bosh.director
+  value: m6i.xlarge.bosh.director
