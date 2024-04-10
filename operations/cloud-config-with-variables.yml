@@ -25,8 +25,8 @@
   path: /instance_groups/name=bosh/persistent_disk_pool
 
 - type: replace
-  path: /instance_groups/name=bosh/vm_type?
-  value: bosh
+  path: /instance_groups/name=bosh/vm_type
+  value: ((instance_type))
 
 - type: replace
   path: /instance_groups/name=bosh/vm_extensions?
@@ -51,3 +51,14 @@
 
 - type: remove
   path: /variables/name=mbus_bootstrap_ssl
+
+- type: replace
+  path: /stemcells?
+  value:
+  - alias: default
+    os: ubuntu-jammy
+    version: latest
+
+- type: replace
+  path: /instance_groups/name=bosh/stemcell?
+  value: default
