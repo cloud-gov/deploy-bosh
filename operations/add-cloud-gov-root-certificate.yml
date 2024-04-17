@@ -1,9 +1,7 @@
 ---
 - type: replace
   path: /instance_groups/name=bosh/properties/director/trusted_certs?
-  value: |
-    ((/root-ca.ca))
-    ((/root-ca.certificate))
+  value: ((/root-ca.certificate))
 
 - type: remove
   path: /variables/name=default_ca
