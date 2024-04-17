@@ -14,24 +14,24 @@
 
 - type: replace
   path: /variables/name=mbus_bootstrap_ssl/options/ca
-  value: /root-ca
+  value: root-ca
 
 - type: replace
   path: /variables/name=director_ssl/options/ca
-  value: /root-ca
+  value: root-ca
 
 - type: replace
   path: /variables/name=nats_server_tls/options/ca
-  value: /root-ca
+  value: root-ca
 
 - type: replace
   path: /variables/name=nats_clients_director_tls/options/ca
-  value: /root-ca
+  value: root-ca
 
 - type: replace
   path: /variables/name=nats_clients_health_monitor_tls/options/ca
-  value: /root-ca
+  value: root-ca
 
 - type: replace
   path: /variables/name=blobstore_server_tls/options/ca
-  value: /root-ca
+  value: root-ca
