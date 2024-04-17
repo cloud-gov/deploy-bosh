@@ -1,10 +1,13 @@
 ---
-- type: replace
-  path: /instance_groups/name=bosh/properties/director/trusted_certs?
-  value: ((/root-ca.certificate))
-
-- type: remove
-  path: /variables/name=default_ca
+- path: /variables/name=default_ca?
+  type: replace
+  value:
+    name: default_ca
+    options:
+      common_name: ca
+      is_ca: true
+      duration: 3650
+    type: certificate
 
 - type: remove
   path: /variables/name=nats_ca
@@ -13,25 +16,21 @@
   path: /variables/name=blobstore_ca
 
 - type: replace
-  path: /variables/name=mbus_bootstrap_ssl/options/ca
-  value: /root-ca
-
-- type: replace
-  path: /variables/name=director_ssl/options/ca
-  value: /root-ca
-
-- type: replace
   path: /variables/name=nats_server_tls/options/ca
-  value: /root-ca
+  value: default_ca
 
 - type: replace
   path: /variables/name=nats_clients_director_tls/options/ca
-  value: /root-ca
+  value: default_ca
 
 - type: replace
   path: /variables/name=nats_clients_health_monitor_tls/options/ca
-  value: /root-ca
+  value: default_ca
 
 - type: replace
   path: /variables/name=blobstore_server_tls/options/ca
-  value: /root-ca
+  value: default_ca
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/director/trusted_certs?
+  value: ((default_ca.ca))
