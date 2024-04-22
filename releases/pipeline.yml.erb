@@ -65,6 +65,9 @@ jobs:
       resource: <%= release['name'] %>-releases-dir-tarball
   - task: finalize-release
     file: pipeline-tasks/finalize-bosh-release.yml
+    vars:
+      ecr_aws_key: ((aws.access_key_id))
+      ecr_aws_secret: ((aws.access_secret_key))
     tags: [iaas]
     params:
       PRIVATE_YML_CONTENT: |-
@@ -75,6 +78,7 @@ jobs:
             bucket_name: <%= release_blobstore_bucket %>
             credentials_source: env_or_profile
             server_side_encryption: AES256
+
   - in_parallel:
     - put: <%= release['name'] %>-release-tarball
       tags: [iaas]
