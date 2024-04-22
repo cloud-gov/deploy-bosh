@@ -11,7 +11,7 @@ resources:
   source:
     uri: https://github.com/cloud-gov/cg-pipeline-tasks
     branch: main
-    commit_verification_keys: ((cloud-gov-pgp-keys))
+    commit_verification_keys: ((commit_verification_keys))
 
 <% releases.map do |release| %>
 - name: <%= release['name'] %>-release-git-repo
@@ -19,7 +19,7 @@ resources:
   source:
     uri: <%= release['uri'] %>
     branch: <%= release['branch'] %>
-    commit_verification_keys: ((cloud-gov-pgp-keys))
+    commit_verification_keys: ((commit_verification_keys))
 
 - name: <%= release['name'] %>-release-tarball
   type: s3-iam

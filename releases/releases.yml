@@ -1,6 +1,6 @@
-bosh_release_bucket: cloud-gov-bosh-releases
-release_blobstore_bucket: cloud-gov-release-blobstore
-aws_region: us-gov-west-1
+bosh_release_bucket: ((bosh_director.releases_bucket))
+release_blobstore_bucket: ((bosh_director.release_blobstore_bucket))
+aws_region: ((aws.region))
 
 releases:
 - name: fisma-jammy
