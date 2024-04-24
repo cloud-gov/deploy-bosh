@@ -1,12 +1,5 @@
-- type: remove
-  path: /instance_groups/name=bosh/jobs/name=blobstore
+# As of 04/24/2024 we import the base s3-blobstore-instance-profile.yml from bosh-deployment and tweek it
 
-- type: replace
-  path: /instance_groups/name=bosh/properties/blobstore/provider
-  value: s3
-- type: replace
-  path: /instance_groups/name=bosh/properties/blobstore/credentials_source?
-  value: env_or_profile
 - type: replace
   path: /instance_groups/name=bosh/properties/blobstore/server_side_encryption?
   value: AES256
@@ -17,9 +10,6 @@
   path: /instance_groups/name=bosh/properties/blobstore/s3_region?
   value: ((terraform_outputs.vpc_region))
 
-- type: remove
-  path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores
-
 - type: replace
   path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores?/-
   value:
@@ -29,4 +19,3 @@
       region: ((terraform_outputs.vpc_region))
       credentials_source: env_or_profile
       server_side_encryption: AES256
-
