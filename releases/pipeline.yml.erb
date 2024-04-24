@@ -63,8 +63,8 @@ jobs:
   - task: finalize-release
     file: pipeline-tasks/finalize-bosh-release.yml
     vars:
-      ecr_aws_key: ((aws.access_key_id))
-      ecr_aws_secret: ((aws.secret_access_key))
+      ecr_aws_key: ((aws.registry_image.access_key_id))
+      ecr_aws_secret: ((aws.registry_image.secret_access_key))
     tags: [iaas]
     params:
       PRIVATE_YML_CONTENT: |-
