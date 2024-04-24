@@ -3,19 +3,13 @@
 - type: replace
   path: /instance_groups/name=bosh/properties/blobstore/server_side_encryption?
   value: AES256
-- type: replace
-  path: /instance_groups/name=bosh/properties/blobstore/bucket_name?
-  value: ((terraform_outputs.bosh_blobstore_bucket))
-- type: replace
-  path: /instance_groups/name=bosh/properties/blobstore/s3_region?
-  value: ((terraform_outputs.vpc_region))
 
 - type: replace
   path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores?/-
   value:
     provider: s3
     options:
-      bucket_name: ((terraform_outputs.bosh_blobstore_bucket))
-      region: ((terraform_outputs.vpc_region))
+      bucket_name: ((s3-bucket-name))
+      region: ((s3-region))
       credentials_source: env_or_profile
       server_side_encryption: AES256

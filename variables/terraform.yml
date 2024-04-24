@@ -1,2 +1,4 @@
 internal_ip: ((terraform_outputs.bosh_static_ip))
 dns_recursor_ip: ((terraform_outputs.vpc_cidr_dns))
+s3-bucket-name: ((terraform_outputs.bosh_blobstore_bucket))
+s3-region: ((terraform_outputs.vpc_region))
