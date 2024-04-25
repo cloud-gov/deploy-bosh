@@ -1,0 +1,350 @@
+---
+meta:
+  s3-release-params: &s3-release-params
+    bucket: ((hack.releases_bucket))
+    region_name: ((hack.region))
+    private: true
+
+jobs:
+# - name: deploy
+#   serial: true
+#   plan:
+#   - in_parallel:
+#     - get: bosh-deployment
+#       trigger: true
+#     - get: bosh-config-old
+#       resource: bosh-create-env-config
+#       trigger: true
+#     - get: bosh-config
+#       resource: bosh-create-env-config
+#       trigger: true
+#     - get: credentials
+#       trigger: true
+      
+#     - get: terraform-yaml
+#       trigger: true
+#       resource: terraform-yaml-tooling
+#     - get: bosh-state
+#       resource: masterbosh-state    
+#     - get: bosh-creds
+#       resource: masterbosh-creds
+#     - get: ca-cert-store
+#       trigger: true
+#     - get: nessus-agent-release
+#       resource: cg-s3-nessus-agent-release
+#       trigger: true
+#     - put: stemcell-lock-pool
+#       params:
+#         claim: updating-stemcells
+#   - task: terraform-secrets
+#     file: bosh-config/ci/terraform-secrets.yml
+#     params:
+#       VARS_FILE: terraform-master.yml
+#   - task: bosh-create-env
+#     file: bosh-config/bosh-create-env.yml
+#     tags: [iaas]
+#     params:
+#       COMMON_FILE: common/master-bosh.yml
+#       BOSH_NAME: master
+#     vars:
+#       nessus_agent_release_url: nessus-agent-release:url
+#   - task: update-cloud-config
+#     file: bosh-config/ci/update-cloud-config.yml
+#     params:
+#       OPS_PATHS: "bosh-config/cloud-config/master.yml"
+#       BOSH_CA_CERT: ((common_ca_cert_store))
+#       BOSH_ENVIRONMENT: ((masterbosh-target))
+#       BOSH_CLIENT: admin
+#       BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
+#   ensure:
+#     do:
+#     - put: masterbosh-state
+#       params:
+#         file: updated-bosh-state/*.json
+#     - put: masterbosh-creds
+#       params:    
+#         file: updated-bosh-creds/*.yml
+#     - put: stemcell-lock-pool
+#       params:
+#         release: stemcell-lock-pool
+#   on_failure:
+#     put: slack
+#     params:
+#       text: |
+#         :x: FAILED to deploy Master BOSH
+#         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+#       channel: '#cg-platform'
+#       username: ((slack-username))
+#       icon_url: ((slack-icon-url))
+#   on_success:
+#     put: slack
+#     params:
+#       text: |
+#         :white_check_mark: Successfully deployed Master BOSH
+#         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+#       channel: '#cg-platform-news'
+#       username: ((slack-username))
+#       icon_url: ((slack-icon-url))
+
+- name: upload-releases
+  serial: true
+  plan:
+  - in_parallel:
+    - get: fisma-jammy-release
+      trigger: true
+    - get: awslogs-jammy-release
+      trigger: true
+    - get: nessus-agent-release
+      trigger: true
+    - get: clamav-release
+      trigger: true
+    - get: jammy-snort-release
+      trigger: true
+    - get: aide-release
+      trigger: true
+    - get: cron-release
+      trigger: true
+    - get: syslog-release
+      trigger: true
+    - get: node-exporter-release
+      trigger: true
+  - task: upload-releases
+    config: &upload-releases-config
+      platform: linux
+      image_resource:
+        type: registry-image
+        source:
+          aws_access_key_id: ((hack.access_key_id))
+          aws_secret_access_key: ((hack.secret_access_key))
+          repository: harden-concourse-task
+          aws_region: ((hack.region))
+          tag: latest
+      inputs:
+      # - {name: certificate}
+      - {name: aide-release, path: releases/aide}
+      - {name: awslogs-jammy-release, path: releases/awslogs-jammy}
+      - {name: clamav-release, path: releases/clamav}
+      - {name: cron-release, path: releases/cron}
+      - {name: fisma-jammy-release, path: releases/fisma-jammy}
+      - {name: jammy-snort-release, path: releases/jammy-snort}
+      - {name: nessus-agent-release, path: releases/nessus-agent}
+      - {name: node-exporter-release, path: releases/node-exporter}
+      - {name: syslog-release, path: releases/syslog}
+      params:
+        BOSH_CA_CERT: ((bosh_director.ca_cert))
+        BOSH_CLIENT: ((bosh_director.client_id))
+        BOSH_CLIENT_SECRET: ((bosh_director.client_secret))
+        BOSH_ENVIRONMENT: ((bosh_director.target))
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          for release in releases/**/*.tgz; do
+            bosh upload-release "${release}"
+          done
+          bosh -n clean-up
+  # - task: update-runtime-config
+  #   file: bosh-config/ci/update-runtime-config.yml
+  #   input_mapping:
+  #     common: common-master
+  #   params:
+  #     BOSH_CA_CERT: ((common_ca_cert_store))
+  #     BOSH_ENVIRONMENT: ((masterbosh-target))
+  #     BOSH_CLIENT: admin
+  #     BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
+  #     BOSH_ENV_NAME: master
+
+resources:
+
+
+# - name: credentials # was common
+#   type: s3-iam
+#   source:
+#     bucket: ((secrets-bucket))
+#     region_name: ((aws_region))
+#     versioned_file: master-bosh.yml # bosh creds.yml
+
+# - name: state
+#   type: s3-iam
+#   source:
+#     bucket: ((secrets-bucket))
+#     region_name: ((aws_region))
+#     versioned_file: master-bosh-state.json # param name
+#     server_side_encryption: AES256
+
+# - name: masterbosh-creds # just has nats_syn_pwd?
+#   type: s3-iam
+#   source:
+#     bucket: ((secrets-bucket))
+#     region_name: ((aws_region))
+#     versioned_file: master-bosh-creds.yml
+#     server_side_encryption: AES256
+
+# - name: ca-cert-store
+#   type: s3-iam
+#   source:
+#     bucket: ((secrets-bucket))
+#     region_name: ((aws_region))
+#     versioned_file: ca-cert-store.crt #unk
+
+# Releases
+- name: aide-release
+  type: s3-iam
+  source:
+    regexp: aide-(.*).tgz
+    <<: *s3-release-params
+- name: awslogs-jammy-release
+  type: s3-iam
+  source:
+    regexp: awslogs-jammy-(.*).tgz
+    <<: *s3-release-params
+- name: clamav-release
+  type: s3-iam
+  source:
+    regexp: clamav-(.*).tgz
+    <<: *s3-release-params
+- name: cron-release
+  type: s3-iam
+  source:
+    regexp: cron-(.*).tgz
+    <<: *s3-release-params
+- name: fisma-jammy-release
+  type: s3-iam
+  source:
+    regexp: fisma-jammy-(.*).tgz
+    <<: *s3-release-params
+- name: jammy-snort-release
+  type: s3-iam
+  source:
+    regexp: jammy-snort-(.*).tgz
+    <<: *s3-release-params
+- name: nessus-agent-release
+  type: s3-iam
+  source:
+    regexp: nessus-agent-(.*).tgz
+    <<: *s3-release-params 
+- name: node-exporter-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-community/node-exporter-boshrelease
+- name: syslog-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/syslog-release
+
+
+
+
+# - name: toolbelt-release
+#   type: bosh-io-release
+#   source:
+#     repository: cloudfoundry-community/toolbelt-boshrelease
+
+# - name: terraform-state-yaml
+#   type: s3-iam
+#   source:
+#     bucket: ((tf_state_bucket))
+#     versioned_file: ((tf_state_file))
+#     region_name: ((aws_region))
+
+
+# - name: toolingbosh-deployment
+#   type: bosh-deployment
+#   source:
+#     target: ((bosh_target))
+#     client: admin
+#     client_secret: ((bosh_admin_password))
+#     ca_cert: ((common_ca_cert_store))
+#     deployment: toolingbosh
+
+# - name: bosh-deployment-source
+#   type: git
+#   source:
+#     uri: https://github.com/cloudfoundry/bosh-deployment.git
+#     branch: master
+
+# - name: bosh-config
+#   type: git
+#   source:
+#     commit_verification_keys: ((cloud_gov_pgp_keys))
+#     uri: ((bosh_config_git_url))
+#     branch: ((bosh_config_git_branch))
+
+# - name: bosh-create-env-config
+#   type: git
+#   source:
+#     commit_verification_keys: ((cloud_gov_pgp_keys))
+#     uri: ((bosh_config_git_url))
+#     branch: ((bosh_config_git_branch))
+#     paths:
+#     - bosh-create-env*
+#     - cloud-config/*
+#     - operations/*
+
+# - name: bosh-stemcell-jammy
+#   type: bosh-io-stemcell
+#   source:
+#     name: bosh-aws-xen-hvm-ubuntu-jammy-go_agent
+
+
+# - name: slack
+#   type: slack-notification
+#   source:
+#     url: ((slack_webhook_url))
+
+# - name: stemcell-lock-pool
+#   type: pool
+#   source:
+#     uri: git@github.com:cloud-gov/concourse-locks.git
+#     branch: ((concourse_locks_branch)) # main is protected, so use a topic branch
+#     pool: stemcell
+#     username: cg-ci-bot
+#     private_key: ((cg-ci-bot-sshkey.private_key))
+#     git_config:
+#       - name: "user.name"
+#         value: "cg-ci-bot"
+#       - name: "user.email"
+#         value: "no-reply@cloud.gov"
+
+resource_types:
+- name: registry-image
+  type: registry-image
+  source:
+    aws_access_key_id: ((hack.access_key_id))
+    aws_secret_access_key: ((hack.secret_access_key))
+    repository: registry-image-resource
+    aws_region: ((hack.region))
+    tag: latest
+
+# - name: bosh-deployment
+#   type: docker-image
+#   source:
+#     repository: cloudfoundry/bosh-deployment-resource
+
+# - name: slack-notification
+#   type: registry-image
+#   source:
+#     aws_access_key_id: ((ecr_aws_key))
+#     aws_secret_access_key: ((ecr_aws_secret))
+#     repository: slack-notification-resource
+#     aws_region: ((aws_region))
+#     tag: latest
+
+- name: s3-iam
+  type: registry-image
+  source:
+    aws_access_key_id: ((hack.access_key_id))
+    aws_secret_access_key: ((hack.secret_access_key))
+    repository: s3-resource
+    aws_region: ((hack.region))
+    tag: latest
+
+# - name: semver-iam
+#   type: registry-image
+#   source:
+#     aws_access_key_id: ((ecr_aws_key))
+#     aws_secret_access_key: ((ecr_aws_secret))
+#     repository: semver-resource
+#     aws_region: ((aws_region))
+#     tag: latest
