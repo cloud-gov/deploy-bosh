@@ -1,7 +1,7 @@
 ---
 meta:
   s3-release-params: &s3-release-params
-    bucket: ((hack.releases_bucket))
+    bucket: ((aws.releases_bucket))
     region_name: ((aws.region))
     private: true
 
@@ -114,8 +114,8 @@ jobs:
       image_resource:
         type: registry-image
         source:
-          aws_access_key_id: ((aws.access_key_id))
-          aws_secret_access_key: ((aws.secret_access_key))
+          aws_access_key_id: ((hack.access_key_id))
+          aws_secret_access_key: ((hack.secret_access_key))
           repository: harden-concourse-task
           aws_region: ((aws.region))
           tag: latest
@@ -308,14 +308,14 @@ resources:
 #         value: "no-reply@cloud.gov"
 
 resource_types:
-- name: registry-image
-  type: registry-image
-  source:
-    aws_access_key_id: ((hack.access_key_id))
-    aws_secret_access_key: ((hack.secret_access_key))
-    repository: registry-image-resource
-    aws_region: ((aws.region))
-    tag: latest
+# - name: registry-image
+#   type: registry-image
+#   source:
+#     aws_access_key_id: ((hack.access_key_id))
+#     aws_secret_access_key: ((hack.secret_access_key))
+#     repository: registry-image-resource
+#     aws_region: ((aws.region))
+#     tag: latest
 
 # - name: bosh-deployment
 #   type: docker-image
@@ -334,8 +334,8 @@ resource_types:
 - name: s3-iam
   type: registry-image
   source:
-    aws_access_key_id: ((hack.access_key_id))
-    aws_secret_access_key: ((hack.secret_access_key))
+    aws_access_key_id: ((aws.access_key_id))
+    aws_secret_access_key: ((aws.secret_access_key))
     repository: s3-resource
     aws_region: ((aws.region))
     tag: latest
