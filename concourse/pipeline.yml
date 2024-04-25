@@ -1,7 +1,7 @@
 ---
 meta:
   s3-release-params: &s3-release-params
-    bucket: ((aws.releases_bucket))
+    bucket: ((bosh_director.releases_bucket))
     region_name: ((aws.region))
     private: true
 
