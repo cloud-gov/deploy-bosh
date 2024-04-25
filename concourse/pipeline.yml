@@ -1,8 +1,8 @@
 ---
 meta:
   s3-release-params: &s3-release-params
-    bucket: ((hack.releases_bucket))
-    region_name: ((hack.region))
+    bucket: ((bosh_director.releases_bucket))
+    region_name: ((aws.region))
     private: true
 
 jobs:
@@ -114,10 +114,10 @@ jobs:
       image_resource:
         type: registry-image
         source:
-          aws_access_key_id: ((hack.access_key_id))
-          aws_secret_access_key: ((hack.secret_access_key))
+          aws_access_key_id: ((aws.access_key_id))
+          aws_secret_access_key: ((aws.secret_access_key))
           repository: harden-concourse-task
-          aws_region: ((hack.region))
+          aws_region: ((aws.region))
           tag: latest
       inputs:
       # - {name: certificate}
@@ -311,10 +311,10 @@ resource_types:
 - name: registry-image
   type: registry-image
   source:
-    aws_access_key_id: ((hack.access_key_id))
-    aws_secret_access_key: ((hack.secret_access_key))
+    aws_access_key_id: ((aws.access_key_id))
+    aws_secret_access_key: ((aws.secret_access_key))
     repository: registry-image-resource
-    aws_region: ((hack.region))
+    aws_region: ((aws.region))
     tag: latest
 
 # - name: bosh-deployment
@@ -334,10 +334,10 @@ resource_types:
 - name: s3-iam
   type: registry-image
   source:
-    aws_access_key_id: ((hack.access_key_id))
-    aws_secret_access_key: ((hack.secret_access_key))
+    aws_access_key_id: ((aws.access_key_id))
+    aws_secret_access_key: ((aws.secret_access_key))
     repository: s3-resource
-    aws_region: ((hack.region))
+    aws_region: ((aws.region))
     tag: latest
 
 # - name: semver-iam
