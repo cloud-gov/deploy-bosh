@@ -10,8 +10,8 @@ releases:
 
 addons:
 - include:
-    stemcell:
-    - os: ubuntu-jammy
+    # stemcell:
+    # - os: ubuntu-jammy
   name: hardening-jammy
   jobs:
   - name: snort
