@@ -48,7 +48,7 @@ addons:
   #       group: ((/nessus_agent_group))
   #       server: ((terraform_outputs.nessus_static_ip))
   #       port: 8834
-  - name: awslogs
+  - name: awslogs-jammy
     release: awslogs
     properties:
       awslogs-jammy:
