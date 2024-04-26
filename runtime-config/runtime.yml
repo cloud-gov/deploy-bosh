@@ -9,10 +9,10 @@ releases:
 # - {name: syslog, version: ((release_syslog))}
 
 addons:
-- include:
+# - include:
     # stemcell:
     # - os: ubuntu-jammy
-  name: hardening-jammy
+- name: hardening-jammy
   jobs:
   - name: snort
     release: snort
