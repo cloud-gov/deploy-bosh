@@ -249,7 +249,6 @@ jobs:
       - bosh-config/operations/dns.yml
       - bosh-config/operations/nist-ntp.yml
       - bosh-config/operations/add-new-saml-key.yml
-      - bosh-config/operations/remove-old-blobstore-ca.yml
       - bosh-config/operations/add-cloud-gov-root-certificate.yml
       vars_files:
       - bosh-config/variables/tooling.yml
