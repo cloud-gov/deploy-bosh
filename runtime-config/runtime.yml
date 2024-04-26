@@ -1,5 +1,5 @@
 releases:
-- {name: fisma-jammy, version: latest}
+- {name: fisma, version: latest}
 - {name: aide, version: latest}
 - {name: clamav, version: latest}
 - {name: jammy-snort, version: latest}
@@ -37,7 +37,7 @@ addons:
   - name: aide
     release: aide
   - name: harden
-    release: fisma-jammy
+    release: fisma
   # - name: node_exporter
   #   release: node-exporter
   # - name: nessus-agent
