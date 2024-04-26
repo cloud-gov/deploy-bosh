@@ -48,10 +48,10 @@ addons:
   #       group: ((/nessus_agent_group))
   #       server: ((terraform_outputs.nessus_static_ip))
   #       port: 8834
-  - name: awslogs
-    release: awslogs
+  - name: awslogs-jammy
+    release: awslogs-jammy
     properties:
-      awslogs:
+      awslogs-jammy:
         region: ((/aws.region))
         awslogs_files_config:
         - name: /var/log/audit/audit.log
