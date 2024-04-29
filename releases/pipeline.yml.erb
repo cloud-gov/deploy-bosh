@@ -24,6 +24,7 @@ resources:
 - name: <%= release['name'] %>-release-tarball
   type: s3-iam
   source:
+    check_every: never
     bucket: <%= bosh_release_bucket %>
     regexp: <%= release['name'] %>-(.*).tgz
     region_name: <%= aws_region %>
@@ -32,6 +33,7 @@ resources:
 - name: <%= release['name'] %>-final-builds-dir-tarball
   type: s3-iam
   source:
+    check_every: never
     bucket: <%= bosh_release_bucket %>
     versioned_file: final-builds-dir-<%= release['name'] %>.tgz
     region_name: <%= aws_region %>
@@ -40,6 +42,7 @@ resources:
 - name: <%= release['name'] %>-releases-dir-tarball
   type: s3-iam
   source:
+    check_every: never
     bucket: <%= bosh_release_bucket %>
     versioned_file: releases-dir-<%= release['name'] %>.tgz
     region_name: <%= aws_region %>
@@ -54,7 +57,9 @@ jobs:
     - get: release-git-repo
       resource: <%= release['name'] %>-release-git-repo
       trigger: true
+      params: {depth: 1}
     - get: pipeline-tasks
+      params: {depth: 1}
     - get: final-builds-dir-tarball
       resource: <%= release['name'] %>-final-builds-dir-tarball
     - get: releases-dir-tarball
