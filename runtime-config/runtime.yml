@@ -2,10 +2,10 @@ releases:
 - {name: fisma-jammy, version: ((release_version.fisma-jammy))}
 - {name: aide, version: ((release_version.aide))}
 # - {name: clamav, version: ((release_version.clamav))}
-- {name: jammy-snort, version: ((release_version.jammy-snort))}
+# - {name: jammy-snort, version: ((release_version.jammy-snort))}
 - {name: awslogs-jammy, version: ((release_version.awslogs-jammy))}
 # - {name: nessus-agent, version: ((release_nessus_agent))}
-# - {name: node-exporter, version: ((release_node_exporter))}
+- {name: node-exporter, version: ((release_node_exporter))}
 # - {name: syslog, version: ((release_syslog))}
 
 addons:
@@ -14,8 +14,8 @@ addons:
     # - os: ubuntu-jammy
 - name: hardening-jammy
   jobs:
-  - name: snort
-    release: jammy-snort
+  # - name: snort
+  #   release: jammy-snort
   # - name: clamav
   #   release: clamav
   #   properties:
