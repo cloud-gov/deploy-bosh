@@ -5,7 +5,7 @@ releases:
 # - {name: jammy-snort, version: ((release_version.jammy-snort))}
 - {name: awslogs-jammy, version: ((release_version.awslogs-jammy))}
 # - {name: nessus-agent, version: ((release_nessus_agent))}
-- {name: node-exporter, version: ((release_node_exporter))}
+- {name: node-exporter, version: ((release_version.node_exporter))}
 # - {name: syslog, version: ((release_syslog))}
 
 addons:
@@ -38,8 +38,8 @@ addons:
     release: aide
   - name: harden
     release: fisma-jammy
-  # - name: node_exporter
-  #   release: node-exporter
+  - name: node_exporter
+    release: node-exporter
   # - name: nessus-agent
   #   release: nessus-agent
   #   properties:
