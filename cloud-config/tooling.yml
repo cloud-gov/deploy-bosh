@@ -94,7 +94,7 @@
           security_groups:
             - ((terraform_outputs.bosh_security_group))
             - ((terraform_outputs.production_concourse_pages_security_group))
-            - ((terraform_outputs.production_pages_credhub_security_group))
+            - ((terraform_outputs.production_credhub_security_group))
 - type: replace
   path: /networks/-
   value:
