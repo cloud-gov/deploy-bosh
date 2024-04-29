@@ -83,8 +83,8 @@
     name: production-concourse-pages
     type: manual
     subnets:
-      - range: ((terraform_outputs.production_concourse__pages_subnet_cidr))
-        gateway: ((terraform_outputs.production_concourse__pages_subnet_gateway))
+      - range: ((terraform_outputs.production_concourse_pages_subnet_cidr))
+        gateway: ((terraform_outputs.production_concourse_pages_subnet_gateway))
         reserved:
           - ((terraform_outputs.production_concourse_pages_subnet_reserved))
         az: z1
