@@ -80,6 +80,24 @@
 - type: replace
   path: /networks/-
   value:
+    name: production-concourse-pages
+    type: manual
+    subnets:
+      - range: ((terraform_outputs.production_concourse__pages_subnet_cidr))
+        gateway: ((terraform_outputs.production_concourse__pages_subnet_gateway))
+        reserved:
+          - ((terraform_outputs.production_concourse_pages_subnet_reserved))
+        az: z1
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.production_concourse_pages_subnet))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.production_concourse_pages_security_group))
+            - ((terraform_outputs.production_pages_credhub_security_group))
+- type: replace
+  path: /networks/-
+  value:
     name: staging-monitoring
     type: dynamic
     subnets:
@@ -381,6 +399,13 @@
     cloud_properties:
       lb_target_groups:
         - ((terraform_outputs.production_concourse_lb_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: production-concourse-pages-lb
+    cloud_properties:
+      lb_target_groups:
+        - ((terraform_outputs.production_concourse_pages_lb_target_group))
 - type: replace
   path: /vm_extensions/-
   value:
