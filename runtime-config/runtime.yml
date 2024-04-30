@@ -44,8 +44,8 @@ addons:
     release: nessus-agent
     properties:
       nessus-agent:
-        key: ((/nessus_agent_key))
-        group: ((/nessus_agent_group))
+        key: ((/nessus_agent.key))
+        group: ((/nessus_agent.group))
         server: ((/nessus_manager.ip))
         port: 8834
   - name: awslogs-jammy
@@ -81,8 +81,3 @@ addons:
 tags:
   environment: ((/bosh_director.ip))
 
-variables:
-- name: nessus_agent_key
-  type: password
-- name: nessus_agent_group
-  type: password
