@@ -1,12 +1,12 @@
 releases:
 - {name: fisma-jammy, version: ((release_version.fisma-jammy))}
 - {name: aide, version: ((release_version.aide))}
-# - {name: clamav, version: ((release_version.clamav))}
-# - {name: jammy-snort, version: ((release_version.jammy-snort))}
+- {name: clamav, version: ((release_version.clamav))}
+- {name: jammy-snort, version: ((release_version.jammy-snort))}
 - {name: awslogs-jammy, version: ((release_version.awslogs-jammy))}
-# - {name: nessus-agent, version: ((release_nessus_agent))}
-# - {name: node-exporter, version: ((release_version.node_exporter))}
-# - {name: syslog, version: ((release_syslog))}
+- {name: nessus-agent, version: ((release_version.nessus_agent))}
+- {name: node-exporter, version: ((release_version.node_exporter))}
+- {name: syslog, version: ((release_version.syslog))}
 
 addons:
 # - include:
@@ -14,40 +14,40 @@ addons:
     # - os: ubuntu-jammy
 - name: hardening-jammy
   jobs:
-  # - name: snort
-  #   release: jammy-snort
-  # - name: clamav
-  #   release: clamav
-  #   properties:
-  #     clamav:
-  #       dbMirror1: ((/clamav.mirror))
-  #       alert_on_stale_defs: ((/clamav.alert_on_stale_defs))
-  #       schedule_enabled: ((/clamav.schedule_enabled))
-  #       on_access_enabled: ((/clamav.onaccess_enabled))
-  #       cron:
-  #         schedule: ((/clamav.cron_schedule))
-  #       include_directories: ((/clamav.include_directories))
-  #       exclude_directories: ((/clamav.exclude_directories))
-  # - name: syslog_forwarder
-  #   properties:
-  #     syslog:
-  #       address: ((terraform_outputs.platform_syslog_elb_dns_name))
-  #       port: 5514
-  #   release: syslog
+  - name: snort
+    release: jammy-snort
+  - name: clamav
+    release: clamav
+    properties:
+      clamav:
+        dbMirror1: ((/clamav.mirror))
+        alert_on_stale_defs: ((/clamav.alert_on_stale_defs))
+        schedule_enabled: ((/clamav.schedule_enabled))
+        on_access_enabled: ((/clamav.onaccess_enabled))
+        cron:
+          schedule: ((/clamav.cron_schedule))
+        include_directories: ((/clamav.include_directories))
+        exclude_directories: ((/clamav.exclude_directories))
+  - name: syslog_forwarder
+    properties:
+      syslog:
+        address: ((terraform_outputs.platform_syslog_elb_dns_name))
+        port: 5514
+    release: syslog
   - name: aide
     release: aide
   - name: harden
     release: fisma-jammy
-  # - name: node_exporter
-  #   release: node-exporter
-  # - name: nessus-agent
-  #   release: nessus-agent
-  #   properties:
-  #     nessus-agent:
-  #       key: ((/nessus_agent_key))
-  #       group: ((/nessus_agent_group))
-  #       server: ((terraform_outputs.nessus_static_ip))
-  #       port: 8834
+  - name: node_exporter
+    release: node-exporter
+  - name: nessus-agent
+    release: nessus-agent
+    properties:
+      nessus-agent:
+        key: ((/nessus_agent_key))
+        group: ((/nessus_agent_group))
+        server: ((terraform_outputs.nessus_static_ip))
+        port: 8834
   - name: awslogs-jammy
     release: awslogs-jammy
     properties:
@@ -81,8 +81,8 @@ addons:
 tags:
   environment: ((/bosh_director.ip))
 
-# variables:
-# - name: nessus_agent_key
-#   type: password
-# - name: nessus_agent_group
-#   type: password
+variables:
+- name: nessus_agent_key
+  type: password
+- name: nessus_agent_group
+  type: password
