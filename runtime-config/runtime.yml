@@ -4,8 +4,8 @@ releases:
 - {name: clamav, version: ((release_version.clamav))}
 - {name: jammy-snort, version: ((release_version.jammy-snort))}
 - {name: awslogs-jammy, version: ((release_version.awslogs-jammy))}
-- {name: nessus-agent, version: ((release_version.nessus_agent))}
-- {name: node-exporter, version: ((release_version.node_exporter))}
+- {name: nessus-agent, version: ((release_version.nessus-agent))}
+- {name: node-exporter, version: ((release_version.node-exporter))}
 - {name: syslog, version: ((release_version.syslog))}
 
 addons:
