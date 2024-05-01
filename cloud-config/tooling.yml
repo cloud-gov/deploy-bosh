@@ -87,7 +87,7 @@
         gateway: ((terraform_outputs.production_concourse_pages_subnet_gateway))
         reserved:
           - ((terraform_outputs.production_concourse_pages_subnet_reserved))
-        az: z1
+        az: z2
         dns: [((terraform_outputs.vpc_cidr_dns))]
         cloud_properties:
           subnet: ((terraform_outputs.production_concourse_pages_subnet))
