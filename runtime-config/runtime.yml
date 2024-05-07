@@ -1,10 +1,10 @@
 releases:
 - {name: fisma-jammy, version: ((release_version.fisma-jammy))}
 - {name: aide, version: ((release_version.aide))}
-# - {name: clamav, version: ((release_version.clamav))}
+- {name: clamav, version: ((release_version.clamav))}
 - {name: jammy-snort, version: ((release_version.jammy-snort))}
-- {name: awslogs-jammy, version: ((release_version.awslogs-jammy))}
-- {name: nessus-agent, version: ((release_version.nessus-agent))}
+# - {name: awslogs-jammy, version: ((release_version.awslogs-jammy))}
+# - {name: nessus-agent, version: ((release_version.nessus-agent))}
 - {name: node-exporter, version: ((release_version.node-exporter))}
 # - {name: syslog, version: ((release_version.syslog))}
 
@@ -16,18 +16,18 @@ addons:
   jobs:
   - name: snort
     release: jammy-snort
-  # - name: clamav
-  #   release: clamav
-  #   properties:
-  #     clamav:
-  #       dbMirror1: ((/clamav.mirror))
-  #       alert_on_stale_defs: ((/clamav.alert_on_stale_defs))
-  #       schedule_enabled: ((/clamav.schedule_enabled))
-  #       on_access_enabled: ((/clamav.onaccess_enabled))
-  #       cron:
-  #         schedule: ((/clamav.cron_schedule))
-  #       include_directories: ((/clamav.include_directories))
-  #       exclude_directories: ((/clamav.exclude_directories))
+  - name: clamav
+    release: clamav
+    properties:
+      clamav:
+        dbMirror1: ((/clamav.mirror))
+        alert_on_stale_defs: ((/clamav.alert_on_stale_defs))
+        schedule_enabled: ((/clamav.schedule_enabled))
+        on_access_enabled: ((/clamav.onaccess_enabled))
+        cron:
+          schedule: ((/clamav.cron_schedule))
+        include_directories: ((/clamav.include_directories))
+        exclude_directories: ((/clamav.exclude_directories))
   # - name: syslog_forwarder
   #   properties:
   #     syslog:
@@ -40,44 +40,44 @@ addons:
     release: fisma-jammy
   - name: node_exporter
     release: node-exporter
-  - name: nessus-agent
-    release: nessus-agent
-    properties:
-      nessus-agent:
-        key: ((/nessus_agent.key))
-        group: ((/nessus_agent.group))
-        server: ((/nessus_manager.ip))
-        port: 8834
-  - name: awslogs-jammy
-    release: awslogs-jammy
-    properties:
-      awslogs-jammy:
-        region: ((/aws.region))
-        awslogs_files_config:
-        - name: /var/log/audit/audit.log
-          file: /var/log/audit/audit.log
-          log_group_name: /var/log/audit/audit.log
-          log_stream_name: "{{instance_id}}"
-          initial_position: start_of_file
-          datetime_format: "%Y-%m-%dT%H:%M:%S"
-        - name: /var/log/auth.log
-          file: /var/log/auth.log
-          log_group_name: /var/log/auth.log
-          log_stream_name: "{{instance_id}}"
-          initial_position: start_of_file
-          datetime_format: "%Y-%m-%dT%H:%M:%S"
-        - name: /var/log/dpkg.log
-          file: /var/log/dpkg.log
-          log_group_name: /var/log/dpkg.log
-          log_stream_name: "{{instance_id}}"
-          initial_position: start_of_file
-          datetime_format: "%Y-%m-%dT%H:%M:%S"
-        - name: /var/log/syslog
-          file: /var/log/syslog
-          log_group_name: /var/log/syslog
-          log_stream_name: "{{instance_id}}"
-          initial_position: start_of_file
-          datetime_format: "%Y-%m-%dT%H:%M:%S"
+  # - name: nessus-agent
+  #   release: nessus-agent
+  #   properties:
+  #     nessus-agent:
+  #       key: ((/nessus_agent.key))
+  #       group: ((/nessus_agent.group))
+  #       server: ((/nessus_manager.ip))
+  #       port: 8834
+  # - name: awslogs-jammy
+  #   release: awslogs-jammy
+  #   properties:
+  #     awslogs-jammy:
+  #       region: ((/aws.region))
+  #       awslogs_files_config:
+  #       - name: /var/log/audit/audit.log
+  #         file: /var/log/audit/audit.log
+  #         log_group_name: /var/log/audit/audit.log
+  #         log_stream_name: "{{instance_id}}"
+  #         initial_position: start_of_file
+  #         datetime_format: "%Y-%m-%dT%H:%M:%S"
+  #       - name: /var/log/auth.log
+  #         file: /var/log/auth.log
+  #         log_group_name: /var/log/auth.log
+  #         log_stream_name: "{{instance_id}}"
+  #         initial_position: start_of_file
+  #         datetime_format: "%Y-%m-%dT%H:%M:%S"
+  #       - name: /var/log/dpkg.log
+  #         file: /var/log/dpkg.log
+  #         log_group_name: /var/log/dpkg.log
+  #         log_stream_name: "{{instance_id}}"
+  #         initial_position: start_of_file
+  #         datetime_format: "%Y-%m-%dT%H:%M:%S"
+  #       - name: /var/log/syslog
+  #         file: /var/log/syslog
+  #         log_group_name: /var/log/syslog
+  #         log_stream_name: "{{instance_id}}"
+  #         initial_position: start_of_file
+  #         datetime_format: "%Y-%m-%dT%H:%M:%S"
 tags:
   environment: ((/bosh_director.ip))
 
