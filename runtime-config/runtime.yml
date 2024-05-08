@@ -1,7 +1,7 @@
 releases:
 - {name: fisma-jammy, version: ((release_version.fisma-jammy))}
 - {name: aide, version: ((release_version.aide))}
-- {name: clamav, version: ((release_version.clamav))}
+# - {name: clamav, version: ((release_version.clamav))}
 - {name: jammy-snort, version: ((release_version.jammy-snort))}
 # - {name: awslogs-jammy, version: ((release_version.awslogs-jammy))}
 # - {name: nessus-agent, version: ((release_version.nessus-agent))}
@@ -16,18 +16,18 @@ addons:
   jobs:
   - name: snort
     release: jammy-snort
-  - name: clamav
-    release: clamav
-    properties:
-      clamav:
-        dbMirror1: ((/clamav.mirror))
-        alert_on_stale_defs: ((/clamav.alert_on_stale_defs))
-        schedule_enabled: ((/clamav.schedule_enabled))
-        on_access_enabled: ((/clamav.onaccess_enabled))
-        cron:
-          schedule: ((/clamav.cron_schedule))
-        include_directories: ((/clamav.include_directories))
-        exclude_directories: ((/clamav.exclude_directories))
+  # - name: clamav
+  #   release: clamav
+  #   properties:
+  #     clamav:
+  #       dbMirror1: ((/clamav.mirror))
+  #       alert_on_stale_defs: ((/clamav.alert_on_stale_defs))
+  #       schedule_enabled: ((/clamav.schedule_enabled))
+  #       on_access_enabled: ((/clamav.onaccess_enabled))
+  #       cron:
+  #         schedule: ((/clamav.cron_schedule))
+  #       include_directories: ((/clamav.include_directories))
+  #       exclude_directories: ((/clamav.exclude_directories))
   # - name: syslog_forwarder
   #   properties:
   #     syslog:
