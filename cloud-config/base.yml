@@ -415,6 +415,12 @@ vm_types:
     instance_type: r6i.2xlarge
   name: r6i.2xlarge
 - cloud_properties:
+    instance_type: r6i.4xlarge
+  name: r6i.4xlarge
+- cloud_properties:
+    instance_type: r6i.8xlarge
+  name: r6i.8xlarge
+- cloud_properties:
     instance_type: r6i.large
     ephemeral_disk:
       size: 10000
