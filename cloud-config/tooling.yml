@@ -321,6 +321,14 @@
 - type: replace
   path: /vm_types/-
   value:
+    name: m6i.large.nessus.manager
+    cloud_properties:
+      instance_type: m6i.large
+      ephemeral_disk:
+        size: 30_000
+- type: replace
+  path: /vm_types/-
+  value:
     <<: *concourse-iaas-worker-vm
     name: production-concourse-iaas-worker
 
