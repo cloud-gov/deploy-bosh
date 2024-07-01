@@ -230,6 +230,7 @@ jobs:
     - get: toolbelt-release
     - get: general-task
   - task: terraform-secrets
+    image: general-task
     file: bosh-config/ci/terraform-secrets.yml
   - put: toolingbosh-deployment
     params: &bosh-deployment
