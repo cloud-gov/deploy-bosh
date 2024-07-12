@@ -1,0 +1,95 @@
+jobs:
+
+- name: terraform-plan
+  plan:
+  - in_parallel:
+    - get: terraform
+      trigger: true
+    - get: cg-provision-repo
+  - task: terraform-plan
+    tags: [iaas]
+    file: cg-provision-repo/concourse/tasks/terraform.yml
+    input_mapping: {terraform-templates: terraform}
+    params: 
+      AWS_REGION: ((aws.region))
+      COMPONENT: bosh-compiled-releases
+      S3_TFSTATE_BUCKET: common-terraform-state
+      TEMPLATE_SUBDIR: compiled-releases/primordial/terraform
+      TERRAFORM_ACTION: plan
+      TF_VAR_bucket_name: bosh-compiled-releases
+    vars: 
+      access_key_id: ((hack.access_key_id))
+      region: ((hack.region))
+      secret_access_key: ((hack.secret_access_key))
+
+- name: terraform-apply
+  plan:
+  - in_parallel:
+    - get: terraform
+      passed: [terraform-plan]
+    - get: cg-provision-repo
+      passed: [terraform-plan]
+  - task: terraform-plan
+    tags: [iaas]
+    file: cg-provision-repo/concourse/tasks/terraform.yml
+    input_mapping: {terraform-templates: terraform}
+    params: 
+      AWS_REGION: ((aws.region))
+      COMPONENT: bosh-compiled-releases
+      S3_TFSTATE_BUCKET: common-terraform-state
+      TEMPLATE_SUBDIR: compiled-releases/primordial/terraform
+      TERRAFORM_ACTION: apply
+      TF_VAR_bucket_name: bosh-compiled-releases
+    vars: 
+      access_key_id: ((hack.access_key_id))
+      region: ((hack.region))
+      secret_access_key: ((hack.secret_access_key))
+
+
+resources:
+
+- name: terraform
+  type: git
+  source:
+    branch: f140
+    commit_verification_keys: ((commit_verification_keys))
+    paths: ["compiled-releases/primordial/terraform/*"]
+    private_key: ((cg_ci_bot_ssh_pk))
+    uri: git@github.com:cloud-gov/cg-deploy-bosh.git
+
+- name: general-task
+  type: registry-image
+  source:
+    aws_access_key_id: ((hack.access_key_id))
+    aws_secret_access_key: ((hack.secret_access_key))
+    repository: general-task
+    aws_region: ((aws.region))
+    tag: latest
+
+- name: cg-provision-repo
+  type: git
+  source:
+    branch: f140
+    commit_verification_keys: ((commit_verification_keys))
+    paths: ["concourse/tasks/terraform.*"]
+    uri: https://github.com/cloud-gov/cg-provision.git
+
+resource_types:
+
+- name: git
+  type: registry-image
+  source:
+    aws_access_key_id: ((hack.access_key_id))
+    aws_secret_access_key: ((hack.secret_access_key))
+    repository: git-resource
+    aws_region: ((aws.region))
+    tag: latest
+
+- name: registry-image
+  type: registry-image
+  source:
+    aws_access_key_id: ((hack.access_key_id))
+    aws_secret_access_key: ((hack.secret_access_key))
+    repository: registry-image-resource
+    aws_region: ((aws.region))
+    tag: latest
