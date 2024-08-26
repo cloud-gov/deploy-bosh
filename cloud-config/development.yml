@@ -6,7 +6,7 @@
   value: 200_000
 - type: replace
   path: /disk_types/name=logs_opensearch_os_data/disk_size
-  value: 150_000
+  value: 400_000
 - type: replace
   path: /disk_types/name=logs_opensearch_os_platform_data/disk_size
   value: 200_000
