@@ -94,18 +94,27 @@ jobs:
         - put: masterbosh-creds
           params:
             file: updated-bosh-creds/*.yml
+    on_error:
+      put: stemcell-lock-pool
+      params:
+        release: stemcell-lock-pool
+    on_abort:
+      put: stemcell-lock-pool
+      params:
+        release: stemcell-lock-pool
+    on_failure:
+      do:
+        - put: slack
+          params:
+            text: |
+              :x: FAILED to deploy Master BOSH
+              <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+            channel: "#cg-platform"
+            username: ((slack-username))
+            icon_url: ((slack-icon-url))
         - put: stemcell-lock-pool
           params:
             release: stemcell-lock-pool
-    on_failure:
-      put: slack
-      params:
-        text: |
-          :x: FAILED to deploy Master BOSH
-          <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-        channel: "#cg-platform"
-        username: ((slack-username))
-        icon_url: ((slack-icon-url))
     on_success:
       put: slack
       params:
@@ -204,6 +213,18 @@ jobs:
           BOSH_CLIENT: admin
           BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
           BOSH_ENV_NAME: master
+    on_error:
+      put: stemcell-lock-pool
+      params:
+        release: stemcell-lock-pool
+    on_abort:
+      put: stemcell-lock-pool
+      params:
+        release: stemcell-lock-pool
+    on_failure:
+      put: stemcell-lock-pool
+      params:
+        release: stemcell-lock-pool
 
   - name: deploy-tooling-bosh
     serial: true
@@ -277,15 +298,27 @@ jobs:
           BOSH_ENVIRONMENT: ((toolingbosh-target))
           BOSH_CLIENT: ci
           BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
-    on_failure:
-      put: slack
+    on_error:
+      put: stemcell-lock-pool
       params:
-        text: |
-          :x: FAILED to deploy Tooling BOSH
-          <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-        channel: "#cg-platform"
-        username: ((slack-username))
-        icon_url: ((slack-icon-url))
+        release: stemcell-lock-pool
+    on_abort:
+      put: stemcell-lock-pool
+      params:
+        release: stemcell-lock-pool
+    on_failure:
+      do:
+        - put: slack
+          params:
+            text: |
+              :x: FAILED to deploy Tooling BOSH
+              <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+            channel: "#cg-platform"
+            username: ((slack-username))
+            icon_url: ((slack-icon-url))
+        - put: stemcell-lock-pool
+          params:
+            release: stemcell-lock-pool
     on_success:
       put: slack
       params:
@@ -383,6 +416,18 @@ jobs:
           BOSH_CLIENT: ci
           BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
           BOSH_ENV_NAME: tooling
+    on_error:
+      put: stemcell-lock-pool
+      params:
+        release: stemcell-lock-pool
+    on_abort:
+      put: stemcell-lock-pool
+      params:
+        release: stemcell-lock-pool
+    on_failure:
+      put: stemcell-lock-pool
+      params:
+        release: stemcell-lock-pool
 
   - name: deploy-development-bosh
     serial: true
@@ -429,14 +474,18 @@ jobs:
           BOSH_CLIENT: ci
           BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
     on_failure:
-      put: slack
-      params:
-        text: |
-          :x: FAILED to deploy development BOSH
-          <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-        channel: "#cg-platform-news"
-        username: ((slack-username))
-        icon_url: ((slack-icon-url))
+      do:
+        - put: slack
+          params:
+            text: |
+              :x: FAILED to deploy development BOSH
+              <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+            channel: "#cg-platform-news"
+            username: ((slack-username))
+            icon_url: ((slack-icon-url))
+        - put: stemcell-lock-pool
+          params:
+            release: stemcell-lock-pool
     on_success:
       put: slack
       params:
@@ -519,6 +568,18 @@ jobs:
           BOSH_CLIENT: ci
           BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
           BOSH_ENV_NAME: development
+    on_error:
+      put: stemcell-lock-pool
+      params:
+        release: stemcell-lock-pool
+    on_abort:
+      put: stemcell-lock-pool
+      params:
+        release: stemcell-lock-pool
+    on_failure:
+      put: stemcell-lock-pool
+      params:
+        release: stemcell-lock-pool
 
   - name: deploy-staging-bosh
     serial: true
@@ -565,14 +626,18 @@ jobs:
           BOSH_CLIENT: ci
           BOSH_CLIENT_SECRET: ((staging_bosh_uaa_ci_client_secret))
     on_failure:
-      put: slack
-      params:
-        text: |
-          :x: FAILED to deploy Staging BOSH
-          <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-        channel: "#cg-platform-news"
-        username: ((slack-username))
-        icon_url: ((slack-icon-url))
+      do:
+        - put: slack
+          params:
+            text: |
+              :x: FAILED to deploy Staging BOSH
+              <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+            channel: "#cg-platform-news"
+            username: ((slack-username))
+            icon_url: ((slack-icon-url))
+        - put: stemcell-lock-pool
+          params:
+            release: stemcell-lock-pool
     on_success:
       put: slack
       params:
@@ -656,6 +721,18 @@ jobs:
           BOSH_CLIENT: ci
           BOSH_CLIENT_SECRET: ((staging_bosh_uaa_ci_client_secret))
           BOSH_ENV_NAME: staging
+    on_error:
+      put: stemcell-lock-pool
+      params:
+        release: stemcell-lock-pool
+    on_abort:
+      put: stemcell-lock-pool
+      params:
+        release: stemcell-lock-pool
+    on_failure:
+      put: stemcell-lock-pool
+      params:
+        release: stemcell-lock-pool
 
   - name: deploy-production-bosh
     serial: true
@@ -702,14 +779,18 @@ jobs:
           BOSH_CLIENT: ci
           BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
     on_failure:
-      put: slack
-      params:
-        text: |
-          :x: FAILED to deploy production BOSH
-          <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-        channel: "#cg-platform"
-        username: ((slack-username))
-        icon_url: ((slack-icon-url))
+      do:
+        - put: slack
+          params:
+            text: |
+              :x: FAILED to deploy production BOSH
+              <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+            channel: "#cg-platform"
+            username: ((slack-username))
+            icon_url: ((slack-icon-url))
+        - put: stemcell-lock-pool
+          params:
+            release: stemcell-lock-pool
     on_success:
       put: slack
       params:
@@ -787,6 +868,10 @@ jobs:
           BOSH_CLIENT: ci
           BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
           BOSH_ENV_NAME: production
+    ensure:
+      put: stemcell-lock-pool
+      params:
+        release: stemcell-lock-pool
 
 resources:
   - name: ca-cert-store
