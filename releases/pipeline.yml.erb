@@ -97,6 +97,7 @@ jobs:
             region: <%= aws_region %>
             bucket_name: <%= release_blobstore_bucket %>
             credentials_source: env_or_profile
+            host: <%= aws_s3_endpoint %>
             server_side_encryption: AES256
   - in_parallel:
     - put: <%= release['name'] %>-release-tarball
