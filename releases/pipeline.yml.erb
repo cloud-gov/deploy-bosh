@@ -51,6 +51,7 @@ resources:
     regexp: <%= release['name'] %>-(.*).tgz
     region_name: <%= aws_region %>
     server_side_encryption: AES256
+    endpoint: <%= aws_s3_endpoint %>
 
 - name: <%= release['name'] %>-final-builds-dir-tarball
   type: s3-iam
@@ -60,6 +61,7 @@ resources:
     versioned_file: final-builds-dir-<%= release['name'] %>.tgz
     region_name: <%= aws_region %>
     server_side_encryption: AES256
+    endpoint: <%= aws_s3_endpoint %>
 
 - name: <%= release['name'] %>-releases-dir-tarball
   type: s3-iam
@@ -69,6 +71,7 @@ resources:
     versioned_file: releases-dir-<%= release['name'] %>.tgz
     region_name: <%= aws_region %>
     server_side_encryption: AES256
+    endpoint: <%= aws_s3_endpoint %>
 <% end %>
 
 jobs:
