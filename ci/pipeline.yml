@@ -3,6 +3,7 @@ meta:
   s3-release-params: &s3-release-params
     bucket: ((s3-bosh-releases-bucket))
     region_name: ((aws-region))
+    endpoint: s3-fips.((aws-region)).amazonaws.com
     private: true
 groups:
 - name: all
@@ -789,6 +790,7 @@ resources:
     bucket: ((secrets-bucket))
     region_name: ((aws-region))
     versioned_file: ca-cert-store.crt
+    endpoint: s3-fips.((aws-region)).amazonaws.com
 
 - name: common-master
   type: s3-iam
@@ -796,6 +798,7 @@ resources:
     bucket: ((secrets-bucket))
     region_name: ((aws-region))
     versioned_file: master-bosh.yml
+    endpoint: s3-fips.((aws-region)).amazonaws.com
 
 - name: masterbosh-state
   type: s3-iam
@@ -804,6 +807,7 @@ resources:
     region_name: ((aws-region))
     versioned_file: master-bosh-state.json
     server_side_encryption: AES256
+    endpoint: s3-fips.((aws-region)).amazonaws.com
 
 - name: masterbosh-creds
   type: s3-iam
@@ -812,6 +816,7 @@ resources:
     region_name: ((aws-region))
     versioned_file: master-bosh-creds.yml
     server_side_encryption: AES256
+    endpoint: s3-fips.((aws-region)).amazonaws.com
 
 - name: cron-release
   type: s3-iam
@@ -941,6 +946,7 @@ resources:
     bucket: ((tf-state-bucket))
     versioned_file: ((tf-state-file-tooling))
     region_name: ((aws-region))
+    endpoint: s3-fips.((aws-region)).amazonaws.com
 
 - name: terraform-yaml-development
   type: s3-iam
@@ -948,6 +954,7 @@ resources:
     bucket: ((tf-state-bucket))
     versioned_file: ((tf-state-file-development))
     region_name: ((aws-region))
+    endpoint: s3-fips.((aws-region)).amazonaws.com
 
 - name: terraform-yaml-staging
   type: s3-iam
@@ -955,6 +962,7 @@ resources:
     bucket: ((tf-state-bucket))
     versioned_file: ((tf-state-file-staging))
     region_name: ((aws-region))
+    endpoint: s3-fips.((aws-region)).amazonaws.com
 
 - name: terraform-yaml-production
   type: s3-iam
@@ -962,6 +970,7 @@ resources:
     bucket: ((tf-state-bucket))
     versioned_file: ((tf-state-file-production))
     region_name: ((aws-region))
+    endpoint: s3-fips.((aws-region)).amazonaws.com
 
 - name: toolbelt-release
   type: bosh-io-release
