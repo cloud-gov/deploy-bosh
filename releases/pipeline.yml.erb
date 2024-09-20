@@ -51,7 +51,7 @@ resources:
     regexp: <%= release['name'] %>-(.*).tgz
     region_name: <%= aws_region %>
     server_side_encryption: AES256
-    endpoint: <%= aws_s3_endpoint %>
+    endpoint: s3-fips.<%= aws_region %>.amazonaws.com
 
 - name: <%= release['name'] %>-final-builds-dir-tarball
   type: s3-iam
@@ -61,7 +61,7 @@ resources:
     versioned_file: final-builds-dir-<%= release['name'] %>.tgz
     region_name: <%= aws_region %>
     server_side_encryption: AES256
-    endpoint: <%= aws_s3_endpoint %>
+    endpoint: s3-fips.<%= aws_region %>.amazonaws.com
 
 - name: <%= release['name'] %>-releases-dir-tarball
   type: s3-iam
@@ -71,7 +71,7 @@ resources:
     versioned_file: releases-dir-<%= release['name'] %>.tgz
     region_name: <%= aws_region %>
     server_side_encryption: AES256
-    endpoint: <%= aws_s3_endpoint %>
+    endpoint: s3-fips.<%= aws_region %>.amazonaws.com
 <% end %>
 
 jobs:
@@ -100,7 +100,7 @@ jobs:
             region: <%= aws_region %>
             bucket_name: <%= release_blobstore_bucket %>
             credentials_source: env_or_profile
-            host: <%= aws_s3_endpoint %>
+            host: s3-fips.<%= aws_region %>.amazonaws.com
             server_side_encryption: AES256
   - in_parallel:
     - put: <%= release['name'] %>-release-tarball
