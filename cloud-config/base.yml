@@ -113,6 +113,15 @@ vm_types:
     instance_type: c6i.xlarge
   name: c6i.xlarge
 - cloud_properties:
+    instance_type: c6id.2xlarge
+  name: c6id.2xlarge
+- cloud_properties:
+    instance_type: c6id.large
+  name: c6id.large
+- cloud_properties:
+    instance_type: c6id.xlarge
+  name: c6id.xlarge
+- cloud_properties:
     instance_type: m4.10xlarge
   name: m4.10xlarge
 - cloud_properties:
