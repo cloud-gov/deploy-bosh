@@ -28,7 +28,7 @@
       bucket_name: ((terraform_outputs.protobosh_blobstore_bucket))
       region: ((terraform_outputs.vpc_region))
       credentials_source: env_or_profile
-      server_side_encryption: AES256
+      server_side_encryption: ((sse_algorithm))
 
 - type: remove
   path: /resource_pools/name=vms/env/bosh/blobstores
@@ -41,4 +41,4 @@
       bucket_name: ((terraform_outputs.protobosh_blobstore_bucket))
       region: ((terraform_outputs.vpc_region))
       credentials_source: env_or_profile
-      server_side_encryption: AES256
+      server_side_encryption: ((sse_algorithm))
