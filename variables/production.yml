@@ -5,3 +5,5 @@ network: production-bosh
 instance_profile: production-bosh-profile
 gateway_host: prometheus-production.service.cf.internal
 gateway_deployment: ""
+blobstore:
+  server_side_encryption: "AES256"
