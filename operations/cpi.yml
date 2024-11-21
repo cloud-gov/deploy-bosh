@@ -21,3 +21,12 @@
 - type: replace
   path: /tags?/environment?
   value: ((environment))
+
+# Forces IMDSv2
+- type: replace
+  path: /instance_groups/name=bosh/properties/aws/metadata_options?/http_tokens?
+  value: required
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/aws/metadata_options?/http_put_response_hop_limit?
+  value: 2
