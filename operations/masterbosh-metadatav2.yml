@@ -1,0 +1,7 @@
+- type: replace
+  path: /cloud_provider/properties/aws/metadata_options?/http_tokens?
+  value: required
+
+- type: replace
+  path: /cloud_provider/properties/aws/metadata_options?/http_put_response_hop_limit?
+  value: 2
