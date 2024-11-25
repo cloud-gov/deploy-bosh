@@ -34,6 +34,7 @@ groups:
 jobs:
 - name: deploy-master-bosh
   serial: true
+  serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -118,6 +119,7 @@ jobs:
 
 - name: common-releases-master
   serial: true
+  serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
     - get: certificate
@@ -204,6 +206,7 @@ jobs:
 
 - name: deploy-tooling-bosh
   serial: true
+  serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
     - get: ca-cert-store
@@ -295,6 +298,7 @@ jobs:
 
 - name: common-releases-tooling
   serial: true
+  serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
     - get: certificate
@@ -380,6 +384,7 @@ jobs:
 
 - name: deploy-development-bosh
   serial: true
+  serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
     - get: ca-cert-store
@@ -443,6 +448,7 @@ jobs:
 
 - name: common-releases-development
   serial: true
+  serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
     - get: certificate
@@ -516,6 +522,7 @@ jobs:
 
 - name: deploy-staging-bosh
   serial: true
+  serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
     - get: ca-cert-store
@@ -579,6 +586,7 @@ jobs:
 
 - name: common-releases-staging
   serial: true
+  serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
     - get: certificate
@@ -653,6 +661,7 @@ jobs:
 
 - name: deploy-production-bosh
   serial: true
+  serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
     - get: ca-cert-store
@@ -716,6 +725,7 @@ jobs:
 
 - name: common-releases-production
   serial: true
+  serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
     - get: certificate
