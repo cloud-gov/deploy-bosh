@@ -146,13 +146,6 @@
 - type: replace
   path: /vm_extensions/-
   value:
-    name: logs_opensearch-lb
-    cloud_properties:
-      elbs:
-      - ((terraform_outputs.logs_opensearch_elb_name))
-- type: replace
-  path: /vm_extensions/-
-  value:
     name: platform-syslog-lb
     cloud_properties:
       elbs:
