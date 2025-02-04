@@ -943,7 +943,7 @@ resources:
 - name: node-exporter-release
   type: bosh-io-release
   source:
-    repository: cloudfoundry-community/node-exporter-boshrelease
+    repository: cloudfoundry/node-exporter-boshrelease
 
 - name: terraform-yaml-tooling
   type: s3-iam
