@@ -40,6 +40,3 @@ releases:
 - name: aide
   uri: https://github.com/cloud-gov/aide-boshrelease
   branch: main
-- name: wazuh-agent
-  uri: https://github.com/cloud-gov/wazuh-agent
-  branch: main
