@@ -422,7 +422,7 @@ jobs:
     image: general-task
     file: bosh-config/ci/update-cloud-config.yml
     params:
-      OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/development.yml"
+      OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/development.yml bosh-config/cloud-config/root-disk.yml"
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((developmentbosh-target))
       BOSH_CLIENT: ci
@@ -560,7 +560,7 @@ jobs:
     image: general-task
     file: bosh-config/ci/update-cloud-config.yml
     params:
-      OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/staging.yml"
+      OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/staging.yml bosh-config/cloud-config/root-disk.yml"
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((stagingbosh-target))
       BOSH_CLIENT: ci
