@@ -1,0 +1,64 @@
+- type: replace
+  path: /vm_extensions/-
+  value:
+    cloud_properties:
+      root_disk:
+        size: 10240
+    name: 10GB_root_disk
+
+- type: replace
+  path: /vm_extensions/-
+  value:
+    cloud_properties:
+      root_disk:
+        size: 15360
+    name: 15GB_root_disk
+
+
+- type: replace
+  path: /vm_extensions/-
+  value:
+    cloud_properties:
+      root_disk:
+        size: 20480
+    name: 20GB_root_disk
+
+- type: replace
+  path: /vm_extensions/-
+  value:
+    cloud_properties:
+      root_disk:
+        size: 30720
+    name: 30GB_root_disk
+
+- type: replace
+  path: /vm_extensions/-
+  value:
+    cloud_properties:
+      root_disk:
+        size: 40960
+    name: 40GB_root_disk
+
+- type: replace
+  path: /vm_extensions/-
+  value:
+    cloud_properties:
+      root_disk:
+        size: 51200
+    name: 50GB_root_disk
+
+- type: replace
+  path: /vm_extensions/-
+  value:
+    cloud_properties:
+      root_disk:
+        size: 102400
+    name: 100GB_root_disk
+
+- type: replace
+  path: /vm_extensions/-
+  value:
+    cloud_properties:
+      root_disk:
+        size: 204800
+    name: 200GB_root_disk
