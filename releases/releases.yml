@@ -40,3 +40,6 @@ releases:
 - name: aide
   uri: https://github.com/cloud-gov/aide-boshrelease
   branch: main
+- name: postgres-client
+  uri: https://github.com/cloud-gov/postgres-client-boshrelease
+  branch: main
