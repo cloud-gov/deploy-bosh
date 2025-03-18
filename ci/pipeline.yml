@@ -151,6 +151,8 @@ jobs:
       trigger: true
     - get: syslog-release
       trigger: true
+    - get: postgres-client-release
+      trigger: true
     - get: node-exporter-release
       trigger: true
     - get: masterbosh-state
@@ -178,6 +180,7 @@ jobs:
       - {name: cron-release, path: releases/cron}
       - {name: node-exporter-release, path: releases/node-exporter}
       - {name: syslog-release, path: releases/syslog}
+      - {name: postgres-client-release, path: releases/postgres-client}
       params:
         BOSH_CA_CERT: ((common_ca_cert_store))
         BOSH_CLIENT: admin
@@ -336,6 +339,10 @@ jobs:
       trigger: true
       passed:
       - common-releases-master
+    - get: postgres-client-release
+      trigger: true
+      passed:
+      - common-releases-master
     - get: cron-release
       trigger: true
       passed:
@@ -367,6 +374,7 @@ jobs:
       - {name: cron-release, path: releases/cron}
       - {name: node-exporter-release, path: releases/node-exporter}
       - {name: syslog-release, path: releases/syslog}
+      - {name: postgres-client-release, path: releases/postgres-client}
       params:
         BOSH_CA_CERT: ((common_ca_cert_store))
         BOSH_CLIENT: ci
@@ -484,6 +492,10 @@ jobs:
       passed:
       - common-releases-tooling
     - get: aide-release
+      trigger: true
+      passed:
+      - common-releases-tooling
+    - get: postgres-client-release
       trigger: true
       passed:
       - common-releases-tooling
@@ -621,8 +633,11 @@ jobs:
       trigger: true
       passed:
       - common-releases-development
-
     - get: aide-release
+      trigger: true
+      passed:
+      - common-releases-development
+    - get: postgres-client-release
       trigger: true
       passed:
       - common-releases-development
@@ -756,6 +771,10 @@ jobs:
       passed:
       - common-releases-staging
     - get: aide-release
+      trigger: true
+      passed:
+      - common-releases-staging
+    - get: postgres-client-release
       trigger: true
       passed:
       - common-releases-staging
@@ -938,6 +957,12 @@ resources:
   type: s3-iam
   source:
     regexp: aide-(.*).tgz
+    <<: *s3-release-params
+
+- name: postgres-client-release
+  type: s3-iam
+  source:
+    regexp: postgres-client-(.*).tgz
     <<: *s3-release-params
 
 - name: node-exporter-release
