@@ -41,7 +41,7 @@
               export PGPASSWORD=${PGPASSWORD}
 
               # apps from other packages on this host we need
-              PSQL=/var/vcap/packages/toolbelt-psql/bin/psql
+              PSQL=/var/vcap/packages/postgres-client/bin/psql
 
               AWSCLI=/var/vcap/packages/awslogs-jammy/venv/bin/aws
               export LD_LIBRARY_PATH=/var/vcap/packages/awslogs-jammy/venv/lib
