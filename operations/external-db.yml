@@ -13,13 +13,13 @@
 - type: replace
   path: /instance_groups/name=bosh/jobs/-
   value:
-    name: toolbelt-psql
-    release: toolbelt
+    name: postgres-client
+    release: postgres-client
 
 - type: replace
   path: /releases/-
   value:
-    name: toolbelt
+    name: postgres-client
     version: latest
 
 - type: replace

@@ -107,15 +107,6 @@ jobs:
       channel: '#cg-platform'
       username: ((slack-username))
       icon_url: ((slack-icon-url))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully deployed Master BOSH
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: '#cg-platform-news'
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
 
 - name: common-releases-master
   serial: true
@@ -151,6 +142,8 @@ jobs:
       trigger: true
     - get: syslog-release
       trigger: true
+    - get: postgres-client-release
+      trigger: true
     - get: node-exporter-release
       trigger: true
     - get: masterbosh-state
@@ -178,6 +171,7 @@ jobs:
       - {name: cron-release, path: releases/cron}
       - {name: node-exporter-release, path: releases/node-exporter}
       - {name: syslog-release, path: releases/syslog}
+      - {name: postgres-client-release, path: releases/postgres-client}
       params:
         BOSH_CA_CERT: ((common_ca_cert_store))
         BOSH_CLIENT: admin
@@ -230,7 +224,6 @@ jobs:
       trigger: true
     - get: terraform-yaml-production
       trigger: true
-    - get: toolbelt-release
     - get: general-task
   - task: terraform-secrets
     image: general-task
@@ -266,8 +259,6 @@ jobs:
       - bosh-config/variables/tooling.yml
       - terraform-secrets/terraform.yml
       - terraform-yaml/state.yml
-      releases:
-      - toolbelt-release/*.tgz
   - task: update-cloud-config
     image: general-task
     file: bosh-config/ci/update-cloud-config-tooling.yml
@@ -284,15 +275,6 @@ jobs:
         :x: FAILED to deploy Tooling BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: '#cg-platform'
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully deployed Tooling BOSH
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: '#cg-platform-news'
       username: ((slack-username))
       icon_url: ((slack-icon-url))
 
@@ -336,6 +318,10 @@ jobs:
       trigger: true
       passed:
       - common-releases-master
+    - get: postgres-client-release
+      trigger: true
+      passed:
+      - common-releases-master
     - get: cron-release
       trigger: true
       passed:
@@ -356,17 +342,6 @@ jobs:
   - task: upload-releases
     config:
       <<: *upload-releases-config
-      inputs:
-      - {name: certificate}
-      - {name: cg-s3-fisma-jammy-release, path: releases/fisma-jammy}
-      - {name: cg-s3-awslogs-jammy-release, path: releases/awslogs-jammy}
-      - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
-      - {name: cg-s3-clamav-release, path: releases/clamav}
-      - {name: cg-s3-jammy-snort-release, path: releases/jammy-snort}
-      - {name: aide-release, path: releases/aide}
-      - {name: cron-release, path: releases/cron}
-      - {name: node-exporter-release, path: releases/node-exporter}
-      - {name: syslog-release, path: releases/syslog}
       params:
         BOSH_CA_CERT: ((common_ca_cert_store))
         BOSH_CLIENT: ci
@@ -404,9 +379,6 @@ jobs:
     - get: terraform-yaml
       trigger: true
       resource: terraform-yaml-development
-    - get: toolbelt-release
-      passed:
-      - deploy-tooling-bosh
     - get: general-task
   - task: terraform-secrets
     image: general-task
@@ -432,15 +404,6 @@ jobs:
     params:
       text: |
         :x: FAILED to deploy development BOSH
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: '#cg-platform-news'
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully deployed development BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: '#cg-platform-news'
       username: ((slack-username))
@@ -484,6 +447,10 @@ jobs:
       passed:
       - common-releases-tooling
     - get: aide-release
+      trigger: true
+      passed:
+      - common-releases-tooling
+    - get: postgres-client-release
       trigger: true
       passed:
       - common-releases-tooling
@@ -542,9 +509,6 @@ jobs:
     - get: terraform-yaml
       trigger: true
       resource: terraform-yaml-staging
-    - get: toolbelt-release
-      passed:
-      - deploy-development-bosh
     - get: general-task
   - task: terraform-secrets
     image: general-task
@@ -570,15 +534,6 @@ jobs:
     params:
       text: |
         :x: FAILED to deploy Staging BOSH
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: '#cg-platform-news'
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully deployed Staging BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: '#cg-platform-news'
       username: ((slack-username))
@@ -621,8 +576,11 @@ jobs:
       trigger: true
       passed:
       - common-releases-development
-
     - get: aide-release
+      trigger: true
+      passed:
+      - common-releases-development
+    - get: postgres-client-release
       trigger: true
       passed:
       - common-releases-development
@@ -681,9 +639,6 @@ jobs:
     - get: terraform-yaml
       trigger: true
       resource: terraform-yaml-production
-    - get: toolbelt-release
-      passed:
-      - deploy-staging-bosh
     - get: general-task
   - task: terraform-secrets
     image: general-task
@@ -711,15 +666,6 @@ jobs:
         :x: FAILED to deploy production BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       channel: '#cg-platform'
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
-  on_success:
-    put: slack
-    params:
-      text: |
-        :white_check_mark: Successfully deployed production BOSH
-        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: '#cg-platform-news'
       username: ((slack-username))
       icon_url: ((slack-icon-url))
 
@@ -756,6 +702,10 @@ jobs:
       passed:
       - common-releases-staging
     - get: aide-release
+      trigger: true
+      passed:
+      - common-releases-staging
+    - get: postgres-client-release
       trigger: true
       passed:
       - common-releases-staging
@@ -940,6 +890,12 @@ resources:
     regexp: aide-(.*).tgz
     <<: *s3-release-params
 
+- name: postgres-client-release
+  type: s3-iam
+  source:
+    regexp: postgres-client-(.*).tgz
+    <<: *s3-release-params
+
 - name: node-exporter-release
   type: bosh-io-release
   source:
@@ -972,11 +928,6 @@ resources:
     bucket: ((tf-state-bucket))
     versioned_file: ((tf-state-file-production))
     region_name: ((aws-region))
-
-- name: toolbelt-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry-community/toolbelt-boshrelease
 
 - name: stemcell-lock-pool
   type: pool
