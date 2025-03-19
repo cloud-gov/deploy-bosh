@@ -233,7 +233,6 @@ jobs:
       trigger: true
     - get: terraform-yaml-production
       trigger: true
-    - get: toolbelt-release
     - get: general-task
   - task: terraform-secrets
     image: general-task
@@ -269,8 +268,6 @@ jobs:
       - bosh-config/variables/tooling.yml
       - terraform-secrets/terraform.yml
       - terraform-yaml/state.yml
-      releases:
-      - toolbelt-release/*.tgz
   - task: update-cloud-config
     image: general-task
     file: bosh-config/ci/update-cloud-config-tooling.yml
@@ -363,18 +360,6 @@ jobs:
   - task: upload-releases
     config:
       <<: *upload-releases-config
-      inputs:
-      - {name: certificate}
-      - {name: cg-s3-fisma-jammy-release, path: releases/fisma-jammy}
-      - {name: cg-s3-awslogs-jammy-release, path: releases/awslogs-jammy}
-      - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
-      - {name: cg-s3-clamav-release, path: releases/clamav}
-      - {name: cg-s3-jammy-snort-release, path: releases/jammy-snort}
-      - {name: aide-release, path: releases/aide}
-      - {name: cron-release, path: releases/cron}
-      - {name: node-exporter-release, path: releases/node-exporter}
-      - {name: syslog-release, path: releases/syslog}
-      - {name: postgres-client-release, path: releases/postgres-client}
       params:
         BOSH_CA_CERT: ((common_ca_cert_store))
         BOSH_CLIENT: ci
@@ -412,9 +397,6 @@ jobs:
     - get: terraform-yaml
       trigger: true
       resource: terraform-yaml-development
-    - get: toolbelt-release
-      passed:
-      - deploy-tooling-bosh
     - get: general-task
   - task: terraform-secrets
     image: general-task
@@ -554,9 +536,6 @@ jobs:
     - get: terraform-yaml
       trigger: true
       resource: terraform-yaml-staging
-    - get: toolbelt-release
-      passed:
-      - deploy-development-bosh
     - get: general-task
   - task: terraform-secrets
     image: general-task
@@ -696,9 +675,6 @@ jobs:
     - get: terraform-yaml
       trigger: true
       resource: terraform-yaml-production
-    - get: toolbelt-release
-      passed:
-      - deploy-staging-bosh
     - get: general-task
   - task: terraform-secrets
     image: general-task
@@ -864,14 +840,14 @@ resources:
   source:
     commit_verification_keys: ((cloud-gov-pgp-keys))
     uri: ((bosh-config-git-url))
-    branch: ((bosh-config-git-branch))
+    branch: postgres-client2 # ((bosh-config-git-branch))
 
 - name: bosh-create-env-config
   type: git
   source:
     commit_verification_keys: ((cloud-gov-pgp-keys))
     uri: ((bosh-config-git-url))
-    branch: ((bosh-config-git-branch))
+    branch: postgres-client2 # ((bosh-config-git-branch))
     paths:
     - bosh-create-env*
     - cloud-config/*
@@ -997,11 +973,6 @@ resources:
     bucket: ((tf-state-bucket))
     versioned_file: ((tf-state-file-production))
     region_name: ((aws-region))
-
-- name: toolbelt-release
-  type: bosh-io-release
-  source:
-    repository: cloudfoundry-community/toolbelt-boshrelease
 
 - name: stemcell-lock-pool
   type: pool
