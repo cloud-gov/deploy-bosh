@@ -125,6 +125,36 @@
             - ((terraform_outputs.bosh_security_group))
             - ((terraform_outputs.staging_concourse_security_group))
             - ((terraform_outputs.staging_credhub_security_group))
+
+- type: replace
+  path: /networks/-
+  value:
+    name: development-defectdojo
+    type: dynamic
+    subnets:
+      - range: ((terraform_outputs.development_defectdojo_subnet_cidr_az1))
+        gateway: ((terraform_outputs.development_defectdojo_subnet_az1_gateway))
+        reserved:
+          - ((terraform_outputs.development_defectdojo_subnet_az1_reserved))
+        az: z1
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.development_defectdojo_subnet_az1))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.development_defectdojo_security_group))
+      - range: ((terraform_outputs.development_defectdojo_subnet_cidr_az2))
+        gateway: ((terraform_outputs.development_defectdojo_subnet_az2_gateway))
+        reserved:
+          - ((terraform_outputs.development_defectdojo_subnet_az2_reserved))
+        az: z2
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.development_defectdojo_subnet_az2))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.development_defectdojo_security_group))
+
 - type: replace
   path: /networks/-
   value:
@@ -357,6 +387,13 @@
     cloud_properties:
       lb_target_groups:
         - ((terraform_outputs.production_doomsday_lb_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: development-defectdojo-lb
+    cloud_properties:
+      lb_target_groups:
+        - ((terraform_outputs.development_defectdojo_lb_target_group))
 - type: replace
   path: /vm_extensions/-
   value:
