@@ -37,7 +37,6 @@
       reserved:
       - ((terraform_outputs.services_subnet_reserved_az1))
       - ((terraform_outputs.domains-internal-ip-az1))
-      static: ((terraform_outputs.services_static_ips))
       dns: [((terraform_outputs.vpc_cidr_dns))]
       cloud_properties:
         subnet: ((terraform_outputs.services_subnet_az1))
