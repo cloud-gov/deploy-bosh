@@ -82,7 +82,7 @@ jobs:
     image: general-task
     file: bosh-config/ci/update-cloud-config.yml
     params:
-      OPS_PATHS: "bosh-config/cloud-config/master.yml"
+      OPS_PATHS: "bosh-config/cloud-config/master.yml bosh-config/cloud-config/root-disk.yml"
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((masterbosh-target))
       BOSH_CLIENT: admin
@@ -255,6 +255,7 @@ jobs:
       - bosh-config/operations/add-new-saml-key.yml
       - bosh-config/operations/add-cloud-gov-root-certificate.yml
       - bosh-config/operations/nats-payload.yml
+      - bosh-config/operations/root-disk.yml
       vars_files:
       - bosh-config/variables/tooling.yml
       - terraform-secrets/terraform.yml
@@ -263,7 +264,7 @@ jobs:
     image: general-task
     file: bosh-config/ci/update-cloud-config-tooling.yml
     params:
-      OPS_PATHS: "bosh-config/cloud-config/tooling.yml"
+      OPS_PATHS: "bosh-config/cloud-config/tooling.yml bosh-config/cloud-config/root-disk.yml"
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((toolingbosh-target))
       BOSH_CLIENT: ci
@@ -654,7 +655,7 @@ jobs:
     image: general-task
     file: bosh-config/ci/update-cloud-config.yml
     params:
-      OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml"
+      OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/root-disk.yml"
       BOSH_CA_CERT: ((common_ca_cert_store))
       BOSH_ENVIRONMENT: ((productionbosh-target))
       BOSH_CLIENT: ci
