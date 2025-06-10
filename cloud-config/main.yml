@@ -42,6 +42,19 @@
         subnet: ((terraform_outputs.services_subnet_az1))
         security_groups:
         - ((terraform_outputs.bosh_security_group))
+    - az: z2
+      range: ((terraform_outputs.services_subnet_cidr_az2))
+      gateway: ((terraform_outputs.services_subnet_gateway_az2))
+      reserved:
+      - ((terraform_outputs.services_subnet_reserved_az2))
+      - ((terraform_outputs.domains-internal-ip-az2))
+      dns: [((terraform_outputs.vpc_cidr_dns))]
+      cloud_properties:
+        subnet: ((terraform_outputs.services_subnet_az2))
+        security_groups:
+        - ((terraform_outputs.bosh_security_group))
+
+
 
 - type: replace
   path: /disk_types/-
