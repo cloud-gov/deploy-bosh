@@ -47,32 +47,57 @@
     name: staging-concourse
     type: manual
     subnets:
-      - range: ((terraform_outputs.staging_concourse_subnet_cidr))
-        gateway: ((terraform_outputs.staging_concourse_subnet_gateway))
+      - range: ((terraform_outputs.staging_concourse_subnet_cidr_az1))
+        gateway: ((terraform_outputs.staging_concourse_subnet_gateway_az1))
         reserved:
-          - ((terraform_outputs.staging_concourse_subnet_reserved))
-        az: z2
+          - ((terraform_outputs.staging_concourse_subnet_reserved_az1))
+        az: z1
         dns: [((terraform_outputs.vpc_cidr_dns))]
         cloud_properties:
-          subnet: ((terraform_outputs.staging_concourse_subnet))
+          subnet: ((terraform_outputs.staging_concourse_subnet_az1))
           security_groups:
             - ((terraform_outputs.bosh_security_group))
             - ((terraform_outputs.staging_concourse_security_group))
             - ((terraform_outputs.staging_credhub_security_group))
+      - range: ((terraform_outputs.staging_concourse_subnet_cidr_az2))
+        gateway: ((terraform_outputs.staging_concourse_subnet_gateway_az2))
+        reserved:
+          - ((terraform_outputs.staging_concourse_subnet_reserved_az2))
+        az: z2
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.staging_concourse_subnet_az2))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.staging_concourse_security_group))
+            - ((terraform_outputs.staging_credhub_security_group))
+
 - type: replace
   path: /networks/-
   value:
     name: production-concourse
     type: manual
     subnets:
-      - range: ((terraform_outputs.production_concourse_subnet_cidr))
-        gateway: ((terraform_outputs.production_concourse_subnet_gateway))
+      - range: ((terraform_outputs.production_concourse_subnet_cidr_az1))
+        gateway: ((terraform_outputs.production_concourse_subnet_gateway_az1))
         reserved:
-          - ((terraform_outputs.production_concourse_subnet_reserved))
+          - ((terraform_outputs.production_concourse_subnet_reserved_az1))
         az: z1
         dns: [((terraform_outputs.vpc_cidr_dns))]
         cloud_properties:
-          subnet: ((terraform_outputs.production_concourse_subnet))
+          subnet: ((terraform_outputs.production_concourse_subnet_az1))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.production_concourse_security_group))
+            - ((terraform_outputs.production_credhub_security_group))
+      - range: ((terraform_outputs.production_concourse_subnet_cidr_az2))
+        gateway: ((terraform_outputs.production_concourse_subnet_gateway_az2))
+        reserved:
+          - ((terraform_outputs.production_concourse_subnet_reserved_az2))
+        az: z2
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.production_concourse_subnet_az2))
           security_groups:
             - ((terraform_outputs.bosh_security_group))
             - ((terraform_outputs.production_concourse_security_group))
