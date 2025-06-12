@@ -51,7 +51,7 @@
         gateway: ((terraform_outputs.staging_concourse_subnet_gateway_az1))
         reserved:
           - ((terraform_outputs.staging_concourse_subnet_reserved_az1))
-        az: z1
+        az: z2
         dns: [((terraform_outputs.vpc_cidr_dns))]
         cloud_properties:
           subnet: ((terraform_outputs.staging_concourse_subnet_az1))
@@ -63,7 +63,7 @@
         gateway: ((terraform_outputs.staging_concourse_subnet_gateway_az2))
         reserved:
           - ((terraform_outputs.staging_concourse_subnet_reserved_az2))
-        az: z2
+        az: z1 # Yes, this looks backwards, it is not
         dns: [((terraform_outputs.vpc_cidr_dns))]
         cloud_properties:
           subnet: ((terraform_outputs.staging_concourse_subnet_az2))
