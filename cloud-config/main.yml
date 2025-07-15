@@ -113,6 +113,13 @@
 - type: replace
   path: /disk_types/-
   value:
+    name: logs_opensearch_os_old_data
+    disk_size: 12_000_000
+    cloud_properties:
+      type: st1
+- type: replace
+  path: /disk_types/-
+  value:
     name: logs_opensearch_os_platform_data
     disk_size: 3_500_000
     cloud_properties:
