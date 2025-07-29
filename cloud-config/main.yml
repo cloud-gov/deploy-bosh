@@ -172,13 +172,6 @@
 - type: replace
   path: /vm_extensions/-
   value:
-    name: elasticache-broker-lb
-    cloud_properties:
-      elbs:
-      - ((terraform_outputs.elasticache_broker_elb_name))
-- type: replace
-  path: /vm_extensions/-
-  value:
     name: domains-broker-lb
     cloud_properties:
       lb_target_groups:
