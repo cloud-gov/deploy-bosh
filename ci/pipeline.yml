@@ -402,11 +402,11 @@ jobs:
       BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
   on_failure:
     put: slack
-    params:
+    params: &slack-failure-params
       text: |
         :x: FAILED to deploy development BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: '#cg-platform-news'
+      channel: ((slack-channel-notifications))
       username: ((slack-username))
       icon_url: ((slack-icon-url))
 
@@ -533,12 +533,10 @@ jobs:
   on_failure:
     put: slack
     params:
+      <<: *slack-failure-params
       text: |
         :x: FAILED to deploy Staging BOSH
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: '#cg-platform-news'
-      username: ((slack-username))
-      icon_url: ((slack-icon-url))
 
 - name: common-releases-staging
   serial: true
