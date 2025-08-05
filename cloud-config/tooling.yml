@@ -578,5 +578,12 @@
       iops: 14_000
 
 - type: replace
+  path: /disk_types/-
+  value:
+    name: production-prometheus-tooling
+    disk_size: 120_000
+    cloud_properties:
+      type: gp3
+- type: replace
   path: /compilation/network?
   value: production-concourse
