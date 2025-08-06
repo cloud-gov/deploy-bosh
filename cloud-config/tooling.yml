@@ -572,10 +572,7 @@
   value:
     <<: *prometheus-large-disk
     name: production-prometheus-large
-    disk_size: 3_000_000
-    cloud_properties:
-      type: io1
-      iops: 14_000
+    disk_size: 1_200_000
 
 - type: replace
   path: /disk_types/-
