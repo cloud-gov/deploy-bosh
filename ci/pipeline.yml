@@ -49,7 +49,6 @@ jobs:
       trigger: true
       resource: common-master
     - get: terraform-yaml
-      trigger: true
       resource: terraform-yaml-tooling
     - get: bosh-state
       resource: masterbosh-state
@@ -123,7 +122,6 @@ jobs:
       trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-production
-      trigger: true
     - get: common-master
       trigger: true
     - get: cg-s3-fisma-jammy-release
@@ -216,14 +214,10 @@ jobs:
     - get: bosh-stemcell-jammy
       trigger: true
     - get: terraform-yaml
-      trigger: true
       resource: terraform-yaml-tooling
     - get: terraform-yaml-development
-      trigger: true
     - get: terraform-yaml-staging
-      trigger: true
     - get: terraform-yaml-production
-      trigger: true
     - get: general-task
   - task: terraform-secrets
     image: general-task
@@ -293,7 +287,6 @@ jobs:
       passed:
       - deploy-tooling-bosh
     - get: terraform-yaml
-      trigger: true
       resource: terraform-yaml-production
     - get: cg-s3-fisma-jammy-release
       trigger: true
@@ -378,7 +371,6 @@ jobs:
       passed:
       - deploy-tooling-bosh
     - get: terraform-yaml
-      trigger: true
       resource: terraform-yaml-development
     - get: general-task
   - task: terraform-secrets
@@ -508,7 +500,6 @@ jobs:
       passed:
       - deploy-development-bosh
     - get: terraform-yaml
-      trigger: true
       resource: terraform-yaml-staging
     - get: general-task
   - task: terraform-secrets
@@ -636,7 +627,6 @@ jobs:
       - deploy-staging-bosh
       trigger: true
     - get: terraform-yaml
-      trigger: true
       resource: terraform-yaml-production
     - get: general-task
   - task: terraform-secrets
