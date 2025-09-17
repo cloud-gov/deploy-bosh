@@ -1,0 +1,26 @@
+# Keeping a stubbed version of the release for tooling bosh, the aws cli is used for cron.yml
+# and uses the version packaged in this release.  For now, tooling bosh will be the only vm with
+# awslogs until a replacement for the aws cli is created.
+
+- type: replace
+  path: /releases/-
+  value:
+    name: awslogs-jammy
+    version: latest
+
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value:
+    name: awslogs-jammy
+    release: awslogs-jammy
+    properties:
+      awslogs-jammy:
+        region: us-gov-west-1
+        awslogs_files_config:
+        - name: /var/log/audit/audit.log
+          file: /var/log/audit/audit.log
+          log_group_name: /var/log/audit/audit.log
+          log_stream_name: "{{instance_id}}"
+          initial_position: start_of_file
+          datetime_format: "%Y-%m-%dT%H:%M:%S"
