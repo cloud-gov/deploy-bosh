@@ -126,8 +126,6 @@ jobs:
       trigger: true
     - get: cg-s3-fisma-jammy-release
       trigger: true
-    - get: cg-s3-awslogs-jammy-release
-      trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
     - get: cg-s3-clamav-release
@@ -161,7 +159,6 @@ jobs:
       inputs:
       - {name: certificate}
       - {name: cg-s3-fisma-jammy-release, path: releases/fisma-jammy}
-      - {name: cg-s3-awslogs-jammy-release, path: releases/awslogs-jammy}
       - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
       - {name: cg-s3-clamav-release, path: releases/clamav}
       - {name: cg-s3-jammy-snort-release, path: releases/jammy-snort}
@@ -292,10 +289,6 @@ jobs:
       trigger: true
       passed:
       - common-releases-master
-    - get: cg-s3-awslogs-jammy-release
-      trigger: true
-      passed:
-      - common-releases-master
     - get: cg-s3-nessus-agent-release
       trigger: true
       passed:
@@ -423,10 +416,6 @@ jobs:
       trigger: true
       passed:
       - common-releases-tooling
-    - get: cg-s3-awslogs-jammy-release
-      trigger: true
-      passed:
-      - common-releases-tooling
     - get: cg-s3-nessus-agent-release
       trigger: true
       passed:
@@ -550,10 +539,6 @@ jobs:
       trigger: true
       passed:
       - common-releases-development
-    - get: cg-s3-awslogs-jammy-release
-      trigger: true
-      passed:
-      - common-releases-development
     - get: cg-s3-nessus-agent-release
       trigger: true
       passed:
@@ -671,10 +656,6 @@ jobs:
     - get: terraform-yaml
       resource: terraform-yaml-production
     - get: cg-s3-fisma-jammy-release
-      trigger: true
-      passed:
-      - common-releases-staging
-    - get: cg-s3-awslogs-jammy-release
       trigger: true
       passed:
       - common-releases-staging
@@ -847,12 +828,6 @@ resources:
   type: s3-iam
   source:
     regexp: fisma-jammy-(.*).tgz
-    <<: *s3-release-params
-
-- name: cg-s3-awslogs-jammy-release
-  type: s3-iam
-  source:
-    regexp: awslogs-jammy-(.*).tgz
     <<: *s3-release-params
 
 - name: cg-s3-nessus-agent-release
