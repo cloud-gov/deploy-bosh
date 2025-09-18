@@ -43,8 +43,7 @@
               # apps from other packages on this host we need
               PSQL=/var/vcap/packages/postgres-client/bin/psql
 
-              AWSCLI=/var/vcap/packages/awslogs-jammy/venv/bin/aws
-              export LD_LIBRARY_PATH=/var/vcap/packages/awslogs-jammy/venv/lib
+              AWSCLI=/var/vcap/data/aws-cli-v2/v2/current/bin/aws
 
               # Hack: look up push gateway address in database if gateway is managed by the current director
               if [ -n "${GATEWAY_DEPLOYMENT}" ]; then
