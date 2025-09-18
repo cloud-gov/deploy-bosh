@@ -1,0 +1,19 @@
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value: 
+    name: pre-start-script
+    release: os-conf
+    properties:
+      script: |
+        #!/bin/bash
+        mkdir /var/vcap/data/aws-cli-v2
+        chown root:vcap /var/vcap/data/aws-cli-v2
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        ./aws/install --install-dir /var/vcap/data/aws-cli-v2
+
+- type: replace
+  path: /releases/-
+  value:
+    name: os-conf  
+    version: latest
