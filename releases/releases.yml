@@ -10,9 +10,6 @@ releases:
 - name: nessus-agent
   uri: https://github.com/cloud-gov/cg-nessus-agent-boshrelease
   branch: main
-- name: awslogs-jammy
-  uri: https://github.com/cloud-gov/cg-awslogs-boshrelease
-  branch: jammy
 - name: clamav
   uri: https://github.com/cloud-gov/cg-clamav-boshrelease
   branch: main
