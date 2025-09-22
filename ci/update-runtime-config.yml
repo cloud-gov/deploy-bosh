@@ -8,7 +8,6 @@ inputs:
   - { name: terraform-yaml }
   - { name: cg-s3-fisma-jammy-release, path: releases/fisma-jammy }
   - { name: aide-release, path: releases/aide }
-  - { name: cg-s3-awslogs-jammy-release, path: releases/awslogs-jammy }
   - { name: cg-s3-nessus-agent-release, path: releases/nessus-agent }
   - { name: cg-s3-clamav-release, path: releases/clamav }
   - { name: cg-s3-jammy-snort-release, path: releases/jammy-snort }
