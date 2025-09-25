@@ -32,6 +32,24 @@ addons:
       syslog:
         address: ((terraform_outputs.platform_syslog_elb_dns_name))
         port: 5514
+        custom_rule: |
+          module(load="imfile" PollingInterval="10")
+
+          input(type="imfile"
+                File="/var/log/auth.log"
+                Tag="auth:"
+                Facility="local6"
+                Severity="info"
+                PersistStateInterval="200"
+                addMetadata="on")
+
+          input(type="imfile"
+                File="/var/log/dpkg.log"
+                Tag="dpkg:"
+                Facility="local6"
+                Severity="info"
+                PersistStateInterval="200"
+                addMetadata="on")
     release: syslog
   - name: aide
     release: aide
