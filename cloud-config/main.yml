@@ -86,7 +86,7 @@
   path: /disk_types/-
   value:
     name: logsearch_es_platform_data_warm
-    disk_size: 11_500_000
+    disk_size: 13_500_000
     cloud_properties:
       type: st1
 - type: replace
