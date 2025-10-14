@@ -288,6 +288,40 @@
 - type: replace
   path: /networks/-
   value:
+    name: workshop-monitoring
+    type: dynamic
+    subnets:
+      - range: ((terraform_outputs.workshop_monitoring_subnet_cidr))
+        gateway: ((terraform_outputs.workshop_monitoring_subnet_gateway))
+        reserved:
+          - ((terraform_outputs.workshop_monitoring_subnet_reserved))
+        az: z1
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.workshop_monitoring_subnet))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.workshop_monitoring_security_group))
+- type: replace
+  path: /networks/-
+  value:
+    name: pages-monitoring
+    type: dynamic
+    subnets:
+      - range: ((terraform_outputs.pages_monitoring_subnet_cidr))
+        gateway: ((terraform_outputs.pages_monitoring_subnet_gateway))
+        reserved:
+          - ((terraform_outputs.pages_monitoring_subnet_reserved))
+        az: z1
+        dns: [((terraform_outputs.vpc_cidr_dns))]
+        cloud_properties:
+          subnet: ((terraform_outputs.pages_monitoring_subnet))
+          security_groups:
+            - ((terraform_outputs.bosh_security_group))
+            - ((terraform_outputs.pages_monitoring_security_group))
+- type: replace
+  path: /networks/-
+  value:
     name: dns-private
     type: manual
     subnets:
@@ -436,6 +470,20 @@
     cloud_properties:
       lb_target_groups:
         - ((terraform_outputs.production_monitoring_lb_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: workshop-prometheus-lb
+    cloud_properties:
+      lb_target_groups:
+        - ((terraform_outputs.workshop_monitoring_lb_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: pages-prometheus-lb
+    cloud_properties:
+      lb_target_groups:
+        - ((terraform_outputs.pages_monitoring_lb_target_group))
 - type: replace
   path: /vm_extensions/-
   value:
