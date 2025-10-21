@@ -629,6 +629,18 @@
     <<: *prometheus-large-disk
     name: production-prometheus-large
     disk_size: 1_200_000
+- type: replace
+  path: /disk_types/-
+  value:
+    <<: *prometheus-large-disk
+    name: workshop-prometheus-large
+    disk_size: 400_000
+- type: replace
+  path: /disk_types/-
+  value:
+    <<: *prometheus-large-disk
+    name: pages-prometheus-large
+    disk_size: 400_000
 
 - type: replace
   path: /disk_types/-
