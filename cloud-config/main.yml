@@ -198,6 +198,12 @@
 - type: replace
   path: /vm_extensions/-
   value:
+    name: logs-opensearch-profile
+    cloud_properties:
+      iam_instance_profile: ((terraform_outputs.logs_opensearch_profile))
+- type: replace
+  path: /vm_extensions/-
+  value:
     name: elasticache-broker-profile
     cloud_properties:
       iam_instance_profile: ((terraform_outputs.elasticache_broker_profile))
