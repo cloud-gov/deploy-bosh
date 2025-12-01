@@ -14,6 +14,7 @@ bosh create-env \
   --ops-file bosh-deployment/aws/cpi.yml \
   --ops-file bosh-deployment/aws/iam-instance-profile.yml \
   --ops-file bosh-deployment/aws/cli-iam-instance-profile.yml \
+  --ops-file bosh-deployment/aws/use-jammy.yml \
   --ops-file bosh-deployment/uaa.yml \
   --ops-file bosh-deployment/credhub.yml \
   --ops-file bosh-deployment/jumpbox-user.yml \
