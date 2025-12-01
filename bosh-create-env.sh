@@ -18,6 +18,9 @@ bosh create-env \
   --ops-file bosh-deployment/uaa.yml \
   --ops-file bosh-deployment/credhub.yml \
   --ops-file bosh-deployment/jumpbox-user.yml \
+  --ops-file bosh-deployment/misc/source-releases/bosh.yml
+  --ops-file bosh-deployment/misc/source-releases/uaa.yml
+  --ops-file bosh-deployment/misc/source-releases/credhub.yml
   --ops-file bosh-config/operations/cpi.yml \
   --ops-file bosh-config/operations/masterbosh-metadatav2.yml \
   --ops-file bosh-config/operations/encryption.yml \
