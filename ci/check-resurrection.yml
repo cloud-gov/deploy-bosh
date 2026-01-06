@@ -1,0 +1,15 @@
+---
+platform: linux
+
+inputs:
+- {name: bosh-config}
+
+run:
+  path: bosh-config/ci/check-resurrection.sh
+
+params:
+  BOSH_CA_CERT:
+  BOSH_ENVIRONMENT:
+  BOSH_CLIENT:
+  BOSH_CLIENT_SECRET:
+  BOSH_ENV_NAME:
