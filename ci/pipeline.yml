@@ -730,7 +730,9 @@ jobs:
     #- get: daily-business-hours
     #  trigger: true
     - get: bosh-config
+    - get: general-task
   - task: check-resurrection
+    image: general-task
     file: bosh-config/ci/check-resurrection.yml
     params:
       BOSH_CA_CERT: ((bosh-director-info.development.ca_cert))
@@ -753,7 +755,9 @@ jobs:
     #- get: daily-business-hours
     #  trigger: true
     - get: bosh-config
+    - get: general-task
   - task: check-resurrection
+    image: general-task
     file: bosh-config/ci/check-resurrection.yml
     params:
       BOSH_CA_CERT: ((bosh-director-info.staging.ca_cert))

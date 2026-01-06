@@ -5,7 +5,7 @@ inputs:
 - {name: bosh-config}
 
 run:
-  path: bosh-config/ci/update-cloud-config.sh
+  path: bosh-config/ci/check-resurrection.sh
 
 params:
   BOSH_CA_CERT:
