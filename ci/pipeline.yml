@@ -31,6 +31,14 @@ groups:
   - common-releases-development
   - common-releases-staging
   - common-releases-production
+- name: checks
+  jobs:
+#  - check-resurrection-master
+#  - check-resurrection-tooling
+  - check-resurrection-development
+  - check-resurrection-staging
+#  - check-resurrection-production
+
 jobs:
 - name: deploy-master-bosh
   serial: true
@@ -711,6 +719,62 @@ jobs:
       BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
       BOSH_ENV_NAME: production
 
+##################################
+#          Checks                #
+###################################
+
+- name: check-resurrection-development
+  serial: true
+  plan:
+  - in_parallel:
+    #- get: daily-business-hours
+    #  trigger: true
+    - get: bosh-config
+  - task: check-resurrection
+    file: bosh-config/ci/check-resurrection.yml
+    params:
+      BOSH_CA_CERT: ((bosh-director-info.development.ca_cert))
+      BOSH_ENVIRONMENT: ((bosh-director-info.development.environment))
+      BOSH_CLIENT: ((bosh-director-info.development.client))
+      BOSH_CLIENT_SECRET: ((bosh-director-info.development.client_secret))
+      BOSH_ENV_NAME: development
+  on_failure:
+    put: slack
+    params:
+      <<: *slack-failure-params
+      text: |
+        :x: Warning: Resurrection is turned off on Development BOSH
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+
+- name: check-resurrection-staging
+  serial: true
+  plan:
+  - in_parallel:
+    #- get: daily-business-hours
+    #  trigger: true
+    - get: bosh-config
+  - task: check-resurrection
+    file: bosh-config/ci/check-resurrection.yml
+    params:
+      BOSH_CA_CERT: ((bosh-director-info.staging.ca_cert))
+      BOSH_ENVIRONMENT: ((bosh-director-info.staging.environment))
+      BOSH_CLIENT: ((bosh-director-info.staging.client))
+      BOSH_CLIENT_SECRET: ((bosh-director-info.staging.client_secret))
+      BOSH_ENV_NAME: staging
+  on_failure:
+    put: slack
+    params:
+      <<: *slack-failure-params
+      text: |
+        :x: Warning: Resurrection is turned off on Staging BOSH
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+
+
+
+
+
+
+
 resources:
 - name: ca-cert-store
   type: s3-iam
@@ -764,7 +828,7 @@ resources:
   source:
     commit_verification_keys: ((cloud-gov-pgp-keys))
     uri: ((bosh-config-git-url))
-    branch: ((bosh-config-git-branch))
+    branch: resurrection-checks #((bosh-config-git-branch))
 
 - name: bosh-create-env-config
   type: git
@@ -915,6 +979,13 @@ resources:
     aws_region: us-gov-west-1
     tag: latest
 
+#- name: daily-business-hours
+#  type: time
+#  source:
+#    start: 1:00 PM
+#    stop: 2:00 PM
+#    location: America/Los_Angeles
+
 resource_types:
 - name: registry-image
   type: registry-image
@@ -996,3 +1067,12 @@ resource_types:
     repository: pool-resource
     aws_region: us-gov-west-1
     tag: latest
+
+#- name: time
+#  type: registry-image
+#  source:
+#    aws_access_key_id: ((ecr_aws_key))
+#    aws_secret_access_key: ((ecr_aws_secret))
+#    repository: time-resource
+#    aws_region: us-gov-west-1
+#    tag: latest
