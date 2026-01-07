@@ -628,7 +628,7 @@
   value:
     <<: *prometheus-large-disk
     name: production-prometheus-large
-    disk_size: 1_200_000
+    disk_size: 2_000_000
 - type: replace
   path: /disk_types/-
   value:
@@ -646,7 +646,7 @@
   path: /disk_types/-
   value:
     name: production-prometheus-tooling
-    disk_size: 120_000
+    disk_size: 200_000
     cloud_properties:
       type: gp3
 - type: replace
