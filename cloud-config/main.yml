@@ -10,6 +10,7 @@
       reserved:
       - ((terraform_outputs.private_subnet_reserved_az1))
       - ((terraform_outputs.bosh_static_ip))
+      - ((terraform_outputs.diego_api_bbs_private_ipv4_address_az1))
       dns: [((terraform_outputs.vpc_cidr_dns))]
       cloud_properties:
         subnet: ((terraform_outputs.private_subnet_az1))
@@ -20,6 +21,7 @@
       gateway: ((terraform_outputs.private_subnet_gateway_az2))
       reserved:
       - ((terraform_outputs.private_subnet_reserved_az2))
+      - ((terraform_outputs.diego_api_bbs_private_ipv4_address_az2))
       dns: [((terraform_outputs.vpc_cidr_dns))]
       cloud_properties:
         subnet: ((terraform_outputs.private_subnet_az2))
@@ -183,6 +185,15 @@
     cloud_properties:
       lb_target_groups:
       - ((terraform_outputs.domains_broker_internal_target_group))
+
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: diego-api-bbs-lb
+    cloud_properties:
+      lb_target_groups:
+      - ((terraform_outputs.diego_api_bbs_lb_target_group))
+
 - type: replace
   path: /vm_extensions/-
   value:
