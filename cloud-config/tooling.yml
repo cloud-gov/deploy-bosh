@@ -615,7 +615,7 @@
   path: /disk_types/-
   value: &prometheus-large-disk
     name: staging-prometheus-large
-    disk_size: 200_000
+    disk_size: 120_000
     cloud_properties:
       type: gp3
 - type: replace
@@ -628,25 +628,25 @@
   value:
     <<: *prometheus-large-disk
     name: production-prometheus-large
-    disk_size: 2_000_000
+    disk_size: 1_200_000
 - type: replace
   path: /disk_types/-
   value:
     <<: *prometheus-large-disk
     name: workshop-prometheus-large
-    disk_size: 400_000
+    disk_size: 50_000
 - type: replace
   path: /disk_types/-
   value:
     <<: *prometheus-large-disk
     name: pages-prometheus-large
-    disk_size: 400_000
+    disk_size: 50_000
 
 - type: replace
   path: /disk_types/-
   value:
     name: production-prometheus-tooling
-    disk_size: 200_000
+    disk_size: 120_000
     cloud_properties:
       type: gp3
 - type: replace
