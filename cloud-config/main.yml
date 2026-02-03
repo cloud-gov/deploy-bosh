@@ -38,7 +38,6 @@
       gateway: ((terraform_outputs.services_subnet_gateway_az1))
       reserved:
       - ((terraform_outputs.services_subnet_reserved_az1))
-      - ((terraform_outputs.domains-internal-ip-az1))
       dns: [((terraform_outputs.vpc_cidr_dns))]
       cloud_properties:
         subnet: ((terraform_outputs.services_subnet_az1))
@@ -49,7 +48,6 @@
       gateway: ((terraform_outputs.services_subnet_gateway_az2))
       reserved:
       - ((terraform_outputs.services_subnet_reserved_az2))
-      - ((terraform_outputs.domains-internal-ip-az2))
       dns: [((terraform_outputs.vpc_cidr_dns))]
       cloud_properties:
         subnet: ((terraform_outputs.services_subnet_az2))
@@ -178,13 +176,6 @@
     cloud_properties:
       lb_target_groups:
       - ((terraform_outputs.platform_kibana_lb_target_group))
-- type: replace
-  path: /vm_extensions/-
-  value:
-    name: domains-broker-lb
-    cloud_properties:
-      lb_target_groups:
-      - ((terraform_outputs.domains_broker_internal_target_group))
 
 - type: replace
   path: /vm_extensions/-
@@ -218,12 +209,6 @@
     name: elasticache-broker-profile
     cloud_properties:
       iam_instance_profile: ((terraform_outputs.elasticache_broker_profile))
-- type: replace
-  path: /vm_extensions/-
-  value:
-    name: domains-broker-profile
-    cloud_properties:
-      iam_instance_profile: ((terraform_outputs.domains_broker_profile))
 
 - type: replace
   path: /compilation/network?
