@@ -31,9 +31,6 @@ releases:
 - name: postfix
   uri: https://github.com/cloud-gov/postfix-boshrelease
   branch: main
-- name: domain-broker
-  uri: https://github.com/cloud-gov/cf-domain-broker-alb-boshrelease
-  branch: main
 - name: aide
   uri: https://github.com/cloud-gov/aide-boshrelease
   branch: main
