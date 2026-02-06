@@ -7,6 +7,7 @@ meta:
 groups:
 - name: all
   jobs:
+  - set-self
   - deploy-master-bosh
   - deploy-tooling-bosh
   - deploy-development-bosh
@@ -55,12 +56,12 @@ jobs:
     - get: bosh-deployment
       trigger: true
     - get: bosh-config-old
-      resource: bosh-create-env-config
+      resource: bosh-config
       trigger: true
+      passed: [set-self]
     - get: bosh-config
       resource: bosh-create-env-config
       trigger: true
-      passed: [set-self]
     - get: common
       trigger: true
       resource: common-master
@@ -136,6 +137,7 @@ jobs:
       trigger: true
     - get: bosh-config
       trigger: true
+      passed: [deploy-master-bosh]
     - get: terraform-yaml
       resource: terraform-yaml-production
     - get: common-master
