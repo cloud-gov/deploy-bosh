@@ -19,9 +19,6 @@ releases:
 - name: shibboleth
   uri: https://github.com/cloud-gov/shibboleth-boshrelease
   branch: main
-- name: uaa-customized
-  uri: https://github.com/cloud-gov/uaa-customized-boshrelease
-  branch: main
 - name: cron
   uri: https://github.com/cloud-gov/cron-boshrelease
   branch: main
