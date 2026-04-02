@@ -12,4 +12,12 @@
   value: 400_000
 - type: replace
   path: /disk_types/name=logs_opensearch_os_platform_data/disk_size
-  value: 200_000
+  value: 400_000
+
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: platform-opensearch-lb
+    cloud_properties:
+      lb_target_groups:
+      - ((terraform_outputs.platform_opensearch_lb_target_group))
