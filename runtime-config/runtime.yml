@@ -50,6 +50,7 @@ addons:
                 Severity="info"
                 PersistStateInterval="200"
                 addMetadata="on")
+          *.* @logs-platform-test:5431
     release: syslog
   - name: aide
     release: aide
