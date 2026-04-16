@@ -11,6 +11,7 @@ addons:
 - include:
     stemcell:
     - os: ubuntu-jammy
+    - os: ubuntu-jammy-fips
   name: hardening-jammy
   jobs:
   - name: snort

@@ -75,6 +75,8 @@ vm_types:
     iam_instance_profile: ((terraform_outputs.bosh_compilation_profile))
     ephemeral_disk:
       size: 30000
+    root_disk:
+        size: 51200
   name: c5.xlarge.compilation
 - cloud_properties:
     instance_type: c5d.metal

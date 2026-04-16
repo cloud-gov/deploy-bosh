@@ -24,4 +24,5 @@ bosh -n update-runtime-config \
 
 bosh -n update-runtime-config --name dns \
   bosh-deployment/runtime-configs/dns.yml \
-  --ops-file bosh-config/operations/dns-aliases.yml
+  --ops-file bosh-config/operations/dns-aliases.yml \
+  --ops-file bosh-config/operations/addons-include-fips-stemcell.yml

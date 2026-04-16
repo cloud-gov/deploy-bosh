@@ -1,0 +1,4 @@
+---
+- type: replace
+  path: /addons/name=bosh-dns/include/stemcell/os=ubuntu-jammy-fips?/os
+  value: ubuntu-jammy-fips
