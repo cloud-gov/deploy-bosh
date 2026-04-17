@@ -51,7 +51,7 @@ addons:
                 Severity="info"
                 PersistStateInterval="200"
                 addMetadata="on")
-          *.* @@ingestor.platform_opensearch.internal:5431;SyslogForwarderTemplate
+          *.* @@q-s4.ingestor.services.logs-platform.bosh:5431;SyslogForwarderTemplate
     release: syslog
   - name: aide
     release: aide
