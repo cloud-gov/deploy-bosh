@@ -194,6 +194,13 @@
 - type: replace
   path: /vm_extensions/-
   value:
+    name: platform-opensearch-ingestor-profile
+    cloud_properties:
+      iam_instance_profile: ((terraform_outputs.platform_opensearch_ingestor_profile))
+      
+- type: replace
+  path: /vm_extensions/-
+  value:
     name: logs-opensearch-ingestor-profile
     cloud_properties:
       iam_instance_profile: ((terraform_outputs.logs_opensearch_ingestor_profile))
