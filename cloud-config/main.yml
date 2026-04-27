@@ -176,6 +176,13 @@
     cloud_properties:
       lb_target_groups:
       - ((terraform_outputs.platform_kibana_lb_target_group))
+- type: replace
+  path: /vm_extensions/-
+  value:
+    name: platform-opensearch-lb
+    cloud_properties:
+      lb_target_groups:
+      - ((terraform_outputs.platform_opensearch_lb_target_group))
 
 - type: replace
   path: /vm_extensions/-
