@@ -128,7 +128,7 @@
   path: /disk_types/-
   value:
     name: logs_opensearch_os_platform_data
-    disk_size: 9_000_000
+    disk_size: 10_500_000
     cloud_properties:
       type: gp3
 - type: replace
@@ -169,6 +169,7 @@
     cloud_properties:
       elbs:
       - ((terraform_outputs.platform_syslog_elb_name))
+
 - type: replace
   path: /vm_extensions/-
   value:
@@ -176,6 +177,7 @@
     cloud_properties:
       lb_target_groups:
       - ((terraform_outputs.platform_kibana_lb_target_group))
+      
 - type: replace
   path: /vm_extensions/-
   value:
