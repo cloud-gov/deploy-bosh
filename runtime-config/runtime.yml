@@ -67,6 +67,13 @@ addons:
         group: ((/nessus_agent_group))
         server: ((/nessus_agent_server))
         port: ((/nessus_agent_port))
+- include:
+    stemcell:
+      - os: ubuntu-noble
+  name: noble-releases
+  jobs:
+    - name: aide
+      release: aide
 
 tags:
   environment: ((bosh_environment))
