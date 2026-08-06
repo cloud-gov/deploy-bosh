@@ -88,6 +88,14 @@ addons:
             schedule: ((/clamav_cron_schedule))
           include_directories: ((/clamav_include_directories))
           exclude_directories: ((/clamav_exclude_directories))
+    - name: nessus-agent
+      release: nessus-agent
+      properties:
+        nessus-agent:
+          key: ((/nessus_agent_key))
+          group: ((/nessus_agent_group))
+          server: ((/nessus_agent_server))
+          port: ((/nessus_agent_port))
 
 tags:
   environment: ((bosh_environment))
