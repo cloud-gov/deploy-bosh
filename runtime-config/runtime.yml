@@ -96,6 +96,8 @@ addons:
           group: ((/nessus_agent_group))
           server: ((/nessus_agent_server))
           port: ((/nessus_agent_port))
+    - name: snort
+      release: jammy-snort
 
 tags:
   environment: ((bosh_environment))
