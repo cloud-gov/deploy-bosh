@@ -74,6 +74,8 @@ addons:
   jobs:
     - name: aide
       release: aide
+    - name: node-exporter
+      release: node-exporter
     - name: clamav
       release: clamav
       properties:
