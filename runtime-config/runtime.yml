@@ -31,8 +31,8 @@ addons:
   - name: syslog_forwarder
     properties:
       syslog:
-        address: ((terraform_outputs.platform_syslog_elb_dns_name))
-        port: 5514
+        address: ((terraform_outputs.platform_syslog_udp_nlb_dns_name))
+        port: 5431
         custom_rule: |
           module(load="imfile" PollingInterval="10")
 
@@ -51,7 +51,6 @@ addons:
                 Severity="info"
                 PersistStateInterval="200"
                 addMetadata="on")
-          *.* @((terraform_outputs.platform_syslog_udp_nlb_dns_name)):5431;SyslogForwarderTemplate
     release: syslog
   - name: aide
     release: aide
