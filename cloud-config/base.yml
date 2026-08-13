@@ -8,171 +8,48 @@ azs:
 
 vm_types:
 - cloud_properties:
-    instance_type: c4.2xlarge
-  name: c4.2xlarge
-- cloud_properties:
-    instance_type: c4.4xlarge
-  name: c4.4xlarge
-- cloud_properties:
-    instance_type: c4.8xlarge
-  name: c4.8xlarge
-- cloud_properties:
-    instance_type: c4.large
-  name: c4.large
-- cloud_properties:
-    instance_type: c4.xlarge
-  name: c4.xlarge
-- cloud_properties:
-    instance_type: c5.12xlarge
-  name: c5.12xlarge
-- cloud_properties:
-    instance_type: c5.18xlarge
-  name: c5.18xlarge
-- cloud_properties:
-    instance_type: c5.24xlarge
-  name: c5.24xlarge
-- cloud_properties:
-    instance_type: c5.2xlarge
-  name: c5.2xlarge
-- cloud_properties:
-    instance_type: c5.4xlarge
-  name: c5.4xlarge
-- cloud_properties:
-    instance_type: c5.9xlarge
-  name: c5.9xlarge
-- cloud_properties:
-    instance_type: c5.large
-  name: c5.large
-- cloud_properties:
-    instance_type: c5.metal
-  name: c5.metal
-- cloud_properties:
-    instance_type: c5.xlarge
-  name: c5.xlarge
-- cloud_properties:
-    instance_type: c5d.12xlarge
-  name: c5d.12xlarge
-- cloud_properties:
-    instance_type: c5d.18xlarge
-  name: c5d.18xlarge
-- cloud_properties:
-    instance_type: c5d.24xlarge
-  name: c5d.24xlarge
-- cloud_properties:
-    instance_type: c5d.2xlarge
-  name: c5d.2xlarge
-- cloud_properties:
-    instance_type: c5d.4xlarge
-  name: c5d.4xlarge
-- cloud_properties:
-    instance_type: c5d.9xlarge
-  name: c5d.9xlarge
-- cloud_properties:
-    instance_type: c5d.large
-  name: c5d.large
-- cloud_properties:
-    instance_type: c5.xlarge
+    instance_type: c6i.xlarge
     iam_instance_profile: ((terraform_outputs.bosh_compilation_profile))
     ephemeral_disk:
       size: 30000
     root_disk:
         size: 51200
-  name: c5.xlarge.compilation
-- cloud_properties:
-    instance_type: c5d.metal
-  name: c5d.metal
-- cloud_properties:
-    instance_type: c5d.xlarge
-  name: c5d.xlarge
-- cloud_properties:
-    instance_type: c5n.18xlarge
-  name: c5n.18xlarge
-- cloud_properties:
-    instance_type: c5n.2xlarge
-  name: c5n.2xlarge
-- cloud_properties:
-    instance_type: c5n.4xlarge
-  name: c5n.4xlarge
-- cloud_properties:
-    instance_type: c5n.9xlarge
-  name: c5n.9xlarge
-- cloud_properties:
-    instance_type: c5n.large
-  name: c5n.large
-- cloud_properties:
-    instance_type: c5n.metal
-  name: c5n.metal
-- cloud_properties:
-    instance_type: c5n.xlarge
-  name: c5n.xlarge
+  name: c6i.xlarge.compilation
 - cloud_properties:
     instance_type: c6i.2xlarge
+    ephemeral_disk:
+      size: 15360
   name: c6i.2xlarge
 - cloud_properties:
     instance_type: c6i.large
+    ephemeral_disk:
+      size: 15360
   name: c6i.large
 - cloud_properties:
     instance_type: c6i.xlarge
+    ephemeral_disk:
+      size: 15360
   name: c6i.xlarge
 - cloud_properties:
     instance_type: c6id.2xlarge
+    ephemeral_disk:
+      size: 15360
   name: c6id.2xlarge
 - cloud_properties:
     instance_type: c6id.large
+    ephemeral_disk:
+      size: 15360
   name: c6id.large
 - cloud_properties:
     instance_type: c6id.xlarge
+    ephemeral_disk:
+      size: 15360
   name: c6id.xlarge
-- cloud_properties:
-    instance_type: m4.10xlarge
-  name: m4.10xlarge
-- cloud_properties:
-    instance_type: m4.16xlarge
-  name: m4.16xlarge
-- cloud_properties:
-    instance_type: m4.2xlarge
-  name: m4.2xlarge
-- cloud_properties:
-    instance_type: m4.4xlarge
-  name: m4.4xlarge
-- cloud_properties:
-    instance_type: m4.large
-  name: m4.large
-- cloud_properties:
-    instance_type: m4.xlarge
-  name: m4.xlarge
-- cloud_properties:
-    instance_type: m5.12xlarge
-  name: m5.12xlarge
-- cloud_properties:
-    instance_type: m5.16xlarge
-  name: m5.16xlarge
-- cloud_properties:
-    instance_type: m5.24xlarge
-  name: m5.24xlarge
-- cloud_properties:
-    instance_type: m5.2xlarge
-  name: m5.2xlarge
-- cloud_properties:
-    instance_type: m5.4xlarge
-  name: m5.4xlarge
-- cloud_properties:
-    instance_type: m5.8xlarge
-  name: m5.8xlarge
-- cloud_properties:
-    instance_type: m5.large
-  name: m5.large
 - cloud_properties:
     instance_type: m5.large
     ephemeral_disk:
       size: 45000
   name: m5.large.concourse.web
-- cloud_properties:
-    instance_type: m5.metal
-  name: m5.metal
-- cloud_properties:
-    instance_type: m5.xlarge
-  name: m5.xlarge
 - cloud_properties:
     instance_type: m5.xlarge
     ephemeral_disk:
@@ -189,85 +66,14 @@ vm_types:
       size: 20000
   name: m5.xlarge.bosh.director
 - cloud_properties:
-    instance_type: m5a.12xlarge
-  name: m5a.12xlarge
-- cloud_properties:
-    instance_type: m5a.16xlarge
-  name: m5a.16xlarge
-- cloud_properties:
-    instance_type: m5a.24xlarge
-  name: m5a.24xlarge
-- cloud_properties:
-    instance_type: m5a.2xlarge
-  name: m5a.2xlarge
-- cloud_properties:
-    instance_type: m5a.4xlarge
-  name: m5a.4xlarge
-- cloud_properties:
-    instance_type: m5a.8xlarge
-  name: m5a.8xlarge
-- cloud_properties:
-    instance_type: m5a.large
-  name: m5a.large
-- cloud_properties:
-    instance_type: m5a.xlarge
-  name: m5a.xlarge
-- cloud_properties:
-    instance_type: m5ad.12xlarge
-  name: m5ad.12xlarge
-- cloud_properties:
-    instance_type: m5ad.16xlarge
-  name: m5ad.16xlarge
-- cloud_properties:
-    instance_type: m5ad.24xlarge
-  name: m5ad.24xlarge
-- cloud_properties:
-    instance_type: m5ad.2xlarge
-  name: m5ad.2xlarge
-- cloud_properties:
-    instance_type: m5ad.4xlarge
-  name: m5ad.4xlarge
-- cloud_properties:
-    instance_type: m5ad.8xlarge
-  name: m5ad.8xlarge
-- cloud_properties:
-    instance_type: m5ad.large
-  name: m5ad.large
-- cloud_properties:
-    instance_type: m5ad.xlarge
-  name: m5ad.xlarge
-- cloud_properties:
-    instance_type: m5d.12xlarge
-  name: m5d.12xlarge
-- cloud_properties:
-    instance_type: m5d.16xlarge
-  name: m5d.16xlarge
-- cloud_properties:
-    instance_type: m5d.24xlarge
-  name: m5d.24xlarge
-- cloud_properties:
-    instance_type: m5d.2xlarge
-  name: m5d.2xlarge
-- cloud_properties:
-    instance_type: m5d.4xlarge
-  name: m5d.4xlarge
-- cloud_properties:
-    instance_type: m5d.8xlarge
-  name: m5d.8xlarge
-- cloud_properties:
-    instance_type: m5d.large
-  name: m5d.large
-- cloud_properties:
-    instance_type: m5d.metal
-  name: m5d.metal
-- cloud_properties:
-    instance_type: m5d.xlarge
-  name: m5d.xlarge
-- cloud_properties:
     instance_type: m6i.2xlarge
+    ephemeral_disk:
+      size: 15360
   name: m6i.2xlarge
 - cloud_properties:
     instance_type: m6i.large
+    ephemeral_disk:
+      size: 15360
   name: m6i.large
 - cloud_properties:
     ephemeral_disk:
@@ -276,6 +82,8 @@ vm_types:
   name: m6i.large.concourse.web
 - cloud_properties:
     instance_type: m6i.xlarge
+    ephemeral_disk:
+      size: 15360
   name: m6i.xlarge
 - cloud_properties:
     instance_type: m6i.xlarge
@@ -289,54 +97,9 @@ vm_types:
   name: m6i.xlarge.concourse.worker
 - cloud_properties:
     instance_type: m6i.xlarge
-  name: m6i.xlarge.opsuaa
-- cloud_properties:
-    instance_type: r4.16xlarge
-  name: r4.16xlarge
-- cloud_properties:
-    instance_type: r4.2xlarge
-  name: r4.2xlarge
-- cloud_properties:
-    instance_type: r4.4xlarge
-  name: r4.4xlarge
-- cloud_properties:
-    instance_type: r4.8xlarge
-  name: r4.8xlarge
-- cloud_properties:
-    instance_type: r4.large
-  name: r4.large
-- cloud_properties:
-    instance_type: r4.xlarge
-  name: r4.xlarge
-- cloud_properties:
-    instance_type: r5.12xlarge
-  name: r5.12xlarge
-- cloud_properties:
-    instance_type: r5.16xlarge
-  name: r5.16xlarge
-- cloud_properties:
-    instance_type: r5.24xlarge
-  name: r5.24xlarge
-- cloud_properties:
-    instance_type: r5.2xlarge
-  name: r5.2xlarge
-- cloud_properties:
-    instance_type: r5.4xlarge
-  name: r5.4xlarge
-- cloud_properties:
-    instance_type: r5.8xlarge
-  name: r5.8xlarge
-- cloud_properties:
-    instance_type: r5.large
     ephemeral_disk:
-      size: 10000
-  name: r5.large
-- cloud_properties:
-    instance_type: r5.metal
-  name: r5.metal
-- cloud_properties:
-    instance_type: r5.xlarge
-  name: r5.xlarge
+      size: 15360
+  name: m6i.xlarge.opsuaa
 - cloud_properties:
     instance_type: r5.xlarge
     ephemeral_disk:
@@ -348,96 +111,29 @@ vm_types:
       size: 30000
   name: r5.xlarge.logs_opensearch.ingestor
 - cloud_properties:
-    instance_type: r5a.12xlarge
-  name: r5a.12xlarge
-- cloud_properties:
-    instance_type: r5a.16xlarge
-  name: r5a.16xlarge
-- cloud_properties:
-    instance_type: r5a.24xlarge
-  name: r5a.24xlarge
-- cloud_properties:
-    instance_type: r5a.2xlarge
-  name: r5a.2xlarge
-- cloud_properties:
-    instance_type: r5a.4xlarge
-  name: r5a.4xlarge
-- cloud_properties:
-    instance_type: r5a.8xlarge
-  name: r5a.8xlarge
-- cloud_properties:
-    instance_type: r5a.large
-  name: r5a.large
-- cloud_properties:
-    instance_type: r5a.xlarge
-  name: r5a.xlarge
-- cloud_properties:
-    instance_type: r5ad.12xlarge
-  name: r5ad.12xlarge
-- cloud_properties:
-    instance_type: r5ad.16xlarge
-  name: r5ad.16xlarge
-- cloud_properties:
-    instance_type: r5ad.24xlarge
-  name: r5ad.24xlarge
-- cloud_properties:
-    instance_type: r5ad.2xlarge
-  name: r5ad.2xlarge
-- cloud_properties:
-    instance_type: r5ad.4xlarge
-  name: r5ad.4xlarge
-- cloud_properties:
-    instance_type: r5ad.8xlarge
-  name: r5ad.8xlarge
-- cloud_properties:
-    instance_type: r5ad.large
-  name: r5ad.large
-- cloud_properties:
-    instance_type: r5ad.xlarge
-  name: r5ad.xlarge
-- cloud_properties:
-    instance_type: r5d.12xlarge
-  name: r5d.12xlarge
-- cloud_properties:
-    instance_type: r5d.16xlarge
-  name: r5d.16xlarge
-- cloud_properties:
-    instance_type: r5d.24xlarge
-  name: r5d.24xlarge
-- cloud_properties:
-    instance_type: r5d.2xlarge
-  name: r5d.2xlarge
-- cloud_properties:
-    instance_type: r5d.4xlarge
-  name: r5d.4xlarge
-- cloud_properties:
-    instance_type: r5d.8xlarge
-  name: r5d.8xlarge
-- cloud_properties:
-    instance_type: r5d.large
-  name: r5d.large
-- cloud_properties:
-    instance_type: r5d.metal
-  name: r5d.metal
-- cloud_properties:
-    instance_type: r5d.xlarge
-  name: r5d.xlarge
-- cloud_properties:
     instance_type: r6i.2xlarge
+    ephemeral_disk:
+      size: 15360
   name: r6i.2xlarge
 - cloud_properties:
     instance_type: r6i.4xlarge
+    ephemeral_disk:
+      size: 15360
   name: r6i.4xlarge
 - cloud_properties:
     instance_type: r6i.8xlarge
+    ephemeral_disk:
+      size: 15360
   name: r6i.8xlarge
 - cloud_properties:
     instance_type: r6i.large
     ephemeral_disk:
-      size: 10000
+      size: 15360
   name: r6i.large
 - cloud_properties:
     instance_type: r6i.xlarge
+    ephemeral_disk:
+      size: 15360
   name: r6i.xlarge
 - cloud_properties:
     instance_type: r6i.xlarge
@@ -446,12 +142,18 @@ vm_types:
   name: r6i.xlarge.logsearch.ingestor
 - cloud_properties:
     instance_type: t3.2xlarge
+    ephemeral_disk:
+      size: 15360
   name: t3.2xlarge
 - cloud_properties:
     instance_type: t3.large
+    ephemeral_disk:
+      size: 15360
   name: t3.large
 - cloud_properties:
     instance_type: t3.medium
+    ephemeral_disk:
+      size: 15360
   name: t3.medium
 - cloud_properties:
     instance_type: t3.medium
@@ -465,61 +167,59 @@ vm_types:
   name: t3.medium.nessus.manager
 - cloud_properties:
     instance_type: t3.micro
+    ephemeral_disk:
+      size: 15360
   name: t3.micro
 - cloud_properties:
     instance_type: t3.nano
+    ephemeral_disk:
+      size: 15360
   name: t3.nano
 - cloud_properties:
     instance_type: t3.small
+    ephemeral_disk:
+      size: 15360
   name: t3.small
 - cloud_properties:
     instance_type: t3.xlarge
+    ephemeral_disk:
+      size: 15360
   name: t3.xlarge
 - cloud_properties:
     instance_type: t3a.2xlarge
+    ephemeral_disk:
+      size: 15360
   name: t3a.2xlarge
 - cloud_properties:
     instance_type: t3a.large
+    ephemeral_disk:
+      size: 15360
   name: t3a.large
 - cloud_properties:
     instance_type: t3a.medium
+    ephemeral_disk:
+      size: 15360
   name: t3a.medium
 - cloud_properties:
     instance_type: t3a.micro
+    ephemeral_disk:
+      size: 15360
   name: t3a.micro
 - cloud_properties:
     instance_type: t3a.nano
+    ephemeral_disk:
+      size: 15360
   name: t3a.nano
 - cloud_properties:
     instance_type: t3a.small
+    ephemeral_disk:
+      size: 15360
   name: t3a.small
 - cloud_properties:
     instance_type: t3a.xlarge
+    ephemeral_disk:
+      size: 15360
   name: t3a.xlarge
-- cloud_properties:
-    instance_type: x1.16xlarge
-  name: x1.16xlarge
-- cloud_properties:
-    instance_type: x1.32xlarge
-  name: x1.32xlarge
-- cloud_properties:
-    instance_type: x1e.16xlarge
-  name: x1e.16xlarge
-- cloud_properties:
-    instance_type: x1e.2xlarge
-  name: x1e.2xlarge
-- cloud_properties:
-    instance_type: x1e.32xlarge
-  name: x1e.32xlarge
-- cloud_properties:
-    instance_type: x1e.4xlarge
-  name: x1e.4xlarge
-- cloud_properties:
-    instance_type: x1e.8xlarge
-  name: x1e.8xlarge
-- cloud_properties:
-    instance_type: x1e.xlarge
-  name: x1e.xlarge
 
 vm_extensions:
 - name: errand-profile
@@ -532,5 +232,5 @@ disk_types: []
 compilation:
   workers: 5
   reuse_compilation_vms: true
-  vm_type: c5.xlarge.compilation
+  vm_type: c6i.xlarge.compilation
   az: z1
