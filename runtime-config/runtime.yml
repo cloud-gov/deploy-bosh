@@ -32,6 +32,7 @@ addons:
     properties:
       syslog:
         address: ((terraform_outputs.platform_syslog_udp_nlb_dns_name))
+        protocol: udp
         port: 5431
         custom_rule: |
           module(load="imfile" PollingInterval="10")
