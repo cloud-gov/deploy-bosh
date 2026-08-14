@@ -131,6 +131,11 @@ vm_types:
       size: 15360
   name: r6i.xlarge
 - cloud_properties:
+    instance_type: r6i.xlarge
+    ephemeral_disk:
+      size: 30000
+  name: r6i.xlarge.opensearch.ingestor
+- cloud_properties:
     instance_type: t3.2xlarge
     ephemeral_disk:
       size: 15360
