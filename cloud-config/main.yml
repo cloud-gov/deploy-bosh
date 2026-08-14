@@ -162,13 +162,6 @@
     cloud_properties:
       lb_target_groups:
       - ((terraform_outputs.shibboleth_lb_target_group))
-- type: replace
-  path: /vm_extensions/-
-  value:
-    name: platform-syslog-lb
-    cloud_properties:
-      elbs:
-      - ((terraform_outputs.platform_syslog_elb_name))
 
 - type: replace
   path: /vm_extensions/-
