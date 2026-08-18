@@ -86,7 +86,7 @@
   path: /disk_types/-
   value:
     name: logs_opensearch_os_platform_data
-    disk_size: 10_500_000
+    disk_size: 11_000_000
     cloud_properties:
       type: gp3
 - type: replace
