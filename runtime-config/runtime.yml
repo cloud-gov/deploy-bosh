@@ -70,7 +70,7 @@ addons:
 - include:
     stemcell:
       - os: ubuntu-noble
-  name: noble-releases
+  name: hardening-noble
   jobs:
     - name: aide
       release: aide
@@ -98,6 +98,15 @@ addons:
           port: ((/nessus_agent_port))
     - name: snort
       release: jammy-snort
+    - name: harden
+      release: fisma-noble
+    - name: ubuntu-advantage-pro-token
+      release: fisma-noble
+      require_fips: false
+      properties:
+        ubuntu_advantage_pro_token: ((/bosh/ubuntu-advantage-pro-token))
+        stig_profile: stig-v1r1
+
 
 tags:
   environment: ((bosh_environment))

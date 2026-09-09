@@ -7,6 +7,9 @@ releases:
 - name: fisma-jammy
   uri: https://github.com/cloud-gov/cg-harden-boshrelease
   branch: jammy-main
+- name: fisma-noble
+  uri: https://github.com/cloud-gov/harden-boshrelease
+  branch: noble-main
 - name: nessus-agent
   uri: https://github.com/cloud-gov/cg-nessus-agent-boshrelease
   branch: main
