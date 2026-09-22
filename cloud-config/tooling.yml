@@ -596,6 +596,11 @@
     disk_size: 5120
 - type: replace
   path: /disk_types/-
+  value:
+    name: 30GB
+    disk_size: 30600
+- type: replace
+  path: /disk_types/-
   value: &prometheus-small-disk
     name: staging-prometheus-small
     disk_size: 8192
