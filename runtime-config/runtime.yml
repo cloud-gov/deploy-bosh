@@ -88,6 +88,31 @@ addons:
             schedule: ((/clamav_cron_schedule))
           include_directories: ((/clamav_include_directories))
           exclude_directories: ((/clamav_exclude_directories))
+    - name: syslog_forwarder
+      properties:
+        syslog:
+          address: ((terraform_outputs.platform_syslog_elb_dns_name))
+          port: 5514
+          custom_rule: |
+            module(load="imfile" PollingInterval="10")
+
+            input(type="imfile"
+                  File="/var/log/auth.log"
+                  Tag="auth:"
+                  Facility="local6"
+                  Severity="info"
+                  PersistStateInterval="200"
+                  addMetadata="on")
+
+            input(type="imfile"
+                  File="/var/log/dpkg.log"
+                  Tag="dpkg:"
+                  Facility="local6"
+                  Severity="info"
+                  PersistStateInterval="200"
+                  addMetadata="on")
+            *.* @@q-s4.ingestor.services.logs-platform.bosh:5431;SyslogForwarderTemplate
+      release: syslog
     - name: nessus-agent
       release: nessus-agent
       properties:
@@ -100,15 +125,15 @@ addons:
       release: jammy-snort
     - name: harden
       release: fisma-noble
+    - name: syslog
+      release: release_syslog
     - name: ubuntu-advantage-pro-token
       release: fisma-noble
       require_fips: false
       properties:
         ubuntu_advantage_pro_token: ((/bosh/ubuntu-advantage-pro-token))
         stig_profile: stig-v1r1
-
-
-tags:
+        tags:
   environment: ((bosh_environment))
 variables:
 - name: nessus_agent_key
