@@ -1,5 +1,6 @@
 releases:
 - {name: fisma-jammy, version: ((release_fisma_jammy))}
+- {name: fisma-noble, version: ((release_fisma_noble))}
 - {name: aide, version: ((release_aide))}
 - {name: clamav, version: ((release_clamav))}
 - {name: jammy-snort, version: ((release_jammy_snort))}
@@ -126,14 +127,14 @@ addons:
     - name: harden
       release: fisma-noble
     - name: syslog
-      release: release_syslog
+      release: syslog
     - name: ubuntu-advantage-pro-token
       release: fisma-noble
       require_fips: false
       properties:
         ubuntu_advantage_pro_token: ((/bosh/ubuntu-advantage-pro-token))
         stig_profile: stig-v1r1
-        tags:
+tags:
   environment: ((bosh_environment))
 variables:
 - name: nessus_agent_key
