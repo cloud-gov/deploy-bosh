@@ -302,6 +302,10 @@ jobs:
       - deploy-tooling-bosh
     - get: terraform-yaml
       resource: terraform-yaml-production
+    - get: cg-s3-noble-release
+      trigger: true
+      passed:
+        - common-releases-master
     - get: cg-s3-fisma-jammy-release
       trigger: true
       passed:
