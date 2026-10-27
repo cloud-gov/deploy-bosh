@@ -7,7 +7,7 @@ inputs:
   - { name: certificate }
   - { name: terraform-yaml }
   - { name: cg-s3-fisma-jammy-release, path: releases/fisma-jammy }
-  - { name: cg-s3-noble-release, path: releases/fisma-noble }
+  - { name: cg-s3-fisma-noble-release, path: releases/fisma-noble }
   - { name: aide-release, path: releases/aide }
   - { name: cg-s3-nessus-agent-release, path: releases/nessus-agent }
   - { name: cg-s3-clamav-release, path: releases/clamav }
