@@ -130,10 +130,11 @@ addons:
       release: syslog
     - name: ubuntu-advantage-pro-token
       release: fisma-noble
-      require_fips: false
       properties:
         ubuntu_advantage_pro_token: ((/bosh/ubuntu-advantage-pro-token))
         stig_profile: stig-v1r1
+        require_fips: false
+
 tags:
   environment: ((bosh_environment))
 variables:
