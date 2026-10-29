@@ -16,5 +16,5 @@
         key: ((nessus_agent_key))
         group: ((nessus_agent_group))
         server: ((nessus_agent_server))
-        port: 8834
+        port: 443
     release: nessus-agent
