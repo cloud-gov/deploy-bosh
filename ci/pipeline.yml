@@ -144,6 +144,8 @@ jobs:
       trigger: true
     - get: cg-s3-fisma-jammy-release
       trigger: true
+    - get: cg-s3-fisma-noble-release
+      trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
     - get: cg-s3-clamav-release
@@ -228,6 +230,8 @@ jobs:
       - common-releases-master
     - get: bosh-stemcell-jammy
       trigger: true
+    - get: bosh-stemcell-noble
+      trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-tooling
     - get: terraform-yaml-development
@@ -242,6 +246,7 @@ jobs:
       manifest: bosh-deployment/bosh.yml
       stemcells:
       - bosh-stemcell-jammy/*.tgz
+      - bosh-stemcell-noble/*.tgz
       ops_files:
       - bosh-deployment/uaa.yml
       - bosh-deployment/credhub.yml
@@ -302,7 +307,7 @@ jobs:
       - deploy-tooling-bosh
     - get: terraform-yaml
       resource: terraform-yaml-production
-    - get: cg-s3-noble-release
+    - get: cg-s3-fisma-noble-release
       trigger: true
       passed:
         - common-releases-master
@@ -384,6 +389,10 @@ jobs:
       trigger: true
       passed:
       - deploy-tooling-bosh
+    - get: bosh-stemcell-noble
+      trigger: true
+      passed:
+        - deploy-tooling-bosh
     - get: terraform-yaml
       resource: terraform-yaml-development
     - get: general-task
@@ -437,6 +446,10 @@ jobs:
       trigger: true
       passed:
       - common-releases-tooling
+    - get: cg-s3-fisma-noble-release
+      trigger: true
+      passed:
+        - common-releases-tooling
     - get: cg-s3-nessus-agent-release
       trigger: true
       passed:
@@ -509,6 +522,10 @@ jobs:
       trigger: true
       passed:
       - deploy-development-bosh
+    - get: bosh-stemcell-noble
+      trigger: true
+      passed:
+        - deploy-development-bosh
     - get: terraform-yaml
       resource: terraform-yaml-staging
     - get: general-task
@@ -560,6 +577,10 @@ jobs:
       trigger: true
       passed:
       - common-releases-development
+    - get: cg-s3-fisma-noble-release
+      trigger: true
+      passed:
+        - common-releases-development
     - get: cg-s3-nessus-agent-release
       trigger: true
       passed:
@@ -632,6 +653,10 @@ jobs:
       passed:
       - deploy-staging-bosh
       trigger: true
+    - get: bosh-stemcell-noble
+      trigger: true
+      passed:
+        - deploy-staging-bosh
     - get: terraform-yaml
       resource: terraform-yaml-production
     - get: general-task
@@ -680,6 +705,10 @@ jobs:
       trigger: true
       passed:
       - common-releases-staging
+    - get: cg-s3-fisma-noble-release
+      trigger: true
+      passed:
+        - common-releases-staging
     - get: cg-s3-nessus-agent-release
       trigger: true
       passed:
