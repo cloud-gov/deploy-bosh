@@ -302,6 +302,10 @@ jobs:
       - deploy-tooling-bosh
     - get: terraform-yaml
       resource: terraform-yaml-production
+    - get: cg-s3-noble-release
+      trigger: true
+      passed:
+        - common-releases-master
     - get: cg-s3-fisma-jammy-release
       trigger: true
       passed:
@@ -932,6 +936,11 @@ resources:
   source:
     name: bosh-aws-xen-hvm-ubuntu-jammy-go_agent
 
+- name: bosh-stemcell-noble
+  type: bosh-io-stemcell
+  source:
+    name: bosh-aws-xen-hvm-ubuntu-noble
+
 - name: toolingbosh-deployment
   type: bosh-deployment
   source:
@@ -977,6 +986,12 @@ resources:
   type: s3-iam
   source:
     regexp: fisma-jammy-(.*).tgz
+    <<: *s3-release-params
+
+- name: cg-s3-fisma-noble-release
+  type: s3-iam
+  source:
+    regexp: fisma-noble-(.*).tgz
     <<: *s3-release-params
 
 - name: cg-s3-nessus-agent-release
