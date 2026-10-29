@@ -144,6 +144,8 @@ jobs:
       trigger: true
     - get: cg-s3-fisma-jammy-release
       trigger: true
+    - get: cg-s3-fisma-noble-release
+      trigger: true
     - get: cg-s3-nessus-agent-release
       trigger: true
     - get: cg-s3-clamav-release
