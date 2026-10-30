@@ -230,8 +230,6 @@ jobs:
       - common-releases-master
     - get: bosh-stemcell-jammy
       trigger: true
-    - get: bosh-stemcell-noble
-      trigger: true
     - get: terraform-yaml
       resource: terraform-yaml-tooling
     - get: terraform-yaml-development
