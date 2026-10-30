@@ -73,67 +73,67 @@ addons:
       - os: ubuntu-noble
   name: hardening-noble
   jobs:
-    - name: aide
-      release: aide
-    - name: node-exporter
-      release: node-exporter
-    - name: clamav
-      release: clamav
-      properties:
-        clamav:
-          dbMirror1: ((/clamav_mirror))
-          alert_on_stale_defs: ((/clamav_alert_on_stale_defs))
-          schedule_enabled: ((/clamav_schedule_enabled))
-          on_access_enabled: ((/clamav_onaccess_enabled))
-          cron:
-            schedule: ((/clamav_cron_schedule))
-          include_directories: ((/clamav_include_directories))
-          exclude_directories: ((/clamav_exclude_directories))
-    - name: syslog_forwarder
-      properties:
-        syslog:
-          address: ((terraform_outputs.platform_syslog_elb_dns_name))
-          port: 5514
-          custom_rule: |
-            module(load="imfile" PollingInterval="10")
+  - name: aide
+    release: aide
+  - name: node-exporter
+    release: node-exporter
+  - name: clamav
+    release: clamav
+    properties:
+      clamav:
+        dbMirror1: ((/clamav_mirror))
+        alert_on_stale_defs: ((/clamav_alert_on_stale_defs))
+        schedule_enabled: ((/clamav_schedule_enabled))
+        on_access_enabled: ((/clamav_onaccess_enabled))
+        cron:
+          schedule: ((/clamav_cron_schedule))
+        include_directories: ((/clamav_include_directories))
+        exclude_directories: ((/clamav_exclude_directories))
+  - name: syslog_forwarder
+    properties:
+      syslog:
+        address: ((terraform_outputs.platform_syslog_udp_nlb_dns_name))
+        transport: udp
+        port: 5431
+        custom_rule: |
+          module(load="imfile" PollingInterval="10")
 
-            input(type="imfile"
-                  File="/var/log/auth.log"
-                  Tag="auth:"
-                  Facility="local6"
-                  Severity="info"
-                  PersistStateInterval="200"
-                  addMetadata="on")
+          input(type="imfile"
+                File="/var/log/auth.log"
+                Tag="auth:"
+                Facility="local6"
+                Severity="info"
+                PersistStateInterval="200"
+                addMetadata="on")
 
-            input(type="imfile"
-                  File="/var/log/dpkg.log"
-                  Tag="dpkg:"
-                  Facility="local6"
-                  Severity="info"
-                  PersistStateInterval="200"
-                  addMetadata="on")
-            *.* @@q-s4.ingestor.services.logs-platform.bosh:5431;SyslogForwarderTemplate
-      release: syslog
-    - name: nessus-agent
-      release: nessus-agent
-      properties:
-        nessus-agent:
-          key: ((/nessus_agent_key))
-          group: ((/nessus_agent_group))
-          server: ((/nessus_agent_server))
-          port: ((/nessus_agent_port))
-    - name: snort
-      release: jammy-snort
-    - name: harden
-      release: fisma-noble
-    - name: syslog
-      release: syslog
-    - name: ubuntu-advantage-pro-token
-      release: fisma-noble
-      properties:
-        ubuntu_advantage_pro_token: ((/bosh/ubuntu-advantage-pro-token))
-        stig_profile: stig-v1r1
-        require_fips: false
+          input(type="imfile"
+                File="/var/log/dpkg.log"
+                Tag="dpkg:"
+                Facility="local6"
+                Severity="info"
+                PersistStateInterval="200"
+                addMetadata="on")
+    release: syslog
+  - name: nessus-agent
+    release: nessus-agent
+    properties:
+      nessus-agent:
+        key: ((/nessus_agent_key))
+        group: ((/nessus_agent_group))
+        server: ((/nessus_agent_server))
+        port: ((/nessus_agent_port))
+  - name: snort
+    release: jammy-snort
+  - name: harden
+    release: fisma-noble
+  - name: syslog
+    release: syslog
+  - name: ubuntu-advantage-pro-token
+    release: fisma-noble
+    properties:
+      ubuntu_advantage_pro_token: ((/bosh/ubuntu-advantage-pro-token))
+      stig_profile: stig-v1r1
+      require_fips: false
 
 tags:
   environment: ((bosh_environment))
