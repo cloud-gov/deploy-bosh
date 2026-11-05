@@ -126,8 +126,6 @@ addons:
     release: jammy-snort
   - name: harden
     release: fisma-noble
-  - name: syslog
-    release: syslog
   - name: ubuntu-advantage-pro-token
     release: fisma-noble
     properties:
