@@ -925,7 +925,7 @@ resources:
   type: git
   source:
     uri: https://github.com/cloudfoundry/bosh-deployment.git
-    branch: master
+    branch: main
 
 - name: bosh-config
   type: git
