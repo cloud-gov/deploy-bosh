@@ -99,10 +99,10 @@ jobs:
     file: bosh-config/ci/update-cloud-config.yml
     params:
       OPS_PATHS: "bosh-config/cloud-config/master.yml bosh-config/cloud-config/root-disk.yml"
-      BOSH_CA_CERT: ((common_ca_cert_store))
-      BOSH_ENVIRONMENT: ((masterbosh-target))
-      BOSH_CLIENT: admin
-      BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
+      BOSH_CA_CERT: ((bosh-director-info.master.ca_cert))
+      BOSH_ENVIRONMENT: ((bosh-director-info.master.environment))
+      BOSH_CLIENT: ((bosh-director-info.master.client))
+      BOSH_CLIENT_SECRET: ((bosh-director-info.master.client_secret))
   ensure:
     do:
     - put: masterbosh-state
@@ -188,10 +188,10 @@ jobs:
       - {name: syslog-release, path: releases/syslog}
       - {name: postgres-client-release, path: releases/postgres-client}
       params:
-        BOSH_CA_CERT: ((common_ca_cert_store))
-        BOSH_CLIENT: admin
-        BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
-        BOSH_ENVIRONMENT: ((masterbosh-target))
+        BOSH_CA_CERT: ((bosh-director-info.master.ca_cert))
+        BOSH_ENVIRONMENT: ((bosh-director-info.master.environment))
+        BOSH_CLIENT: ((bosh-director-info.master.client))
+        BOSH_CLIENT_SECRET: ((bosh-director-info.master.client_secret))
       run:
         path: sh
         args:
@@ -207,10 +207,10 @@ jobs:
     input_mapping:
       common: common-master
     params:
-      BOSH_CA_CERT: ((common_ca_cert_store))
-      BOSH_ENVIRONMENT: ((masterbosh-target))
-      BOSH_CLIENT: admin
-      BOSH_CLIENT_SECRET: ((master_bosh_admin_password))
+      BOSH_CA_CERT: ((bosh-director-info.master.ca_cert))
+      BOSH_ENVIRONMENT: ((bosh-director-info.master.environment))
+      BOSH_CLIENT: ((bosh-director-info.master.client))
+      BOSH_CLIENT_SECRET: ((bosh-director-info.master.client_secret))
       BOSH_ENV_NAME: master
 
 - name: deploy-tooling-bosh
@@ -275,10 +275,10 @@ jobs:
     file: bosh-config/ci/update-cloud-config-tooling.yml
     params:
       OPS_PATHS: "bosh-config/cloud-config/tooling.yml bosh-config/cloud-config/root-disk.yml"
-      BOSH_CA_CERT: ((common_ca_cert_store))
-      BOSH_ENVIRONMENT: ((toolingbosh-target))
-      BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
+      BOSH_CA_CERT: ((bosh-director-info.tooling.ca_cert))
+      BOSH_ENVIRONMENT: ((bosh-director-info.tooling.environment))
+      BOSH_CLIENT: ((bosh-director-info.tooling.client))
+      BOSH_CLIENT_SECRET: ((bosh-director-info.tooling.client_secret))
   on_failure:
     put: slack
     params:
@@ -353,18 +353,18 @@ jobs:
     config:
       <<: *upload-releases-config
       params:
-        BOSH_CA_CERT: ((common_ca_cert_store))
-        BOSH_CLIENT: ci
-        BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
-        BOSH_ENVIRONMENT: ((toolingbosh-target))
+        BOSH_CA_CERT: ((bosh-director-info.tooling.ca_cert))
+        BOSH_ENVIRONMENT: ((bosh-director-info.tooling.environment))
+        BOSH_CLIENT: ((bosh-director-info.tooling.client))
+        BOSH_CLIENT_SECRET: ((bosh-director-info.tooling.client_secret))
   - task: update-runtime-config
     image: general-task
     file: bosh-config/ci/update-runtime-config.yml
     params:
-      BOSH_CA_CERT: ((common_ca_cert_store))
-      BOSH_ENVIRONMENT: ((toolingbosh-target))
-      BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: ((tooling_bosh_uaa_ci_client_secret))
+      BOSH_CA_CERT: ((bosh-director-info.tooling.ca_cert))
+      BOSH_ENVIRONMENT: ((bosh-director-info.tooling.environment))
+      BOSH_CLIENT: ((bosh-director-info.tooling.client))
+      BOSH_CLIENT_SECRET: ((bosh-director-info.tooling.client_secret))
       BOSH_ENV_NAME: tooling
 
 - name: deploy-development-bosh
@@ -404,10 +404,10 @@ jobs:
     file: bosh-config/ci/update-cloud-config.yml
     params:
       OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/development.yml bosh-config/cloud-config/root-disk.yml"
-      BOSH_CA_CERT: ((common_ca_cert_store))
-      BOSH_ENVIRONMENT: ((developmentbosh-target))
-      BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
+      BOSH_CA_CERT: ((bosh-director-info.development.ca_cert))
+      BOSH_ENVIRONMENT: ((bosh-director-info.development.environment))
+      BOSH_CLIENT: ((bosh-director-info.development.client))
+      BOSH_CLIENT_SECRET: ((bosh-director-info.development.client_secret))
   on_failure:
     put: slack
     params: &slack-failure-params
@@ -482,18 +482,18 @@ jobs:
     config:
       <<: *upload-releases-config
       params:
-        BOSH_CA_CERT: ((common_ca_cert_store))
-        BOSH_CLIENT: ci
-        BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
-        BOSH_ENVIRONMENT: ((developmentbosh-target))
+        BOSH_CA_CERT: ((bosh-director-info.development.ca_cert))
+        BOSH_ENVIRONMENT: ((bosh-director-info.development.environment))
+        BOSH_CLIENT: ((bosh-director-info.development.client))
+        BOSH_CLIENT_SECRET: ((bosh-director-info.development.client_secret))
   - task: update-runtime-config
     image: general-task
     file: bosh-config/ci/update-runtime-config.yml
     params:
-      BOSH_CA_CERT: ((common_ca_cert_store))
-      BOSH_ENVIRONMENT: ((developmentbosh-target))
-      BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: ((development_bosh_uaa_ci_client_secret))
+      BOSH_CA_CERT: ((bosh-director-info.development.ca_cert))
+      BOSH_ENVIRONMENT: ((bosh-director-info.development.environment))
+      BOSH_CLIENT: ((bosh-director-info.development.client))
+      BOSH_CLIENT_SECRET: ((bosh-director-info.development.client_secret))
       BOSH_ENV_NAME: development
 
 - name: deploy-staging-bosh
@@ -533,10 +533,10 @@ jobs:
     file: bosh-config/ci/update-cloud-config.yml
     params:
       OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/staging.yml bosh-config/cloud-config/root-disk.yml"
-      BOSH_CA_CERT: ((common_ca_cert_store))
-      BOSH_ENVIRONMENT: ((stagingbosh-target))
-      BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: ((staging_bosh_uaa_ci_client_secret))
+      BOSH_CA_CERT: ((bosh-director-info.staging.ca_cert))
+      BOSH_ENVIRONMENT: ((bosh-director-info.staging.environment))
+      BOSH_CLIENT: ((bosh-director-info.staging.client))
+      BOSH_CLIENT_SECRET: ((bosh-director-info.staging.client_secret))
   on_failure:
     put: slack
     params:
@@ -609,18 +609,18 @@ jobs:
     config:
       <<: *upload-releases-config
       params:
-        BOSH_CA_CERT: ((common_ca_cert_store))
-        BOSH_CLIENT: ci
-        BOSH_CLIENT_SECRET: ((staging_bosh_uaa_ci_client_secret))
-        BOSH_ENVIRONMENT: ((stagingbosh-target))
+        BOSH_CA_CERT: ((bosh-director-info.staging.ca_cert))
+        BOSH_ENVIRONMENT: ((bosh-director-info.staging.environment))
+        BOSH_CLIENT: ((bosh-director-info.staging.client))
+        BOSH_CLIENT_SECRET: ((bosh-director-info.staging.client_secret))
   - task: update-runtime-config
     image: general-task
     file: bosh-config/ci/update-runtime-config.yml
     params:
-      BOSH_CA_CERT: ((common_ca_cert_store))
-      BOSH_ENVIRONMENT: ((stagingbosh-target))
-      BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: ((staging_bosh_uaa_ci_client_secret))
+      BOSH_CA_CERT: ((bosh-director-info.staging.ca_cert))
+      BOSH_ENVIRONMENT: ((bosh-director-info.staging.environment))
+      BOSH_CLIENT: ((bosh-director-info.staging.client))
+      BOSH_CLIENT_SECRET: ((bosh-director-info.staging.client_secret))
       BOSH_ENV_NAME: staging
 
 - name: deploy-production-bosh
@@ -660,10 +660,10 @@ jobs:
     file: bosh-config/ci/update-cloud-config.yml
     params:
       OPS_PATHS: "bosh-config/cloud-config/main.yml bosh-config/cloud-config/cf.yml bosh-config/cloud-config/root-disk.yml"
-      BOSH_CA_CERT: ((common_ca_cert_store))
-      BOSH_ENVIRONMENT: ((productionbosh-target))
-      BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
+      BOSH_CA_CERT: ((bosh-director-info.production.ca_cert))
+      BOSH_ENVIRONMENT: ((bosh-director-info.production.environment))
+      BOSH_CLIENT: ((bosh-director-info.production.client))
+      BOSH_CLIENT_SECRET: ((bosh-director-info.production.client_secret))
   on_failure:
     put: slack
     params:
@@ -733,18 +733,18 @@ jobs:
     config:
       <<: *upload-releases-config
       params:
-        BOSH_CA_CERT: ((common_ca_cert_store))
-        BOSH_CLIENT: ci
-        BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
-        BOSH_ENVIRONMENT: ((productionbosh-target))
+        BOSH_CA_CERT: ((bosh-director-info.production.ca_cert))
+        BOSH_ENVIRONMENT: ((bosh-director-info.production.environment))
+        BOSH_CLIENT: ((bosh-director-info.production.client))
+        BOSH_CLIENT_SECRET: ((bosh-director-info.production.client_secret))
   - task: update-runtime-config
     image: general-task
     file: bosh-config/ci/update-runtime-config.yml
     params:
-      BOSH_CA_CERT: ((common_ca_cert_store))
-      BOSH_ENVIRONMENT: ((productionbosh-target))
-      BOSH_CLIENT: ci
-      BOSH_CLIENT_SECRET: ((production_bosh_uaa_ci_client_secret))
+      BOSH_CA_CERT: ((bosh-director-info.production.ca_cert))
+      BOSH_ENVIRONMENT: ((bosh-director-info.production.environment))
+      BOSH_CLIENT: ((bosh-director-info.production.client))
+      BOSH_CLIENT_SECRET: ((bosh-director-info.production.client_secret))
       BOSH_ENV_NAME: production
 
 ##################################
@@ -953,37 +953,37 @@ resources:
 - name: toolingbosh-deployment
   type: bosh-deployment
   source:
-    target: ((masterbosh-target))
-    client: admin
-    client_secret: ((master_bosh_admin_password))
-    ca_cert: ((common_ca_cert_store))
+    ca_cert: ((bosh-director-info.master.ca_cert))
+    client: ((bosh-director-info.master.client))
+    client_secret: ((bosh-director-info.master.client_secret))
+    target: ((bosh-director-info.master.environment))
     deployment: toolingbosh
 
 - name: developmentbosh-deployment
   type: bosh-deployment
   source:
-    target: ((toolingbosh-target))
-    client: ci
-    client_secret: ((tooling_bosh_uaa_ci_client_secret))
-    ca_cert: ((common_ca_cert_store))
+    ca_cert: ((bosh-director-info.tooling.ca_cert))
+    client: ((bosh-director-info.tooling.client))
+    client_secret: ((bosh-director-info.tooling.client_secret))
+    target: ((bosh-director-info.tooling.environment))
     deployment: developmentbosh
 
 - name: stagingbosh-deployment
   type: bosh-deployment
   source:
-    target: ((toolingbosh-target))
-    client: ci
-    client_secret: ((tooling_bosh_uaa_ci_client_secret))
-    ca_cert: ((common_ca_cert_store))
+    ca_cert: ((bosh-director-info.tooling.ca_cert))
+    client: ((bosh-director-info.tooling.client))
+    client_secret: ((bosh-director-info.tooling.client_secret))
+    target: ((bosh-director-info.tooling.environment))
     deployment: stagingbosh
 
 - name: productionbosh-deployment
   type: bosh-deployment
   source:
-    target: ((toolingbosh-target))
-    client: ci
-    client_secret: ((tooling_bosh_uaa_ci_client_secret))
-    ca_cert: ((common_ca_cert_store))
+    ca_cert: ((bosh-director-info.tooling.ca_cert))
+    client: ((bosh-director-info.tooling.client))
+    client_secret: ((bosh-director-info.tooling.client_secret))
+    target: ((bosh-director-info.tooling.environment))
     deployment: productionbosh
 
 - name: slack
