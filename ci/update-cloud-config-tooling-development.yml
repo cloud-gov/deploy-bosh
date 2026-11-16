@@ -12,7 +12,6 @@ image_resource:
 
 inputs:
 - {name: bosh-config}
-- {name: ca-cert-store}
 - {name: terraform-yaml}
 - {name: terraform-yaml-development}
 
