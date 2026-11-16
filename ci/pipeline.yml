@@ -917,6 +917,7 @@ resources:
     - bosh-create-env*
     - cloud-config/*
     - operations/*
+    - ci/* 
 
 - name: bosh-stemcell-jammy
   type: bosh-io-stemcell
