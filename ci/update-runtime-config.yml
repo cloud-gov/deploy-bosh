@@ -4,7 +4,6 @@ platform: linux
 inputs:
   - { name: bosh-config }
   - { name: bosh-deployment }
-  - { name: certificate }
   - { name: terraform-yaml }
   - { name: cg-s3-fisma-jammy-release, path: releases/fisma-jammy }
   - { name: cg-s3-fisma-noble-release, path: releases/fisma-noble }

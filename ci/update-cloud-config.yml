@@ -3,7 +3,6 @@ platform: linux
 
 inputs:
 - {name: bosh-config}
-- {name: ca-cert-store}
 - {name: terraform-yaml}
 
 run:

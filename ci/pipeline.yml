@@ -71,8 +71,6 @@ jobs:
       resource: masterbosh-state
     - get: bosh-creds
       resource: masterbosh-creds
-    - get: ca-cert-store
-      trigger: true
     - get: nessus-agent-release
       resource: cg-s3-nessus-agent-release
       trigger: true
@@ -129,8 +127,6 @@ jobs:
   serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
-    - get: certificate
-      resource: ca-cert-store
     - get: bosh-deployment
       passed:
       - deploy-master-bosh
@@ -177,7 +173,6 @@ jobs:
           aws_region: us-gov-west-1
           tag: latest
       inputs:
-      - {name: certificate}
       - {name: cg-s3-fisma-jammy-release, path: releases/fisma-jammy}
       - {name: cg-s3-nessus-agent-release, path: releases/nessus-agent}
       - {name: cg-s3-clamav-release, path: releases/clamav}
@@ -218,8 +213,6 @@ jobs:
   serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
-    - get: ca-cert-store
-      trigger: true
     - get: bosh-deployment
       trigger: true
       passed:
@@ -294,8 +287,6 @@ jobs:
   serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
-    - get: certificate
-      resource: ca-cert-store
     - get: bosh-deployment
       trigger: true
     - get: bosh-config
@@ -372,8 +363,6 @@ jobs:
   serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
-    - get: ca-cert-store
-      trigger: true
     - get: bosh-deployment
       trigger: true
       passed:
@@ -423,8 +412,6 @@ jobs:
   serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
-    - get: certificate
-      resource: ca-cert-store
     - get: bosh-deployment
       trigger: true
       passed:
@@ -501,8 +488,6 @@ jobs:
   serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
-    - get: ca-cert-store
-      trigger: true
     - get: bosh-deployment
       trigger: true
       passed:
@@ -550,8 +535,6 @@ jobs:
   serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
-    - get: certificate
-      resource: ca-cert-store
     - get: bosh-deployment
       trigger: true
       passed:
@@ -628,8 +611,6 @@ jobs:
   serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
-    - get: ca-cert-store
-      trigger: true
     - get: bosh-deployment
       passed:
       - common-releases-staging
@@ -679,8 +660,6 @@ jobs:
   serial_groups: [one-at-a-time]
   plan:
   - in_parallel:
-    - get: certificate
-      resource: ca-cert-store
     - get: bosh-deployment
       trigger: true
     - get: bosh-config
@@ -880,12 +859,6 @@ jobs:
 
 
 resources:
-- name: ca-cert-store
-  type: s3-iam
-  source:
-    bucket: ((secrets-bucket))
-    region_name: ((aws-region))
-    versioned_file: ca-cert-store.crt
 
 - name: common-master
   type: s3-iam
@@ -944,6 +917,7 @@ resources:
     - bosh-create-env*
     - cloud-config/*
     - operations/*
+    - ci/* 
 
 - name: bosh-stemcell-jammy
   type: bosh-io-stemcell
