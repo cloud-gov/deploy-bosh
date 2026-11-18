@@ -45,8 +45,8 @@ jobs:
   plan:
     - get: bosh-config
       trigger: true
-#    - set_pipeline: self
-#      file: bosh-config/ci/pipeline.yml
+    - set_pipeline: self
+      file: bosh-config/ci/pipeline.yml
 
 - name: deploy-master-bosh
   serial: true
@@ -905,14 +905,14 @@ resources:
   source:
     commit_verification_keys: ((cloud-gov-pgp-keys))
     uri: ((bosh-config-git-url))
-    branch: no-ca-cert-store #((bosh-config-git-branch))
+    branch: ((bosh-config-git-branch))
 
 - name: bosh-create-env-config
   type: git
   source:
     commit_verification_keys: ((cloud-gov-pgp-keys))
     uri: ((bosh-config-git-url))
-    branch: no-ca-cert-store #((bosh-config-git-branch))
+    branch: ((bosh-config-git-branch))
     paths:
     - bosh-create-env*
     - cloud-config/*
